@@ -64,6 +64,7 @@
 <script type="text/javascript" src="@{'/public/js/lib/sea_2.1.1.js'}"></script>
 <script type="text/javascript" src="@{'/public/js/thirdParty/bootstrap-3.3.4/js/bootstrap.min.js'}"></script>
 
+<!-- 增加 -->
 <script id="createDialogTmpl" type="text/html">
     <div class="dialog dialog-create">
         <form action="@{ajax.Admins.add}" id="createAdmin">
@@ -71,6 +72,11 @@
                 <label class="label"><span class="asterisk">*</span>姓名</label>
                 <div class="col">
                     <input type="text" name="admin.username" value="" style='width:150px'>
+                    <span class="msg error-text">必填项！</span>
+                </div>
+                <label class="label"><span class="asterisk">*</span>密码</label>
+                <div class="col">
+                    <input type="password" name="admin.password" value="" style='width:150px'>
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
