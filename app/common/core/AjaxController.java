@@ -38,12 +38,12 @@ public class AjaxController extends BaseController {
 		}
 		
 		String sessionId = Session.current().get("sid");
-		if(org.apache.commons.lang.StringUtils.isNotBlank(sessionId)) {
+		if(org.apache.commons.lang.StringUtils.isBlank(sessionId)) {
 			//请求参数带sid，解决页面使用flash上传时出现cookie丢失
 			sessionId = request.params.get("sid");
 		}
 		sessionInfo = AdminService.getSessionInfo(sessionId);
-		
+
 		if(sessionInfo != null) {
 			if(!checkRouterPrivilege(sessionInfo)) {
 				renderErrorJson(Messages.get("invalid.router"));
