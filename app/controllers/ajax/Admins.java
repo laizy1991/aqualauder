@@ -1,5 +1,6 @@
 package controllers.ajax;
 
+import dao.AdminDao;
 import models.Administrator;
 
 import common.core.AjaxController;
@@ -9,14 +10,15 @@ public class Admins extends AjaxController {
         if (admin != null) {
             admin.setCreateTime(System.currentTimeMillis());
             admin.setModifyTime(System.currentTimeMillis());
-            admin.create();
+            AdminDao.insert(admin);
         }
         renderSuccessJson();
     }
 
     public static void delete(Administrator admin) {
         if(admin != null) {
-            admin.delete();
+            AdminDao.delete(admin.getUsername());
+
         }
         renderSuccessJson();
     }
@@ -24,7 +26,7 @@ public class Admins extends AjaxController {
     public static void update(Administrator admin) {
         if(admin != null) {
             admin.setModifyTime(System.currentTimeMillis());
-            admin.save();
+            AdminDao.update(admin);
         }
         renderSuccessJson();
     }

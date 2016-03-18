@@ -7,6 +7,7 @@ import models.Administrator;
 import org.apache.commons.collections.CollectionUtils;
 
 import play.Logger;
+import utils.StringUtil;
 
 /**
  * 
@@ -23,14 +24,14 @@ public class AdminDao {
         return admin.create();
     }
     
-    public static Administrator getByName(String userName) {
-        List<Administrator> list = Administrator.find("username", userName).fetch();
+    public static Administrator getByName(String username) {
+        List<Administrator> list = Administrator.find("username", username).fetch();
         if(CollectionUtils.isEmpty(list)) {
             return null;
         }
         
         if(list.size() > 1) {
-            Logger.error("too many admin find. userName:" + userName);
+            Logger.error("too many admin find. username:" + username);
             return null;
         }
         
@@ -44,5 +45,14 @@ public class AdminDao {
         
         admin.save();
     }
-    
+
+    public static void delete(String username) {
+        if(StringUtil.isNullOrEmpty(username)) {
+            return;
+        }
+        Administrator admin = getByName(username);
+        if (admin != null) {
+            admin.delete();
+        }
+    }
 }
