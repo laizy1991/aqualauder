@@ -24,11 +24,14 @@ public class User extends GenericModel{
 	 */
 	@Column(name="mobile")
 	private String mobile;
-	
-	@Column(name="reg_type")
-	private int regType;
 
-	/**
+
+    @Column(name="open_id")
+    private String openId;
+
+    @Column(name="reg_type")
+    private int regType;
+
 	/**
 	 * 昵称 
 	 */
@@ -61,6 +64,14 @@ public class User extends GenericModel{
 
     public void setMobile(String mobile) {
         this.mobile = mobile;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 
     public int getRegType() {
