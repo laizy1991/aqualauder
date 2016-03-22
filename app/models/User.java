@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import play.db.jpa.GenericModel;
-import sun.util.calendar.BaseCalendar.Date;
+import java.util.Date;
 
 @Entity
 @Table(name="user")
