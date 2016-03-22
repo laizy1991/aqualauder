@@ -1,0 +1,101 @@
+package models;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import play.db.jpa.GenericModel;
+
+@Entity
+@Table(name="distributor")
+public class Distrributor extends GenericModel {
+    @Id
+    @Column(name="user_id")
+    private Integer userId;
+    
+    @Column(name="distributor_type")
+    private Integer type;
+    
+    @Column(name="distributor_status")
+    private Integer status;
+    
+    @Column(name="real_name")
+    private String realName;
+    
+    @Column(name="join_time")
+    private Long joinTime;
+    
+    @Column(name="link")
+    private String link;
+    
+    @Column(name="qrcode_url")
+    private String qrcodeUrl;
+    
+    @Column(name="update_time")
+    private Long updateTime;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public Long getJoinTime() {
+        return joinTime;
+    }
+
+    public void setJoinTime(Long joinTime) {
+        this.joinTime = joinTime;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public String getQrcodeUrl() {
+        return qrcodeUrl;
+    }
+
+    public void setQrcodeUrl(String qrcodeUrl) {
+        this.qrcodeUrl = qrcodeUrl;
+    }
+
+    public Long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
+    }
+}

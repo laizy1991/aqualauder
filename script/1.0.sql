@@ -469,12 +469,12 @@ CREATE TABLE `color` (
 -- ----------------------------
 -- Table structure for `common_dict`
 -- ----------------------------
-DROP TABLE IF EXISTS `common_dict`;
 CREATE TABLE `common_dict` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `dict_type` int(11) NOT NULL COMMENT '字典类型',
   `dict_key` varchar(50) NOT NULL COMMENT '键',
   `dict_value` varchar(50) DEFAULT NULL COMMENT '值',
+  `dict_desc` varchar(50) DEFAULT NULL,
   `create_time` bigint(20) DEFAULT NULL COMMENT '创建时间',
   `update_time` bigint(20) DEFAULT NULL COMMENT '修改时间',
   `deleted` tinyint(4) DEFAULT NULL COMMENT '是否删除',
@@ -3697,7 +3697,7 @@ CREATE TABLE `user` (
   `sex` tinyint(4) DEFAULT NULL,
   `birthday` datetime DEFAULT NULL,
   `create_time` bigint(20) DEFAULT NULL,
-  `modify_time` bigint(20) DEFAULT NULL,
+  `update_time` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用来信息';
 
