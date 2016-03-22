@@ -46,13 +46,9 @@ public class AdminDao {
         admin.save();
     }
 
-    public static void delete(String username) {
-        if(StringUtil.isNullOrEmpty(username)) {
-            return;
-        }
-        Administrator admin = getByName(username);
-        if (admin != null) {
-            admin.delete();
+    public static void delete(Administrator administrator) {
+        if (administrator != null) {
+            administrator.delete();
         }
     }
 }

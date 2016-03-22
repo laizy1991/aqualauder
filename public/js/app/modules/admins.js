@@ -77,10 +77,10 @@ define(function(require) {
                     $wrap = $this.closest('tr'),
                 	$adminId = $wrap.find('.id'),
                 	adminId = $adminId.val();
-                
+
                 var deleteLevelDialog = dialog({
                     id: 'deleteDialog',
-                    title: '删除邮箱信息',
+                    title: '删除',
                     content: document.getElementById('deleteDialogTmpl').innerHTML,
                     button: [
                         {
@@ -109,7 +109,7 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                    	$("#emailId").val(emailId);
+                    	$("#adminIdOnDelete").val(adminId);
                     }
                 }).showModal();
             });
@@ -122,14 +122,13 @@ define(function(require) {
             obj.click(function() {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
-                    $id = $wrap.find('.id'),
+                    $adminId = $wrap.find('.id'),
                     $name = $wrap.find('.username'),
-                    id = $id.val(),
+                    adminId = $adminId.val(),
                 	name = $name.val(),
-                
                 editAdminDialog = dialog({
                     id: 'editDialog',
-                    title: '编辑等级等级提成',
+                    title: '编辑',
                     content: document.getElementById('editDialogTmpl').innerHTML,
                     button: [
                         {
@@ -158,8 +157,8 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                    	$("#adminId").val(id);
-                    	$("#username").val(name);
+                    	$("#adminIdOnUpdate").val(adminId);
+                    	$("#usernameOnUpdate").text(name);
                     }
                 }).showModal();
             });

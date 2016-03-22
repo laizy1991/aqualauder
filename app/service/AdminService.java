@@ -4,18 +4,21 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import models.Administrator;
+import play.Play;
 import utils.EncryptionUtil;
 import utils.IdGenerator;
 import dao.AdminDao;
 import dto.SessionInfo;
 import exception.BusinessException;
+import utils.StringUtil;
 
 public class AdminService {
     //session信息目前放内存，之后保存到缓存中
     private static Map<String, SessionInfo> sessions = new ConcurrentHashMap<String, SessionInfo>();
     //加密盐
-    private static final String SLAT = "lllaqenk";
-    
+    private static final String SLAT = Play.configuration.getProperty("passwordSlat", "passwordSlat2016");
+
+
     public static SessionInfo getSessionInfo(String sessionId) {
         if(sessionId == null) {
             return null;
@@ -24,11 +27,11 @@ public class AdminService {
     }
     
 
-    public static SessionInfo login(String userName, String password) throws BusinessException {
-        System.err.println(userName);
+    public static SessionInfo login(String username, String password) throws BusinessException {
+        System.err.println(username);
         System.err.println(password);
-        Administrator admin = AdminDao.getByName(userName);
-        if (admin == null) {
+        Administrator admin = AdminDao.getByName(username);
+        if (admin == null || new Integer(1).equals(admin.getDeleted())) {
             throw new BusinessException("User not exists");
         }
         
@@ -47,7 +50,30 @@ public class AdminService {
         sessions.put(sessionInfo.getSessionId(), sessionInfo);
         return sessionInfo;
     }
-    
+
+    public static void add(Administrator admin) {
+        admin.setCreateTime(System.currentTimeMillis());
+        admin.setModifyTime(System.currentTimeMillis());
+        admin.setPassword(EncryptionUtil.md5(admin.getPassword() + SLAT));
+        AdminDao.insert(admin);
+    }
+
+    public static void delete(Administrator admin) {
+        AdminDao.delete(admin);
+    }
+
+    public static void update(Administrator admin) {
+        admin.setModifyTime(System.currentTimeMillis());
+        if (!StringUtil.isNullOrEmpty(admin.getPassword())) {
+            admin.setPassword(EncryptionUtil.md5(admin.getPassword() + SLAT));
+        }
+        AdminDao.update(admin);
+    }
+
+    public static Administrator getByName(String username) {
+        return AdminDao.getByName(username);
+    }
+
     public static void logout(String sessionId) {
         sessions.remove(sessionId);
     }

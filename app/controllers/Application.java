@@ -25,21 +25,21 @@ public class Application extends WebController {
     }
 
     @GuestAuthorization
-    public static void logined(String userName, String password) {
+    public static void logined(String username, String password) {
         String errorMsg = null;
 
-        if (StringUtils.isBlank("userName")) {
+        if (StringUtils.isBlank(username)) {
             errorMsg = Messages.get("user.mobile.invalid");
             renderTemplate(loginTpl, errorMsg);
         }
 
-        if (StringUtils.isBlank("password")) {
+        if (StringUtils.isBlank(password)) {
             errorMsg = Messages.get("user.password.invalid");
             renderTemplate(loginTpl, errorMsg);
         }
 
         try {
-            SessionInfo sessionInfo = AdminService.login(userName, password);
+            SessionInfo sessionInfo = AdminService.login(username, password);
             if (sessionInfo == null) {
                 errorMsg = Messages.get("user.login.failed");
                 renderTemplate(loginTpl, errorMsg);
