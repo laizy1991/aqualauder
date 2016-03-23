@@ -491,7 +491,7 @@ DROP TABLE IF EXISTS `distributor_superior`;
 CREATE TABLE `distributor_superior` (
   `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户id',
   `superior` bigint(20) DEFAULT '0' COMMENT '上线用户id',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`user_id`),
   KEY `idx1` (`superior`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分销商上线表';
@@ -3401,7 +3401,7 @@ CREATE TABLE `goods` (
 DROP TABLE IF EXISTS `goods_icon`;
 CREATE TABLE `goods_icon` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
-  `goods_id` bigint(20) NOT NULL DEFAULT '0',
+  `goods_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '商品id',
   `icon_url` varchar(512) NOT NULL DEFAULT '' COMMENT '图片地址',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品图片';
@@ -3443,8 +3443,8 @@ CREATE TABLE `goods_size` (
 -- ----------------------------
 DROP TABLE IF EXISTS `goods_spec`;
 CREATE TABLE `goods_spec` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `goods_id` bigint(20) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
+  `goods_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '商品id',
   `spec_type` int(11) NOT NULL COMMENT '属性类别',
   `spec_info_id` int(11) NOT NULL COMMENT '属性值',
   `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
@@ -3461,8 +3461,8 @@ CREATE TABLE `goods_spec` (
 -- ----------------------------
 DROP TABLE IF EXISTS `goods_stock`;
 CREATE TABLE `goods_stock` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `goods_id` bigint(20) NOT NULL DEFAULT '0',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
+  `goods_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '商品id',
   `goods_size` int(11) NOT NULL DEFAULT '0',
   `goods_color` int(11) NOT NULL DEFAULT '0' COMMENT '商品颜色，-1表示所有颜色',
   `amount` int(11) NOT NULL DEFAULT '0' COMMENT '数量',
@@ -3491,7 +3491,7 @@ CREATE TABLE `order_goods` (
   `goods_discount` varchar(255) DEFAULT '' COMMENT '折扣描述',
   `goods_icon` varchar(1000) DEFAULT '' COMMENT '商品图片url',
   `goods_number` int(11) DEFAULT '1' COMMENT '购买商品的数量',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx1` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单物品';
@@ -13716,7 +13716,7 @@ INSERT INTO `user_id_pool` VALUES ('67167');
 -- ----------------------------
 DROP TABLE IF EXISTS `user_wallet`;
 CREATE TABLE `user_wallet` (
-  `user_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `balances` int(11) NOT NULL DEFAULT '0' COMMENT '余额',
   `card_no` varchar(50) DEFAULT NULL COMMENT '银行卡号',
   `income` int(11) NOT NULL DEFAULT '0' COMMENT '累计收入',
@@ -13734,8 +13734,8 @@ CREATE TABLE `user_wallet` (
 -- ----------------------------
 DROP TABLE IF EXISTS `user_wallet_bill`;
 CREATE TABLE `user_wallet_bill` (
-  `id` bigint(20) NOT NULL,
-  `user_id` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL COMMENT '唯一ID',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `oper_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '操作类型，0-转入，1-转出',
   `bill_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '类型，0-推广提成，1-支付，2-退款，3-提现，4-提现失败返回',
   `bill_month` int(11) DEFAULT '0' COMMENT '月份,形如201603',
@@ -13744,7 +13744,7 @@ CREATE TABLE `user_wallet_bill` (
   `balance` int(11) DEFAULT '0' COMMENT '余额',
   `obj_id` varchar(255) DEFAULT '' COMMENT '关联的其他表id，比如支付，对应的为订单',
   `bill_desc` varchar(500) DEFAULT '0' COMMENT '描述',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx1` (`user_id`,`bill_month`,`bill_type`) USING BTREE,
   KEY `idx2` (`bill_month`,`bill_type`) USING BTREE
