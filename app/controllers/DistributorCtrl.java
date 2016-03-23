@@ -5,7 +5,7 @@ import models.Administrator;
 
 import java.util.List;
 
-public class Orders extends WebController {
+public class DistributorCtrl extends WebController {
 
     public static void list() {
         List<Administrator> admins = Administrator.all().fetch();

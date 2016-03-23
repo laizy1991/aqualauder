@@ -53,7 +53,7 @@ public class AdminService {
 
     public static void add(Administrator admin) {
         admin.setCreateTime(System.currentTimeMillis());
-        admin.setModifyTime(System.currentTimeMillis());
+        admin.setUpdateTime(System.currentTimeMillis());
         admin.setPassword(EncryptionUtil.md5(admin.getPassword() + SLAT));
         AdminDao.insert(admin);
     }
@@ -63,7 +63,7 @@ public class AdminService {
     }
 
     public static void update(Administrator admin) {
-        admin.setModifyTime(System.currentTimeMillis());
+        admin.setUpdateTime(System.currentTimeMillis());
         if (!StringUtil.isNullOrEmpty(admin.getPassword())) {
             admin.setPassword(EncryptionUtil.md5(admin.getPassword() + SLAT));
         }

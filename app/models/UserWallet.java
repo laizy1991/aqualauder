@@ -1,13 +1,15 @@
 package models;
 
+import play.db.jpa.GenericModel;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="user_wallets")
-public class UserWallets {
+@Table(name="user_wallet")
+public class UserWallet extends GenericModel {
     @Id
     @Column(name="user_id")
     private Integer userId;

@@ -9,7 +9,7 @@ import play.db.jpa.GenericModel;
 
 @Entity
 @Table(name="distributor")
-public class Distrributor extends GenericModel {
+public class Distributor extends GenericModel {
     @Id
     @Column(name="user_id")
     private Integer userId;
@@ -31,7 +31,10 @@ public class Distrributor extends GenericModel {
     
     @Column(name="qrcode_url")
     private String qrcodeUrl;
-    
+
+    @Column(name="create_time")
+    private Long createTime;
+
     @Column(name="update_time")
     private Long updateTime;
 
@@ -89,6 +92,14 @@ public class Distrributor extends GenericModel {
 
     public void setQrcodeUrl(String qrcodeUrl) {
         this.qrcodeUrl = qrcodeUrl;
+    }
+
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
     }
 
     public Long getUpdateTime() {

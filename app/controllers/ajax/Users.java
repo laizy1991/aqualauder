@@ -3,10 +3,6 @@ package controllers.ajax;
 import common.core.AjaxController;
 import exception.BusinessException;
 import models.User;
-import models.User;
-import utils.StringUtil;
-
-import java.util.List;
 
 public class Users extends AjaxController {
 

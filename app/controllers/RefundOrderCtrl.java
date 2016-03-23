@@ -5,7 +5,7 @@ import models.Administrator;
 
 import java.util.List;
 
-public class RefundOrders extends WebController {
+public class RefundOrderCtrl extends WebController {
 
     public static void list() {
         List<Administrator> admins = Administrator.all().fetch();

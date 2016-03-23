@@ -18,7 +18,7 @@ public class Admins extends AjaxController {
         }
 
         if (null != AdminService.getByName(admin.getUsername())) {
-            throw new BusinessException("User exsit");
+            throw new BusinessException("User exist");
         }
         AdminService.add(admin);
         renderSuccessJson();

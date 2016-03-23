@@ -10,7 +10,7 @@ public class Admins extends WebController {
 
     public static void list() {
         List<Administrator> admins = Administrator.all().fetch();
-        render("/Admins/list.html", admins);
+        render("/Admin/list.html", admins);
     }
     
 }

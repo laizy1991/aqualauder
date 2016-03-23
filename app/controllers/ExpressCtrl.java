@@ -5,11 +5,11 @@ import models.Administrator;
 
 import java.util.List;
 
-public class Goodses extends WebController {
+public class ExpressCtrl extends WebController {
 
     public static void list() {
         List<Administrator> admins = Administrator.all().fetch();
-        render("/Goods/list.html", admins);
+        render("/Express/list.html", admins);
     }
     
 }

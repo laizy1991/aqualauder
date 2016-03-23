@@ -18,8 +18,8 @@ public class Administrator extends Model {
     private Integer deleted;
     @Column(name="create_time")
     private Long createTime;
-    @Column(name="modify_time")
-    private Long modifyTime;
+    @Column(name="update_time")
+    private Long updateTime;
     public String getPassword() {
         return password;
     }
@@ -44,11 +44,11 @@ public class Administrator extends Model {
     public void setCreateTime(Long createTime) {
         this.createTime = createTime;
     }
-    public Long getModifyTime() {
-        return modifyTime;
+    public Long getUpdateTime() {
+        return updateTime;
     }
-    public void setModifyTime(Long modifyTime) {
-        this.modifyTime = modifyTime;
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
     }
     
 }

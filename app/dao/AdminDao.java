@@ -46,9 +46,9 @@ public class AdminDao {
         admin.save();
     }
 
-    public static void delete(Administrator administrator) {
-        if (administrator != null) {
-            administrator.delete();
+    public static void delete(Administrator admin) {
+        if (admin != null) {
+            admin.delete();
         }
     }
 }

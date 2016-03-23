@@ -7,8 +7,8 @@ import javax.persistence.Table;
 import play.db.jpa.Model;
 
 @Entity
-@Table(name="user_wallets_bill")
-public class UserWalletsBill extends Model {
+@Table(name="user_wallet_bill")
+public class UserWalletBill extends Model {
     @Column(name="user_id")
     private Integer userId;
     
