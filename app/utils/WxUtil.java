@@ -1,23 +1,33 @@
 package utils;
 
+import java.io.IOException;
+
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import play.Play;
 import play.cache.Cache;
+import utils.http.HttpRequester;
+import utils.http.HttpRespons;
 
 public class WxUtil {
-	public static String CACHE_PREFIX = "wx_";
-	private static String ACCESS_TOKEN_KEY = CACHE_PREFIX + "accessToken";
-	public static String ACCESS_TOKEN_TIMEOUT = 
-			Play.configuration.getProperty("wx.access.token.timeout", "90mn");  //有效时间一个半小时
+	public static final String CACHE_PREFIX = "wx_";
+	private static String ACCESS_TOKEN_CACHE_KEY = null;		//access_token缓存key
+	public static String ACCESS_TOKEN_CACHE_TIMEOUT = null;		//access_token在缓存中有效时间
+	
+	static {
+		ACCESS_TOKEN_CACHE_KEY = CACHE_PREFIX + "accessToken";
+		ACCESS_TOKEN_CACHE_TIMEOUT = Play.configuration.getProperty("wx.access.token.timeout", "90mn");  //有效时间一个半小时
+	}
 	
 	/**
 	 * 获取微信AccessToken
 	 * @return
 	 */
 	public static String getAccessToken() {
-		String accessToken = Cache.get(ACCESS_TOKEN_KEY, String.class);
+		String accessToken = Cache.get(ACCESS_TOKEN_CACHE_KEY, String.class);
 		if(StringUtils.isEmpty(accessToken)) {
 			accessToken = getAccessTokenFromWx();
 		}
@@ -41,7 +51,7 @@ public class WxUtil {
 				return null;
 			}
 		}
-		Cache.set(ACCESS_TOKEN_KEY, accessToken, ACCESS_TOKEN_TIMEOUT);
+		Cache.set(ACCESS_TOKEN_CACHE_KEY, accessToken, ACCESS_TOKEN_CACHE_TIMEOUT);
 		return accessToken;
 	}
 	
@@ -50,6 +60,28 @@ public class WxUtil {
 	 * @return
 	 */
 	private static String getAccessTokenFromWxWithValidation() {
-		return "";
+		//获取配置项
+		String appId = Play.configuration.getProperty("wx.config.appid");
+		String appSecret = Play.configuration.getProperty("wx.config.appsecret");
+		String accessTokenUrl = Play.configuration.getProperty("wx.access.token.url");
+		if(StringUtils.isBlank(appId) || StringUtils.isBlank(appSecret) ||
+				StringUtils.isBlank(accessTokenUrl)) {
+			return null;
+		}
+		String realUrl = String.format(accessTokenUrl, appId, appSecret);
+		HttpRespons resp = null;
+		try {
+			resp = HttpRequester.sendGet(realUrl);
+		} catch (Exception e) {
+			Logger.error("请求微信AccessToken发生错误");
+			e.printStackTrace();
+		}
+		if(null == resp)
+			return null;
+		JSONObject json = JSONObject.fromObject(resp.getContent());
+		if(StringUtils.isBlank(json.getString("access_token"))) {
+			return null;
+		}
+		return json.getString("access_token");
 	}
 }
