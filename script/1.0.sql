@@ -20,12 +20,12 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `administrator`;
 CREATE TABLE `administrator` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '管理员ID',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
   `password` varchar(50) NOT NULL COMMENT '密码',
   `username` varchar(20) NOT NULL COMMENT '用户名',
   `deleted` tinyint(4) DEFAULT '0' COMMENT '0-有效，1-已删除',
-  `create_time` bigint(20) DEFAULT '0' COMMENT '创建时间',
-  `modify_time` bigint(20) DEFAULT '0' COMMENT '修改时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COMMENT='管理员账号表';
 
@@ -33,16 +33,8 @@ CREATE TABLE `administrator` (
 -- Records of administrator
 -- ----------------------------
 INSERT INTO `administrator` VALUES ('1', '7942fc383577c7d252c13f7464276ac0', 'laizy', '0', '1458229382000', '1458229382000');
-INSERT INTO `administrator` VALUES ('2', '7942fc383577c7d252c13f7464276ac0', 'nemo', null, '1458317239094', '1458317239094');
-INSERT INTO `administrator` VALUES ('5', '7942fc383577c7d252c13f7464276ac0', 'maotian', null, '1458391257247', '1458391257247');
-INSERT INTO `administrator` VALUES ('6', '7942fc383577c7d252c13f7464276ac0', 'maotian2', null, '1458395340829', '1458395340829');
-INSERT INTO `administrator` VALUES ('7', '7942fc383577c7d252c13f7464276ac0', 'maotian3', null, '1458395402700', '1458395402700');
-INSERT INTO `administrator` VALUES ('15', '7942fc383577c7d252c13f7464276ac0', 'maotian3', null, '1458395402700', '1458395402700');
-INSERT INTO `administrator` VALUES ('16', '7942fc383577c7d252c13f7464276ac0', 'maotian3', null, '1458395402700', '1458395402700');
-INSERT INTO `administrator` VALUES ('17', '7942fc383577c7d252c13f7464276ac0', 'maotian3', null, '1458395402700', '1458395402700');
-INSERT INTO `administrator` VALUES ('18', '7942fc383577c7d252c13f7464276ac0', 'maotian3', null, '1458395402700', '1458395402700');
-INSERT INTO `administrator` VALUES ('19', '7942fc383577c7d252c13f7464276ac0', 'maotian3', null, '1458395402700', '1458395402700');
-INSERT INTO `administrator` VALUES ('20', '7942fc383577c7d252c13f7464276ac0', 'maotian3', null, '1458395402700', '1458395402700');
+INSERT INTO `administrator` VALUES ('2', '7942fc383577c7d252c13f7464276ac0', 'nemo', '0', '1458317239094', '1458317239094');
+INSERT INTO `administrator` VALUES ('5', '7942fc383577c7d252c13f7464276ac0', 'maotian', '0', '1458391257247', '1458391257247');
 
 -- ----------------------------
 -- Table structure for `cash_info`
@@ -50,9 +42,9 @@ INSERT INTO `administrator` VALUES ('20', '7942fc383577c7d252c13f7464276ac0', 'm
 DROP TABLE IF EXISTS `cash_info`;
 CREATE TABLE `cash_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
-  `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户',
+  `user_id` bigint(20) NOT NULL COMMENT '用户',
   `cash_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '提现方式: 0=红包,1=银行卡',
-  `amount` int(11) NOT NULL DEFAULT '0' COMMENT '金额，单位分',
+  `amount` int(11) NOT NULL COMMENT '金额，单位分',
   `cash_status` int(11) NOT NULL DEFAULT '0' COMMENT '状态：0-申请中，1-转账中，2-提现成功，3-提现失败',
   `slip_no` bigint(20) DEFAULT '0' COMMENT '凭证号',
   `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
@@ -453,30 +445,16 @@ INSERT INTO `city` VALUES ('370', '澳门特别行政区', '33', '370');
 INSERT INTO `city` VALUES ('371', '香港特别行政区', '34', '371');
 
 -- ----------------------------
--- Table structure for `color`
--- ----------------------------
-DROP TABLE IF EXISTS `color`;
-CREATE TABLE `color` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='颜色';
-
--- ----------------------------
--- Records of color
--- ----------------------------
-
--- ----------------------------
 -- Table structure for `common_dict`
 -- ----------------------------
 CREATE TABLE `common_dict` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一id',
   `dict_type` int(11) NOT NULL COMMENT '字典类型',
   `dict_key` varchar(50) NOT NULL COMMENT '键',
   `dict_value` varchar(50) DEFAULT NULL COMMENT '值',
-  `dict_desc` varchar(50) DEFAULT NULL,
-  `create_time` bigint(20) DEFAULT NULL COMMENT '创建时间',
-  `update_time` bigint(20) DEFAULT NULL COMMENT '修改时间',
+  `dict_desc` varchar(50) DEFAULT NULL '描述',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   `deleted` tinyint(4) DEFAULT NULL COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='通用字典表,用于保存一些字典值，包括配置等';
@@ -490,13 +468,14 @@ CREATE TABLE `common_dict` (
 -- ----------------------------
 DROP TABLE IF EXISTS `distributor`;
 CREATE TABLE `distributor` (
-  `user_id` int(11) NOT NULL,
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
   `distributor_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '分销商类型，0-个人',
   `distributor_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '分销商状态，0-为认证，1-认证通过，-1-认证不通过',
   `real_name` varchar(16) DEFAULT NULL COMMENT '真实姓名',
   `join_time` bigint(20) DEFAULT '0' COMMENT '成为分销商的时间',
   `link` varchar(500) DEFAULT NULL COMMENT '推广链接',
   `qrcode_url` varchar(500) DEFAULT NULL COMMENT '推广二维码',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分销商信息表';
@@ -510,9 +489,9 @@ CREATE TABLE `distributor` (
 -- ----------------------------
 DROP TABLE IF EXISTS `distributor_superior`;
 CREATE TABLE `distributor_superior` (
-  `user_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户id',
-  `superior` int(11) DEFAULT '0' COMMENT '上线用户id',
-  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户id',
+  `superior` bigint(20) DEFAULT '0' COMMENT '上线用户id',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`user_id`),
   KEY `idx1` (`superior`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分销商上线表';
@@ -3366,7 +3345,7 @@ INSERT INTO `district` VALUES ('2824', '额济纳旗', '362');
 DROP TABLE IF EXISTS `express`;
 CREATE TABLE `express` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
-  `name` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL  COMMENT '快递公司名称',
   `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`)
@@ -3377,21 +3356,21 @@ CREATE TABLE `express` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `good_type`
+-- Table structure for `goods_type`
 -- ----------------------------
-DROP TABLE IF EXISTS `good_type`;
-CREATE TABLE `good_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+DROP TABLE IF EXISTS `goods_type`;
+CREATE TABLE `goods_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '唯一id',
   `name` varchar(128) NOT NULL COMMENT '类型名字',
   `type_desc` varchar(512) NOT NULL DEFAULT '' COMMENT '类型描述',
   `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '父类型',
-  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品分类';
 
 -- ----------------------------
--- Records of good_type
+-- Records of goods_type
 -- ----------------------------
 
 -- ----------------------------
@@ -3406,8 +3385,8 @@ CREATE TABLE `goods` (
   `price` int(11) NOT NULL COMMENT '商品原价：单位：分',
   `warm_prompt` text COMMENT '温馨提示',
   `state` tinyint(4) NOT NULL DEFAULT '1' COMMENT '商品状态，1上架，0下架',
-  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`),
   KEY `idx1` (`goods_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品';
@@ -3422,7 +3401,7 @@ CREATE TABLE `goods` (
 DROP TABLE IF EXISTS `goods_icon`;
 CREATE TABLE `goods_icon` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
-  `goods_id` int(11) NOT NULL DEFAULT '0',
+  `goods_id` bigint(20) NOT NULL DEFAULT '0',
   `icon_url` varchar(512) NOT NULL DEFAULT '' COMMENT '图片地址',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品图片';
@@ -3432,12 +3411,26 @@ CREATE TABLE `goods_icon` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `goods_color`
+-- ----------------------------
+DROP TABLE IF EXISTS `goods_color`;
+CREATE TABLE `goods_color` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '唯一id',
+  `name` varchar(50) NOT NULL COMMENT '颜色',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品颜色';
+
+-- ----------------------------
+-- Records of goods_color
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `goods_size`
 -- ----------------------------
 DROP TABLE IF EXISTS `goods_size`;
 CREATE TABLE `goods_size` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
+  `name` varchar(50) NOT NULL COMMENT '码数',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品码数';
 
@@ -3451,11 +3444,11 @@ CREATE TABLE `goods_size` (
 DROP TABLE IF EXISTS `goods_spec`;
 CREATE TABLE `goods_spec` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `goods_id` int(11) NOT NULL DEFAULT '0',
+  `goods_id` bigint(20) NOT NULL DEFAULT '0',
   `spec_type` int(11) NOT NULL COMMENT '属性类别',
   `spec_info_id` int(11) NOT NULL COMMENT '属性值',
-  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品属性';
 
@@ -3468,13 +3461,13 @@ CREATE TABLE `goods_spec` (
 -- ----------------------------
 DROP TABLE IF EXISTS `goods_stock`;
 CREATE TABLE `goods_stock` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `goods_id` int(11) NOT NULL DEFAULT '0',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `goods_id` bigint(20) NOT NULL DEFAULT '0',
   `goods_size` int(11) NOT NULL DEFAULT '0',
   `goods_color` int(11) NOT NULL DEFAULT '0' COMMENT '商品颜色，-1表示所有颜色',
   `amount` int(11) NOT NULL DEFAULT '0' COMMENT '数量',
-  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='库存';
 
@@ -3498,7 +3491,7 @@ CREATE TABLE `order_goods` (
   `goods_discount` varchar(255) DEFAULT '' COMMENT '折扣描述',
   `goods_icon` varchar(1000) DEFAULT '' COMMENT '商品图片url',
   `goods_number` int(11) DEFAULT '1' COMMENT '购买商品的数量',
-  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx1` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单物品';
@@ -3508,12 +3501,12 @@ CREATE TABLE `order_goods` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `orders`
+-- Table structure for `order`
 -- ----------------------------
-DROP TABLE IF EXISTS `orders`;
-CREATE TABLE `orders` (
+DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
-  `user_id` int(11) NOT NULL COMMENT '用户ID',
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `out_trade_no` varchar(255) NOT NULL DEFAULT '' COMMENT '订单编号',
   `slip_no` varchar(255) NOT NULL COMMENT '支付流水号',
   `pay_type` tinyint(4) NOT NULL COMMENT '支付类型，0-现金，1-余额',
@@ -3524,10 +3517,10 @@ CREATE TABLE `orders` (
   `order_memo` varchar(255) DEFAULT '' COMMENT '用户下单备注',
   `shipping_address` varchar(500) DEFAULT NULL COMMENT '收货地址',
   `state_history` varchar(2000) DEFAULT NULL,
-  `pay_time` bigint(20) DEFAULT '0' COMMENT '支付时间',
-  `deliver_time` bigint(20) DEFAULT '0' COMMENT '发货时间',
-  `recev_time` bigint(20) DEFAULT '0' COMMENT '自动收货时间',
-  `finish_time` bigint(20) DEFAULT '0' COMMENT '完成时间',
+  `pay_time` timestamp DEFAULT NULL COMMENT '支付时间',
+  `deliver_time` timestamp DEFAULT NULL  COMMENT '发货时间',
+  `recev_time` timestamp DEFAULT NULL  COMMENT '自动收货时间',
+  `finish_time` timestamp DEFAULT NULL  COMMENT '完成时间',
   `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`),
@@ -3536,7 +3529,7 @@ CREATE TABLE `orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单';
 
 -- ----------------------------
--- Records of orders
+-- Records of order
 -- ----------------------------
 
 -- ----------------------------
@@ -3616,14 +3609,14 @@ CREATE TABLE `refund_order` (
 DROP TABLE IF EXISTS `sale_info`;
 CREATE TABLE `sale_info` (
   `id` bigint(20) NOT NULL COMMENT '唯一ID',
-  `goods_id` int(11) NOT NULL COMMENT '商品id，-1表示所有商品',
+  `goods_id` bigint(20) NOT NULL COMMENT '商品id，-1表示所有商品',
   `sale` int(11) NOT NULL COMMENT '折扣',
   `discount_desc` varchar(50) DEFAULT NULL COMMENT '打折的描述语',
   `deleted` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除:0=否,1=是',
   `begin_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '开始时间',
   `end_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '结束时间',
-  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品折扣';
 
@@ -3659,8 +3652,8 @@ CREATE TABLE `spec_info` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(128) NOT NULL COMMENT '名字',
   `spec_type` int(11) NOT NULL COMMENT '属性类别',
-  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='属性信息';
 
@@ -3675,8 +3668,8 @@ DROP TABLE IF EXISTS `spec_type`;
 CREATE TABLE `spec_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `name` varchar(128) NOT NULL COMMENT '名字',
-  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='属性类别';
 
@@ -3689,17 +3682,17 @@ CREATE TABLE `spec_type` (
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
-  `mobile` varchar(11) DEFAULT NULL,
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `mobile` varchar(11) DEFAULT NULL COMMENT '用户手机号',
   `reg_type` int(3) NOT NULL DEFAULT '0' COMMENT '1 = 微信',
   `open_id` varchar(255) DEFAULT NULL COMMENT '第三方平台ID',
   `nickname` varchar(50) DEFAULT NULL COMMENT '昵称',
   `sex` tinyint(4) DEFAULT NULL,
   `birthday` datetime DEFAULT NULL,
-  `create_time` bigint(20) DEFAULT NULL,
-  `update_time` bigint(20) DEFAULT NULL,
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用来信息';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息';
 
 -- ----------------------------
 -- Records of user
@@ -3710,7 +3703,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 DROP TABLE IF EXISTS `user_id_pool`;
 CREATE TABLE `user_id_pool` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=67168 DEFAULT CHARSET=utf8 COMMENT='账号资源池';
 
@@ -13719,11 +13712,11 @@ INSERT INTO `user_id_pool` VALUES ('67165');
 INSERT INTO `user_id_pool` VALUES ('67167');
 
 -- ----------------------------
--- Table structure for `user_wallets`
+-- Table structure for `user_wallet`
 -- ----------------------------
-DROP TABLE IF EXISTS `user_wallets`;
-CREATE TABLE `user_wallets` (
-  `user_id` int(11) NOT NULL,
+DROP TABLE IF EXISTS `user_wallet`;
+CREATE TABLE `user_wallet` (
+  `user_id` bigint(20) NOT NULL,
   `balances` int(11) NOT NULL DEFAULT '0' COMMENT '余额',
   `card_no` varchar(50) DEFAULT NULL COMMENT '银行卡号',
   `income` int(11) NOT NULL DEFAULT '0' COMMENT '累计收入',
@@ -13733,16 +13726,16 @@ CREATE TABLE `user_wallets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户钱包';
 
 -- ----------------------------
--- Records of user_wallets
+-- Records of user_wallet
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `user_wallets_bill`
+-- Table structure for `user_wallet_bill`
 -- ----------------------------
-DROP TABLE IF EXISTS `user_wallets_bill`;
-CREATE TABLE `user_wallets_bill` (
+DROP TABLE IF EXISTS `user_wallet_bill`;
+CREATE TABLE `user_wallet_bill` (
   `id` bigint(20) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` bigint(20) NOT NULL,
   `oper_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '操作类型，0-转入，1-转出',
   `bill_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '类型，0-推广提成，1-支付，2-退款，3-提现，4-提现失败返回',
   `bill_month` int(11) DEFAULT '0' COMMENT '月份,形如201603',
@@ -13751,12 +13744,12 @@ CREATE TABLE `user_wallets_bill` (
   `balance` int(11) DEFAULT '0' COMMENT '余额',
   `obj_id` varchar(255) DEFAULT '' COMMENT '关联的其他表id，比如支付，对应的为订单',
   `bill_desc` varchar(500) DEFAULT '0' COMMENT '描述',
-  `bill_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '产生的时间',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`),
   KEY `idx1` (`user_id`,`bill_month`,`bill_type`) USING BTREE,
   KEY `idx2` (`bill_month`,`bill_type`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户钱包清单';
 
 -- ----------------------------
--- Records of user_wallets_bill
+-- Records of user_wallet_bill
 -- ----------------------------
