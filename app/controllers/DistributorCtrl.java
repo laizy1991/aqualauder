@@ -1,15 +1,15 @@
 package controllers;
 
 import common.core.WebController;
-import models.Administrator;
+import models.Distributor;
 
 import java.util.List;
 
 public class DistributorCtrl extends WebController {
 
     public static void list() {
-        List<Administrator> admins = Administrator.all().fetch();
-        render("/Order/list.html", admins);
+        List<Distributor> distributors = Distributor.all().fetch();
+        render("/Distributor/list.html", distributors);
     }
     
 }

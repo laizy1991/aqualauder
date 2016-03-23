@@ -1,15 +1,15 @@
 package controllers;
 
 import common.core.WebController;
-import models.Administrator;
+import models.Express;
 
 import java.util.List;
 
 public class ExpressCtrl extends WebController {
 
     public static void list() {
-        List<Administrator> admins = Administrator.all().fetch();
-        render("/Express/list.html", admins);
+        List<Express> expresses = Express.all().fetch();
+        render("/Express/list.html", expresses);
     }
     
 }
