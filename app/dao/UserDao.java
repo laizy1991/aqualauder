@@ -1,7 +1,10 @@
 package dao;
 
 import models.User;
+
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+
 import play.Logger;
 
 import java.util.List;
@@ -23,6 +26,23 @@ public class UserDao {
         
         if(list.size() > 1) {
             Logger.error("too many user find. user_Id:" + id);
+            return null;
+        }
+        
+        return list.get(0);
+    }
+    
+    /**
+     * 通过OpenId获取用户信息
+     * @param openId
+     * @return
+     */
+    public static User getyOpenId (String openId) {
+    	if(StringUtils.isEmpty(openId)) {
+    		return null;
+    	}
+        List<User> list = User.find("open_id", openId).fetch();
+        if(CollectionUtils.isEmpty(list)) {
             return null;
         }
         

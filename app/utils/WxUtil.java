@@ -1,9 +1,8 @@
 package utils;
 
-import java.io.IOException;
-
 import net.sf.json.JSONObject;
 
+import java.io.IOException;
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
@@ -73,15 +72,87 @@ public class WxUtil {
 		try {
 			resp = HttpRequester.sendGet(realUrl);
 		} catch (Exception e) {
-			Logger.error("请求微信AccessToken发生错误");
+			Logger.error("请求微信基础支持AccessToken发生错误");
 			e.printStackTrace();
 		}
 		if(null == resp)
 			return null;
 		JSONObject json = JSONObject.fromObject(resp.getContent());
-		if(StringUtils.isBlank(json.getString("access_token"))) {
+		if(StringUtils.isBlank(json.optString("access_token"))) {
+			Logger.error("微信返回的基础支持AccessToken错误，错误码：%s，错误信息：%s", 
+					json.getString("errcode"), json.getString("errmsg"));
 			return null;
 		}
 		return json.getString("access_token");
+	}
+	
+	/**
+	 * 获取用户OpenID
+	 * @return
+	 */
+	public static String getUserOpenId(String code) {
+		if(StringUtils.isEmpty(code))
+			return null;
+		//通过code换取openid
+		String appId = Play.configuration.getProperty("wx.config.appid");
+		String appSecret = Play.configuration.getProperty("wx.config.appsecret");
+		String accessCodeUrl = Play.configuration.getProperty("wx.access.code.url");
+		if(StringUtils.isBlank(appId) || StringUtils.isBlank(appSecret) ||
+				StringUtils.isBlank(accessCodeUrl)) {
+			return null;
+		}
+		String realUrl = String.format(accessCodeUrl, appId, appSecret, code);
+		HttpRespons resp = null;
+		try {
+			resp = HttpRequester.sendGet(realUrl);
+		} catch (Exception e) {
+			Logger.error("通过code向微信请求获取用户OpenId发生错误");
+			e.printStackTrace();
+		}
+		if(null == resp)
+			return null;
+		JSONObject json = JSONObject.fromObject(resp.getContent());
+		String openId = json.optString("openid");
+		if(StringUtils.isBlank(openId)) {
+			Logger.error("微信返回用户OpenId时发生错误，错误码：%s，错误信息：%s", 
+					json.getString("errcode"), json.getString("errmsg"));
+			return null;
+		}
+		
+		return openId;
+	}
+	
+	/**
+	 * 通过openID获取用户信息
+	 * @param openId
+	 * @return
+	 */
+	public static JSONObject getUserInfoByOpenId(String openId) {
+		if(StringUtils.isEmpty(openId)) {
+			return null;
+		}
+		String accessToken = WxUtil.getAccessToken();
+		String accessUserUrl = Play.configuration.getProperty("wx.access.user.url");
+		if(StringUtils.isBlank(accessToken) || StringUtils.isBlank(accessUserUrl) ) {
+			return null;
+		}
+		String realUrl = String.format(accessUserUrl, accessToken, openId);
+		HttpRespons resp = null;
+		try {
+			resp = HttpRequester.sendGet(realUrl);
+		} catch (Exception e) {
+			Logger.error("向微信请求获取用户信息发生错误");
+			e.printStackTrace();
+		}
+		if(null == resp)
+			return null;
+		JSONObject json = JSONObject.fromObject(resp.getContent());
+		if(null == json || StringUtils.isNotEmpty(json.optString("errcode"))) {
+			Logger.error("微信返回用户信息时发生错误，错误码：%s，错误信息：%s", 
+					json.getString("errcode"), json.getString("errmsg"));
+			return null;
+		}
+		
+		return json;
 	}
 }

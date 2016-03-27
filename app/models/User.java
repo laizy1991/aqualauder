@@ -49,6 +49,15 @@ public class User extends GenericModel{
     
     @Column(name = "update_time")
     private Long updateTime;
+    
+    @Column(name = "subscribe_time")
+    private Long subscribeTime;
+    
+    @Column(name = "unionid")
+    private String unionId;
+    
+    @Column(name = "headimg_url")
+    private String headImgUrl;
 
     public int getUserId() {
         return userId;
@@ -121,4 +130,28 @@ public class User extends GenericModel{
     public void setUpdateTime(Long updateTime) {
         this.updateTime = updateTime;
     }
+
+	public Long getSubscribeTime() {
+		return subscribeTime;
+	}
+
+	public void setSubscribeTime(Long subscribeTime) {
+		this.subscribeTime = subscribeTime;
+	}
+
+	public String getUnionId() {
+		return unionId;
+	}
+
+	public void setUnionId(String unionId) {
+		this.unionId = unionId;
+	}
+
+	public String getHeadImgUrl() {
+		return headImgUrl;
+	}
+
+	public void setHeadImgUrl(String headImgUrl) {
+		this.headImgUrl = headImgUrl;
+	}
 }
