@@ -1,10 +1,6 @@
 package dao;
 
 import models.Distributor;
-import org.apache.commons.collections.CollectionUtils;
-import play.Logger;
-
-import java.util.List;
 
 public class DistributorDao {
 
@@ -15,18 +11,9 @@ public class DistributorDao {
         return distributor.create();
     }
     
-    public static Distributor get(int id) {
-        List<Distributor> list = Distributor.find("user_id", id).fetch();
-        if(CollectionUtils.isEmpty(list)) {
-            return null;
-        }
-        
-        if(list.size() > 1) {
-            Logger.error("too many distributor find user_id:" + id);
-            return null;
-        }
-        
-        return list.get(0);
+    public static Distributor get(int userId) {
+        Distributor distributor = Distributor.findById(userId);
+        return distributor;
     }
     
     public static void update(Distributor distributor) {

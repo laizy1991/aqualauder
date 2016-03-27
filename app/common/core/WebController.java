@@ -23,8 +23,8 @@ import exception.BusinessException;
 
 /**
  * 
- * @author Daniel@warthog.cn
- * @createDate 2016年3月16日
+ * @author laizy1991@gmail.com
+ * @createDate 2016年3月26日
  *
  */
 public class WebController extends BaseController {

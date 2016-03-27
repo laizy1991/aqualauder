@@ -19,7 +19,8 @@ public class DateUtil {
     public static final String ONLY_DAY_FORMAT = "MM-dd";
     
     public static final String STACK_DATE_FORMAT = "yyyyMMdd";
-    
+
+    private static final String MONTH_FORMAT = "yyyyMM";
     public static final long ONE_DAY_TS = 24 * 60 * 60 * 1000L;
     
     /**
@@ -218,6 +219,16 @@ public class DateUtil {
             Logger.warn("DateUtil - getDate format failed");
         }
         return null;
+    }
+    
+    /**
+     * 获取现在具体月份: yyyyMM
+     * @return
+     */
+    public static Integer getThisMonth() {
+        SimpleDateFormat sdf = new SimpleDateFormat(MONTH_FORMAT);
+        String month = sdf.format(new Date());
+        return Integer.parseInt(month);
     }
     
     /**
