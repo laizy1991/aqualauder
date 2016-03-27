@@ -5,9 +5,9 @@ import play.mvc.Controller;
 import dto.SessionInfo;
 
 /**
- * 
- * @author Daniel@warthog.cn
- * @createDate 2016年3月16日
+ * 接口请求公用逻辑
+ * @author laizy1991@gmail.com
+ * @createDate 2016年3月26日
  *
  */
 public class BaseController extends Controller {
