@@ -53,9 +53,6 @@ public class User extends GenericModel{
     @Column(name = "subscribe_time")
     private Long subscribeTime;
     
-    @Column(name = "unionid")
-    private String unionId;
-    
     @Column(name = "headimg_url")
     private String headImgUrl;
 
@@ -137,14 +134,6 @@ public class User extends GenericModel{
 
 	public void setSubscribeTime(Long subscribeTime) {
 		this.subscribeTime = subscribeTime;
-	}
-
-	public String getUnionId() {
-		return unionId;
-	}
-
-	public void setUnionId(String unionId) {
-		this.unionId = unionId;
 	}
 
 	public String getHeadImgUrl() {

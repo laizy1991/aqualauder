@@ -83,6 +83,7 @@ public class WxUtil {
 					json.getString("errcode"), json.getString("errmsg"));
 			return null;
 		}
+		Logger.info("get access_token from weixin: %s", json.getString("access_token"));
 		return json.getString("access_token");
 	}
 	
@@ -147,7 +148,7 @@ public class WxUtil {
 		if(null == resp)
 			return null;
 		JSONObject json = JSONObject.fromObject(resp.getContent());
-		if(null == json || StringUtils.isNotEmpty(json.optString("errcode"))) {
+		if(null == json || StringUtils.isNotBlank(json.optString("errcode"))) {
 			Logger.error("微信返回用户信息时发生错误，错误码：%s，错误信息：%s", 
 					json.getString("errcode"), json.getString("errmsg"));
 			return null;
