@@ -3,10 +3,8 @@ package service;
 import models.UserWallet;
 import play.Logger;
 import utils.DistributeCacheLock;
-
-import common.contants.BillType;
-import common.contants.OperType;
-
+import common.constants.BillType;
+import common.constants.OperType;
 import dao.UserWalletDao;
 
 /**

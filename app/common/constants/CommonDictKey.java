@@ -1,4 +1,4 @@
-package common.contants;
+package common.constants;
 
 /**
  * 通用字典的key

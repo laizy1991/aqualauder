@@ -1,4 +1,4 @@
-package common.contants;
+package common.constants;
 /**
  * 流水类型
  * @author laizy1991@gmail.com

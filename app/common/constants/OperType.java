@@ -1,19 +1,24 @@
-package common.contants;
+package common.constants;
 
-public enum CashStatus {
+/**
+ * 操作类型
+ * @author laizy1991@gmail.com
+ * @createDate 2016年3月26日
+ *
+ */
+public enum OperType {
 
-    APPLY(0, "申请中"),
-    ING(1, "转账中"),
-    SUCCESS(2, "提现成功"),
-    FAILED(3, "提现失败");
+    INTO(0, "转入"),
+    OUT(1, "转出");
     
-    //0-申请中，1-转账中，2-提现成功，3-提现失败
     private int code;
     private String desc;
-    private CashStatus(int code, String desc) {
+    
+    private OperType(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
+    
     public int getCode() {
         return code;
     }

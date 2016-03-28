@@ -1,19 +1,16 @@
-package common.contants;
+package common.constants;
 
-/**
- * 通用字典类型
- * @author laizy1991@gmail.com
- * @createDate 2016年3月26日
- *
- */
-public enum CommonDictType {
+public enum CashStatus {
 
-    LEVEL_PAY(0, "等级提成"),
-    CONFIG(1, "配置");
+    APPLY(0, "申请中"),
+    ING(1, "转账中"),
+    SUCCESS(2, "提现成功"),
+    FAILED(3, "提现失败");
     
+    //0-申请中，1-转账中，2-提现成功，3-提现失败
     private int code;
     private String desc;
-    private CommonDictType(int code, String desc) {
+    private CashStatus(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }

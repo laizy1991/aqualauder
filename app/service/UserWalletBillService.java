@@ -4,8 +4,8 @@ import models.UserWalletBill;
 import play.Logger;
 
 import com.google.gson.Gson;
-import common.contants.BillType;
 
+import common.constants.BillType;
 import dao.UserWalletBillDao;
 
 public class UserWalletBillService {

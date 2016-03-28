@@ -46,7 +46,7 @@ CREATE TABLE `cash_info` (
   `cash_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '提现方式: 0=红包,1=银行卡',
   `amount` int(11) NOT NULL COMMENT '金额，单位分',
   `cash_status` int(11) NOT NULL DEFAULT '0' COMMENT '状态：0-申请中，1-转账中，2-提现成功，3-提现失败',
-  `slip_no` bigint(20) DEFAULT '0' COMMENT '凭证号',
+  `slip_no` varchar(50) DEFAULT '0' COMMENT '凭证号',
   `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
   PRIMARY KEY (`id`),

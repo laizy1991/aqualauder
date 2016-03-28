@@ -8,9 +8,7 @@ import java.util.Map;
 import models.CommonDict;
 import play.Logger;
 import utils.MapUtil;
-
-import common.contants.CommonDictType;
-
+import common.constants.CommonDictType;
 import dao.CommonDictDao;
 
 public class CommonDictService {

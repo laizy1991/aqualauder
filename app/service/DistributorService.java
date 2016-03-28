@@ -15,11 +15,9 @@ import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import utils.DateUtil;
-
-import common.contants.BillType;
-import common.contants.CashStatus;
-import common.contants.CommonDictType;
-
+import common.constants.BillType;
+import common.constants.CashStatus;
+import common.constants.CommonDictType;
 import dao.CashInfoDao;
 import dao.DistributorDao;
 import dao.DistributorSuperiorDao;
