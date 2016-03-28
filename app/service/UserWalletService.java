@@ -84,12 +84,8 @@ public class UserWalletService {
         try {
             UserWallet userWallet = UserWalletDao.getByUserId(userId);
             if(userWallet == null) {
-                userWallet = new UserWallet();
-                userWallet.setBalances(0);
-                userWallet.setIncome(0);
-                userWallet.setUserId(userId);
-                boolean isUScc = UserWalletDao.insert(userWallet);
-                if(!isUScc) {
+                userWallet = init(userId);
+                if(userWallet == null) {
                     Logger.error("user wallets not found and init fail, userId:%d, addMoney:%d, billType:%d", userId, addMoney, billType.getCode());
                     return false;
                 }
@@ -110,6 +106,18 @@ public class UserWalletService {
         }
     }
     
+    
+    public static UserWallet init(int userId) {
+        UserWallet userWallet = new UserWallet();
+        userWallet.setBalances(0);
+        userWallet.setIncome(0);
+        userWallet.setUserId(userId);
+        boolean isUScc = UserWalletDao.insert(userWallet);
+        if(!isUScc) {
+            return null;
+        }
+        return userWallet;
+    }
     
     /**
      * 锁的键

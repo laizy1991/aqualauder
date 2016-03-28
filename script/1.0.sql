@@ -13753,3 +13753,14 @@ CREATE TABLE `user_wallet_bill` (
 -- ----------------------------
 -- Records of user_wallet_bill
 -- ----------------------------
+CREATE TABLE `user_month_blotters` (
+  `id` bigint(20) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `blotter_month` int(11) DEFAULT '0' COMMENT '流水月份,形如200509',
+  `blotters` bigint(20) DEFAULT '0' COMMENT '本月自己的消费金额',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  KEY `idx1` (`user_id`,`blotter_month`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户月流水';
+

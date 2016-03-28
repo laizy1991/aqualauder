@@ -1,19 +1,31 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import models.CashInfo;
 import models.Distributor;
 import models.DistributorSuperior;
 import models.User;
+import models.UserMonthBlotter;
+import models.UserWallet;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import utils.DateUtil;
 
 import common.contants.BillType;
+import common.contants.CashStatus;
 import common.contants.CommonDictType;
 
+import dao.CashInfoDao;
 import dao.DistributorDao;
 import dao.DistributorSuperiorDao;
+import dao.UserMonthBlotterDao;
+import dao.UserWalletDao;
+import dto.DistributorDetail;
 
 /**
  * 分销商
@@ -49,6 +61,18 @@ public class DistributorService {
         }
         
         int currMonth = DateUtil.getThisMonth();
+        
+        
+        UserMonthBlotter monthBlotter = UserMonthBlotterDao.get(currMonth, userId);
+        if(monthBlotter == null) {
+            monthBlotter = new UserMonthBlotter();
+            monthBlotter.setBlotterMonth(currMonth);
+            monthBlotter.setCreateTime(System.currentTimeMillis());
+            monthBlotter.setUserId(userId);
+            monthBlotter.setMonthBlotters(0l);
+        }
+        monthBlotter.setMonthBlotters(monthBlotter.getMonthBlotters() + blotterAmount);
+        UserMonthBlotterDao.save(monthBlotter);
         
         DistributorSuperior superior = DistributorSuperiorDao.get(userId);
         if (superior == null || superior.getSuperior() == null || superior.getSuperior().intValue() <= 0 || superior.getSuperior().intValue() == userId) {
@@ -123,5 +147,63 @@ public class DistributorService {
         // 递归访问上上线, 给上上线增加下下线流水
         depth++;
         flushBlotterToSuperiors(user, blotterAmount, depth, currMonth, consumerId, outTradeNo);
+    }
+    
+    public DistributorDetail distributorDetail(Integer userId) {
+        DistributorDetail detail = new DistributorDetail();
+        Distributor distributor = DistributorDao.get(userId);
+        if(distributor == null) {
+            return null;
+        }
+        
+        detail.setExtensionQrCode(distributor.getQrcodeUrl());
+        detail.setExtensionUrl(distributor.getLink());
+        detail.setType(distributor.getType());
+        
+        List<Integer> superiors = new ArrayList<Integer>();
+        superiors.add(userId);
+        for(int level=1; level<=MAX_BLOTTER_DEPTH; level++) {
+            List<DistributorSuperior> list = DistributorSuperiorDao.getBySuperiors(superiors);
+            if(CollectionUtils.isEmpty(list)) {
+                break;
+            }
+            
+            superiors.clear();
+            for(DistributorSuperior item : list) {
+                superiors.add(item.getUserId());
+            }
+            
+            List<UserMonthBlotter> blotters = UserMonthBlotterDao.getByIds(superiors);
+            for(UserMonthBlotter item : blotters) {
+                detail.addBlotter(level, item.getUserId(), item.getMonthBlotters());
+            }
+            
+        }
+        
+        UserWallet userWallet = UserWalletDao.getByUserId(userId);
+        if(userWallet == null) {
+            userWallet = UserWalletService.init(userId);
+        }
+        
+        List<Integer> types = new ArrayList<Integer>();
+        types.add(CashStatus.APPLY.getCode());
+        types.add(CashStatus.ING.getCode());
+        List<CashInfo> cashInfos = CashInfoDao.getByTypes(userId, types);
+        int amount = 0;
+        for(CashInfo info : cashInfos) {
+            amount += info.getAmount();
+        }
+        
+        if(userWallet == null) {
+            detail.setTotalIncome(0);
+            detail.setAllBalance(amount);
+            detail.setUsefulBalance(0);
+        } else {
+            detail.setTotalIncome(userWallet.getIncome());
+            detail.setAllBalance(amount + userWallet.getBalances());
+            detail.setUsefulBalance(userWallet.getBalances());
+        }
+        
+        return detail;
     }
 }

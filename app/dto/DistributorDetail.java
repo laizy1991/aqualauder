@@ -1,104 +1,99 @@
 package dto;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DistributorDetail {
-    private Long blotter;
-    private Long helpBlotter;
-    private Long commission;
+    private Map<Integer,List<Integer>> underling = new HashMap<Integer, List<Integer>>();
+    private Map<Integer, Map<Integer, Long>> underlingBlotter = new HashMap<Integer, Map<Integer, Long>>();
     private Integer allBalance;
     private Integer usefulBalance;
     private String extensionUrl;
     private String extensionQrCode;
     private Integer type;
-
-    /**
-     * 下线数
-     */
-    private Map<Integer, Integer> underlingCount;
-    
     /**
      * 累计收入
      */
     private Integer totalIncome;
-
-    public Long getBlotter() {
-        return blotter;
+    public Map<Integer, List<Integer>> getUnderling() {
+        return underling;
     }
-
-    public void setBlotter(Long blotter) {
-        this.blotter = blotter;
+    public void setUnderling(Map<Integer, List<Integer>> underling) {
+        this.underling = underling;
     }
-
-    public Long getHelpBlotter() {
-        return helpBlotter;
+    public Map<Integer, Map<Integer, Long>> getUnderlingBlotter() {
+        return underlingBlotter;
     }
-
-    public void setHelpBlotter(Long helpBlotter) {
-        this.helpBlotter = helpBlotter;
+    public void setUnderlingBlotter(Map<Integer, Map<Integer, Long>> underlingBlotter) {
+        this.underlingBlotter = underlingBlotter;
     }
-
-    public Long getCommission() {
-        return commission;
-    }
-
-    public void setCommission(Long commission) {
-        this.commission = commission;
-    }
-
     public Integer getAllBalance() {
         return allBalance;
     }
-
     public void setAllBalance(Integer allBalance) {
         this.allBalance = allBalance;
     }
-
     public Integer getUsefulBalance() {
         return usefulBalance;
     }
-
     public void setUsefulBalance(Integer usefulBalance) {
         this.usefulBalance = usefulBalance;
     }
-
     public String getExtensionUrl() {
         return extensionUrl;
     }
-
     public void setExtensionUrl(String extensionUrl) {
         this.extensionUrl = extensionUrl;
     }
-
     public String getExtensionQrCode() {
         return extensionQrCode;
     }
-
     public void setExtensionQrCode(String extensionQrCode) {
         this.extensionQrCode = extensionQrCode;
     }
-
     public Integer getType() {
         return type;
     }
-
     public void setType(Integer type) {
         this.type = type;
     }
-
-    public Map<Integer, Integer> getUnderlingCount() {
-        return underlingCount;
-    }
-
-    public void setUnderlingCount(Map<Integer, Integer> underlingCount) {
-        this.underlingCount = underlingCount;
-    }
-
     public Integer getTotalIncome() {
         return totalIncome;
     }
-
     public void setTotalIncome(Integer totalIncome) {
         this.totalIncome = totalIncome;
+    }
+    
+    public void addUnderling(int level, int userId) {
+        List<Integer> underlings = underling.get(level);
+        if(underlings == null) {
+            underlings = new ArrayList<Integer>();
+            underling.put(level, underlings);
+        }
+        
+        if(underlings.contains(userId)) {
+            return;
+        }
+        
+        underlings.add(userId);
+        
+    }
+    
+    public void addBlotter(int level, int userId, long blotter) {
+        Map<Integer, Long> blotters = underlingBlotter.get(level);
+        if(blotters == null) {
+            blotters = new HashMap<Integer, Long>();
+            underlingBlotter.put(level, blotters);
+        }
+        
+        Long userBlotter = blotters.get(userId);
+        if(userBlotter == null) {
+            userBlotter = blotter;
+        } else {
+            userBlotter += blotter;
+        }
+        blotters.put(userId, userBlotter);
     }
 }

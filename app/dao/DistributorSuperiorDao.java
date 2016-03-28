@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.List;
+
 import models.DistributorSuperior;
 
 /**
@@ -14,4 +16,7 @@ public class DistributorSuperiorDao {
         return ds;
     }
     
+    public static List<DistributorSuperior> getBySuperiors(List<Integer> superiors) {
+        return DistributorSuperior.find("superior in ?", superiors).fetch();
+    }
 }
