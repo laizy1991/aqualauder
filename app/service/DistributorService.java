@@ -15,12 +15,17 @@ import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import utils.DateUtil;
+
 import common.constants.BillType;
 import common.constants.CashStatus;
 import common.constants.CommonDictType;
+import common.constants.DistributorStatus;
+import common.constants.DistributorType;
+
 import dao.CashInfoDao;
 import dao.DistributorDao;
 import dao.DistributorSuperiorDao;
+import dao.UserDao;
 import dao.UserMonthBlotterDao;
 import dao.UserWalletDao;
 import dto.DistributorDetail;
@@ -38,19 +43,19 @@ public class DistributorService {
         return DistributorDao.get(id);
     }
 
-    public static void add(Distributor distributor) {
+    public static boolean add(Distributor distributor) {
         distributor.setCreateTime(System.currentTimeMillis());
         distributor.setUpdateTime(System.currentTimeMillis());
-        DistributorDao.insert(distributor);
+        return DistributorDao.insert(distributor);
     }
 
     public static void delete(Distributor distributor) {
         DistributorDao.delete(distributor);
     }
 
-    public static void update(Distributor distributor) {
+    public static boolean update(Distributor distributor) {
         distributor.setUpdateTime(System.currentTimeMillis());
-        DistributorDao.update(distributor);
+        return DistributorDao.update(distributor);
     }
     
     public static void blotterProduce(Integer userId, Long blotterAmount, String outTradeNo) {
@@ -204,4 +209,94 @@ public class DistributorService {
         
         return detail;
     }
+    
+    public boolean becomeDistributor(Integer userId, String realName, DistributorType type, String link, String qrcodeUrl) {
+        if(type == null) {
+            type = DistributorType.PERSONAL;
+        }
+        
+        User user = UserDao.get(userId);
+        if(user == null) {
+            return false;
+        }
+        Distributor distributor = DistributorDao.get(userId);
+        if(distributor != null) {
+            return true;
+        }
+        
+        distributor = new Distributor();
+        distributor.setJoinTime(System.currentTimeMillis());
+        distributor.setLink(link);
+        distributor.setQrcodeUrl(qrcodeUrl);
+        distributor.setRealName(realName);
+        distributor.setStatus(DistributorStatus.UN_AUTH.getCode());
+        distributor.setUserId(userId);
+        return add(distributor);
+    }
+
+    public boolean updateStatus(int userId, int status) {
+        Distributor distributor = DistributorDao.get(userId);
+        if(distributor == null) {
+            return false;
+        }
+        distributor.setStatus(status);
+        return update(distributor);
+    }
+    
+    public boolean createDistributorRef(Integer userId, Integer superiors) {
+        if(userId == null || superiors == null || superiors <= 0) {
+            Logger.warn("create ref fail, userId:%d, superiors:%d.", userId, superiors);
+            return false;
+        }
+        
+        if(superiors.intValue() == userId.intValue()) {
+            Logger.warn("user and superiors is same people");
+            return false;
+        }
+        
+        //检查是否有环
+        if(isSuperiors(userId, superiors, CHECK_DEPTH)) {
+            Logger.warn("(userId)%d is the superiors of (superiorsId)%d", userId, superiors);
+            return false;
+        }
+        
+        Distributor superDistributor = DistributorDao.get(superiors);
+        if(superDistributor == null || superDistributor.getStatus().intValue() != DistributorStatus.ACCESS_AUTH.getCode()) {
+            Logger.warn("superiors not found userId:%d, superiors:%d", userId, superiors);
+            return false;
+        }
+            
+        if(DistributorSuperiorDao.get(userId) != null) {
+            Logger.warn("superiors is exist, userId:%d", userId);
+            return false;
+        }
+        
+        return DistributorSuperiorDao.create(userId, superiors);
+    }
+
+
+    private static final int CHECK_DEPTH = 20;
+    /**
+     * 检查userId是否为superiors的直接上线或间接上线
+     * @param userId
+     * @param superiors
+     * @param currDepth
+     * @return
+     */
+    private boolean isSuperiors(int userId, Integer superiors, int currDepth) {
+        if(currDepth <= 0) {
+            return false;
+        }
+        
+        DistributorSuperior ref = DistributorSuperiorDao.get(superiors);
+        if(ref == null || ref.getSuperior() == null || ref.getSuperior().intValue() <= 0) {
+            return false;
+        } else if(ref.getSuperior().intValue() == userId) {
+            return true;
+        } else {
+            currDepth --;
+            return isSuperiors(userId, ref.getSuperior(), currDepth);
+        }
+    }
+    
 }

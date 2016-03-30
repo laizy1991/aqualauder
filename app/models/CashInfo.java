@@ -12,7 +12,7 @@ public class CashInfo extends Model {
     @Column(name="user_id")
     private Integer userId;
     @Column(name="cash_type")
-    private Integer cashTyppe;
+    private Integer cashType;
     @Column(name="amount")
     private Integer amount;
     @Column(name="cash_status")
@@ -33,12 +33,12 @@ public class CashInfo extends Model {
         this.userId = userId;
     }
 
-    public Integer getCashTyppe() {
-        return cashTyppe;
+    public Integer getCashType() {
+        return cashType;
     }
 
-    public void setCashTyppe(Integer cashTyppe) {
-        this.cashTyppe = cashTyppe;
+    public void setCashType(Integer cashType) {
+        this.cashType = cashType;
     }
 
     public Integer getAmount() {

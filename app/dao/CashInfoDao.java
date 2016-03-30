@@ -10,4 +10,12 @@ public class CashInfoDao {
         return CashInfo.find("userId = ? and cashStatus in ?", userId, types).fetch();
     }
     
+    public static boolean insert(CashInfo info) {
+        if(info == null) {
+            return false;
+        }
+        info.setCreateTime(System.currentTimeMillis());
+        info.setUpdateTime(System.currentTimeMillis());
+        return info.create();
+    }
 }

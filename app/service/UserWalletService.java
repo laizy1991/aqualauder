@@ -2,9 +2,14 @@ package service;
 
 import models.UserWallet;
 import play.Logger;
+import utils.DateUtil;
 import utils.DistributeCacheLock;
+
 import common.constants.BillType;
+import common.constants.CashStatus;
+import common.constants.CashType;
 import common.constants.OperType;
+
 import dao.UserWalletDao;
 
 /**
@@ -115,6 +120,55 @@ public class UserWalletService {
             return null;
         }
         return userWallet;
+    }
+    
+
+
+    public static boolean cash(int userId, int amount, int type, String slipNo) {
+        if(userId <= 0 || amount <= 0) {
+            Logger.error("can not cash, userId:%d, num:%d", userId, amount);
+            return false;
+        }
+
+        //加锁
+        final DistributeCacheLock lockMgr = DistributeCacheLock.getInstance();
+        final String lockKey = getWalletsLockKey(userId);
+        
+        if(lockMgr.isLocked(lockKey)) {
+            return false;
+        }
+        if(!lockMgr.tryLock(lockKey)) {
+            return false;
+        }
+        
+        try {
+            
+            UserWallet userWallet = UserWalletDao.getByUserId(userId);
+            if(userWallet == null) {
+                Logger.error("userWallets not found, userId:%d", userId);
+                return false;
+            }
+            
+            if(userWallet.getBalances() < amount) {
+                Logger.warn("not enough money,userId:%d", userId);
+                return false;
+            }
+            boolean isSucc = spend(userId, amount, "", BillType.CASH, userId, amount, DateUtil.getThisMonth());
+            if(!isSucc) {
+                return false;
+            }
+            
+            CashStatus status = CashStatus.APPLY;
+            CashType cashType = CashType.BANK;
+            if(type == CashType.EREDPACKET.getCode()) {
+                //发红包
+                status = CashStatus.SUCCESS;
+                cashType = CashType.EREDPACKET;
+            }
+            return CashInfoService.create(userId, cashType, amount, slipNo, status);
+        } finally {
+            lockMgr.unLock(lockKey);
+        }
     }
     
     /**
