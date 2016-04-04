@@ -1,10 +1,12 @@
 package dao;
 
-import models.Goods;
-import org.apache.commons.collections.CollectionUtils;
-import play.Logger;
-
 import java.util.List;
+
+import models.Goods;
+
+import org.apache.commons.collections.CollectionUtils;
+
+import play.Logger;
 
 public class GoodsDao {
 
@@ -15,7 +17,7 @@ public class GoodsDao {
         return goods.create();
     }
     
-    public static Goods get(int id) {
+    public static Goods get(long id) {
         List<Goods> list = Goods.find("goods_Id", id).fetch();
         if(CollectionUtils.isEmpty(list)) {
             return null;
@@ -41,5 +43,9 @@ public class GoodsDao {
         if (goods != null) {
             goods.delete();
         }
+    }
+    
+    public static List<Goods> getBy(int type, int page, int size)  {
+        return Goods.find("goods_type = ? and state = 1", type).fetch(page, size);
     }
 }

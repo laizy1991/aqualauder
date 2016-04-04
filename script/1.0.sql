@@ -3461,10 +3461,11 @@ CREATE TABLE `goods_spec` (
 -- ----------------------------
 DROP TABLE IF EXISTS `goods_stock`;
 CREATE TABLE `goods_stock` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
-  `goods_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '商品id',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `goods_id` bigint(20) NOT NULL DEFAULT '0',
   `goods_size` int(11) NOT NULL DEFAULT '0',
   `goods_color` int(11) NOT NULL DEFAULT '0' COMMENT '商品颜色，-1表示所有颜色',
+  `stock_desc` varchar(500) DEFAULT NULL COMMENT '库存描述',
   `amount` int(11) NOT NULL DEFAULT '0' COMMENT '数量',
   `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
   `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
