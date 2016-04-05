@@ -1,6 +1,5 @@
 output/
 /modules/
-/lib/
 .classpath
 .project
 .settings/

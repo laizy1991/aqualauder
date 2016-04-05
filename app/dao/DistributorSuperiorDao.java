@@ -19,4 +19,12 @@ public class DistributorSuperiorDao {
     public static List<DistributorSuperior> getBySuperiors(List<Integer> superiors) {
         return DistributorSuperior.find("superior in ?", superiors).fetch();
     }
+    
+    public static boolean create(int userId, int superior) {
+        DistributorSuperior ds = new DistributorSuperior();
+        ds.setSuperior(superior);
+        ds.setUserId(userId);
+        ds.setCreateTime(System.currentTimeMillis());
+        return ds.create();
+    }
 }

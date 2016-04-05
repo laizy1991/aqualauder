@@ -16,12 +16,13 @@ public class DistributorDao {
         return distributor;
     }
     
-    public static void update(Distributor distributor) {
+    public static boolean update(Distributor distributor) {
         if(distributor == null || distributor.getUserId() == null) {
-            return;
+            return false;
         }
         
         distributor.save();
+        return true;
     }
 
     public static void delete(Distributor distributor) {
