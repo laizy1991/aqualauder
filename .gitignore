@@ -17,3 +17,4 @@ test-result/*
 *.iml
 *.ipr
 *.iws
+target
