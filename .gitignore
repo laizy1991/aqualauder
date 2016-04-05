@@ -1,6 +1,5 @@
 output/
 /modules/
-/lib/
 .classpath
 .project
 .settings/
@@ -18,3 +17,4 @@ test-result/*
 *.iml
 *.ipr
 *.iws
+target
