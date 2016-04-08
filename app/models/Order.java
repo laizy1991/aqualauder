@@ -32,7 +32,7 @@ public class Order extends Model {
     private Integer state;
 
     @Column(name="forbid_refund")
-    private String forbidRefund;
+    private Integer forbidRefund;
 
     @Column(name="order_memo")
     private String orderMemo;
@@ -117,11 +117,11 @@ public class Order extends Model {
         this.state = state;
     }
 
-    public String getForbidRefund() {
+    public Integer getForbidRefund() {
         return forbidRefund;
     }
 
-    public void setForbidRefund(String forbidRefund) {
+    public void setForbidRefund(Integer forbidRefund) {
         this.forbidRefund = forbidRefund;
     }
 

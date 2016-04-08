@@ -1,10 +1,12 @@
 package dao;
 
-import models.RefundOrder;
-import org.apache.commons.collections.CollectionUtils;
-import play.Logger;
-
 import java.util.List;
+
+import models.RefundOrder;
+
+import org.apache.commons.collections.CollectionUtils;
+
+import play.Logger;
 
 public class RefundOrderDao {
 
@@ -15,7 +17,7 @@ public class RefundOrderDao {
         return refundOrder.create();
     }
     
-    public static RefundOrder get(int id) {
+    public static RefundOrder get(long id) {
         List<RefundOrder> list = RefundOrder.find("refundOrder_Id", id).fetch();
         if(CollectionUtils.isEmpty(list)) {
             return null;
@@ -29,14 +31,19 @@ public class RefundOrderDao {
         return list.get(0);
     }
     
-    public static void update(RefundOrder refundOrder) {
+    public static boolean update(RefundOrder refundOrder) {
         if(refundOrder == null || refundOrder.getId() == 0) {
-            return;
+            return false;
         }
         
         refundOrder.save();
+        return true;
     }
 
+    public static RefundOrder getByOrder(long orderId) {
+        return RefundOrder.find("orderId", orderId).first();
+    }
+    
     public static void delete(RefundOrder refundOrder) {
         if (refundOrder != null) {
             refundOrder.delete();
