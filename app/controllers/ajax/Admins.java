@@ -1,12 +1,10 @@
 package controllers.ajax;
 
-import dao.AdminDao;
 import dto.SessionInfo;
 import exception.BusinessException;
 import models.Administrator;
 
 import common.core.AjaxController;
-import play.mvc.Scope;
 import play.mvc.Scope.Session;
 import service.AdminService;
 import utils.StringUtil;

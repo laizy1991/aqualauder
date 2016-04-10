@@ -4,7 +4,6 @@ import java.util.List;
 
 import models.Administrator;
 import common.core.WebController;
-import dao.AdminDao;
 
 public class Admins extends WebController {
 
