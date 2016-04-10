@@ -11,14 +11,14 @@ import dao.RefundOrderDao;
 
 public class RefundOrderService {
 
-    public static RefundOrder get(int id) {
+    public static RefundOrder get(long id) {
         return RefundOrderDao.get(id);
     }
 
-    public static void add(RefundOrder refundOrder) {
+    public static boolean add(RefundOrder refundOrder) {
         refundOrder.setCreateTime(System.currentTimeMillis());
         refundOrder.setUpdateTime(System.currentTimeMillis());
-        RefundOrderDao.insert(refundOrder);
+        return RefundOrderDao.insert(refundOrder);
     }
 
     public static void delete(RefundOrder refundOrder) {
@@ -30,47 +30,14 @@ public class RefundOrderService {
         RefundOrderDao.update(refundOrder);
     }
     
-    /**
-     * 申请退款
-     * @param userId
-     * @param orderId
-     * @param memo
-     */
-    public static void refundApply(int userId, long orderId, String memo) {
-        Order order = OrderService.get(orderId);
-        if(order == null) {
-            Logger.error("order not found, id:%s", orderId);
-            return;
-        }
-        
-        if(order.getForbidRefund().intValue() == 1 || order.getUserId().intValue() != userId) {
-            Logger.error("can not refund.");
-            return;
-        }
-
-        RefundOrder refundOrder = RefundOrderDao.getByOrder(orderId);
-        if (refundOrder != null
-                && (refundOrder.getRefundState().intValue() == RefundStatus.SUCCESS.getCode()
-                        || refundOrder.getRefundState().intValue() == RefundStatus.APPLY
-                                .getCode() || refundOrder.getRefundState().intValue() == RefundStatus.ING
-                        .getCode())) {
-            Logger.error("can not refund.");
-            return;
-        }
-        if(refundOrder == null) {
-            refundOrder = new RefundOrder();
-        }
-        refundOrder.setStateHistory(refundOrder.getStateHistory() + RefundStatus.APPLY.getCode()
-                + "_" + DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss"));
-        refundOrder.setCreateTime(System.currentTimeMillis());
-        refundOrder.setOrderId(orderId);
-        refundOrder.setRefundState(RefundStatus.APPLY.getCode());
-        refundOrder.setUpdateTime(System.currentTimeMillis());
-        refundOrder.setUserMemo(memo);
-        refundOrder.setSellerMemo("");
-        add(refundOrder);
+    public static RefundOrder getByOrder(long orderId) {
+        return RefundOrderDao.getByOrder(orderId);
     }
     
+    public static boolean updateRefundState(long id, int status) {
+        RefundStatus rs = RefundStatus.resolveType(status);
+        return updateRefundState(id, rs);
+    }
     /**
      * 更新订单退款状态
      * @param orderId

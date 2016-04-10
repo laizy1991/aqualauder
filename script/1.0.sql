@@ -3487,8 +3487,8 @@ CREATE TABLE `order_goods` (
   `goods_type` int(11) NOT NULL DEFAULT '0' COMMENT '商品类型：1=物品，2=赠品',
   `goods_name` varchar(500) NOT NULL DEFAULT '' COMMENT '商品名称',
   `goods_desc` varchar(1000) DEFAULT '' COMMENT '商品描述',
-  `goods_origin_price` int(10) DEFAULT '0' COMMENT '商品原价-单位分',
-  `goods_discount_price` int(10) DEFAULT '0' COMMENT '商品打折价-单位分',
+  `goods_origin_price` int(11) DEFAULT '0' COMMENT '商品原价-单位分',
+  `goods_discount_price` int(11) DEFAULT '0' COMMENT '商品打折价-单位分',
   `goods_discount` varchar(255) DEFAULT '' COMMENT '折扣描述',
   `goods_icon` varchar(1000) DEFAULT '' COMMENT '商品图片url',
   `goods_number` int(11) DEFAULT '1' COMMENT '购买商品的数量',
@@ -3496,6 +3496,7 @@ CREATE TABLE `order_goods` (
   PRIMARY KEY (`id`),
   KEY `idx1` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单物品';
+
 
 -- ----------------------------
 -- Records of order_goods

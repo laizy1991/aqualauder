@@ -36,6 +36,10 @@ public class OrderDetail {
 
     
     public OrderDetail(Order order) {
+        init(order);
+    }
+    
+    public void init(Order order) {
         this.deliverTime = order.getDeliverTime();
         this.expressId = order.getExpressId();
         this.expressNum = order.getExpressNum();
@@ -71,7 +75,7 @@ public class OrderDetail {
         info.setGoodsDiscountPrice(goods.getGoodsDiscountPrice());
         info.setGoodsIcon(goods.getGoodsIcon());
         info.setGoodsId(goods.getGoodsId());
-        info.setGoodsName(goods.getGoodsName());
+        info.setGoodsName(goods.getGoodsTitle());
         info.setGoodsNumber(goods.getGoodsDiscountPrice());
         info.setGoodsOriginPrice(goods.getGoodsOriginPrice());
         info.setGoodsType(goods.getGoodsType());

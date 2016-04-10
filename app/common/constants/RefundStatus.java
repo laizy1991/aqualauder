@@ -9,11 +9,11 @@ package common.constants;
 public enum RefundStatus {
 //-1=无退款，0=申请退款,2=退款中,3=退款成功,4=拒绝退款，5=取消退款',
     APPLY(0, "申请退款"),
-    ING(1, "转出"),
-    SUCCESS(2, "转出"),
+    ING(1, "退款中"),
+    SUCCESS(2, "退款成功"),
     REFUSE(3, "拒绝"),
     CANCEL(4, "取消"),
-    NOREFUND(-1, "无退款");
+    NOTREFUND(-1, "无退款");
     
     private int code;
     private String desc;
@@ -35,5 +35,13 @@ public enum RefundStatus {
     public void setDesc(String desc) {
         this.desc = desc;
     }
-    
+    public static RefundStatus resolveType(int code) {
+        for (RefundStatus rs: RefundStatus.values()) {
+            if (code == rs.getCode()) {
+                return rs;
+            }
+        }
+        
+        return null;
+    }
 }
