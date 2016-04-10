@@ -227,7 +227,7 @@ fieldset, img {
 }
 
 
-.header {
+.header, .header-inner {
 	background-color: #222;
 }
 
@@ -245,6 +245,7 @@ fieldset, img {
 .header .userbar {
 	float: right;
 	height: 40px;
+	margin-right: 10px;
 }
 
 .header .userbar .info {
