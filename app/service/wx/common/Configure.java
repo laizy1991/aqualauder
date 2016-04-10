@@ -31,18 +31,22 @@ public class Configure {
 	private static String ip = "";
 	
 	static {
-		key = Play.configuration.getProperty("wx.config.key", "");
-		appID = Play.configuration.getProperty("wx.config.appid", "");
-		mchID = Play.configuration.getProperty("wx.config.mchid", "");
-		subMchID = Play.configuration.getProperty("", "");
-		certLocalPath = Play.configuration.getProperty("wx.config.sslcert.path", "");
-		certPassword = Play.configuration.getProperty("wx.config.sslkey.path", "");
-		ip = Play.configuration.getProperty("", "");
+		key = Play.configuration.getProperty("wx.config.key", "726Ujis98wJ93S8hv634Hj934f92424j");
+		appID = Play.configuration.getProperty("wx.config.appid", "wxcec16984044e8658");
+		mchID = Play.configuration.getProperty("wx.config.mchid", "1326679501");
+//		subMchID = Play.configuration.getProperty("", "");
+		certLocalPath = Play.configuration.getProperty("wx.config.sslcert.path");
+		certPassword = Play.configuration.getProperty("wx.config.sslkey.path");
+		ip = Play.configuration.getProperty("local.host.ip");
 	}
 
 	//以下是API的路径：
 	//1) 统一下单API
 	public static String UNIFIED_ORDER_API = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+	//2) 发送现金红包API
+	public static String SEND_REDPACK_API = "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack";
+	//3) 查询现金红包API
+	public static String QUERY_REDPACK_API = "	https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo";
 
 	public static boolean isUseThreadToDoReport() {
 		return useThreadToDoReport;

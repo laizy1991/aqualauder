@@ -1,6 +1,7 @@
 package service.wx.common;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +12,10 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 public class Util {
 
@@ -60,12 +65,25 @@ public class Util {
         return tInputStringStream;
     }
 
-    public static Object getObjectFromXML(String xml, Class tClass) {
+    public static Object getObjectFromXMLWithXStream(String xml, Class tClass) {
         //将从API返回的XML数据映射到Java对象
-        XStream xStreamForResponseData = new XStream();
+        XStream xStreamForResponseData = new XStream(new DomDriver());
         xStreamForResponseData.alias("xml", tClass);
         xStreamForResponseData.ignoreUnknownElements();//暂时忽略掉一些新增的字段
         return xStreamForResponseData.fromXML(xml);
+    }
+    
+    public static <T> T getObjectFromXMLWithJAXB(String xml, Class<T> c) {
+        T t = null;  
+        try {  
+            JAXBContext context = JAXBContext.newInstance(c);  
+            Unmarshaller unmarshaller = context.createUnmarshaller();  
+//            t = (T) unmarshaller.unmarshal(new StringReader(xml));  
+            t = (T) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes()));
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        }  
+        return t;  
     }
 
     public static String getStringFromMap(Map<String, Object> map, String key, String defaultValue) {

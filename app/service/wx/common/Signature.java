@@ -111,7 +111,7 @@ public class Signature {
         	Logger.info("API返回的数据签名验证不通过，有可能被第三方篡改!!!");
             return false;
         }
-        Logger.info("恭喜，API返回的数据签名验证通过!!!");
+        Logger.info("API返回的数据签名验证通过!!!");
         return true;
     }
 

@@ -1,8 +1,9 @@
-package service.wx.dto;
+package service.wx.dto.unifiedOrder;
 
 import service.wx.common.Configure;
 import service.wx.common.RandomStringGenerator;
 import service.wx.common.Signature;
+import service.wx.service.BaseService;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -58,7 +59,7 @@ public class UnifiedOrderReqDto {
         String sign = Signature.getSign(toMap());
         setSign(sign);//把签名数据设置到Sign这个属性中
     }
-
+    
     public Map<String,Object> toMap(){
         Map<String,Object> map = new HashMap<String, Object>();
         Field[] fields = this.getClass().getDeclaredFields();

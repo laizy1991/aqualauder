@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+<title>确认支付</title>
+<link rel="stylesheet" href="/public/css/pay.css"/>
+<script src="/public/js/front/jquery.min.js"></script>
+<script src="/public/js/front/h5_unit_demo.js"></script>
+</head>
+<body>
+
+<section class="main">
+		<div class="info-area">	
+			<dl class="totle">
+				<dt class="totle-title">实付款</dt>
+					<dd class="totle-num"><strong>￥15.00</strong>
+				</dd>
+			</dl>
+
+			<ul class="info-list">
+				<li>&nbsp;</li>
+				<li class="list last-time">
+					<span class="list-title">商品名称</span>
+					<span class="list-content">小黑裤一套</span>
+				</li>
+				<li class="list in-time">
+					<span class="list-title">收货人</span>
+					<span class="list-content">兽王</span>
+				</li>
+				<li class="list">
+					<span class="list-title">联系电话</span>
+					<span class="list-content">15989164257</span>
+				</li>
+				<li class="list">
+					<span class="list-title">码数</span>
+					<span class="list-content">XL</span>
+				</li>
+				<li class="list">
+					<span class="list-title">收货地址</span>
+					<span class="list-content">
+							广东省 广州市 天河区 </br>
+							 车陂街道车陂路美东花园
+					</span>
+				</li>
+				<li>&nbsp;</li>
+			</ul>
+			<div class="info-btn">
+				<a href="javascript:void(0)" class="btn btn-green" onclick="callpay()" id="pay_btn">立即缴费</a>
+			</div>
+		</div>
+</section>
+
+</body>
+<script type="text/javascript">
+function onBridgeReady(){
+   WeixinJSBridge.invoke(
+       'getBrandWCPayRequest', ${jsRequestBody},
+       function(res){     
+           if(res.err_msg == "get_brand_wcpay_request：ok" ) {}     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+       }
+   ); 
+}
+function callpay() {
+	if (typeof WeixinJSBridge == "undefined"){
+	   if( document.addEventListener ){
+	       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+	   }else if (document.attachEvent){
+	       document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+	       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	   }
+	}else{
+	   onBridgeReady();
+	}
+}
+</script>
+</html>
+

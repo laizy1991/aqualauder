@@ -1,4 +1,4 @@
-package service.wx.dto;
+package service.wx.dto.unifiedOrder;
 
 public class UnifiedOrderRspDto {
 
