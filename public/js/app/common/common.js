@@ -8,6 +8,7 @@ define(function(require) {
             this.placeholder();
             this.sidebar();
             this.updateSessionInfo($('[role="updateSessionInfo"]'));
+            this.resizer();
         },
 
         // 下拉菜单
@@ -37,18 +38,18 @@ define(function(require) {
             //$("dd:not(:first)").hide();
             $(".nav-bd a").each(function () {
                 if($(this).is(".current")){
-                    $("dd:visible").slideUp("slow");
-                    $(this).parent().slideDown("slow");
+                    $("dd:visible").slideUp(100);
+                    $(this).parent().slideDown(100);
                     $(this).parent().parent().find("dt").css("color","black");
                 }
             });
             $("dt").click(function () {
                 if($(this).next().is(":visible")){
-                    $(this).next().slideUp("slow");
+                    $(this).next().slideUp(100);
                     return;
                 }
-                $("dd:visible").slideUp("slow");
-                $(this).parent().children().next().slideDown("slow");
+                $("dd:visible").slideUp(100);
+                $(this).parent().children().next().slideDown(100);
                 return false;
             });
         },
@@ -64,6 +65,17 @@ define(function(require) {
                     }
                 });
             });
+        },
+
+        resizer: function() {
+            var resize = function() {
+                var height = $(window).height() - 40;
+                if(height < 560) {height = 560}
+                $(".content").height(height);
+                console.log($(".content").height())
+            }
+            resize();
+            window.onresize = resize;
         }
     };
 
