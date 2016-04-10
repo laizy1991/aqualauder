@@ -2,7 +2,6 @@ package models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
 
 import play.db.jpa.GenericModel;
@@ -11,7 +10,6 @@ import play.db.jpa.GenericModel;
 @Table(name="order")
 public class Order extends GenericModel {
 
-    @Id
     @Column(name="id")
     private Long id;
     

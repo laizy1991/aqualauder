@@ -73,19 +73,6 @@ public class Util {
         return xStreamForResponseData.fromXML(xml);
     }
     
-    public static <T> T getObjectFromXMLWithJAXB(String xml, Class<T> c) {
-        T t = null;  
-        try {  
-            JAXBContext context = JAXBContext.newInstance(c);  
-            Unmarshaller unmarshaller = context.createUnmarshaller();  
-//            t = (T) unmarshaller.unmarshal(new StringReader(xml));  
-            t = (T) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes()));
-        } catch (Exception e) {  
-            e.printStackTrace();  
-        }  
-        return t;  
-    }
-
     public static String getStringFromMap(Map<String, Object> map, String key, String defaultValue) {
         if (key == "" || key == null) {
             return defaultValue;
