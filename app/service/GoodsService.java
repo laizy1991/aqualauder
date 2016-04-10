@@ -3,12 +3,17 @@ package service;
 import java.util.List;
 
 import models.Goods;
+import models.GoodsIcon;
 import models.GoodsStock;
 
 import org.apache.commons.collections.CollectionUtils;
 
 import play.Logger;
+
+import common.constants.Separator;
+
 import dao.GoodsDao;
+import dao.GoodsIconDao;
 import dao.GoodsStockDao;
 import dto.GoodsDetail;
 
@@ -63,5 +68,22 @@ public class GoodsService {
         }
         
         return detail;
+    }
+    
+    public static String getIcon(long goodsId) {
+        List<GoodsIcon> icons = GoodsIconDao.getByGoods(goodsId);
+        if(CollectionUtils.isEmpty(icons)) {
+            return "";
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        String sep = "";
+        for(GoodsIcon icon : icons) {
+            sb.append(icon.getIconUrl());
+            sb.append(sep);
+            sep = Separator.COMMON_SEPERATOR_COMME;
+        }
+        
+        return sb.toString();
     }
 }

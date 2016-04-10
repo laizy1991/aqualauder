@@ -27,19 +27,19 @@ public class OrderService {
         return OrderDao.get(id);
     }
 
-    public static void add(Order order) {
+    public static boolean add(Order order) {
         order.setCreateTime(System.currentTimeMillis());
         order.setUpdateTime(System.currentTimeMillis());
-        OrderDao.insert(order);
+        return OrderDao.insert(order);
     }
 
     public static void delete(Order order) {
         OrderDao.delete(order);
     }
 
-    public static void update(Order order) {
+    public static boolean update(Order order) {
         order.setUpdateTime(System.currentTimeMillis());
-        OrderDao.update(order);
+        return OrderDao.update(order);
     }
     
     /**
@@ -85,7 +85,7 @@ public class OrderService {
             
             RefundOrder refund = RefundOrderDao.getByOrder(order.getId());
             if(refund == null) {
-                detail.setRefundState(RefundStatus.NOREFUND.getCode());
+                detail.setRefundState(RefundStatus.NOTREFUND.getCode());
             } else {
                 detail.setRefundState(refund.getRefundState());
             }
@@ -111,7 +111,7 @@ public class OrderService {
         OrderDetail detail = new OrderDetail(order);
         RefundOrder refund = RefundOrderDao.getByOrder(order.getId());
         if(refund == null) {
-            detail.setRefundState(RefundStatus.NOREFUND.getCode());
+            detail.setRefundState(RefundStatus.NOTREFUND.getCode());
         } else {
             detail.setRefundState(refund.getRefundState());
         }
@@ -124,5 +124,4 @@ public class OrderService {
         
         return detail;
     } 
-    
 }

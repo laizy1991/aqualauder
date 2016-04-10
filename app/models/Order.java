@@ -1,15 +1,20 @@
 package models;
 
-import play.db.jpa.Model;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
+
+import play.db.jpa.GenericModel;
 
 @Entity
 @Table(name="order")
-public class Order extends Model {
+public class Order extends GenericModel {
 
+    @Id
+    @Column(name="id")
+    private Long id;
+    
     @Column(name="user_id")
     private Integer userId;
 
@@ -195,5 +200,13 @@ public class Order extends Model {
 
     public void setUpdateTime(Long updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
