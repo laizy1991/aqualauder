@@ -1,21 +1,20 @@
 package service.wx.common;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
-
-import org.slf4j.LoggerFactory;
-
-import play.Logger;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+
+import play.Logger;
+import play.Play;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class Util {
 
@@ -68,6 +67,7 @@ public class Util {
     public static Object getObjectFromXMLWithXStream(String xml, Class tClass) {
         //将从API返回的XML数据映射到Java对象
         XStream xStreamForResponseData = new XStream(new DomDriver());
+        xStreamForResponseData.setClassLoader(Play.classloader);
         xStreamForResponseData.alias("xml", tClass);
         xStreamForResponseData.ignoreUnknownElements();//暂时忽略掉一些新增的字段
         return xStreamForResponseData.fromXML(xml);
