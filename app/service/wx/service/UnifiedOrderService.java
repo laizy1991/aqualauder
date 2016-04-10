@@ -1,5 +1,7 @@
 package service.wx.service;
 
+import com.google.gson.Gson;
+
 import net.sf.json.JSONObject;
 import play.Logger;
 import service.wx.common.Configure;
@@ -33,6 +35,7 @@ public class UnifiedOrderService extends BaseService{
     	Logger.info("统一下单API返回的数据是：%s", responseString);
         //将从API返回的XML数据映射到Java对象
     	UnifiedOrderRspDto rsp = (UnifiedOrderRspDto)Util.getObjectFromXMLWithXStream(responseString, UnifiedOrderRspDto.class);
+    	System.err.println(new Gson().toJson(rsp));
 //    	UnifiedOrderRspDto rsp = XMLParser.getObjectFromXML(responseString, UnifiedOrderRspDto.class);
 	  /* if(null == rsp || null == rsp.getReturn_code()) {
 			//通信失败
