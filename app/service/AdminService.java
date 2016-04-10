@@ -28,16 +28,12 @@ public class AdminService {
     
 
     public static SessionInfo login(String username, String password) throws BusinessException {
-        System.err.println(username);
-        System.err.println(password);
         Administrator admin = AdminDao.getByName(username);
         if (admin == null || new Integer(1).equals(admin.getDeleted())) {
             throw new BusinessException("User not exists");
         }
         
-        //TODO MD5加密
         String md5 = EncryptionUtil.md5(password + SLAT);
-        System.err.println(md5);
         if (!admin.getPassword().equals(md5)) {
             throw new BusinessException("Password incorrect");
         }

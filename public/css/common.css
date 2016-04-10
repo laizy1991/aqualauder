@@ -221,7 +221,8 @@ fieldset, img {
 
 .sidebar {
 	float: left;
-	width: 250px;
+	max-width: 250px;
+	width: 19.5%;
     border-right:1px solid #E5E5E5;
 }
 
@@ -960,25 +961,24 @@ fieldset, img {
 	bottom: 15px
 }
 
-@
--webkit-keyframes ui-dialog-loading { 0%{
-	-webkit-transform: rotate(0deg)
+@-webkit-keyframes ui-dialog-loading {
+	0%{
+		-webkit-transform: rotate(0deg)
+	}
+
+	100%{
+		-webkit-transform:rotate(360deg)
+	}
 }
 
-100%{
--webkit-transform
-:rotate(360deg)
-}
-}
-@
-keyframes ui-dialog-loading { 0%{
-	transform: rotate(0deg)
-}
+@keyframes ui-dialog-loading {
+	0%{
+		transform: rotate(0deg)
+	}
 
-100%{
-transform
-:rotate(360deg)
-}
+	100%{
+		transform:rotate(360deg)
+	}
 }
 .ui-dialog-loading {
 	vertical-align: middle;
