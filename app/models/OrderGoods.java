@@ -16,8 +16,8 @@ public class OrderGoods extends Model {
     @Column(name="goods_id")
     private Long goodsId;
 
-    @Column(name="goods_name")
-    private String goodsName;
+    @Column(name="goods_title")
+    private String goodsTitle;
     
     @Column(name="goods_type")
     private Integer goodsType;
@@ -56,14 +56,6 @@ public class OrderGoods extends Model {
         this.goodsId = goodsId;
     }
 
-    public String getGoodsName() {
-        return goodsName;
-    }
-
-    public void setGoodsName(String goodsName) {
-        this.goodsName = goodsName;
-    }
-
     public Integer getGoodsType() {
         return goodsType;
     }
@@ -78,6 +70,14 @@ public class OrderGoods extends Model {
 
     public void setGoodsNumber(Integer goodsNumber) {
         this.goodsNumber = goodsNumber;
+    }
+
+    public String getGoodsTitle() {
+        return goodsTitle;
+    }
+
+    public void setGoodsTitle(String goodsTitle) {
+        this.goodsTitle = goodsTitle;
     }
 
     public String getGoodsIcon() {

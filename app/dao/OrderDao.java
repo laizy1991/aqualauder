@@ -31,12 +31,13 @@ public class OrderDao {
         return list.get(0);
     }
     
-    public static void update(Order order) {
+    public static boolean update(Order order) {
         if(order == null || order.getId() == 0) {
-            return;
+            return false;
         }
         
         order.save();
+        return true;
     }
 
     public static List<Order> list(int userId, int page, int size) {
