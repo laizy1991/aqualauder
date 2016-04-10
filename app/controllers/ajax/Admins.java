@@ -1,10 +1,13 @@
 package controllers.ajax;
 
 import dao.AdminDao;
+import dto.SessionInfo;
 import exception.BusinessException;
 import models.Administrator;
 
 import common.core.AjaxController;
+import play.mvc.Scope;
+import play.mvc.Scope.Session;
 import service.AdminService;
 import utils.StringUtil;
 
@@ -26,17 +29,27 @@ public class Admins extends AjaxController {
 
     public static void delete(Administrator admin) throws Exception {
         if(!StringUtil.isNullOrEmpty(admin.getUsername())) {
-            admin.setDeleted(1);
-            AdminService.update(admin);
+            AdminService.delete(admin);
         }
         renderSuccessJson();
     }
 
-    public static void update(Administrator admin) {
-        if(admin != null) {
-            AdminService.update(admin);
+    public static void update(Administrator admin) throws BusinessException {
+        if (admin == null
+                || StringUtil.isNullOrEmpty(admin.getPassword())) {
+            throw new BusinessException("Lack of information");
         }
-        renderSuccessJson();
+
+        Session session = Session.current.get();
+
+        if (session != null) {
+            SessionInfo sessionInfo = AdminService.getSessionInfo(session.get("sid"));
+            if (sessionInfo != null && sessionInfo.getAdmin() != null && sessionInfo.getAdmin().getId() == admin.getId()) {
+                AdminService.update(admin);
+                renderSuccessJson();
+            }
+        }
+        throw new BusinessException("no permission");
     }
 
 }

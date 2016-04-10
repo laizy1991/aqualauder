@@ -55,7 +55,9 @@ public class AdminService {
     }
 
     public static void delete(Administrator admin) {
-        AdminDao.delete(admin);
+        admin.setUpdateTime(System.currentTimeMillis());
+        admin.setDeleted(1);
+        AdminDao.update(admin);
     }
 
     public static void update(Administrator admin) {
