@@ -15,6 +15,7 @@ define(function(require) {
             this.bindEvent();
             this.initData();
             this.initTab();
+            this.IntResizer();
         },
         
         initData: function() {
@@ -57,6 +58,28 @@ define(function(require) {
                     cookie.setCookie('yyUser', $mobile.val(), 60 * 60 * 60, '/');
                 }
             });
+        },
+
+        IntResizer: function() {
+            var footerHeight = $(".footer").height();
+            var loginHeight = $("login-box").height();
+
+            var minHeight = 600;
+            var resize = function() {
+                var windowHeight = $(window).height();
+                var loginMarginTop = (windowHeight - loginHeight)/2;
+                if(windowHeight >= minHeight) {
+                    $(".content").height(windowHeight - footerHeight);
+                    $(".login-box").marginTop = loginMarginTop;
+
+                }
+            }
+
+            window.onresize = resize;
+            var contentHeight = $(window).height()-footerHeight;
+            $(".content").height( contentHeight> minHeight?contentHeight: minHeight);
+
+
         }
     };
     

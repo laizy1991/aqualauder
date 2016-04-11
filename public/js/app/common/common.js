@@ -8,7 +8,7 @@ define(function(require) {
             this.placeholder();
             this.sidebar();
             this.updateSessionInfo($('[role="updateSessionInfo"]'));
-            this.resizer();
+            this.IntResizer();
         },
 
         // 下拉菜单
@@ -67,15 +67,20 @@ define(function(require) {
             });
         },
 
-        resizer: function() {
+        IntResizer: function() {
+            var headerHeight = $(".header").height();
+            var minHeight = 600;
             var resize = function() {
-                var height = $(window).height() - 40;
-                if(height < 560) {height = 560}
-                $(".content").height(height);
-                console.log($(".content").height())
+                var windowHeight = $(window).height();
+                if(windowHeight >= minHeight) {
+                    $(".content").height(windowHeight - headerHeight);
+
+                }
             }
-            resize();
+
             window.onresize = resize;
+            var contentHeight = $(window).height()-headerHeight;
+            $(".content").height( contentHeight> minHeight?contentHeight: minHeight);
         }
     };
 
