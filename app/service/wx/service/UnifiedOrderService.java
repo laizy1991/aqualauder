@@ -35,9 +35,7 @@ public class UnifiedOrderService extends BaseService{
     	Logger.info("统一下单API返回的数据是：%s", responseString);
         //将从API返回的XML数据映射到Java对象
     	UnifiedOrderRspDto rsp = (UnifiedOrderRspDto)Util.getObjectFromXMLWithXStream(responseString, UnifiedOrderRspDto.class);
-    	System.err.println(new Gson().toJson(rsp));
-//    	UnifiedOrderRspDto rsp = XMLParser.getObjectFromXML(responseString, UnifiedOrderRspDto.class);
-	  /* if(null == rsp || null == rsp.getReturn_code()) {
+	   if(null == rsp || null == rsp.getReturn_code()) {
 			//通信失败
 			Logger.error("微信统一下单接口通信失败，请求数据为：%s, 返回数据为：%s", JSONObject.fromObject(unifiedOrderReqData).toString(),
 					JSONObject.fromObject(rsp).toString());
@@ -59,7 +57,6 @@ public class UnifiedOrderService extends BaseService{
             } else {
             	throw new BusinessException("微信统一下单API返回的数据签名验证失败");
             }
-	   }*/
-    	return null;
+	   }
     }
 }

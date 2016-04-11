@@ -38,6 +38,7 @@ public class SellerService {
         
         long cussTs = System.currentTimeMillis();
         List<OrderGoods> orderGoodsList = new ArrayList<OrderGoods>();
+        int totalFee = 0;
         for(Long id : goodsNum.keySet()) {
             if(goodsNum.get(id).intValue() <= 0) {
                 continue;
@@ -57,6 +58,7 @@ public class SellerService {
             og.setGoodsTitle(goods.getTitle());
             og.setGoodsNumber(goodsNum.get(id));
             og.setGoodsType(GoodsType.GOODS.getType());
+            totalFee += (og.getGoodsDiscountPrice() + og.getGoodsNumber());
             orderGoodsList.add(og);
         }
         
@@ -64,6 +66,7 @@ public class SellerService {
             return null;
         }
         
+        order.setTotalFee(totalFee);
         order.setId(IdGenerator.getId());
         order.setForbidRefund(0);
         order.setOutTradeNo(OutTradeNo.getOutTradeNo());

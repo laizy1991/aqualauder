@@ -3514,6 +3514,7 @@ CREATE TABLE `order` (
   `pay_type` tinyint(4) NOT NULL COMMENT '支付类型，0-现金，1-余额',
   `express_id` int(11) DEFAULT NULL COMMENT '快递公司',
   `express_num` varchar(255) DEFAULT NULL COMMENT '快递单号',
+  `total_fee` int(11) NOT NULL,
   `state` int(11) NOT NULL DEFAULT '0' COMMENT '订单对应的状态: 0=创建订单(待支付)，1=完成支付,2=待发货，3=完成发货，4=交易成功(确认收货),5=交易关闭',
   `forbid_refund` tinyint(4) NOT NULL DEFAULT '0' COMMENT '默认0=允许退款，1=禁止退款-某些场景不允许退款操作',
   `order_memo` varchar(255) DEFAULT '' COMMENT '用户下单备注',
@@ -3529,6 +3530,7 @@ CREATE TABLE `order` (
   KEY `idx1` (`user_id`,`state`) USING BTREE,
   KEY `idx2` (`state`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单';
+
 
 -- ----------------------------
 -- Records of order

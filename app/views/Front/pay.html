@@ -6,7 +6,6 @@
 <title>确认支付</title>
 <link rel="stylesheet" href="/public/css/pay.css"/>
 <script src="/public/js/front/jquery.min.js"></script>
-<script src="/public/js/front/h5_unit_demo.js"></script>
 </head>
 <body>
 
@@ -57,7 +56,12 @@ function onBridgeReady(){
    WeixinJSBridge.invoke(
        'getBrandWCPayRequest', ${jsRequestBody},
        function(res){     
-           if(res.err_msg == "get_brand_wcpay_request：ok" ) {}     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+           // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
+           if(res.err_msg == 'get_brand_wcpay_request:ok') {
+        	   //准备回调，更新订单和外单表状态，前台支付时间
+			} else if(res.err_msg == 'get_brand_wcpay_request:fail') {
+				//准备回调，更新外单表状态，前台支付时间
+			} 
        }
    ); 
 }

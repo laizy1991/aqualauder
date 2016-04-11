@@ -11,7 +11,7 @@ import play.db.jpa.GenericModel;
 @Table(name="`order`")
 public class Order extends GenericModel {
 
-    @Id
+	@Id
     @Column(name="id")
     private Long id;
     
@@ -32,6 +32,9 @@ public class Order extends GenericModel {
 
     @Column(name="express_num")
     private String expressNum;
+
+    @Column(name="total_fee")
+    private Integer totalFee;
 
     @Column(name="state")
     private Integer state;
@@ -160,6 +163,14 @@ public class Order extends GenericModel {
 
     public void setPayTime(Long payTime) {
         this.payTime = payTime;
+    }
+
+    public Integer getTotalFee() {
+        return totalFee;
+    }
+
+    public void setTotalFee(Integer totalFee) {
+        this.totalFee = totalFee;
     }
 
     public Long getDeliverTime() {
