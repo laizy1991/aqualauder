@@ -18,11 +18,11 @@ public class WxTest extends FrontController {
 
 	
     public static void pay() throws BusinessException{
-        String outTradeNo = OrderService.genOrderId();
+       /* String outTradeNo = OrderService.genOrderId();
         String openId = "olVhYv2ogEVJYgaRhEpIh83NZh5c";
     	UnifiedOrderReqDto orderReq = new UnifiedOrderReqDto("WEB", "Ipad mini  16G  白色", outTradeNo, 1, "192.168.0.112", "http://www.weixin.qq.com/wxpay/pay.php", "JSAPI", openId);
 		
 		
-    	render("/Front/pay.html", jsRequestBody);
+    	render("/Front/pay.html", jsRequestBody);*/
     }
 }
