@@ -19,6 +19,7 @@ public class OrderDetail {
     private String outTradeNo;
     private String slipNo;
     private Integer payType;
+    private Integer totalFee;
     private Integer expressId;
     private String expressNum;
     private Integer state;
@@ -49,6 +50,7 @@ public class OrderDetail {
         this.outTradeNo = order.getOutTradeNo();
         this.payTime = order.getPayTime();
         this.payType = order.getPayType();
+        this.totalFee = order.getTotalFee();
         this.recevTime = order.getRecevTime();
         this.shippingAddress = order.getShippingAddress();
         this.slipNo = order.getSlipNo();
@@ -57,6 +59,14 @@ public class OrderDetail {
         this.userId = order.getUserId();
     }
     
+    public Integer getTotalFee() {
+        return totalFee;
+    }
+
+    public void setTotalFee(Integer totalFee) {
+        this.totalFee = totalFee;
+    }
+
     public Integer getRefundState() {
         return refundState;
     }
