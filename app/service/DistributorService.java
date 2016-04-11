@@ -14,14 +14,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
+import sun.security.krb5.internal.crypto.crc32;
 import utils.DateUtil;
-
 import common.constants.BillType;
 import common.constants.CashStatus;
 import common.constants.CommonDictType;
 import common.constants.DistributorStatus;
 import common.constants.DistributorType;
-
 import dao.CashInfoDao;
 import dao.DistributorDao;
 import dao.DistributorSuperiorDao;
@@ -152,7 +151,7 @@ public class DistributorService {
         flushBlotterToSuperiors(user, blotterAmount, depth, currMonth, consumerId, outTradeNo);
     }
     
-    public DistributorDetail distributorDetail(Integer userId) {
+    public static DistributorDetail distributorDetail(Integer userId) {
         DistributorDetail detail = new DistributorDetail();
         Distributor distributor = DistributorDao.get(userId);
         if(distributor == null) {
@@ -210,11 +209,24 @@ public class DistributorService {
         return detail;
     }
     
-    public boolean becomeDistributor(Integer userId, String realName, DistributorType type, String link, String qrcodeUrl) {
-        if(type == null) {
-            type = DistributorType.PERSONAL;
+    public static boolean checkAndBecomeDistributor(Integer userId) {
+        User user = UserDao.get(userId);
+        if(user == null) {
+            return false;
+        }
+        Distributor distributor = DistributorDao.get(userId);
+        if(distributor != null) {
+            return true;
         }
         
+        //生成推广链接
+        String link = "";
+        //生成推广二维码
+        String qrcodeUrl = "";
+        return createDistributor(userId, "", DistributorType.PERSONAL, link, qrcodeUrl);
+        
+    }    
+    private static boolean createDistributor(Integer userId, String realName, DistributorType type, String link, String qrcodeUrl) {
         User user = UserDao.get(userId);
         if(user == null) {
             return false;
@@ -234,7 +246,7 @@ public class DistributorService {
         return add(distributor);
     }
 
-    public boolean updateStatus(int userId, int status) {
+    public static boolean updateStatus(int userId, int status) {
         Distributor distributor = DistributorDao.get(userId);
         if(distributor == null) {
             return false;
@@ -243,7 +255,7 @@ public class DistributorService {
         return update(distributor);
     }
     
-    public boolean createDistributorRef(Integer userId, Integer superiors) {
+    public static boolean createDistributorRef(Integer userId, Integer superiors) {
         if(userId == null || superiors == null || superiors <= 0) {
             Logger.warn("create ref fail, userId:%d, superiors:%d.", userId, superiors);
             return false;
@@ -283,7 +295,7 @@ public class DistributorService {
      * @param currDepth
      * @return
      */
-    private boolean isSuperiors(int userId, Integer superiors, int currDepth) {
+    private static boolean isSuperiors(int userId, Integer superiors, int currDepth) {
         if(currDepth <= 0) {
             return false;
         }
