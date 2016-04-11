@@ -1,10 +1,5 @@
 package common.core;
 
-import models.User;
-import net.sf.json.JSONObject;
-
-import org.apache.commons.lang.StringUtils;
-
 import play.Logger;
 import play.i18n.Messages;
 import play.mvc.Before;
@@ -12,11 +7,8 @@ import play.mvc.Catch;
 import play.mvc.Http.Request;
 import play.mvc.Scope.Session;
 import service.AdminService;
-import service.UserService;
-import utils.WxUtil;
 
 import common.annotation.GuestAuthorization;
-import common.constants.RegType;
 
 import controllers.Application;
 import exception.BusinessException;

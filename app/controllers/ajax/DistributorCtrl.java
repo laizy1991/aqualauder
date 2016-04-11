@@ -4,8 +4,6 @@ import common.core.AjaxController;
 import exception.BusinessException;
 import models.Distributor;
 
-import java.util.List;
-
 public class DistributorCtrl extends AjaxController {
 
     public static void add(Distributor distributor) throws BusinessException {

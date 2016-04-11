@@ -196,33 +196,21 @@ fieldset, img {
 	height: 13px;
 	background-position: -45px -103px
 }
-
-.header {
-	background-color: #fff;
-	border-bottom: 1px solid #E5E5E5
-}
-
-.header-inner {
-	height: 84px
-}
-
-.header-inner, .footer-inner {
-	width: 95%;
-	margin: 0 auto
-}
-
 .content {
-	width: 95%;
-	min-height: 500px;
-	border: 1px solid #E5E5E5;
-	margin: 20px auto 40px;
-    background-color:#ffffff;
+	background-color: #ffffff;
+}
+
+.content-inner {
+	width: 100%;
+	min-width: 980px;
+	height: inherit;
 }
 
 .sidebar {
 	float: left;
-	width: 250px;
-    border-right:1px solid #E5E5E5;
+	width: 190px;
+	background: #333;
+	height: 100%;
 }
 
 .main {
@@ -234,25 +222,35 @@ fieldset, img {
 	padding: 0 30px 40px
 }
 
-.header {
-	min-width: 1200px
+.header, .content, .footer {
+	width: 100%;
+}
+
+
+.header, .header-inner {
+	background-color: #222;
+}
+
+.header-inner, .footer-inner {
+	width: 95%;
+	margin: 0 auto;
+	min-width: 980px;
+	height: 40px
 }
 
 .header .logo {
 	float: left;
-	margin-top: 20px
 }
 
 .header .userbar {
 	float: right;
 	height: 40px;
-	margin-top: 22px
+	margin-right: 10px;
 }
 
 .header .userbar .info {
 	float: left;
-	padding-left: 40px;
-	color: #999
+	margin-top: 8px;
 }
 
 .header .userbar .info a {
@@ -265,10 +263,6 @@ fieldset, img {
 	height: 40px;
 	margin-left: -40px;
 	border-radius: 2px
-}
-
-.header .userbar .info p {
-	margin-left: 10px
 }
 
 .header .userbar .info .name {
@@ -346,7 +340,6 @@ fieldset, img {
 }
 
 .sidebar .nav {
-	border-bottom: 1px solid #E5E5E5;
 	font-size: 16px;
 }
 
@@ -356,10 +349,11 @@ fieldset, img {
 
 .sidebar .nav-hd {
 	position: relative;
-	height: 50px;
-	line-height: 50px;
-	padding-left: 60px;
-	color: #999;
+	height: 42px;
+	line-height: 42px;
+	padding: 0px 20px 0px 20px;
+	color: #eeeeee;
+	cursor: pointer;
 }
 
 .sidebar .nav-hd .icon {
@@ -387,16 +381,14 @@ fieldset, img {
 	top: 12px
 }
 
-.sidebar .nav-bd {
-	padding-bottom: 10px
-}
-
 .sidebar .nav-bd a {
 	display: block;
 	height: 42px;
 	line-height: 42px;
-	padding-left: 60px;
-	color: #333;
+	padding-left: 40px;
+	color: #999;
+	background-color: #F8F8F8;
+	border-top: 1px solid #E5E5E5;
 	-webkit-transition: background-color 0.15s ease;
 	-moz-transition: background-color 0.15s ease;
 	-ms-transition: background-color 0.15s ease;
@@ -405,8 +397,8 @@ fieldset, img {
 }
 
 .sidebar .nav-bd a:hover {
-	background-color: #F8F8F8;
-	color: #333
+	background-color: #E5E5E5;
+	color: #999
 }
 
 .sidebar .nav-bd .current, .sidebar .nav-bd .current:hover {
@@ -415,7 +407,7 @@ fieldset, img {
 }
 
 .footer {
-	height: 200px;
+	height: 40px;
 	text-align: center;
 	clear: both;
 	line-height: 1
@@ -840,8 +832,7 @@ fieldset, img {
 	border: 8px dashed transparent
 }
 
-.ui-popup-follow .ui-dialog-arrow-a, .ui-popup-follow .ui-dialog-arrow-b
-	{
+.ui-popup-follow .ui-dialog-arrow-a, .ui-popup-follow .ui-dialog-arrow-b {
 	display: block
 }
 
@@ -960,25 +951,24 @@ fieldset, img {
 	bottom: 15px
 }
 
-@
--webkit-keyframes ui-dialog-loading { 0%{
-	-webkit-transform: rotate(0deg)
+@-webkit-keyframes ui-dialog-loading {
+	0%{
+		-webkit-transform: rotate(0deg)
+	}
+
+	100%{
+		-webkit-transform:rotate(360deg)
+	}
 }
 
-100%{
--webkit-transform
-:rotate(360deg)
-}
-}
-@
-keyframes ui-dialog-loading { 0%{
-	transform: rotate(0deg)
-}
+@keyframes ui-dialog-loading {
+	0%{
+		transform: rotate(0deg)
+	}
 
-100%{
-transform
-:rotate(360deg)
-}
+	100%{
+		transform:rotate(360deg)
+	}
 }
 .ui-dialog-loading {
 	vertical-align: middle;
@@ -1149,13 +1139,6 @@ transform
 
 .none-topic .btn-upload {
 	visibility: hidden
-}
-
-body {
-	background-color: #F2F2F2;
-	font: 400 14px Arial, Microsoft Yahei, Simsun;
-	line-height: 1.43;
-	color: #333
 }
 
 a {

@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import play.db.jpa.GenericModel;
 
 @Entity
-@Table(name="order")
+@Table(name="`order`")
 public class Order extends GenericModel {
 
 	@Id
