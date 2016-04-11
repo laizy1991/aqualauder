@@ -3507,7 +3507,7 @@ CREATE TABLE `order_goods` (
 -- ----------------------------
 DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
+  `id` bigint(20) NOT NULL COMMENT '唯一ID',
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `out_trade_no` varchar(255) NOT NULL DEFAULT '' COMMENT '订单编号',
   `slip_no` varchar(255) NOT NULL COMMENT '支付流水号',
