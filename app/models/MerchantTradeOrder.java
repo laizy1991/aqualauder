@@ -30,15 +30,6 @@ public class MerchantTradeOrder extends GenericModel {
     @Column(name="subject")
     private String subject;
 
-    @Column(name="body")
-    private String body;
-
-    @Column(name="price")
-    private Integer price;
-
-    @Column(name="quantity")
-    private Integer quantity;
-
     @Column(name="callback_url")
     private String callbackUrl;
 
@@ -50,10 +41,16 @@ public class MerchantTradeOrder extends GenericModel {
 
     @Column(name="trade_no")
     private String tradeNo;
+    
+    @Column(name="openid")
+    private String openid;
 
     @Column(name="create_time")
     private Long createTime;
 
+    @Column(name="pay_time")
+    private Long payTime;
+    
     @Column(name="callback_time")
     private Long callbackTime;
 
@@ -105,30 +102,6 @@ public class MerchantTradeOrder extends GenericModel {
 		this.subject = subject;
 	}
 
-	public String getBody() {
-		return body;
-	}
-
-	public void setBody(String body) {
-		this.body = body;
-	}
-
-	public Integer getPrice() {
-		return price;
-	}
-
-	public void setPrice(Integer price) {
-		this.price = price;
-	}
-
-	public Integer getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
-
 	public String getCallbackUrl() {
 		return callbackUrl;
 	}
@@ -169,11 +142,27 @@ public class MerchantTradeOrder extends GenericModel {
 		this.createTime = createTime;
 	}
 
+	public Long getPayTime() {
+		return payTime;
+	}
+
+	public void setPayTime(Long payTime) {
+		this.payTime = payTime;
+	}
+
 	public Long getCallbackTime() {
 		return callbackTime;
 	}
 
 	public void setCallbackTime(Long callbackTime) {
 		this.callbackTime = callbackTime;
+	}
+
+	public String getOpenid() {
+		return openid;
+	}
+
+	public void setOpenid(String openid) {
+		this.openid = openid;
 	}
 }
