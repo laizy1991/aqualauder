@@ -28,7 +28,7 @@ import dao.RefundOrderDao;
 import dto.OrderDetail;
 import exception.BusinessException;
 
-public class OrderService {
+public class MerchantTradeOrderService {
 
     public static Order get(long id) {
         return OrderDao.get(id);
