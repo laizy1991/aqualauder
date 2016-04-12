@@ -1,4 +1,4 @@
-package controllers;
+package controllers.admin;
 
 import common.core.WebController;
 import models.Express;
@@ -9,7 +9,7 @@ public class ExpressCtrl extends WebController {
 
     public static void list() {
         List<Express> expresses = Express.all().fetch();
-        render("/Express/list.html", expresses);
+        render("/admin/Express/list.html", expresses);
     }
     
 }

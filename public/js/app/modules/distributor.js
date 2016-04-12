@@ -8,11 +8,9 @@ define(function(require) {
     
     var ajax = require('../util/ajax');
     var dd = require('../util/dialog');
-    var template = require('../common/module/template_native');
 
     var Admin = {
         init: function() {
-            //$.get("/User/list");
             this.createAdmin($('[role="create"]'));
             this.deleteAdmin($('[role="delete"]'));
             this.editAdmin($('[role="edit"]'));
@@ -116,7 +114,7 @@ define(function(require) {
         },
 
         /**
-         * 编辑
+         * 修改
          */
         editAdmin: function(obj) {
             obj.click(function() {
@@ -128,7 +126,7 @@ define(function(require) {
                 	name = $name.val(),
                 editAdminDialog = dialog({
                     id: 'editDialog',
-                    title: '编辑',
+                    title: '修改',
                     content: document.getElementById('editDialogTmpl').innerHTML,
                     button: [
                         {

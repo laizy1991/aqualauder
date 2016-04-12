@@ -8,26 +8,23 @@ define(function(require) {
     
     var ajax = require('../util/ajax');
     var dd = require('../util/dialog');
-    var template = require('../common/module/template_native');
 
-    var Admin = {
+    var Initiator = {
         init: function() {
-            //$.get("/User/list");
-            this.createAdmin($('[role="create"]'));
-            this.deleteAdmin($('[role="delete"]'));
-            this.editAdmin($('[role="edit"]'));
+            this.create($('[role="create"]'));
+            this.delete($('[role="delete"]'));
+            this.update($('[role="update"]'));
+            this.view($('[role="view"]'));
         },
 
         /**
          * 添加
          */
-        createAdmin: function(obj) {
+        create: function(obj) {
             var self = this;
 
             obj.click(function() {
-                var $this = $(this),
-                    $wrap = $this.closest('.folded-panel'),
-                    $hiddenInputs = $wrap.find('input:hidden');
+                var $this = $(this);
 
                 var createDialog = dialog({
                     id: 'createDialog',
@@ -60,25 +57,25 @@ define(function(require) {
 
                     },
                     onshow: function() {
-                        
+
                     }
                 }).showModal();
             });
         },
-        
-        
+
+
 
         /**
          * 删除
          */
-        deleteAdmin: function(obj) {
+        delete: function(obj) {
             obj.click(function() {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
-                	$adminId = $wrap.find('.id'),
-                	adminId = $adminId.val();
+                	id = $wrap.find('.id').val(),
+                    name = $wrap.find('.username').val();
 
-                var deleteLevelDialog = dialog({
+                var deleteDialog = dialog({
                     id: 'deleteDialog',
                     title: '删除',
                     content: document.getElementById('deleteDialogTmpl').innerHTML,
@@ -88,7 +85,7 @@ define(function(require) {
                             callback: function () {
                                 var dia = this,
                                 $form = this.__popup.find('form');
-                                
+
                                 ajax.post($form.attr('action'), $form.serialize(), function(result){
                                     if(result.success){
                                         dia.close();
@@ -109,27 +106,26 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                    	$("#adminIdOnDelete").val(adminId);
+                    	$("#idToDelete").val(id);
+                        $("#usernameToDelete").text(name);
                     }
                 }).showModal();
             });
         },
 
         /**
-         * 编辑
+         * 修改
          */
-        editAdmin: function(obj) {
+        update: function(obj) {
             obj.click(function() {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
-                    $adminId = $wrap.find('.id'),
-                    $name = $wrap.find('.username'),
-                    adminId = $adminId.val(),
-                	name = $name.val(),
-                editAdminDialog = dialog({
-                    id: 'editDialog',
-                    title: '编辑',
-                    content: document.getElementById('editDialogTmpl').innerHTML,
+                    id = $wrap.find('.id').val(),
+                	name = $wrap.find('.username').val();
+                var updateDialog = dialog({
+                    id: 'updateDialog',
+                    title: '修改',
+                    content: document.getElementById('updateDialogTmpl').innerHTML,
                     button: [
                         {
                         	value: '确定',
@@ -157,14 +153,46 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                    	$("#adminIdOnUpdate").val(adminId);
-                    	$("#usernameOnUpdate").text(name);
+                    	$("#idToUpdate").val(id);
+                    	$("#usernameToUpdate").text(name);
                     }
                 }).showModal();
+            });
+        },
+
+        /**
+         * 查看
+         */
+        view: function(obj) {
+            obj.click(function() {
+                var $this = $(this),
+                    $wrap = $this.closest('tr'),
+                    id = $wrap.find('.id').val(),
+                    name = $wrap.find('.username').val(),
+                    createTime = $wrap.find('.createTime').val(),
+                    updateTime = $wrap.find('.updateTime').val(),
+                    deleted = $wrap.find('.deleted').val();
+                var viewDialog = dialog({
+                        id: 'viewDialog',
+                        title: '查看',
+                        content: document.getElementById('viewDialogTmpl').innerHTML,
+                        button: [],
+                        cancelValue: '关闭',
+                        cancel: function() {
+
+                        },
+                        onshow:function() {
+                            $("#idToView").text(id);
+                            $("#usernameToView").text(name);
+                            $("#updateTimeToView").text(updateTime);
+                            $("#createTimeToView").text(createTime);
+                            $("#stateToView").text(deleted==1?"已删除":"有效");
+                        }
+                    }).showModal();
             });
         }
         
     }
 
-    Admin.init();
+    Initiator.init();
 });

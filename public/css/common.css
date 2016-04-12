@@ -229,6 +229,7 @@ fieldset, img {
 
 .header, .header-inner {
 	background-color: #222;
+	color: #fff;
 }
 
 .header-inner, .footer-inner {
@@ -250,11 +251,11 @@ fieldset, img {
 
 .header .userbar .info {
 	float: left;
-	margin-top: 8px;
+	margin-top: 11px;
 }
 
 .header .userbar .info a {
-	color: #999
+	color: #fff
 }
 
 .header .userbar .info img {
@@ -341,6 +342,10 @@ fieldset, img {
 
 .sidebar .nav {
 	font-size: 16px;
+}
+
+.sidebar .nav:hover {
+	background: #444;
 }
 
 .sidebar .nav.last {

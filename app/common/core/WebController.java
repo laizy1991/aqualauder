@@ -50,7 +50,6 @@ public class WebController extends BaseController {
     private static void initReqSource() {
         renderArgs.put("pageTitle", "管理平台");
         renderArgs.put("sysType", 0);
-        loginTpl = "guildLogin.html";
     }
 	
 	/**
@@ -59,7 +58,8 @@ public class WebController extends BaseController {
 	 */
 	private static void initParams() {
 		renderArgs.put("sid", sessionInfo.getSessionId());
-		renderArgs.put("Amdin", sessionInfo.getAdmin());
+		renderArgs.put("admin", sessionInfo.getAdmin());
+		renderArgs.put("username", sessionInfo.getAdmin().getUsername());
 		renderArgs.put("privilegeFlag", privilegeFlag);
 		renderArgs.put("ctrl", request.controller);
 		renderArgs.put("action", request.action);

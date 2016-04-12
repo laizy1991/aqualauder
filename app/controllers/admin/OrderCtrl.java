@@ -1,4 +1,4 @@
-package controllers;
+package controllers.admin;
 
 import common.core.WebController;
 import models.Order;
@@ -9,7 +9,7 @@ public class OrderCtrl extends WebController {
 
     public static void list() {
         List<Order> Orders = Order.all().fetch();
-        render("/Order/list.html", Orders);
+        render("/admin/Order/list.html", Orders);
     }
     
 }

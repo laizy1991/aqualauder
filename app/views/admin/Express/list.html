@@ -1,18 +1,15 @@
 #{extends 'main.html' /}
 
 #{set 'moreStyles'}
-    <link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
-    <link rel="shortcut icon" type="image/x-icon" href="@{'/public/images/favicon.ico'}" />
-
-    <link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+<link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+<link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
 #{/set}
-     <style>
-
-     </style>
+<style>
+</style>
 <!-- 页头 begin -->
 <div class="main-header">
     <div class="breadcrumb">
-        <span class="nolink">管理员列表</span>
+        <span class="nolink">快递公司</span>
     </div>
     <a class="btn btn-default" href="javascript:;" role="create">添加</a>
 </div>
@@ -21,6 +18,7 @@
     <table class="tb">
         <thead>
         <tr  class="text-center">
+            <th>ID</th>
             <th>姓名</th>
             <th class="order" role="contributeAsc">
                 创建时间
@@ -31,16 +29,17 @@
             <th>操作</th>
         </tr>
         </thead>
-        #{if admins == null || admins.size() == 0 }
-            <tr><td colspan="5" style="text-align:center;">暂无记录<td></tr>
+        #{if expresses == null || expresses.size() == 0 }
+            <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
         #{/if}
         #{else}
-        #{list items:admins, as:'info'}
+        #{list items:expresses, as:'info'}
         <tbody>
         <tr class="user-item">
             <input type="hidden" class="id" name="id" value="${info.id}">
-            <input type="hidden" class="username" name="username" value="${info?.username}">
-            <td>${info?.username}</td>
+            <input type="hidden" class="name" name="name" value="${info?.name}">
+            <td>${info?.id}</td>
+            <td>${info?.name}</td>
             <td>
             %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
             </td>
@@ -67,18 +66,11 @@
 <!-- 增加 -->
 <script id="createDialogTmpl" type="text/html">
     <div class="dialog dialog-create">
-        <form action="@{ajax.Admins.add}" id="createAdmin">
+        <form action="@{ajax.ExpressCtrl.add}" id="createExpress">
             <div class="form-group">
-                <label class="label"><span class="asterisk">*</span>姓名</label>
+                <label class="label"><span class="asterisk">*</span>名称</label>
                 <div class="col">
-                    <input type="text" name="admin.username" value="" style='width:150px'>
-                    <span class="msg error-text">必填项！</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="label"><span class="asterisk">*</span>密码</label>
-                <div class="col">
-                    <input type="password" name="admin.password" value="" style='width:150px'>
+                    <input type="text" name="express.name" value="" style='width:150px'>
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
@@ -89,31 +81,31 @@
 <!-- 删除 -->
 <script id="deleteDialogTmpl" type="text/html">
     <div class="dialog dialog-create">
-        <form action="@{ajax.Admins.delete}" id="deleteAdmin">
+        <form action="@{ajax.ExpressCtrl.delete}" id="deleteExpress">
             <div class="form-group">
-                <input type="hidden" class="in-t" id="adminIdOnDelete" name="admin.id" value="">
+                <input type="hidden" class="in-t" id="expressIdOnDelete" name="express.id" value="">
                 <label class="label">确定删除？</label>
             </div>
         </form>
     </div>
 </script>
 
-<!-- 编辑邮箱信息 -->
+<!-- 修改 -->
 <script id="editDialogTmpl" type="text/html">
     <div class="dialog dialog-create">
-        <form action="@{ajax.Admins.update}" id="updateAdmin">
+        <form action="@{ajax.ExpressCtrl.update}" id="updateExpress">
             <div class="form-group">
-                <input type="hidden" class="in-t" id="adminIdOnUpdate" name="admin.id" value="">
-                <label class="label">确定修改？<strong id="usernameOnUpdate"></strong></label>
+                <input type="hidden" class="in-t" id="expressIdOnUpdate" name="express.id" value="">
+                <label class="label">确定修改？<strong id="nameOnUpdate"></strong></label>
             </div>
             <div class="form-group">
-                <label class="label"><span class="asterisk">*</span>密码</label>
+                <label class="label"><span class="asterisk">*</span>名称</label>
                 <div class="col">
-                    <input type="password" name="admin.password" id="password" value="" style='width:150px'>
+                    <input type="text" name="express.name" id="name" value="" style='width:150px'>
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
-            </form>
+        </form>
     </div>
 </script>
 
@@ -126,6 +118,6 @@
                 [ '.js', '.js?v='+verNum]
             ]
         });
-        seajs.use("@{'/public/js/app/modules/admins.js'}");
+        seajs.use("@{'/public/js/app/modules/expresses.js'}");
     </script>
 #{/set}

@@ -114,7 +114,7 @@ define(function(require) {
         },
 
         /**
-         * 编辑
+         * 修改
          */
         editExpress: function(obj) {
             obj.click(function() {
@@ -126,7 +126,7 @@ define(function(require) {
                 	name = $name.val(),
                 editExpressDialog = dialog({
                     id: 'editDialog',
-                    title: '编辑',
+                    title: '修改',
                     content: document.getElementById('editDialogTmpl').innerHTML,
                     button: [
                         {
@@ -138,7 +138,7 @@ define(function(require) {
                                 ajax.post($form.attr('action'), $form.serialize(), function(result){
                                     if(result.success){
                                         dia.close();
-                                        dd.alert('编辑成功！', function(){
+                                        dd.alert('修改成功！', function(){
                                             window.location.reload(false);
                                        });
                                     }else{

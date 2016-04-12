@@ -1,14 +1,11 @@
 #{extends 'main.html' /}
 
 #{set 'moreStyles'}
-    <link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
-    <link rel="shortcut icon" type="image/x-icon" href="@{'/public/images/favicon.ico'}" />
-
-    <link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+<link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+<link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
 #{/set}
-     <style>
-
-     </style>
+<style>
+</style>
 <!-- 页头 begin -->
 <div class="main-header">
     <div class="breadcrumb">
@@ -21,13 +18,8 @@
     <table class="tb">
         <thead>
         <tr  class="text-center">
-            <th>用户id</th>
-            <th>手机号码</th>
-            <th>注册方式</th>
-            <th>第三方平台ID</th>
+            <th>ID</th>
             <th>昵称</th>
-            <th>性别</th>
-            <th>生日</th>
             <th class="order" role="contributeAsc">
                 创建时间
             </th>
@@ -46,12 +38,7 @@
         <tr class="user-item">
             <input type="hidden" class="id" name="id" value="${info.userId}">
             <td>${info?.userId}</td>
-            <td>${info?.mobile}</td>
-            <td>${info?.openId}</td>
-            <td>${info?.regType}</td>
             <td>${info?.nickname}</td>
-            <td>${info?.sex}</td>
-            <td>${info?.birthday}</td>
             <td>
                 %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
             </td>
@@ -109,6 +96,7 @@
     </div>
 </script>
 
+<!-- 修改 -->
 <script id="editDialogTmpl" type="text/html">
     <div class="dialog dialog-create">
         <form action="@{ajax.Users.update}" id="updateUser">
