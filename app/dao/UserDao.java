@@ -26,7 +26,6 @@ public class UserDao {
         
         if(list.size() > 1) {
             Logger.error("too many user find. user_Id:" + id);
-            return null;
         }
         
         return list.get(0);

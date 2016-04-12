@@ -10,8 +10,14 @@ public enum MessageCode {
 
 
 	//订单模块   
-	GET_ORDER_FAILED("get.order.failed", "查询订单失败"),	
+	ORDER_ID_INVALID("order.id.invalid", "订单ID无效"),
+	ORDER_NULL_ERROR("order.null.error", "订单为空"),
+	ORDER_RECEIVER_EMPTY("order.receiver.empty", "订单收货人为空"),
+	ORDER_RECEIVER_MOBILE_PHONE_EMPTY("order.receiver.mobile.phone.empty", "订单收货人电话为空"),
+	ORDER_SHIPPING_ADDRESS_EMPTY("order.shipping.address.empty", "订单收货人电话为空"),
 	
+	
+	GET_ORDER_FAILED("get.order.failed", "查询订单失败"),	
 	ADD_MECHANT_TRADE_ORDER_FAILED("add.mechant.trade.order.failed", "添加商户外部订单失败"),
 	
 	//用户模块

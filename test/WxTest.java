@@ -17,8 +17,4 @@ public class WxTest extends UnitTest {
 		Logger.info("appSecrect: %s", "9391c34828a8cd46f3375a5d4363cd19");
     }
     
-//    @Test
-    public void genOrder() {
-    	Logger.info("OrderId: %s", OrderService.genOrderId());
-    }
 }

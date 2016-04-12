@@ -13,33 +13,28 @@
 		<div class="info-area">	
 			<dl class="totle">
 				<dt class="totle-title">实付款</dt>
-					<dd class="totle-num"><strong>￥15.00</strong>
+					<dd class="totle-num"><strong>￥${totalFee}</strong>
 				</dd>
 			</dl>
 
 			<ul class="info-list">
 				<li>&nbsp;</li>
 				<li class="list last-time">
-					<span class="list-title">商品名称</span>
-					<span class="list-content">小黑裤一套</span>
+					<span class="list-title">订单编号</span>
+					<span class="list-content">${order.outTradeNo}</span>
 				</li>
 				<li class="list in-time">
 					<span class="list-title">收货人</span>
-					<span class="list-content">兽王</span>
+					<span class="list-content">${order.outTradeNo}</span>
 				</li>
 				<li class="list">
 					<span class="list-title">联系电话</span>
 					<span class="list-content">15989164257</span>
 				</li>
 				<li class="list">
-					<span class="list-title">码数</span>
-					<span class="list-content">XL</span>
-				</li>
-				<li class="list">
 					<span class="list-title">收货地址</span>
 					<span class="list-content">
-							广东省 广州市 天河区 </br>
-							 车陂街道车陂路美东花园
+							${order.shippingAddress}
 					</span>
 				</li>
 				<li>&nbsp;</li>
