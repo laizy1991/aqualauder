@@ -44,6 +44,12 @@ public class Order extends GenericModel {
 
     @Column(name="order_memo")
     private String orderMemo;
+    
+    @Column(name="receiver")
+    private String receiver;
+    
+    @Column(name="mobile_phone")
+    private String mobilePhone;
 
     @Column(name="shipping_address")
     private String shippingAddress;
@@ -220,4 +226,20 @@ public class Order extends GenericModel {
     public void setId(Long id) {
         this.id = id;
     }
+
+	public String getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
+	}
+
+	public String getMobilePhone() {
+		return mobilePhone;
+	}
+
+	public void setMobilePhone(String mobilePhone) {
+		this.mobilePhone = mobilePhone;
+	}
 }
