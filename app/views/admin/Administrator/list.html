@@ -28,11 +28,11 @@
         <th>操作</th>
     </tr>
     </thead>
-    #{if admins == null || admins.size() == 0 }
+    #{if administrators == null || administrators.size() == 0 }
         <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
     #{/if}
     #{else}
-    #{list items:admins, as:'info'}
+    #{list items:administrators, as:'info'}
     <tbody>
     <tr class="user-item">
         <input type="hidden" class="id" value="${info.id}">
@@ -107,7 +107,7 @@
             <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>密码</label>
                 <div class="col">
-                    <input type="password" name="administrator.password" id="password" value="">
+                    <input type="password" name="administrator.password" value="">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>

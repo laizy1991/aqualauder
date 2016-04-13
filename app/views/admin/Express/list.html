@@ -1,76 +1,74 @@
 #{extends 'main.html' /}
 
 #{set 'moreStyles'}
-<link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
-<link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+    <link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+    <link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
 #{/set}
-<style>
-</style>
+ <style>
+ </style>
 <!-- 页头 begin -->
 <div class="main-header">
     <div class="breadcrumb">
-        <span class="nolink">快递公司</span>
+        <span class="nolink">快递公司列表</span>
     </div>
     <a class="btn btn-default" href="javascript:;" role="create">添加</a>
 </div>
 <!-- 页头 end -->
-
-    <table class="tb">
-        <thead>
-        <tr  class="text-center">
-            <th>ID</th>
-            <th>姓名</th>
-            <th class="order" role="contributeAsc">
-                创建时间
-            </th>
-            <th class="order" role="contributeAsc">
-                修改时间
-            </th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        #{if expresses == null || expresses.size() == 0 }
-            <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
-        #{/if}
-        #{else}
-        #{list items:expresses, as:'info'}
-        <tbody>
-        <tr class="user-item">
-            <input type="hidden" class="id" name="id" value="${info.id}">
-            <input type="hidden" class="name" name="name" value="${info?.name}">
-            <td>${info?.id}</td>
-            <td>${info?.name}</td>
-            <td>
-            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
-            </td>
-            <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
-            <td>
-                <div class="opts">
-                    <span class="opt" role="edit"><a href="javascript:;">修改</a></span>|
-                    <span class="opt" role="delete"><a href="javascript:;">删除</a></span>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-        #{/list}
-        #{/else}
-    </table>
+ <table class="tb">
+    <thead>
+    <tr  class="text-center">
+        <th>ID</th>
+        <th>名称</th>
+        <th class="order" role="contributeAsc">
+            创建时间
+        </th>
+        <th class="order" role="contributeAsc">
+            修改时间
+        </th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    #{if expresses == null || expresses.size() == 0 }
+        <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+    #{/if}
+    #{else}
+    #{list items:expresses, as:'info'}
+    <tbody>
+    <tr class="user-item">
+        <input type="hidden" class="id" value="${info.id}">
+        <input type="hidden" class="name" value="${info?.name}">
+        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
+        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
+        <td>${info?.id}</td>
+        <td>${info?.name}</td>
+        <td>
+        %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
+        </td>
+        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
+        <td>
+            <div class="opts">
+                <span class="opt" role="update"><a href="javascript:;">修改</a></span>|
+                <span class="opt" role="delete"><a href="javascript:;">删除</a></span>|
+                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+    #{/list}
+    #{/else}
+</table>
 
 #{include file="common/jsinclude.html" /}
 
 #{set 'moreScripts'}
-<script type="text/javascript" src="@{'/public/js/thirdParty/bootstrap-3.3.4/js/jquery-2.1.3.min.js'}"></script>
-<script type="text/javascript" src="@{'/public/js/lib/sea_2.1.1.js'}"></script>
-<script type="text/javascript" src="@{'/public/js/thirdParty/bootstrap-3.3.4/js/bootstrap.min.js'}"></script>
-
 <!-- 增加 -->
 <script id="createDialogTmpl" type="text/html">
     <div class="dialog dialog-create">
-        <form action="@{ajax.ExpressCtrl.add}" id="createExpress">
+        <form action="@{ajax.ExpressCtrl.add}" id="create">
             <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>名称</label>
                 <div class="col">
-                    <input type="text" name="express.name" value="" style='width:150px'>
+                    <input type="text" name="express.name" value="">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
@@ -80,28 +78,28 @@
 
 <!-- 删除 -->
 <script id="deleteDialogTmpl" type="text/html">
-    <div class="dialog dialog-create">
-        <form action="@{ajax.ExpressCtrl.delete}" id="deleteExpress">
+    <div class="dialog dialog-delete">
+        <form action="@{ajax.ExpressCtrl.delete}" id="delete">
             <div class="form-group">
-                <input type="hidden" class="in-t" id="expressIdOnDelete" name="express.id" value="">
-                <label class="label">确定删除？</label>
+                <input type="hidden" class="in-t" id="idToDelete" name="express.id" value="">
+                <label class="tips">确定删除<strong id="nameToDelete"></strong>？</label>
             </div>
         </form>
     </div>
 </script>
 
 <!-- 修改 -->
-<script id="editDialogTmpl" type="text/html">
-    <div class="dialog dialog-create">
-        <form action="@{ajax.ExpressCtrl.update}" id="updateExpress">
+<script id="updateDialogTmpl" type="text/html">
+    <div class="dialog dialog-update">
+        <form action="@{ajax.ExpressCtrl.update}" id="update">
             <div class="form-group">
-                <input type="hidden" class="in-t" id="expressIdOnUpdate" name="express.id" value="">
-                <label class="label">确定修改？<strong id="nameOnUpdate"></strong></label>
+                <input type="hidden" class="in-t" id="idToUpdate" name="express.id" value="">
+                <label class="tips">确定修改<strong id="nameToUpdate"></strong>？</label>
             </div>
             <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>名称</label>
                 <div class="col">
-                    <input type="text" name="express.name" id="name" value="" style='width:150px'>
+                    <input type="text" name="express.name" value="">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
@@ -109,15 +107,47 @@
     </div>
 </script>
 
-    <script>
-        var verNum = new Date();
-        seajs.config({
-            base:"../",
-            // 加版本号
-            map: [
-                [ '.js', '.js?v='+verNum]
-            ]
-        });
-        seajs.use("@{'/public/js/app/modules/expresses.js'}");
-    </script>
+<!-- 查看 -->
+<script id="viewDialogTmpl" type="text/html">
+    <div class="dialog dialog-view">
+        <form action="#" id="view">
+            <div class="form-group">
+                <label class="label">ID:</label>
+                <div class="col">
+                    <label class="info" id="idToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">名称:</label>
+                <div class="col">
+                    <label class="info" id="nameToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">修改时间:</label>
+                <div class="col">
+                    <label class="info" id="updateTimeToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">创建时间:</label>
+                <div class="col">
+                    <label class="info" id="createTimeToView"></label>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script>
+    var verNum = new Date();
+    seajs.config({
+        base:"../",
+        // 加版本号
+        map: [
+            [ '.js', '.js?v='+verNum]
+        ]
+    });
+    seajs.use("@{'/public/js/app/modules/express.js'}");
+</script>
 #{/set}

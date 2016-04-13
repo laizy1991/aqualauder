@@ -8,8 +8,8 @@ import java.util.List;
 public class OrderCtrl extends WebController {
 
     public static void list() {
-        List<Order> Orders = Order.all().fetch();
-        render("/admin/Order/list.html", Orders);
+        List<Order> orders = Order.all().fetch();
+        render("/admin/Order/list.html", orders);
     }
     
 }

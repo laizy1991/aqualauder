@@ -4,7 +4,7 @@ import common.core.AjaxController;
 import exception.BusinessException;
 import models.User;
 
-public class Users extends AjaxController {
+public class UserCtrl extends AjaxController {
 
     public static void add(User user) throws BusinessException {
 

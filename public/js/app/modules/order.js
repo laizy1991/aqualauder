@@ -73,14 +73,14 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                 	id = $wrap.find('.id').val(),
-                    name = $wrap.find('.username').val(),
+                    outTradeNo = $wrap.find('.outTradeNo').val(),
                     deleteDialog = dialog({
                     id: 'deleteDialog',
                     title: '删除',
                     content: document.getElementById('deleteDialogTmpl').innerHTML,
                     button: [
                         {
-                            value: '确定',
+                        	value: '确定',
                             callback: function () {
                                 var dia = this,
                                 $form = this.__popup.find('form');
@@ -105,8 +105,8 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                        $("#idToDelete").val(id);
-                        $("#usernameToDelete").text(name);
+                    	$("#idToDelete").val(id);
+                        $("#outTradeNoToDelete").text(outTradeNo);
                     }
                 }).showModal();
             });
@@ -120,7 +120,7 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
-                	name = $wrap.find('.username').val(),
+                    outTradeNo = $wrap.find('.outTradeNo').val(),
                     updateDialog = dialog({
                     id: 'updateDialog',
                     title: '修改',
@@ -153,7 +153,7 @@ define(function(require) {
                     },
                     onshow:function() {
                     	$("#idToUpdate").val(id);
-                    	$("#usernameToUpdate").text(name);
+                    	$("#outTradeNoToUpdate").text(outTradeNo);
                     }
                 }).showModal();
             });
@@ -167,10 +167,26 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
-                    name = $wrap.find('.username').val(),
+                    userId = $wrap.find('.userId').val(),
+                    outTradeNo = $wrap.find('.outTradeNo').val(),
+                    slipNo = $wrap.find('.slipNo').val(),
+                    payType = $wrap.find('.payType').val(),
+                    expressId = $wrap.find('.expressId').val(),
+                    expressNum = $wrap.find('.expressNum').val(),
+                    totalFee = $wrap.find('.totalFee').val(),
+                    state = $wrap.find('.state').val(),
+                    forbidRefund = $wrap.find('.forbidRefund').val(),
+                    orderMemo = $wrap.find('.orderMemo').val(),
+                    receiver = $wrap.find('.receiver').val(),
+                    mobilePhone = $wrap.find('.mobilePhone').val(),
+                    shippingAddress = $wrap.find('.shippingAddress').val(),
+                    stateHistory = $wrap.find('.stateHistory').val(),
+                    payTime = $wrap.find('.payTime').val(),
+                    deliverTime = $wrap.find('.deliverTime').val(),
+                    recevTime = $wrap.find('.recevTime').val(),
+                    finishTime = $wrap.find('.finishTime').val(),
                     createTime = $wrap.find('.createTime').val(),
                     updateTime = $wrap.find('.updateTime').val(),
-                    deleted = $wrap.find('.deleted').val(),
                     viewDialog = dialog({
                     id: 'viewDialog',
                     title: '查看',
@@ -182,10 +198,26 @@ define(function(require) {
                     },
                     onshow:function() {
                         $("#idToView").text(id);
-                        $("#usernameToView").text(name);
-                        $("#updateTimeToView").text(updateTime);
+                        $("#userIdToView").text(userId);
+                        $("#outTradeNoToView").text(outTradeNo);
+                        $("#slipNoToView").text(slipNo);
+                        $("#payTypeToView").text(payType);
+                        $("#expressIdToView").text(expressId);
+                        $("#expressNumToView").text(expressNum);
+                        $("#totalFeeToView").text(totalFee);
+                        $("#stateToView").text(state);
+                        $("#forbidRefundToView").text(forbidRefund);
+                        $("#orderMemoToView").text(orderMemo);
+                        $("#receiverToView").text(receiver);
+                        $("#mobilePhoneToView").text(mobilePhone);
+                        $("#shippingAddressToView").text(shippingAddress);
+                        $("#stateHistoryToView").text(stateHistory);
+                        $("#payTimeToView").text(payTime);
+                        $("#deliverTimeToView").text(deliverTime);
+                        $("#recevTimeToView").text(recevTime);
+                        $("#finishTimeToView").text(finishTime);
                         $("#createTimeToView").text(createTime);
-                        $("#stateToView").text(deleted==1?"已删除":"有效");
+                        $("#updateTimeToView").text(updateTime);
                     }
                 }).showModal();
             });

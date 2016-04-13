@@ -470,7 +470,7 @@ DROP TABLE IF EXISTS `distributor`;
 CREATE TABLE `distributor` (
   `user_id` bigint(20) NOT NULL COMMENT '用户id',
   `distributor_type` tinyint(4) NOT NULL DEFAULT '0' COMMENT '分销商类型，0-个人',
-  `distributor_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '分销商状态，0-为认证，1-认证通过，-1-认证不通过',
+  `distributor_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '分销商状态，0-未认证，1-认证通过，-1-认证不通过',
   `real_name` varchar(16) DEFAULT NULL COMMENT '真实姓名',
   `join_time` bigint(20) DEFAULT '0' COMMENT '成为分销商的时间',
   `link` varchar(500) DEFAULT NULL COMMENT '推广链接',

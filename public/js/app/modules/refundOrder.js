@@ -73,7 +73,6 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                 	id = $wrap.find('.id').val(),
-                    name = $wrap.find('.username').val(),
                     deleteDialog = dialog({
                     id: 'deleteDialog',
                     title: '删除',
@@ -106,7 +105,6 @@ define(function(require) {
                     },
                     onshow:function() {
                         $("#idToDelete").val(id);
-                        $("#usernameToDelete").text(name);
                     }
                 }).showModal();
             });
@@ -167,10 +165,13 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
-                    name = $wrap.find('.username').val(),
+                    orderId = $wrap.find('.orderId').val(),
+                    refundState = $wrap.find('.refundState').val(),
+                    userMemo = $wrap.find('.userMemo').val(),
+                    sellerMemo = $wrap.find('.sellerMemo').val(),
+                    stateHistory = $wrap.find('.stateHistory').val(),
                     createTime = $wrap.find('.createTime').val(),
                     updateTime = $wrap.find('.updateTime').val(),
-                    deleted = $wrap.find('.deleted').val(),
                     viewDialog = dialog({
                     id: 'viewDialog',
                     title: '查看',
@@ -182,10 +183,13 @@ define(function(require) {
                     },
                     onshow:function() {
                         $("#idToView").text(id);
-                        $("#usernameToView").text(name);
-                        $("#updateTimeToView").text(updateTime);
+                        $("#orderIdToView").text(orderId);
+                        $("#refundStateToView").text(refundState);
+                        $("#userMemoToView").text(userMemo);
+                        $("#sellerMemoToView").text(sellerMemo);
+                        $("#stateHistoryToView").text(stateHistory);
                         $("#createTimeToView").text(createTime);
-                        $("#stateToView").text(deleted==1?"已删除":"有效");
+                        $("#updateTimeToView").text(updateTime);
                     }
                 }).showModal();
             });

@@ -217,7 +217,7 @@
     float:left;
     display:inline-block;
     text-align:right;
-    width: 80px;
+    width: 88px;
 }
 .dialog-create .info, .dialog-delete .info, .dialog-update .info, .dialog-view .info {
     font-weight: bold;

@@ -9,23 +9,22 @@ define(function(require) {
     var ajax = require('../util/ajax');
     var dd = require('../util/dialog');
 
-    var Express = {
+    var Initiator = {
         init: function() {
-            this.createExpress($('[role="create"]'));
-            this.deleteExpress($('[role="delete"]'));
-            this.editExpress($('[role="edit"]'));
+            this.create($('[role="create"]'));
+            this.delete($('[role="delete"]'));
+            this.update($('[role="update"]'));
+            this.view($('[role="view"]'));
         },
 
         /**
          * 添加
          */
-        createExpress: function(obj) {
+        create: function(obj) {
             var self = this;
 
             obj.click(function() {
-                var $this = $(this),
-                    $wrap = $this.closest('.folded-panel'),
-                    $hiddenInputs = $wrap.find('input:hidden');
+                var $this = $(this);
 
                 var createDialog = dialog({
                     id: 'createDialog',
@@ -58,35 +57,33 @@ define(function(require) {
 
                     },
                     onshow: function() {
-                        
+
                     }
                 }).showModal();
             });
         },
-        
-        
+
+
 
         /**
          * 删除
          */
-        deleteExpress: function(obj) {
+        delete: function(obj) {
             obj.click(function() {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
-                	$expressId = $wrap.find('.id'),
-                	expressId = $expressId.val();
-
-                var deleteLevelDialog = dialog({
+                	id = $wrap.find('.id').val(),
+                    deleteDialog = dialog({
                     id: 'deleteDialog',
                     title: '删除',
                     content: document.getElementById('deleteDialogTmpl').innerHTML,
                     button: [
                         {
-                        	value: '确定',
+                            value: '确定',
                             callback: function () {
                                 var dia = this,
                                 $form = this.__popup.find('form');
-                                
+
                                 ajax.post($form.attr('action'), $form.serialize(), function(result){
                                     if(result.success){
                                         dia.close();
@@ -107,7 +104,7 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                    	$("#expressIdOnDelete").val(expressId);
+                        $("#idToDelete").val(id);
                     }
                 }).showModal();
             });
@@ -116,18 +113,15 @@ define(function(require) {
         /**
          * 修改
          */
-        editExpress: function(obj) {
+        update: function(obj) {
             obj.click(function() {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
-                    $expressId = $wrap.find('.id'),
-                    $name = $wrap.find('.name'),
-                    expressId = $expressId.val(),
-                	name = $name.val(),
-                editExpressDialog = dialog({
-                    id: 'editDialog',
+                    userId = $wrap.find('.userId').val(),
+                    updateDialog = dialog({
+                    id: 'updateDialog',
                     title: '修改',
-                    content: document.getElementById('editDialogTmpl').innerHTML,
+                    content: document.getElementById('updateDialogTmpl').innerHTML,
                     button: [
                         {
                         	value: '确定',
@@ -138,7 +132,7 @@ define(function(require) {
                                 ajax.post($form.attr('action'), $form.serialize(), function(result){
                                     if(result.success){
                                         dia.close();
-                                        dd.alert('修改成功！', function(){
+                                        dd.alert('修改信息成功！', function(){
                                             window.location.reload(false);
                                        });
                                     }else{
@@ -155,8 +149,42 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                    	$("#expressIdOnUpdate").val(expressId);
-                    	$("#nameOnUpdate").text(name);
+                    	$("#userIdToUpdate").val(userId);
+                    }
+                }).showModal();
+            });
+        },
+
+        /**
+         * 查看
+         */
+        view: function(obj) {
+            obj.click(function() {
+                var $this = $(this),
+                    $wrap = $this.closest('tr'),
+                    userId = $wrap.find('.userId').val(),
+                    cardNo = $wrap.find('.cardNo').val(),
+                    balances = $wrap.find('.balances').val(),
+                    income = $wrap.find('.income').val(),
+                    createTime = $wrap.find('.createTime').val(),
+                    updateTime = $wrap.find('.updateTime').val(),
+                    deleted = $wrap.find('.deleted').val(),
+                    viewDialog = dialog({
+                    id: 'viewDialog',
+                    title: '查看',
+                    content: document.getElementById('viewDialogTmpl').innerHTML,
+                    button: [],
+                    cancelValue: '关闭',
+                    cancel: function() {
+
+                    },
+                    onshow:function() {
+                        $("#userIdToView").text(userId);
+                        $("#cardNoToView").text(cardNo);
+                        $("#balancesToView").text(balances);
+                        $("#incomeToView").text(income);
+                        $("#updateTimeToView").text(updateTime);
+                        $("#createTimeToView").text(createTime);
                     }
                 }).showModal();
             });
@@ -164,5 +192,5 @@ define(function(require) {
         
     }
 
-    Express.init();
+    Initiator.init();
 });
