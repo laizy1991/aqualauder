@@ -1,36 +1,18 @@
 package service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import models.MerchantTradeOrder;
 import models.Order;
 import models.OrderGoods;
 import models.RefundOrder;
-import models.User;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.RandomUtils;
 
-import play.Logger;
-import play.Play;
-import service.wx.WXPay;
-import service.wx.common.Configure;
-import service.wx.common.RandomStringGenerator;
-import service.wx.common.Signature;
-import service.wx.dto.unifiedOrder.UnifiedOrderReqDto;
-import service.wx.dto.unifiedOrder.UnifiedOrderRspDto;
-import common.constants.MessageCode;
+import common.constants.OrderStatus;
 import common.constants.RefundStatus;
-import common.constants.wx.OutTradeStatus;
-import common.constants.wx.OutTradeType;
-import common.constants.wx.PayType;
+import common.constants.Separator;
+
 import dao.OrderDao;
 import dao.OrderGoodsDao;
 import dao.RefundOrderDao;
@@ -56,6 +38,17 @@ public class OrderService {
     public static boolean update(Order order) {
         order.setUpdateTime(System.currentTimeMillis());
         return OrderDao.update(order);
+    }
+    
+    public static boolean setStatusAndUpdate(long id, OrderStatus state) {
+        Order order = get(id);
+        return setStatusAndUpdate(order, state);
+    }
+    
+    public static boolean setStatusAndUpdate(Order order, OrderStatus state) {
+        order.setState(state.getState());
+        order.setStateHistory(order.getStateHistory() + OrderStatus.DELIVERED.getState() + Separator.COMMON_SEPERATOR_BL);
+        return update(order);
     }
     
     /**

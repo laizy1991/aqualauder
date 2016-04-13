@@ -57,7 +57,7 @@ public class DistributorService {
         return DistributorDao.update(distributor);
     }
     
-    public static void blotterProduce(Integer userId, Long blotterAmount, String outTradeNo) {
+    public static void blotterProduce(Integer userId, int blotterAmount, String outTradeNo) {
         if(userId == null || userId.intValue() < 0) {
             return;
         }

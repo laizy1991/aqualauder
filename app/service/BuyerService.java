@@ -79,6 +79,9 @@ public class BuyerService {
      */
     public static boolean receiving(int userId, long orderId) {
         Order order = OrderService.get(orderId);
+        if(order == null) {
+            Logger.error("order not found, id:%s", orderId);
+        }
         int dbOrderState = order.getState() == null ? OrderStatus.INIT.getState() : order.getState();
         if (dbOrderState != OrderStatus.DELIVERED.getState()) {
             return false;
@@ -93,9 +96,19 @@ public class BuyerService {
             return false;
         }
         
-        order.setFinishTime(System.currentTimeMillis());
-        order.setState(OrderStatus.COMPLETE.getState());
-        boolean isSucc = OrderService.update(order);
+        order.setRecevTime(System.currentTimeMillis());
+        boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.RECE);
+        return isSucc;
+    }
+    
+    public static boolean paySuccess(long orderId) {
+        Order order = OrderService.get(orderId);
+        if(order == null) {
+            Logger.error("order not found, id:%s", orderId);
+            return false;
+        }
+        order.setPayTime(System.currentTimeMillis());
+        boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.PAYED);
         return isSucc;
     }
 }

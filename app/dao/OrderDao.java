@@ -44,6 +44,10 @@ public class OrderDao {
         return Order.find("userId", userId).fetch(page, size);
     }
     
+    public static List<Order> getByStatus(int state) {
+        return Order.find("state", state).fetch();
+    }
+    
     public static void delete(Order order) {
         if (order != null) {
             order.delete();

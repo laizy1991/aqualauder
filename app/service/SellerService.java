@@ -117,6 +117,13 @@ public class SellerService {
         RefundStatus refundState = RefundStatus.ING;
         if(isAgree != 1) {
             refundState = RefundStatus.REFUSE;
+        } else {
+            //如果是同意退款需要关闭订单
+            boolean isSucc = OrderService.setStatusAndUpdate(refundOrder.getOrderId(), OrderStatus.CLOSE);
+            if(!isSucc) {
+                Logger.error("close order fail. id:%s", refundOrder.getOrderId());
+                return false;
+            }
         }
 
         refundOrder.setSellerMemo(reason);
@@ -131,9 +138,8 @@ public class SellerService {
      * @param expressId
      * @param expressNum
      * @return
-     * @throws BusinessException
      */
-    public static boolean complete(long orderId, int expressId, String expressNum) {
+    public static boolean delivered(long orderId, int expressId, String expressNum) {
         Order order = OrderService.get(orderId);
         if(order == null) {
             Logger.error("order not found, id:%s", orderId);
@@ -154,11 +160,10 @@ public class SellerService {
             Logger.error("can not delivered, orderId:{}", orderId);
             return false;
         }
-        order.setState(OrderStatus.DELIVERED.getState());
         order.setExpressId(expressId);
         order.setExpressNum(expressNum);
         order.setDeliverTime(System.currentTimeMillis());
-        boolean isSucc = OrderService.update(order);
+        boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.DELIVERED);
             
         return isSucc;
     }

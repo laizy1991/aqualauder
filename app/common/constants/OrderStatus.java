@@ -8,13 +8,13 @@ package common.constants;
  *
  */
 public enum OrderStatus {
-//订单对应的状态: 0=创建订单(待支付)，1=完成支付,2=待发货，3=完成发货，4=交易成功(确认收货),5=交易关闭
     INIT(0,"订单创建(待支付)"),
     PAYED(1,"完成支付"),
     DELIVERING(2,"待发货"),
     DELIVERED(3,"完成发货"),
-    COMPLETE(4,"交易成功(确认收货)"),
-    CLOSE(5, "交易关闭");
+    RECE(4,"确认收货"),
+    COMPLETE(5,"交易成功(不能退货)"),
+    CLOSE(6, "交易关闭");
     
     private int state;
     private String desc;
