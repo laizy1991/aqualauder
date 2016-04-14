@@ -1,0 +1,198 @@
+#{extends 'main.html' /}
+
+#{set 'moreStyles'}
+<link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+<link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+#{/set}
+<style>
+</style>
+<!-- 页头 begin -->
+<div class="main-header">
+    <div class="breadcrumb">
+        <span class="nolink">系统参数</span>
+    </div>
+    <a class="btn btn-default" href="javascript:;" role="create">添加</a>
+</div>
+<!-- 页头 end -->
+<table class="tb">
+    <thead>
+    <tr  class="text-center">
+        <th>ID</th>
+        <th>KEY</th>
+        <th>VALUE</th>
+        <th class="order" role="contributeAsc">
+            创建时间
+        </th>
+        <th class="order" role="contributeAsc">
+            修改时间
+        </th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    #{if commonDicts == null || commonDicts.size() == 0 }
+    <tr><td colspan="6" style="text-align:center;">暂无记录</td></tr>
+    #{/if}
+    #{else}
+    #{list items:commonDicts, as:'info'}
+    <tbody>
+    <tr class="user-item">
+        <input type="hidden" class="id" value="${info.id}">
+        <input type="hidden" class="type" value="${info.type}">
+        <input type="hidden" class="value" value="${info.value}">
+        <input type="hidden" class="key" value="${info.key}">
+        <input type="hidden" class="desc" value="${info.desc}">
+        <input type="hidden" class="deleted" value="${info.deleted}">
+        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
+        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
+        <td>${info?.id}</td>
+        <td>${info?.key}</td>
+        <td>${info?.value}</td>
+        <td>
+            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
+        </td>
+        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
+        <td>
+            <div class="opts">
+                <span class="opt" role="update"><a href="javascript:;">修改</a></span>|
+                <span class="opt" role="delete"><a href="javascript:;">删除</a></span>|
+                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+    #{/list}
+    #{/else}
+</table>
+
+#{include file="common/jsinclude.html" /}
+
+#{set 'moreScripts'}
+<!-- 增加 -->
+<script id="createDialogTmpl" type="text/html">
+    <div class="dialog dialog-create">
+        <form action="@{ajax.CommonDictCtrl.add}" id="create">
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>KEY</label>
+                <div class="col">
+                    <input type="text" name="commonDict.key" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>VALUE</label>
+                <div class="col">
+                    <input type="text" name="commonDict.value" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>描述</label>
+                <div class="col">
+                    <input type="text" name="commonDict.desc" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 删除 -->
+<script id="deleteDialogTmpl" type="text/html">
+    <div class="dialog dialog-delete">
+        <form action="@{ajax.CommonDictCtrl.delete}" id="delete">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToDelete" name="commonDict.id" value="">
+                <label class="tips">确定删除<strong id="keyToDelete"></strong>？</label>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 修改 -->
+<script id="updateDialogTmpl" type="text/html">
+    <div class="dialog dialog-update">
+        <form action="@{ajax.CommonDictCtrl.update}" id="update">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToUpdate" name="commonDict.id" value="">
+                <label class="tips">确定修改<strong id="keyToUpdate"></strong>？</label>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>VALUE</label>
+                <div class="col">
+                    <input type="text" name="commonDict.value" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>描述</label>
+                <div class="col">
+                    <input type="text" name="commonDict.desc" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 查看 -->
+<script id="viewDialogTmpl" type="text/html">
+    <div class="dialog dialog-view">
+        <form action="#" id="view">
+            <div class="form-group">
+                <label class="label">ID:</label>
+                <div class="col">
+                    <label class="info" id="idToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">KEY:</label>
+                <div class="col">
+                    <label class="info" id="keyToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">VALUE:</label>
+                <div class="col">
+                    <label class="info" id="valueToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">描述:</label>
+                <div class="col">
+                    <label class="info" id="descToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">修改时间:</label>
+                <div class="col">
+                    <label class="info" id="updateTimeToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">创建时间:</label>
+                <div class="col">
+                    <label class="info" id="createTimeToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">状态:</label>
+                <div class="col">
+                    <label class="info" id="deletedToView"></label>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script>
+    var verNum = new Date();
+    seajs.config({
+        base:"../",
+        // 加版本号
+        map: [
+            [ '.js', '.js?v='+verNum]
+        ]
+    });
+    seajs.use("@{'/public/js/app/modules/commonDict.js'}");
+</script>
+#{/set}

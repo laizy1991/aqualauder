@@ -72,7 +72,8 @@ define(function(require) {
             obj.click(function() {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
-                	userId = $wrap.find('.userId').val(),
+                	id = $wrap.find('.id').val(),
+                    key = $wrap.find('.key').val(),
                     deleteDialog = dialog({
                     id: 'deleteDialog',
                     title: '删除',
@@ -104,7 +105,8 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                        $("#userIdToDelete").val(userId);
+                        $("#idToDelete").val(id);
+                        $("#keyToDelete").text(key);
                     }
                 }).showModal();
             });
@@ -117,7 +119,8 @@ define(function(require) {
             obj.click(function() {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
-                    userId = $wrap.find('.userId').val(),
+                    id = $wrap.find('.id').val(),
+                    key = $wrap.find('.key').val(),
                     updateDialog = dialog({
                     id: 'updateDialog',
                     title: '修改',
@@ -149,7 +152,8 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                    	$("#userIdToUpdate").val(userId);
+                        $("#idToUpdate").val(id);
+                        $("#keyToUpdate").text(key);
                     }
                 }).showModal();
             });
@@ -162,10 +166,11 @@ define(function(require) {
             obj.click(function() {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
-                    userId = $wrap.find('.userId').val(),
-                    cardNo = $wrap.find('.cardNo').val(),
-                    balances = $wrap.find('.balances').val(),
-                    income = $wrap.find('.income').val(),
+                    id = $wrap.find('.id').val(),
+                    type = $wrap.find('.type').val(),
+                    value = $wrap.find('.value').val(),
+                    key = $wrap.find('.key').val(),
+                    desc = $wrap.find('.desc').val(),
                     createTime = $wrap.find('.createTime').val(),
                     updateTime = $wrap.find('.updateTime').val(),
                     deleted = $wrap.find('.deleted').val(),
@@ -179,12 +184,14 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                        $("#userIdToView").text(userId);
-                        $("#cardNoToView").text(cardNo);
-                        $("#balancesToView").text(balances);
-                        $("#incomeToView").text(income);
+                        $("#idToView").text(id);
+                        $("#typeToView").text(type);
+                        $("#valueToView").text(value);
+                        $("#keyToView").text(key);
+                        $("#descToView").text(desc);
                         $("#updateTimeToView").text(updateTime);
                         $("#createTimeToView").text(createTime);
+                        $("#deletedToView").text(deleted);
                     }
                 }).showModal();
             });
