@@ -8,9 +8,9 @@ package common.constants;
  */
 public enum DistributorStatus {
 
-    UN_AUTH(0, "未认证"),
-    ACCESS_AUTH(1, "通过认证"),
-    FAIL_AUTh(2, "认证不通过");
+    INIT(0, "未认证"),
+    PASS(1, "通过认证"),
+    FAILED(2, "认证不通过");
     
     private int code;
     private String desc;
@@ -36,4 +36,12 @@ public enum DistributorStatus {
         this.desc = desc;
     }
     
+    public static boolean isExist(int code) {
+        for (DistributorStatus ele : DistributorStatus.values()) {
+            if (ele.getCode() == code) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

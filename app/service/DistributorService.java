@@ -3,6 +3,7 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.AuditInfo;
 import models.CashInfo;
 import models.Distributor;
 import models.DistributorSuperior;
@@ -16,11 +17,14 @@ import org.apache.commons.lang.StringUtils;
 import play.Logger;
 import sun.security.krb5.internal.crypto.crc32;
 import utils.DateUtil;
+import common.constants.AuditStatus;
+import common.constants.AuditType;
 import common.constants.BillType;
 import common.constants.CashStatus;
 import common.constants.CommonDictType;
 import common.constants.DistributorStatus;
 import common.constants.DistributorType;
+import dao.AuditInfoDao;
 import dao.CashInfoDao;
 import dao.DistributorDao;
 import dao.DistributorSuperiorDao;
@@ -241,12 +245,16 @@ public class DistributorService {
         distributor.setLink(link);
         distributor.setQrcodeUrl(qrcodeUrl);
         distributor.setRealName(realName);
-        distributor.setStatus(DistributorStatus.UN_AUTH.getCode());
+        distributor.setStatus(DistributorStatus.INIT.getCode());
         distributor.setUserId(userId);
         return add(distributor);
     }
 
     public static boolean updateStatus(int userId, int status) {
+        if(!DistributorStatus.isExist(status)) {
+            return false;
+        }
+        
         Distributor distributor = DistributorDao.get(userId);
         if(distributor == null) {
             return false;
@@ -273,7 +281,7 @@ public class DistributorService {
         }
         
         Distributor superDistributor = DistributorDao.get(superiors);
-        if(superDistributor == null || superDistributor.getStatus().intValue() != DistributorStatus.ACCESS_AUTH.getCode()) {
+        if(superDistributor == null || superDistributor.getStatus().intValue() != DistributorStatus.PASS.getCode()) {
             Logger.warn("superiors not found userId:%d, superiors:%d", userId, superiors);
             return false;
         }
@@ -311,4 +319,27 @@ public class DistributorService {
         }
     }
     
+    public static boolean applyAudit(int userId, String imgUrl, String realName) {
+        if(StringUtils.isBlank(realName) || StringUtils.isBlank(imgUrl)) {
+            return false;
+        }
+        
+        Distributor distributor = DistributorDao.get(userId);
+        if(distributor == null) {
+            return false;
+        }
+        distributor.setRealName(realName);
+        boolean isSucc =DistributorDao.update(distributor);
+        if(!isSucc) {
+            return false;
+        }
+        
+        AuditInfo info = new AuditInfo();
+        info.setAuditType(AuditType.DISTRIBUTOR.getCode());
+        info.setAuditStatus(AuditStatus.INIT.getStatus());
+        info.setContent(realName);
+        info.setImgUrls(imgUrl);
+        info.setUserId(userId);
+        return AuditInfoDao.insert(info);
+    }
 }

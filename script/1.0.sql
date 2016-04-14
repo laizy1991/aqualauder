@@ -13768,3 +13768,15 @@ CREATE TABLE `user_month_blotters` (
   KEY `idx1` (`user_id`,`blotter_month`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户月流水';
 
+CREATE TABLE `audit_info` (
+  `id` bigint(20) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `audit_type` int(11) NOT NULL COMMENT '审核类型，0-分销商身份审核',
+  `content` varchar(500) CHARACTER SET gbk DEFAULT NULL,
+  `img_urls` varchar(1024) CHARACTER SET gbk DEFAULT '' COMMENT '图片url，多个url以分号分割',
+  `audit_status` tinyint(4) DEFAULT '0' COMMENT '审核状态，0为未审核，1为审核通过，-1为审核不通过',
+  `create_time` bigint(20) NOT NULL,
+  `update_time` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='审核信息表';
+
