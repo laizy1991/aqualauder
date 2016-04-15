@@ -28,7 +28,7 @@ import dao.OrderDao;
  * @createDate 2016年4月13日
  *
  */
-@On("0 0 * * *")
+@On("0 0 0 * * ?")
 public class OrderCheckJob extends Job {
 
     @Override
