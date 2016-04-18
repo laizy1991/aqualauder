@@ -64,18 +64,27 @@ public class Pay extends FrontController {
     /**
      * 前台回调
      */
-    public static void payCallBack(long id) {
+    public static void payCallBack(long id, int payStatus) {
     	if(id <= 0) {
     		Logger.error("微信统一下单后前台传来的订单编号为空");
+    		return;
+    	}
+    	if(payStatus <= 0 || (payStatus != OutTradeStatus.PAY_FAILED && payStatus != OutTradeStatus.PAY_SUCC)) {
+    		Logger.error("微信统一下单后前台传来的订单支付状态有误，payStatus[%d]", payStatus);
     		return;
     	}
     	Order order = OrderService.get(id);
     	if(null == order) {
     		Logger.error("获取到的订单为空，id[%d]", id);
     	}
+    	if(order.getPayStatus() >= OutTradeStatus.PAY_SUCC) {
+    		Logger.info("该订单之前已支付成功，id[%d]", id);
+    		return;
+    	}
+    	
     	//更新订单前台回调时间
     	order.setPayTime(System.currentTimeMillis());
-    	order.setPayStatus(OutTradeStatus.PAY_SUCC);
+    	order.setPayStatus(payStatus);
     	if(!OrderService.update(order)) {
     		Logger.error("更新订单前台回调时间时失败，id[%d]", id);
     	}
