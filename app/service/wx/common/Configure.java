@@ -46,7 +46,9 @@ public class Configure {
 	//2) 发送现金红包API
 	public static String SEND_REDPACK_API = "https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack";
 	//3) 查询现金红包API
-	public static String QUERY_REDPACK_API = "	https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo";
+	public static String QUERY_REDPACK_API = "https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo";
+	//4) 查询订单
+	public static String ORDER_QUERY_API = "https://api.mch.weixin.qq.com/pay/orderquery";
 
 	public static boolean isUseThreadToDoReport() {
 		return useThreadToDoReport;
