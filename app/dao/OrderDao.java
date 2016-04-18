@@ -5,6 +5,7 @@ import java.util.List;
 import models.Order;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 
@@ -25,7 +26,6 @@ public class OrderDao {
         
         if(list.size() > 1) {
             Logger.error("too many order find. order_Id:" + id);
-            return null;
         }
         
         return list.get(0);
@@ -52,5 +52,26 @@ public class OrderDao {
         if (order != null) {
             order.delete();
         }
+    }
+    
+    /**
+     * 通过outTradeNo获取订单
+     * @param outTradeNo
+     * @return
+     */
+    public static Order getOrderByOutTradeNo(String outTradeNo) {
+    	if(StringUtils.isEmpty(outTradeNo)) {
+    		return null;
+    	}
+    	List<Order> list = Order.find("outTradeNo", outTradeNo).fetch();
+    	if(CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        
+        if(list.size() > 1) {
+            Logger.error("too many order find. outTradeNo:" + outTradeNo);
+        }
+    	
+    	return list.get(0);
     }
 }

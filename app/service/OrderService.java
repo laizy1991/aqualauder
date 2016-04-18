@@ -8,11 +8,11 @@ import models.OrderGoods;
 import models.RefundOrder;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import common.constants.OrderStatus;
 import common.constants.RefundStatus;
 import common.constants.Separator;
-
 import dao.OrderDao;
 import dao.OrderGoodsDao;
 import dao.RefundOrderDao;
@@ -115,4 +115,16 @@ public class OrderService {
         
         return detail;
     } 
+    
+    /**
+     * 通过outTradeNo获取订单
+     * @param outTradeNo
+     * @return
+     */
+    public static Order getOrderByOutTradeNo(String outTradeNo) {
+    	if(StringUtils.isEmpty(outTradeNo)) {
+    		return null;
+    	}
+    	return OrderDao.getOrderByOutTradeNo(outTradeNo);
+    }
 }

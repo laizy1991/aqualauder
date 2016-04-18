@@ -74,7 +74,28 @@ public class Order extends GenericModel {
 
     @Column(name="update_time")
     private Long updateTime;
+    
+    @Column(name="open_id")
+    private String openId;
+    
+    @Column(name="client_ip")
+    private String clientIp;
+    
+    @Column(name="pay_status")
+    private Integer payStatus;
 
+    @Column(name="callback_url")
+    private String callbackUrl;
+
+    @Column(name="platform_trade_no")
+    private String platformTradeNo;
+    
+    @Column(name="platform_trade_msg")
+    private String platformTradeMsg;
+    
+    @Column(name="callback_time")
+    private Long callbackTime;
+    
     public Integer getUserId() {
         return userId;
     }
@@ -241,5 +262,61 @@ public class Order extends GenericModel {
 
 	public void setMobilePhone(String mobilePhone) {
 		this.mobilePhone = mobilePhone;
+	}
+
+	public String getOpenId() {
+		return openId;
+	}
+
+	public void setOpenId(String openId) {
+		this.openId = openId;
+	}
+
+	public String getClientIp() {
+		return clientIp;
+	}
+
+	public void setClientIp(String clientIp) {
+		this.clientIp = clientIp;
+	}
+
+	public Integer getPayStatus() {
+		return payStatus;
+	}
+
+	public void setPayStatus(Integer payStatus) {
+		this.payStatus = payStatus;
+	}
+
+	public String getCallbackUrl() {
+		return callbackUrl;
+	}
+
+	public void setCallbackUrl(String callbackUrl) {
+		this.callbackUrl = callbackUrl;
+	}
+
+	public String getPlatformTradeNo() {
+		return platformTradeNo;
+	}
+
+	public void setPlatformTradeNo(String platformTradeNo) {
+		this.platformTradeNo = platformTradeNo;
+	}
+
+	public String getPlatformTradeMsg() {
+		return platformTradeMsg;
+	}
+
+	public void setPlatformTradeMsg(String platformTradeMsg) {
+		this.platformTradeMsg = platformTradeMsg;
+	}
+
+	public Long getCallbackTime() {
+		return callbackTime;
+	}
+
+	public void setCallbackTime(Long callbackTime) {
+		this.callbackTime = callbackTime;
 	}
 }
