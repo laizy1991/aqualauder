@@ -29,4 +29,8 @@ public class CommonDictDao {
     public static void update(CommonDict dict) {
         dict.save();
     }
+
+    public static void insert(CommonDict dict) {
+        dict.save();
+    }
 }

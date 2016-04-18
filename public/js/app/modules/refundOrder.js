@@ -105,6 +105,7 @@ define(function(require) {
                     },
                     onshow:function() {
                         $("#idToDelete").val(id);
+                        $("#idToDeleteEx").text(id);
                     }
                 }).showModal();
             });
@@ -118,7 +119,8 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
-                	name = $wrap.find('.username').val(),
+                    refundState = $wrap.find('.refundState').val(),
+                    sellerMemo = $wrap.find('.sellerMemo').val(),
                     updateDialog = dialog({
                     id: 'updateDialog',
                     title: '修改',
@@ -151,7 +153,9 @@ define(function(require) {
                     },
                     onshow:function() {
                     	$("#idToUpdate").val(id);
-                    	$("#usernameToUpdate").text(name);
+                    	$("#idToUpdateEx").text(id);
+                    	$("#refundStateToUpdate").val(refundState);
+                    	$("#sellerMemoToUpdate").val(sellerMemo);
                     }
                 }).showModal();
             });
@@ -182,9 +186,10 @@ define(function(require) {
 
                     },
                     onshow:function() {
+                        var stateList={"0":"申请退款", "2":"退款中","3":"退款成功","4":"拒绝退款","5":"取消退款"};
                         $("#idToView").text(id);
                         $("#orderIdToView").text(orderId);
-                        $("#refundStateToView").text(refundState);
+                        $("#refundStateToView").text(stateList[refundState]);
                         $("#userMemoToView").text(userMemo);
                         $("#sellerMemoToView").text(sellerMemo);
                         $("#stateHistoryToView").text(stateHistory);

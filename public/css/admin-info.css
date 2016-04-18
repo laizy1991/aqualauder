@@ -245,6 +245,11 @@
     margin:21px 0 0 12px;
     overflow:hidden
 }
+
+.dialog-view {
+    max-height:400px;
+    overflow-y: scroll;
+}
 .search-combobox {
     margin:40px auto
 }
@@ -555,4 +560,8 @@ a.list-group-item:focus, a.list-group-item:hover {
 .form-field .input-floor {
     width: 112px;
     margin: 0 6px
+}
+
+.hidden {
+    display:none
 }

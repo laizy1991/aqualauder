@@ -11,7 +11,7 @@
     <div class="breadcrumb">
         <span class="nolink">用户列表</span>
     </div>
-    <a class="btn btn-default" href="javascript:;" role="create">添加</a>
+    <!--<a class="btn btn-default" href="javascript:;" role="create">添加</a>-->
 </div>
 <!-- 页头 end -->
 <table class="tb">
@@ -106,7 +106,7 @@
             <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>昵称</label>
                 <div class="col">
-                    <input type="text" name="user.nickname" value="">
+                    <input type="text" id="nicknameTpdateEx" name="user.nickname" value="">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
@@ -136,13 +136,13 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="label">OpenId:</label>
+                <label class="label">第三方平台ID:</label>
                 <div class="col">
                     <label class="info" id="openIdToView"></label>
                 </div>
             </div>
             <div class="form-group">
-                <label class="label">regType:</label>
+                <label class="label">注册类型:</label>
                 <div class="col">
                     <label class="info" id="regTypeToView"></label>
                 </div>

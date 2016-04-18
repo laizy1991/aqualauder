@@ -116,12 +116,49 @@
         <form action="@{ajax.OrderCtrl.update}" id="update">
             <div class="form-group">
                 <input type="hidden" class="in-t" id="idToUpdate" name="order.id" value="">
-                <label class="tips">确定修改<strong id="outTradeNoToUpdate"></strong>？</label>
+                <label class="tips">确定修改订单:<strong id="outTradeNoToUpdate"></strong>？</label>
             </div>
             <div class="form-group">
-                <label class="label"><span class="asterisk">*</span>密码</label>
+                <label class="label"><span class="asterisk">*</span>快递公司</label>
                 <div class="col">
-                    <input type="password" name="order.password" value="">
+                    <select id="expressIdToUpdate" name="order.expressId">
+                        #{list items:expresses, as:'exp'}
+                        <option value="${exp.id}">${exp.name}</option>>
+                        #{/list}
+                    </select>
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>快递单号</label>
+                <div class="col">
+                    <input type="text" id="expressNumToUpdate" name="order.expressNum" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>订单状态</label>
+                <div class="col">
+                    <select id="stateToUpdate" name="order.state">
+                        <option value="0">创建订单(待支付)</option>
+                        <option value="1">完成支付</option>
+                        <option value="2">待发货</option>
+                        <option value="3">完成发货</option>
+                        <option value="4">确认收货</option>
+                        <option value="5">交易成功(不可退货)</option>)
+                        <option value="6">交易关闭</option>
+                    </select>
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>允许退款</label>
+                <div class="col">
+                    <!--<input type="text"id="statusToUpdate" name="distributor.status" value="">-->
+                    <select id="forbidRefundToUpdate" name="order.forbidRefund">
+                        <option value="0">允许</option>
+                        <option value="1">禁止</option>
+                    </select>
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
@@ -164,9 +201,11 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="label">快递公司ID:</label>
+                <label class="label">快递公司:</label>
                 <div class="col">
-                    <label class="info" id="expressIdToView"></label>
+                    #{list items:expresses, as:'exp'}
+                    <label class="info hidden" id="expressIdToView_${exp.id}">${exp.name}</label>
+                    #{/list}
                 </div>
             </div>
             <div class="form-group">

@@ -154,6 +154,7 @@ define(function(require) {
                     onshow:function() {
                         $("#idToUpdate").val(id);
                         $("#nameToUpdate").text(name);
+                        $("#nameToUpdateEx").val(name);
                     }
                 }).showModal();
             });

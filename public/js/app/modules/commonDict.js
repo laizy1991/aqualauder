@@ -120,7 +120,9 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
+                    value = $wrap.find('.value').val(),
                     key = $wrap.find('.key').val(),
+                    desc = $wrap.find('.desc').val(),
                     updateDialog = dialog({
                     id: 'updateDialog',
                     title: '修改',
@@ -154,6 +156,8 @@ define(function(require) {
                     onshow:function() {
                         $("#idToUpdate").val(id);
                         $("#keyToUpdate").text(key);
+                        $("#valueToUpdate").val(value);
+                        $("#descToUpdate").val(desc);
                     }
                 }).showModal();
             });

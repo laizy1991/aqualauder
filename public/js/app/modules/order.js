@@ -121,6 +121,11 @@ define(function(require) {
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
                     outTradeNo = $wrap.find('.outTradeNo').val(),
+                    expressId = $wrap.find('.expressId').val(),
+                    expressNum = $wrap.find('.expressNum').val(),
+                    forbidRefund = $wrap.find('.forbidRefund').val(),
+                    state = $wrap.find('.state').val(),
+
                     updateDialog = dialog({
                     id: 'updateDialog',
                     title: '修改',
@@ -154,6 +159,10 @@ define(function(require) {
                     onshow:function() {
                     	$("#idToUpdate").val(id);
                     	$("#outTradeNoToUpdate").text(outTradeNo);
+                        $("#expressIdToUpdate").val(expressId);
+                        $("#expressNumToUpdate").val(expressNum);
+                        $("#forbidRefundToUpdate").val(forbidRefund);
+                        $("#stateToUpdate").val(state);
                     }
                 }).showModal();
             });
@@ -197,16 +206,18 @@ define(function(require) {
 
                     },
                     onshow:function() {
+                        var stateList = {"0":"创建订单(待支付)","1":"完成支付","2":"待发货","3":"完成发货","4":"确认收货","5":"交易成功(不可退货)","6":"交易关闭"};
+                        var forbidRefundList = {"0":"允许退款", "1":"禁止退款"}
                         $("#idToView").text(id);
                         $("#userIdToView").text(userId);
                         $("#outTradeNoToView").text(outTradeNo);
                         $("#slipNoToView").text(slipNo);
-                        $("#payTypeToView").text(payType);
-                        $("#expressIdToView").text(expressId);
+                        $("#payTypeToView").text(payType=="0"?"微信支付":payType=="1"?"余额":"未知");
+                        $("#expressIdToView_" + expressId).show();
                         $("#expressNumToView").text(expressNum);
                         $("#totalFeeToView").text(totalFee);
-                        $("#stateToView").text(state);
-                        $("#forbidRefundToView").text(forbidRefund);
+                        $("#stateToView").text(stateList[state]);
+                        $("#forbidRefundToView").text(forbidRefundList[forbidRefund]);
                         $("#orderMemoToView").text(orderMemo);
                         $("#receiverToView").text(receiver);
                         $("#mobilePhoneToView").text(mobilePhone);

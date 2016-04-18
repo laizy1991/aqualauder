@@ -11,7 +11,7 @@
     <div class="breadcrumb">
         <span class="nolink">用户列表</span>
     </div>
-    <a class="btn btn-default" href="javascript:;" role="create">添加</a>
+    <!--<a class="btn btn-default" href="javascript:;" role="create">添加</a>-->
 </div>
 <!-- 页头 end -->
 <table class="tb">
@@ -102,9 +102,45 @@
                 <label class="tips">确定修改<strong id="realNameToUpdate"></strong>？</label>
             </div>
             <div class="form-group">
-                <label class="label"><span class="asterisk">*</span>名称</label>
+                <label class="label"><span class="asterisk">*</span>真实姓名</label>
                 <div class="col">
-                    <input type="text" name="distributor.realName" value="">
+                    <input type="text" id="realNameToUpdateEx" name="distributor.realName" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>类型</label>
+                <div class="col">
+                    <!--<input type="text"id="typeToUpdate" name="distributor.type" value="">-->
+                    <select id="typeToUpdate" name="distributor.type">
+                        <option value="0">个人</option>
+                    </select>
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>分销商状态</label>
+                <div class="col">
+                    <!--<input type="text"id="statusToUpdate" name="distributor.status" value="">-->
+                    <select id="statusToUpdate" name="distributor.status">
+                        <option value="0">未认证</option>
+                        <option value="1">认证通过</option>
+                        <option value="-1">认证不通过</option>
+                    </select>
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>推广链接</label>
+                <div class="col">
+                    <input type="text"id="linkToUpdate" name="distributor.link" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>二维码</label>
+                <div class="col">
+                    <input type="text"id="qrcodeUrlToUpdate" name="distributor.qrcodeUrl" value="">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>

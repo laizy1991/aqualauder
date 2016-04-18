@@ -3,6 +3,7 @@ package controllers.ajax;
 import common.core.AjaxController;
 import exception.BusinessException;
 import models.Distributor;
+import service.DistributorService;
 
 public class DistributorCtrl extends AjaxController {
 
@@ -17,7 +18,7 @@ public class DistributorCtrl extends AjaxController {
     }
 
     public static void update(Distributor distributor) {
-
+        DistributorService.update(distributor);
         renderSuccessJson();
     }
 

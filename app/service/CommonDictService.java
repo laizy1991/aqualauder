@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dao.AdminDao;
+import models.Administrator;
 import models.CommonDict;
 import play.Logger;
+import utils.EncryptionUtil;
 import utils.MapUtil;
 import common.constants.CommonDictType;
 import dao.CommonDictDao;
@@ -52,9 +55,27 @@ public class CommonDictService {
         commonDictMap.remove(dict.getType());
         return true;
     }
-    
-    
-    
+
+
+    public static void add(CommonDict dict) {
+        dict.setCreateTime(System.currentTimeMillis());
+        dict.setUpdateTime(System.currentTimeMillis());
+        commonDictMap.remove(dict.getType());
+        CommonDictDao.insert(dict);
+    }
+
+    public static void delete(CommonDict dict) {
+        dict.setDeleted(1);
+        dict.setUpdateTime(System.currentTimeMillis());
+        commonDictMap.remove(dict.getType());
+        CommonDictDao.insert(dict);
+    }
+
+    public static void update(CommonDict dict) {
+        dict.setUpdateTime(System.currentTimeMillis());
+        commonDictMap.remove(dict.getType());
+        CommonDictDao.update(dict);
+    }
     
     
     

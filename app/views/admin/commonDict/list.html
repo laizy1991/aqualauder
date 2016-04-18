@@ -72,6 +72,15 @@
     <div class="dialog dialog-create">
         <form action="@{ajax.CommonDictCtrl.add}" id="create">
             <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>类型</label>
+                <div class="col">
+                    <select name="commonDict.type">
+                        <option value="${config.code}" selected>${config.desc}</option>
+                        <option value="${levelPay.code}">${levelPay.desc}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>KEY</label>
                 <div class="col">
                     <input type="text" name="commonDict.key" value="">
@@ -119,14 +128,14 @@
             <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>VALUE</label>
                 <div class="col">
-                    <input type="text" name="commonDict.value" value="">
+                    <input type="text" id="valueToUpdate" name="commonDict.value" value="">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
             <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>描述</label>
                 <div class="col">
-                    <input type="text" name="commonDict.desc" value="">
+                    <input type="text" id="descToUpdate" name="commonDict.desc" value="">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>

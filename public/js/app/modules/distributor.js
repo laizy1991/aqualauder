@@ -121,6 +121,10 @@ define(function(require) {
                     $wrap = $this.closest('tr'),
                     userId = $wrap.find('.userId').val(),
                     realName = $wrap.find('.realName').val(),
+                    type = $wrap.find('.type').val(),
+                    status = $wrap.find('.status').val(),
+                    link = $wrap.find('.link').val(),
+                    qrcodeUrl = $wrap.find('.qrcodeUrl').val(),
                     updateDialog = dialog({
                     id: 'updateDialog',
                     title: '修改',
@@ -154,6 +158,11 @@ define(function(require) {
                     onshow:function() {
                         $("#userIdToUpdate").val(userId);
                         $("#realNameToUpdate").text(realName);
+                        $("#realNameToUpdateEx").val(realName);
+                        $("#typeToUpdate").val(type);
+                        $("#statusToUpdate").val(status);
+                        $("#linkToUpdate").val(link);
+                        $("#qrcodeUrlToUpdate").val(qrcodeUrl);
                     }
                 }).showModal();
             });
@@ -185,9 +194,10 @@ define(function(require) {
 
                     },
                     onshow:function() {
+                        var statusList={"0":"未认证","1":"认证通过","-1":"认证不通过"}
                         $("#userIdToView").text(userId);
-                        $("#typeToView").text(type);
-                        $("#statusToView").text(status);
+                        $("#typeToView").text(type=="0"?"个人":"未知");
+                        $("#statusToView").text(statusList[status]);
                         $("#realNameToView").text(realName);
                         $("#joinTimeToView").text(joinTime);
                         $("#linkToView").text(link);

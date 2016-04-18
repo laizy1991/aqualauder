@@ -3,6 +3,7 @@ package controllers.ajax;
 import common.core.AjaxController;
 import exception.BusinessException;
 import models.Order;
+import service.OrderService;
 
 public class OrderCtrl extends AjaxController {
 
@@ -17,7 +18,7 @@ public class OrderCtrl extends AjaxController {
     }
 
     public static void update(Order order) {
-
+        OrderService.update(order);
         renderSuccessJson();
     }
 
