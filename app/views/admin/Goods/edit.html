@@ -1,0 +1,41 @@
+#{extends 'main.html' /}
+
+#{set 'moreStyles'}
+<link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+<link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+#{/set}
+<style>
+</style>
+<!-- 页头 begin -->
+<form action="@{ajax.GoodsCtrl.add}" id="create">
+    <div class="form-group">
+        <label class="label"><span class="asterisk">*</span>姓名</label>
+        <div class="col">
+            <input type="text" name="goods.username" value="">
+            <span class="msg error-text">必填项！</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="label"><span class="asterisk">*</span>密码</label>
+        <div class="col">
+            <input type="password" name="goods.password" value="">
+            <span class="msg error-text">必填项！</span>
+        </div>
+    </div>
+</form>
+#{include file="common/jsinclude.html" /}
+
+#{set 'moreScripts'}
+
+<script>
+    var verNum = new Date();
+    seajs.config({
+        base:"../",
+        // 加版本号
+        map: [
+            [ '.js', '.js?v='+verNum]
+        ]
+    });
+    seajs.use("@{'/public/js/app/modules/goods.js'}");
+</script>
+#{/set}
