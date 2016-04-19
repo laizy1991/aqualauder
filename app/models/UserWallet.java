@@ -52,6 +52,14 @@ public class UserWallet extends GenericModel {
         this.userId = userId;
     }
 
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
+    }
+
     public Integer getBalances() {
         return balances;
     }

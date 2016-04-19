@@ -9,7 +9,7 @@
 <!-- 页头 begin -->
 <div class="main-header">
     <div class="breadcrumb">
-        <span class="nolink">钱包列表</span>
+        <span class="nolink">钱包</span>
     </div>
 </div>
 <!-- 页头 end -->
@@ -100,13 +100,27 @@
     <div class="dialog dialog-update">
         <form action="@{ajax.WalletCtrl.update}" id="update">
             <div class="form-group">
-                <input type="hidden" class="in-t" id="userIdUpdate" name="wallet.userId" value="">
-                <label class="tips">确定修改<strong id="usernameToUpdate"></strong>？</label>
+                <input type="hidden" class="in-t" id="userIdToUpdate" name="wallet.userId" value="">
+                <label class="tips">确定修改 <strong id="userIdToUpdateEx"></strong> 的钱包？</label>
             </div>
             <div class="form-group">
-                <label class="label"><span class="asterisk">*</span>密码</label>
+                <label class="label"><span class="asterisk">*</span>银行卡号</label>
                 <div class="col">
-                    <input type="password" name="wallet.password" value="">
+                    <input type="text" id="cardNoToUpdate" name="wallet.cardNo" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>余额</label>
+                <div class="col">
+                    <input type="text" id="balancesToUpdate" name="wallet.balances" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>银行卡号</label>
+                <div class="col">
+                    <input type="text" id="incomeToUpdate" name="wallet.income" value="">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>

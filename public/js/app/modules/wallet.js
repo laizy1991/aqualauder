@@ -118,6 +118,9 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                     userId = $wrap.find('.userId').val(),
+                    cardNo = $wrap.find('.cardNo').val(),
+                    balances = $wrap.find('.balances').val(),
+                    income = $wrap.find('.income').val(),
                     updateDialog = dialog({
                     id: 'updateDialog',
                     title: '修改',
@@ -149,7 +152,11 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                    	$("#userIdToUpdate").val(userId);
+                        $("#userIdToUpdate").val(userId);
+                        $("#userIdToUpdateEx").text(userId);
+                        $("#cardNoToUpdate").val(cardNo);
+                        $("#balancesToUpdate").val(balances);
+                        $("#incomeToUpdate").val(income);
                     }
                 }).showModal();
             });

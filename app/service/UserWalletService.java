@@ -179,5 +179,9 @@ public class UserWalletService {
     public static String getWalletsLockKey(int userId) {
         return "user_wallets_" + userId;
     }
-    
+
+    public static void update(UserWallet wallet) {
+        wallet.setUpdateTime(System.currentTimeMillis());
+        UserWalletDao.update(wallet);
+    }
 }
