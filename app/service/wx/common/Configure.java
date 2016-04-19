@@ -1,5 +1,10 @@
 package service.wx.common;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import play.Play;
 
 public class Configure {
@@ -22,7 +27,7 @@ public class Configure {
 	private static String certLocalPath = "";
 
 	//HTTPS证书密码，默认密码等于商户号MCHID
-	private static String certPassword = "";
+	private static InputStream certPassword = null;
 
 	//是否使用异步线程的方式来上报API测速，默认为异步模式
 	private static boolean useThreadToDoReport = true;
@@ -36,8 +41,13 @@ public class Configure {
 		mchID = Play.configuration.getProperty("wx.config.mchid", "1326679501");
 //		subMchID = Play.configuration.getProperty("", "");
 		certLocalPath = Play.configuration.getProperty("wx.config.sslcert.path");
-		certPassword = Play.configuration.getProperty("wx.config.sslkey.path");
 		ip = Play.configuration.getProperty("local.host.ip");
+//		certPassword = Play.configuration.getProperty("wx.config.sslkey.path");
+		try {
+			certPassword = new FileInputStream(new File(Play.configuration.getProperty("wx.config.sslkey.path")));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//以下是API的路径：
@@ -81,7 +91,7 @@ public class Configure {
 		Configure.certLocalPath = certLocalPath;
 	}
 
-	public static void setCertPassword(String certPassword) {
+	public static void setCertPassword(InputStream certPassword) {
 		Configure.certPassword = certPassword;
 	}
 
@@ -109,7 +119,7 @@ public class Configure {
 		return certLocalPath;
 	}
 	
-	public static String getCertPassword(){
+	public static InputStream getCertPassword(){
 		return certPassword;
 	}
 

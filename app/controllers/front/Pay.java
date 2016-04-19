@@ -1,24 +1,28 @@
 package controllers.front;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.xml.parsers.ParserConfigurationException;
-
+import models.CashInfo;
 import models.Order;
+import models.User;
 
 import org.apache.commons.lang.StringUtils;
-import org.xml.sax.SAXException;
 
 import play.Logger;
+import play.Play;
+import service.CashInfoService;
 import service.OrderService;
 import service.PayService;
+import service.UserService;
+import service.wx.WXPay;
 import service.wx.common.Signature;
 import service.wx.common.Util;
+import service.wx.dto.redpack.SendRedpackReqDto;
+import service.wx.dto.redpack.SendRedpackRspDto;
 import service.wx.dto.unifiedOrder.UnifiedOrderCallbackDto;
 
 import com.google.gson.Gson;
@@ -160,5 +164,42 @@ public class Pay extends FrontController {
     		return;
     	}
     	Logger.info("更新微信回调结果成功，order参数为：%s", gson.toJson(order));
+    }
+    
+    public static boolean sendRedPack(long cashId) {
+    	if(cashId <= 0) {
+    		Logger.error("发送现金红包入参不正确，cashId: %d", cashId);
+    		return false;
+    	}
+    	CashInfo ci = CashInfoService.get(cashId);
+    	if(null == ci) {
+    		Logger.error("获取提现的记录为空，cashId: %d", cashId);
+    		return false;
+    	}
+    	if(ci.getCashStatus() == 2) {
+    		//已提现成功
+    		Logger.info("该订单之前已提现成功，cashId: %d", cashId);
+    		return false;
+    	}
+    	String mchBillno = ci.getMchBillno();
+    	String openid = "";
+    	User user = UserService.get(ci.getUserId());
+    	if(null == user || StringUtils.isEmpty(user.getOpenId())) {
+    		Logger.error("发送微信红包时无法获取用户Openid，cashId: %d", cashId);
+    		return false;
+    	}
+    	int totalAmount = ci.getAmount();
+    	SendRedpackReqDto sendRedpackReqDto = new SendRedpackReqDto(mchBillno, openid, totalAmount);
+    	SendRedpackRspDto rsp = null;
+		try {
+			rsp = WXPay.sendRedpackService(sendRedpackReqDto);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(null == rsp) {
+			return false;
+		}
+		
+		return true;
     }
 }

@@ -4,6 +4,7 @@ import service.wx.dto.orderQuery.OrderQueryReqDto;
 import service.wx.dto.orderQuery.OrderQueryRspDto;
 import service.wx.dto.redpack.QueryRedpackReqDto;
 import service.wx.dto.redpack.SendRedpackReqDto;
+import service.wx.dto.redpack.SendRedpackRspDto;
 import service.wx.dto.unifiedOrder.UnifiedOrderReqDto;
 import service.wx.dto.unifiedOrder.UnifiedOrderRspDto;
 import service.wx.service.OrderQueryService;
@@ -25,7 +26,7 @@ public class WXPay {
     }
     
     //发送红包
-    public static String sendRedpackService(SendRedpackReqDto sendRedpackReqDto) throws Exception {
+    public static SendRedpackRspDto sendRedpackService(SendRedpackReqDto sendRedpackReqDto) throws Exception {
     	return new SendRedpackService().request(sendRedpackReqDto);
     }
     

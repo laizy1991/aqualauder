@@ -60,20 +60,19 @@ public class HttpsRequest implements IServiceRequest{
 
     	if(withCertFlag) {
     		KeyStore keyStore = KeyStore.getInstance("PKCS12");
-    		FileInputStream instream = new FileInputStream(new File(Configure.getCertLocalPath()));//加载本地的证书进行https加密传输
-    		try {
-    			keyStore.load(instream, Configure.getCertPassword().toCharArray());//设置证书密码
-    		} catch (CertificateException e) {
-    			e.printStackTrace();
-    		} catch (NoSuchAlgorithmException e) {
-    			e.printStackTrace();
-    		} finally {
-    			instream.close();
+//    		FileInputStream instream = new FileInputStream(new File(Configure.getCertLocalPath()));//加载本地的证书进行https加密传输
+//    			keyStore.load(instream, Configure.getCertPassword().));//设置证书密码
+			try {
+				keyStore.load(Configure.getCertPassword(), Configure.getMchid().toCharArray());
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+    			Configure.getCertPassword().close();
     		}
     		
     		// Trust own CA and all self-signed certs
     		SSLContext sslcontext = SSLContexts.custom()
-    				.loadKeyMaterial(keyStore, Configure.getCertPassword().toCharArray())
+    				.loadKeyMaterial(keyStore, Configure.getMchid().toCharArray())
     				.build();
     		// Allow TLSv1 protocol only
     		SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
@@ -169,7 +168,7 @@ public class HttpsRequest implements IServiceRequest{
      * @param socketTimeout 连接时长，默认10秒
      */
     public void setSocketTimeout(int socketTimeout) {
-        socketTimeout = socketTimeout;
+    	this.socketTimeout = socketTimeout;
         resetRequestConfig();
     }
 
@@ -179,7 +178,7 @@ public class HttpsRequest implements IServiceRequest{
      * @param connectTimeout 传输时长，默认30秒
      */
     public void setConnectTimeout(int connectTimeout) {
-        connectTimeout = connectTimeout;
+    	this.connectTimeout = connectTimeout;
         resetRequestConfig();
     }
 
@@ -193,6 +192,6 @@ public class HttpsRequest implements IServiceRequest{
      * @param requestConfig 设置HttpsRequest的请求器配置
      */
     public void setRequestConfig(RequestConfig requestConfig) {
-        requestConfig = requestConfig;
+    	this.requestConfig = requestConfig;
     }
 }

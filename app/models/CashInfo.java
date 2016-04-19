@@ -19,6 +19,8 @@ public class CashInfo extends Model {
     private Integer cashStatus;
     @Column(name="slip_no")
     private String slipNo;
+    @Column(name="mch_billno")
+    private String mchBillno;
     @Column(name = "create_time")
     private Long createTime;
     
@@ -65,7 +67,15 @@ public class CashInfo extends Model {
         this.slipNo = slipNo;
     }
 
-    public Long getCreateTime() {
+    public String getMchBillno() {
+		return mchBillno;
+	}
+
+	public void setMchBillno(String mchBillno) {
+		this.mchBillno = mchBillno;
+	}
+
+	public Long getCreateTime() {
         return createTime;
     }
 

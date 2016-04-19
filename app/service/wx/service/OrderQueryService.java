@@ -38,6 +38,7 @@ public class OrderQueryService extends BaseService{
 					JSONObject.fromObject(rsp).toString());
 			 throw new BusinessException("查询订单接口通信失败");
 		} else {
+			//TODO 查看所有的微信接口，看sign是否只在resultcode=="SUCCESS"时返回
 			Logger.info("查询订单API成功返回数据");
 			//先验证一下数据有没有被第三方篡改，确保安全
 			try {
