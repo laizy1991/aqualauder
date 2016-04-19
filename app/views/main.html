@@ -12,14 +12,10 @@
     </head>
     <body>
         #{include file="common/header.html" /}
+        #{include file="common/sidebar.html" /}
         <div class="content">
             <div class="content-inner">
-                #{include file="common/sidebar.html" /}
-                <div class="main">
-                    <div class="main-inner">
-                        #{doLayout /}
-                    </div>
-                </div>
+                #{doLayout /}
             </div>
         </div>
         #{get 'moreScripts' /}

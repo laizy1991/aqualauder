@@ -247,7 +247,7 @@
 }
 
 .dialog-view {
-    max-height:400px;
+    max-height:380px;
     overflow-y: scroll;
 }
 .search-combobox {

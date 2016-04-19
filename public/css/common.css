@@ -196,21 +196,33 @@ fieldset, img {
 	height: 13px;
 	background-position: -45px -103px
 }
+
 .content {
-	background-color: #ffffff;
+	overflow-x: hidden;
 }
 
 .content-inner {
-	width: 100%;
-	min-width: 980px;
+	min-width: 590px;
 	height: inherit;
+	padding: 10px;
+	margin-top: 40px;
+	margin-left: 190px;
 }
 
 .sidebar {
-	float: left;
+	position: fixed;
 	width: 190px;
-	background: #333;
 	height: 100%;
+	background: #333;
+	top: 0;
+	left: 0;
+	z-index: 900;
+	padding-top: 40px;
+	overflow-y: scroll;
+}
+
+.sidebar-inner{
+	/*padding-top: 40px;*/
 }
 
 .main {
@@ -220,6 +232,14 @@ fieldset, img {
 
 .main-inner {
 	padding: 0 30px 40px
+}
+
+.header {
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 901;
 }
 
 .header, .content, .footer {
@@ -235,7 +255,7 @@ fieldset, img {
 .header-inner, .footer-inner {
 	width: 95%;
 	margin: 0 auto;
-	min-width: 980px;
+	min-width: 800px;
 	height: 40px
 }
 
@@ -1436,7 +1456,7 @@ button.btn-default {
 
 .page-title {
 	font-size: 18px;
-	font-weight: 400
+	font-weight: 400px
 }
 
 .main-header {
