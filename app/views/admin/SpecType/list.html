@@ -1,0 +1,116 @@
+#{extends 'main.html' /}
+
+#{set 'moreStyles'}
+<link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+<link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+#{/set}
+<style>
+</style>
+<!-- 页头 begin -->
+<div class="main-header">
+    <div class="breadcrumb">
+        <span class="nolink">商品属性分类</span>
+    </div>
+    <a class="btn btn-default" href="javascript:;" role="create">添加</a>
+</div>
+<!-- 页头 end -->
+<!-- 页头 end -->
+<table class="tb">
+    <thead>
+    <tr  class="text-center">
+        <th>ID</th>
+        <th>名字</th>
+        <th>创建时间</th>
+        <th>修改时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    #{if specTypes == null || specTypes.size() == 0 }
+    <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+    #{/if}
+    #{else}
+    #{list items:specTypes, as:'info'}
+    <tbody>
+    <tr class="user-item">
+        <input type="hidden" class="id" value="${info.id}">
+        <input type="hidden" class="name" value="${info.name}">
+        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
+        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
+        <td>${info?.id}</td>
+        <td>${info?.name}</td>
+        <td>
+            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
+        </td>
+        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
+        <td>
+            <div class="opts">
+                <span class="opt" role="update"><a href="javascript:;">修改</a></span>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+    #{/list}
+    #{/else}
+</table>
+
+#{include file="common/jsinclude.html" /}
+
+#{set 'moreScripts'}
+<!-- 增加 -->
+<script id="createDialogTmpl" type="text/html">
+    <div class="dialog dialog-create">
+        <form action="@{ajax.SpecTypeCtrl.add}" id="create">
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>属性分类</label>
+                <div class="col">
+                    <input type="text" name="type.name" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 删除 -->
+<script id="deleteDialogTmpl" type="text/html">
+    <div class="dialog dialog-delete">
+        <form action="@{ajax.SpecTypeCtrl.delete}" id="delete">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToDelete" name="type.id" value="">
+                <label class="tips">确定删除<strong id="nameToDelete"></strong>？</label>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 修改 -->
+<script id="updateDialogTmpl" type="text/html">
+    <div class="dialog dialog-update">
+        <form action="@{ajax.SpecTypeCtrl.update}" id="update">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToUpdate" name="type.id" value="">
+                <label class="tips">确定修改<strong id="nameToUpdate"></strong>？</label>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>属性分类</label>
+                <div class="col">
+                    <input type="text" id="nameToUpdateEx" name="type.name" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script>
+    var verNum = new Date();
+    seajs.config({
+        base:"../",
+        // 加版本号
+        map: [
+            [ '.js', '.js?v='+verNum]
+        ]
+    });
+    seajs.use("@{'/public/js/app/modules/specType.js'}");
+</script>
+#{/set}
