@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import play.Play;
 import service.wx.common.Configure;
 import service.wx.common.RandomStringGenerator;
 import service.wx.common.Signature;
@@ -24,19 +25,25 @@ public class SendRedpackReqDto {
     private String nonce_str = "";
     private String sign = "";
     
-    public SendRedpackReqDto(String mch_billno, String send_name, String re_openid, Integer total_amount, Integer total_num,
-    			String wishing, String client_ip, String act_name, String remark) {
+    public SendRedpackReqDto(String mch_billno, String re_openid, Integer total_amount) {
     	setWxappid(Configure.getAppid());
     	setMch_id(Configure.getMchid());
     	
+    	String sendName = Play.configuration.getProperty("wx.redpack.sendName", "安琪儿");
+    	int totalNum = 1;
+    	String wishing = Play.configuration.getProperty("wx.redpack.wishing", "感谢您进行提现！");
+    	String clientIp = Play.configuration.getProperty("local.host.ip", "127.0.0.1");	
+    	String actName = Play.configuration.getProperty("wx.redpack.actName", "微信提现活动");
+    	String remark = "感谢您的参与！";
+    	
     	setMch_billno(mch_billno);
-    	setSend_name(send_name);
+    	setSend_name(sendName);
     	setRe_openid(re_openid);
     	setTotal_amount(total_amount);
-    	setTotal_num(total_num);
+    	setTotal_num(totalNum);
     	setWishing(wishing);
-    	setClient_ip(client_ip);
-    	setAct_name(act_name);
+    	setClient_ip(clientIp);
+    	setAct_name(actName);
     	setRemark(remark);
     	
     	//随机字符串，不长于32 位
