@@ -3,6 +3,7 @@ package service.wx;
 import service.wx.dto.orderQuery.OrderQueryReqDto;
 import service.wx.dto.orderQuery.OrderQueryRspDto;
 import service.wx.dto.redpack.QueryRedpackReqDto;
+import service.wx.dto.redpack.QueryRedpackRspDto;
 import service.wx.dto.redpack.SendRedpackReqDto;
 import service.wx.dto.redpack.SendRedpackRspDto;
 import service.wx.dto.unifiedOrder.UnifiedOrderReqDto;
@@ -31,7 +32,7 @@ public class WXPay {
     }
     
     //查询红包
-    public static String queryRedpackStatusService(QueryRedpackReqDto queryRedpackReqDto) throws Exception {
+    public static QueryRedpackRspDto queryRedpackStatusService(QueryRedpackReqDto queryRedpackReqDto) throws Exception {
     	return new QueryRedpackService().request(queryRedpackReqDto);
     }
 

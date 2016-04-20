@@ -32,31 +32,23 @@ public class SendRedpackService extends BaseService{
     		e.printStackTrace();
     		throw new BusinessException("请求微信发送现金红包接口发生错误");
     	}
-    	Logger.info("现金红包API返回的数据是：%s", responseString);
+    	Logger.info("发送现金红包API返回的数据是：%s", responseString);
     	SendRedpackRspDto rsp = (SendRedpackRspDto)Util.getObjectFromXMLWithXStream(responseString, SendRedpackRspDto.class);
     	if(null == rsp || null == rsp.getReturn_code()) {
 			//通信失败
-			Logger.error("微信现金红包接口通信失败，请求数据为：%s, 返回数据为：%s", JSONObject.fromObject(sendRedpackReqDto).toString(),
+			Logger.error("发送微信现金红包接口通信失败，请求数据为：%s, 返回数据为：%s", JSONObject.fromObject(sendRedpackReqDto).toString(),
 					JSONObject.fromObject(rsp).toString());
 			 throw new BusinessException("微信现金红包接口通信失败");
 		} else {
-			Logger.info("现金红包API成功返回对象数据：%s", gson.toJson(rsp));
+			Logger.info("发送现金红包API成功返回对象数据：%s", gson.toJson(rsp));
 			if(!rsp.getReturn_code().equals("SUCCESS")) {
-				throw new BusinessException("微信现金红包API接口通信失败");
+				throw new BusinessException("发送微信现金红包API接口通信失败");
 			}
 			
 			if (rsp.getResult_code().equals("SUCCESS")) {
-				try {
-					if (!Signature.checkIsSignValidFromResponseString(responseString)) {
-						Logger.error("现金红包API返回的数据签名验证失败，有可能数据被篡改了");
-					}
-				} catch(Exception e) {
-					e.printStackTrace();
-					throw new BusinessException("微信现金红包API返回的数据签名验证失败");
-				}
 				return rsp;
             } else {
-            	throw new BusinessException("微信现金红包API接口交易失败");
+            	throw new BusinessException("发送微信现金红包API接口交易失败");
             }
 	   }
     }
