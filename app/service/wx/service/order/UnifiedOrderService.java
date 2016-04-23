@@ -1,4 +1,4 @@
-package service.wx.service;
+package service.wx.service.order;
 
 import com.google.gson.Gson;
 
@@ -8,8 +8,9 @@ import service.wx.common.Configure;
 import service.wx.common.Signature;
 import service.wx.common.Util;
 import service.wx.common.XMLParser;
-import service.wx.dto.unifiedOrder.UnifiedOrderReqDto;
-import service.wx.dto.unifiedOrder.UnifiedOrderRspDto;
+import service.wx.dto.order.UnifiedOrderReqDto;
+import service.wx.dto.order.UnifiedOrderRspDto;
+import service.wx.service.BaseService;
 import exception.BusinessException;
 
 public class UnifiedOrderService extends BaseService{
@@ -35,7 +36,7 @@ public class UnifiedOrderService extends BaseService{
     	Logger.info("统一下单API返回的数据是：%s", responseString);
         //将从API返回的XML数据映射到Java对象
     	UnifiedOrderRspDto rsp = (UnifiedOrderRspDto)Util.getObjectFromXMLWithXStream(responseString, UnifiedOrderRspDto.class);
-	   if(null == rsp || null == rsp.getReturn_code()) {
+	   if(null == rsp || null == rsp.getReturn_code() || rsp.getReturn_code().equals("FAIL")) {
 			//通信失败
 			Logger.error("微信统一下单接口通信失败，请求数据为：%s, 返回数据为：%s", JSONObject.fromObject(unifiedOrderReqData).toString(),
 					JSONObject.fromObject(rsp).toString());
@@ -52,11 +53,7 @@ public class UnifiedOrderService extends BaseService{
 	    		throw new BusinessException("微信统一下单API返回的数据签名验证失败");
 	    	}
 			
-			if (rsp.getResult_code().equals("SUCCESS")) {
-				return rsp;
-            } else {
-            	throw new BusinessException("微信统一下单API返回的数据签名验证失败");
-            }
+			return rsp;
 	   }
     }
 }

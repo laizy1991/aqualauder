@@ -1,4 +1,4 @@
-package service.wx.service;
+package service.wx.service.redpack;
 
 import com.google.gson.Gson;
 
@@ -10,10 +10,12 @@ import service.wx.common.Signature;
 import service.wx.common.Util;
 import service.wx.dto.redpack.SendRedpackReqDto;
 import service.wx.dto.redpack.SendRedpackRspDto;
+import service.wx.service.BaseService;
 
 public class SendRedpackService extends BaseService{
 	public static Gson gson = new Gson();
-    public SendRedpackService() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+	
+    public SendRedpackService() {
         super(Configure.SEND_REDPACK_API);
     }
 
@@ -23,7 +25,7 @@ public class SendRedpackService extends BaseService{
      * @return
      * @throws Exception
      */
-    public SendRedpackRspDto request(SendRedpackReqDto sendRedpackReqDto) throws Exception {
+    public SendRedpackRspDto request(SendRedpackReqDto sendRedpackReqDto) throws BusinessException {
 
     	String responseString = "";
     	try {
@@ -34,7 +36,7 @@ public class SendRedpackService extends BaseService{
     	}
     	Logger.info("发送现金红包API返回的数据是：%s", responseString);
     	SendRedpackRspDto rsp = (SendRedpackRspDto)Util.getObjectFromXMLWithXStream(responseString, SendRedpackRspDto.class);
-    	if(null == rsp || null == rsp.getReturn_code()) {
+    	if(null == rsp || null == rsp.getReturn_code() || rsp.getReturn_code().equals("FAIL")) {
 			//通信失败
 			Logger.error("发送微信现金红包接口通信失败，请求数据为：%s, 返回数据为：%s", JSONObject.fromObject(sendRedpackReqDto).toString(),
 					JSONObject.fromObject(rsp).toString());
@@ -45,11 +47,7 @@ public class SendRedpackService extends BaseService{
 				throw new BusinessException("发送微信现金红包API接口通信失败");
 			}
 			
-			if (rsp.getResult_code().equals("SUCCESS")) {
-				return rsp;
-            } else {
-            	throw new BusinessException("发送微信现金红包API接口交易失败");
-            }
+			return rsp;
 	   }
     }
 

@@ -1,6 +1,6 @@
-package service.wx.dto.orderQuery;
+package service.wx.dto.order;
 
-public class OrderQueryRspDto {
+public class UnifiedOrderRspDto {
 
     //协议层
     private String return_code = "";
@@ -9,6 +9,7 @@ public class OrderQueryRspDto {
     //协议返回的具体数据（以下字段在return_code 为SUCCESS 的时候有返回）
     private String appid = "";
     private String mch_id = "";
+    private String device_info = "";
     private String nonce_str = "";
     private String sign = "";
     private String result_code = "";
@@ -16,18 +17,9 @@ public class OrderQueryRspDto {
     private String err_code_des = "";
     
     //以下字段在return_code 和result_code都为SUCCESS的时候有返回
-    private String device_info = "";
-    private String openid;
-    private String is_subscribe;
     private String trade_type = "";
-    private String trade_state = "";
-    private String bank_type = "";
-    private Integer total_fee;
-    private Integer cash_fee;
-    private String transaction_id;
-    private String out_trade_no;
-    private String time_end;
-    private String trade_state_desc;
+    private String prepay_id = "";
+    private String code_url = "";	//非必填
     
 	public String getReturn_code() {
 		return return_code;
@@ -95,64 +87,16 @@ public class OrderQueryRspDto {
 	public void setTrade_type(String trade_type) {
 		this.trade_type = trade_type;
 	}
-	public String getOpenid() {
-		return openid;
+	public String getPrepay_id() {
+		return prepay_id;
 	}
-	public void setOpenid(String openid) {
-		this.openid = openid;
+	public void setPrepay_id(String prepay_id) {
+		this.prepay_id = prepay_id;
 	}
-	public String getIs_subscribe() {
-		return is_subscribe;
+	public String getCode_url() {
+		return code_url;
 	}
-	public void setIs_subscribe(String is_subscribe) {
-		this.is_subscribe = is_subscribe;
-	}
-	public String getBank_type() {
-		return bank_type;
-	}
-	public void setBank_type(String bank_type) {
-		this.bank_type = bank_type;
-	}
-	public Integer getTotal_fee() {
-		return total_fee;
-	}
-	public void setTotal_fee(Integer total_fee) {
-		this.total_fee = total_fee;
-	}
-	public Integer getCash_fee() {
-		return cash_fee;
-	}
-	public void setCash_fee(Integer cash_fee) {
-		this.cash_fee = cash_fee;
-	}
-	public String getTransaction_id() {
-		return transaction_id;
-	}
-	public void setTransaction_id(String transaction_id) {
-		this.transaction_id = transaction_id;
-	}
-	public String getOut_trade_no() {
-		return out_trade_no;
-	}
-	public void setOut_trade_no(String out_trade_no) {
-		this.out_trade_no = out_trade_no;
-	}
-	public String getTime_end() {
-		return time_end;
-	}
-	public void setTime_end(String time_end) {
-		this.time_end = time_end;
-	}
-	public String getTrade_state() {
-		return trade_state;
-	}
-	public void setTrade_state(String trade_state) {
-		this.trade_state = trade_state;
-	}
-	public String getTrade_state_desc() {
-		return trade_state_desc;
-	}
-	public void setTrade_state_desc(String trade_state_desc) {
-		this.trade_state_desc = trade_state_desc;
+	public void setCode_url(String code_url) {
+		this.code_url = code_url;
 	}
 }

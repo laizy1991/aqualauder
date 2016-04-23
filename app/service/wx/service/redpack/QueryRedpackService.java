@@ -1,4 +1,4 @@
-package service.wx.service;
+package service.wx.service.redpack;
 
 import com.google.gson.Gson;
 
@@ -9,12 +9,13 @@ import service.wx.common.Util;
 import service.wx.dto.redpack.QueryRedpackReqDto;
 import service.wx.dto.redpack.QueryRedpackRspDto;
 import service.wx.dto.redpack.SendRedpackRspDto;
+import service.wx.service.BaseService;
 import exception.BusinessException;
 
 public class QueryRedpackService extends BaseService{
 	public static Gson gson = new Gson();
 	
-    public QueryRedpackService() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+    public QueryRedpackService() {
         super(Configure.QUERY_REDPACK_API);
     }
 
@@ -24,7 +25,7 @@ public class QueryRedpackService extends BaseService{
      * @return
      * @throws Exception
      */
-    public QueryRedpackRspDto request(QueryRedpackReqDto queryRedpackReqDto) throws Exception {
+    public QueryRedpackRspDto request(QueryRedpackReqDto queryRedpackReqDto) throws BusinessException {
     	String responseString = "";
     	try {
     		responseString = sendPost(queryRedpackReqDto, true);
@@ -34,7 +35,7 @@ public class QueryRedpackService extends BaseService{
     	}
     	Logger.info("查询现金红包API返回的数据是：%s", responseString);
     	QueryRedpackRspDto rsp = (QueryRedpackRspDto)Util.getObjectFromXMLWithXStream(responseString, QueryRedpackRspDto.class);
-    	if(null == rsp || null == rsp.getReturn_code()) {
+    	if(null == rsp || null == rsp.getReturn_code() || rsp.getReturn_code().equals("FAIL")) {
 			//通信失败
 			Logger.error("查询微信现金红包接口通信失败，请求数据为：%s, 返回数据为：%s", JSONObject.fromObject(queryRedpackReqDto).toString(),
 					JSONObject.fromObject(rsp).toString());
@@ -45,11 +46,7 @@ public class QueryRedpackService extends BaseService{
 				throw new BusinessException("查询微信现金红包API接口通信失败");
 			}
 			
-			if (rsp.getResult_code().equals("SUCCESS")) {
-				return rsp;
-            } else {
-            	throw new BusinessException("查询微信现金红包API接口交易失败");
-            }
+			return rsp;
 	   }
     }
 

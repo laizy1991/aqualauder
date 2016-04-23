@@ -1,4 +1,4 @@
-package service.wx.dto.unifiedOrder;
+package service.wx.dto.order;
 
 public class UnifiedOrderCallbackDto {
 

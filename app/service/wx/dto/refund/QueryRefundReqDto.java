@@ -1,4 +1,4 @@
-package service.wx.dto.orderQuery;
+package service.wx.dto.refund;
 
 import service.wx.common.Configure;
 import service.wx.common.RandomStringGenerator;
@@ -9,15 +9,18 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrderQueryReqDto {
+public class QueryRefundReqDto {
     //每个字段具体的意思请查看API文档
     private String appid = "";
     private String mch_id = "";
-    private String transaction_id = "";
     private String nonce_str = "";
     private String sign = "";
-
-    public OrderQueryReqDto(String transaction_id){
+    private String out_refund_no = "";	//以下四选一，暂选商户退款单号
+    //微信订单号		transaction_id	String(32)		微信订单号
+    //商户订单号		out_trade_no	String(32)		商户系统内部的订单号
+    //商户退款单号	out_refund_no	String(32)		商户侧传给微信的退款单号
+    //微信退款单号	refund_id		String(28)		微信生成的退款单号，在申请退款接口有返回
+    public QueryRefundReqDto(String out_refund_no){
 
         //微信分配的公众号ID（开通公众号之后可以获取到）
         setAppid(Configure.getAppid());
@@ -25,7 +28,7 @@ public class OrderQueryReqDto {
         //微信支付分配的商户号ID（开通公众号的微信支付功能之后可以获取到）
         setMch_id(Configure.getMchid());
         
-        setTransaction_id(transaction_id);
+        setOut_refund_no(out_refund_no);
         
         //随机字符串，不长于32 位
         setNonce_str(RandomStringGenerator.getRandomStringByLength(32));
@@ -70,14 +73,6 @@ public class OrderQueryReqDto {
 		this.mch_id = mch_id;
 	}
 
-	public String getTransaction_id() {
-		return transaction_id;
-	}
-
-	public void setTransaction_id(String transaction_id) {
-		this.transaction_id = transaction_id;
-	}
-
 	public String getNonce_str() {
 		return nonce_str;
 	}
@@ -92,5 +87,13 @@ public class OrderQueryReqDto {
 
 	public void setSign(String sign) {
 		this.sign = sign;
+	}
+
+	public String getOut_refund_no() {
+		return out_refund_no;
+	}
+
+	public void setOut_refund_no(String out_refund_no) {
+		this.out_refund_no = out_refund_no;
 	}
 }

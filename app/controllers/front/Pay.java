@@ -20,18 +20,18 @@ import service.UserService;
 import service.wx.WXPay;
 import service.wx.common.Signature;
 import service.wx.common.Util;
+import service.wx.dto.order.UnifiedOrderCallbackDto;
 import service.wx.dto.redpack.QueryRedpackReqDto;
 import service.wx.dto.redpack.QueryRedpackRspDto;
 import service.wx.dto.redpack.SendRedpackReqDto;
 import service.wx.dto.redpack.SendRedpackRspDto;
-import service.wx.dto.unifiedOrder.UnifiedOrderCallbackDto;
 
 import com.google.gson.Gson;
+
 import common.constants.GlobalConstants;
 import common.constants.MessageCode;
 import common.constants.wx.OutTradeStatus;
 import common.core.FrontController;
-
 import exception.BusinessException;
 
 
@@ -226,7 +226,6 @@ public class Pay extends FrontController {
 		try {
 			rsp = WXPay.queryRedpackStatusService(queryRedpackReqDto);
 			renderText(gson.toJson(rsp));
-			//TODO 2016-04-20 23:20 做到这里，红包失败返回信息能否入对象还未测试，红包状态constants未写
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

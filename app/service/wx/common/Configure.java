@@ -52,6 +52,14 @@ public class Configure {
 	public static String QUERY_REDPACK_API = "https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo";
 	//4) 查询订单
 	public static String ORDER_QUERY_API = "https://api.mch.weixin.qq.com/pay/orderquery";
+	//5) 创建二维码
+	public static String CREATE_QRCODE_API = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=%s";
+	//6) 下载二维码
+	public static String DOWNLOAD_QRCODE_API = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=%s";
+	//7) 请求退款
+	public static String SEND_REFUND_API = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+	//8) 查询退款
+	public static String QUERY_REFUND_API = "https://api.mch.weixin.qq.com/pay/refundquery";
 
 	public static boolean isUseThreadToDoReport() {
 		return useThreadToDoReport;

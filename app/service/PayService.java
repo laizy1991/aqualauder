@@ -16,14 +16,14 @@ import service.wx.WXPay;
 import service.wx.common.Configure;
 import service.wx.common.RandomStringGenerator;
 import service.wx.common.Signature;
-import service.wx.dto.unifiedOrder.UnifiedOrderReqDto;
-import service.wx.dto.unifiedOrder.UnifiedOrderRspDto;
+import service.wx.dto.order.UnifiedOrderReqDto;
+import service.wx.dto.order.UnifiedOrderRspDto;
 
 import com.google.gson.Gson;
+
 import common.constants.MessageCode;
 import common.constants.wx.OutTradeStatus;
 import common.constants.wx.PayType;
-
 import dao.OrderDao;
 import dao.OrderGoodsDao;
 import exception.BusinessException;
