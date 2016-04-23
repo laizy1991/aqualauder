@@ -21,9 +21,6 @@ public class Order extends GenericModel {
     @Column(name="out_trade_no")
     private String outTradeNo;
 
-    @Column(name="slip_no")
-    private String slipNo;
-
     @Column(name="pay_type")
     private Integer payType;
 
@@ -110,14 +107,6 @@ public class Order extends GenericModel {
 
     public void setOutTradeNo(String outTradeNo) {
         this.outTradeNo = outTradeNo;
-    }
-
-    public String getSlipNo() {
-        return slipNo;
-    }
-
-    public void setSlipNo(String slipNo) {
-        this.slipNo = slipNo;
     }
 
     public Integer getPayType() {

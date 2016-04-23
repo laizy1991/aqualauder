@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 
 import common.constants.GlobalConstants;
 import common.constants.MessageCode;
+import common.constants.OrderStatus;
 import common.constants.wx.OutTradeStatus;
 import common.core.FrontController;
 import exception.BusinessException;
@@ -88,9 +89,10 @@ public class Pay extends FrontController {
     	}
     	
     	//更新订单前台回调时间
+    	order.setState(OrderStatus.PAYED.getState());
     	order.setPayTime(System.currentTimeMillis());
     	order.setPayStatus(payStatus);
-    	if(!OrderService.update(order)) {
+    	if(!OrderService.setStatusAndUpdate(order, OrderStatus.PAYED)) {
     		Logger.error("更新订单前台回调时间时失败，id[%d]", id);
     	}
     	Logger.info("更新订单前台回调时间时成功，id[%d]", id);

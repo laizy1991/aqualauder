@@ -18,17 +18,7 @@ public class RefundOrderDao {
     }
     
     public static RefundOrder get(long id) {
-        List<RefundOrder> list = RefundOrder.find("refundOrder_Id", id).fetch();
-        if(CollectionUtils.isEmpty(list)) {
-            return null;
-        }
-        
-        if(list.size() > 1) {
-            Logger.error("too many refundOrder find. refundOrder_Id:" + id);
-            return null;
-        }
-        
-        return list.get(0);
+        return RefundOrder.findById(id);
     }
     
     public static boolean update(RefundOrder refundOrder) {

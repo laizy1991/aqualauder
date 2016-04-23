@@ -1,13 +1,11 @@
 package dao;
 
+import java.util.List;
+
 import models.User;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-
-import play.Logger;
-
-import java.util.List;
 
 public class UserDao {
 
@@ -19,16 +17,7 @@ public class UserDao {
     }
     
     public static User get(int id) {
-        List<User> list = User.find("user_Id", id).fetch();
-        if(CollectionUtils.isEmpty(list)) {
-            return null;
-        }
-        
-        if(list.size() > 1) {
-            Logger.error("too many user find. user_Id:" + id);
-        }
-        
-        return list.get(0);
+        return User.findById(id);
     }
     
     /**

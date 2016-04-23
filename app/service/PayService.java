@@ -20,10 +20,13 @@ import service.wx.dto.order.UnifiedOrderReqDto;
 import service.wx.dto.order.UnifiedOrderRspDto;
 
 import com.google.gson.Gson;
-
+import common.constants.BillType;
 import common.constants.MessageCode;
+import common.constants.OrderStatus;
+import common.constants.PayType;
 import common.constants.wx.OutTradeStatus;
-import common.constants.wx.PayType;
+import common.constants.wx.PayMode;
+
 import dao.OrderDao;
 import dao.OrderGoodsDao;
 import exception.BusinessException;
@@ -68,13 +71,14 @@ public class PayService {
 			clientIp = Play.configuration.getProperty("local.host.ip");
 		}
 		UnifiedOrderReqDto req = new UnifiedOrderReqDto("WEB", subject, order.getOutTradeNo(), order.getTotalFee(),
-				clientIp, callbackUrl, PayType.JS.getType(), user.getOpenId());
+				clientIp, callbackUrl, PayMode.JS.getType(), user.getOpenId());
 		
 		UnifiedOrderRspDto rsp  = WXPay.requestUnifiedOrderService(req);
 		if(null != rsp && rsp.getResult_code().equals("SUCCESS")) {
 			//对订单表进行更新
 			order.setCallbackUrl(callbackUrl);
 			order.setPayStatus(OutTradeStatus.ADDED);
+			order.setPayType(PayType.WX.getCode());
 			order.setPlatformTradeNo(rsp.getPrepay_id());
 			order.setPlatformTradeMsg("");
 			order.setUpdateTime(System.currentTimeMillis());
@@ -104,5 +108,37 @@ public class PayService {
 		
 		return jsRequestBody;
 	}
-	
+
+	/**
+	 * 余额支付
+	 * @param orderId
+	 */
+	public static boolean balancePay(long orderId) throws BusinessException{
+	    if(orderId <= 0) {
+            throw new BusinessException(MessageCode.ORDER_ID_INVALID.getMsg());
+        }
+        //获取订单信息
+        Order order = OrderService.get(orderId);
+        if(null == order) {
+            throw new BusinessException(MessageCode.ORDER_NULL_ERROR.getMsg());
+        }
+        //获取用户信息
+        User user = UserService.get(order.getUserId());
+        if(null == user || StringUtils.isBlank(user.getOpenId())) {
+            throw new BusinessException(MessageCode.GET_USER_FAILED.getMsg());
+        }
+        
+        boolean isSucc = UserWalletService.spend(user.getUserId(), order.getTotalFee(), order.getOutTradeNo(),
+                BillType.PAY, user.getUserId(), user.getUserId());
+        
+        if(isSucc) {
+            order.setPayTime(System.currentTimeMillis());
+            order.setPayStatus(OutTradeStatus.PAY_SUCC);
+            order.setPayType(PayType.BALANCE.getCode());
+            order.setState(OrderStatus.PAYED.getState());
+            return OrderService.setStatusAndUpdate(order, OrderStatus.PAYED);
+        }
+        
+        return isSucc;
+	}
 }

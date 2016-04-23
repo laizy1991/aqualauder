@@ -3510,7 +3510,6 @@ CREATE TABLE `order` (
   `id` bigint(20) NOT NULL COMMENT '唯一ID',
   `user_id` bigint(20) NOT NULL COMMENT '用户ID',
   `out_trade_no` varchar(255) NOT NULL DEFAULT '' COMMENT '订单编号',
-  `slip_no` varchar(255) NOT NULL COMMENT '支付流水号',
   `pay_type` tinyint(4) NOT NULL COMMENT '支付类型，0-现金，1-余额',
   `express_id` int(11) DEFAULT NULL COMMENT '快递公司',
   `express_num` varchar(255) DEFAULT NULL COMMENT '快递单号',

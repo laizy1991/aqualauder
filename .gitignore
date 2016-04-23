@@ -8,6 +8,7 @@ precompiled/
 logs/
 dist/
 tmp/
+conf/application.conf
 test-result/*
 *.log
 .gitignore.txt

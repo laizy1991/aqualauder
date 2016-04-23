@@ -20,7 +20,7 @@ public class AuditInfoDao {
     }
     
     public static List<AuditInfo> getByStatus(int status) {
-        return AuditInfo.find("audit_status", status).fetch();
+        return AuditInfo.find("auditStatus", status).fetch();
     }
     
     public static boolean update(AuditInfo info) {
