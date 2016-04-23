@@ -57,7 +57,7 @@ public class BuyerService {
             og.setGoodsTitle(goods.getTitle());
             og.setGoodsNumber(goodsNum.get(id));
             og.setGoodsType(GoodsType.GOODS.getType());
-            totalFee += (og.getGoodsDiscountPrice() + og.getGoodsNumber());
+            totalFee += (og.getGoodsDiscountPrice() * og.getGoodsNumber());
             orderGoodsList.add(og);
         }
         
