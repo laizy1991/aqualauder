@@ -19,16 +19,7 @@ public class OrderDao {
     }
     
     public static Order get(long id) {
-        List<Order> list = Order.find("id", id).fetch();
-        if(CollectionUtils.isEmpty(list)) {
-            return null;
-        }
-        
-        if(list.size() > 1) {
-            Logger.error("too many order find. order_Id:" + id);
-        }
-        
-        return list.get(0);
+        return Order.findById(id);
     }
     
     public static boolean update(Order order) {

@@ -2,7 +2,6 @@ package dao;
 
 import java.util.List;
 
-import models.Order;
 import models.OrderGoods;
 
 public class OrderGoodsDao {
@@ -15,6 +14,6 @@ public class OrderGoodsDao {
     }
 
     public static List<OrderGoods> getByOrder(long orderId) {
-        return Order.find("orderId", orderId).fetch();
+        return OrderGoods.find("orderId", orderId).fetch();
     }
 }
