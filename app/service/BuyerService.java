@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 
 import models.Goods;
 import models.Order;
@@ -128,7 +129,11 @@ public class BuyerService {
             return false;
         }
         
-        if(order.getForbidRefund().intValue() == 1 || order.getUserId().intValue() != userId) {
+        if (order.getState().intValue() == OrderStatus.COMPLETE.getState()
+                || order.getState().intValue() == OrderStatus.CLOSE.getState()
+                || order.getState().intValue() == OrderStatus.INIT.getState()
+                || order.getForbidRefund().intValue() == 1
+                || order.getUserId().intValue() != userId) {
             Logger.error("can not refund.");
             return false;
         }
@@ -145,7 +150,9 @@ public class BuyerService {
         if(refundOrder == null) {
             refundOrder = new RefundOrder();
         }
-        refundOrder.setStateHistory(refundOrder.getStateHistory() + RefundStatus.APPLY.getCode()
+        
+        String dbHis = StringUtils.isBlank(refundOrder.getStateHistory()) ? "" : refundOrder.getStateHistory();
+        refundOrder.setStateHistory(dbHis + RefundStatus.APPLY.getCode()
                 + "_" + DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss"));
         refundOrder.setCreateTime(System.currentTimeMillis());
         refundOrder.setOrderId(orderId);
@@ -164,7 +171,7 @@ public class BuyerService {
      */
     public static boolean receiving(int userId, long orderId) {
         Order order = OrderService.get(orderId);
-        if(order == null) {
+        if(order == null || order.getUserId().intValue() != userId) {
             Logger.error("order not found, id:%s", orderId);
         }
         int dbOrderState = order.getState() == null ? OrderStatus.INIT.getState() : order.getState();

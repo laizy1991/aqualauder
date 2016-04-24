@@ -74,7 +74,7 @@ public class SellerService {
         }
 
         RefundOrder refundOrder = RefundOrderService.getByOrder(orderId);
-        int dbRefundState = refundOrder.getRefundState() == null ? RefundStatus.NOTREFUND.getCode() : refundOrder.getRefundState();
+        int dbRefundState = refundOrder == null || refundOrder.getRefundState() == null ? RefundStatus.NOTREFUND.getCode() : refundOrder.getRefundState();
         if (dbRefundState == RefundStatus.APPLY.getCode()
                 || dbRefundState == RefundStatus.ING.getCode()
                 || dbRefundState == RefundStatus.SUCCESS.getCode()) {

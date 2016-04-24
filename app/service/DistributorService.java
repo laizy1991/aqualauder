@@ -74,6 +74,7 @@ public class DistributorService {
             monthBlotter = new UserMonthBlotter();
             monthBlotter.setBlotterMonth(currMonth);
             monthBlotter.setCreateTime(System.currentTimeMillis());
+            monthBlotter.setUpdateTime(System.currentTimeMillis());
             monthBlotter.setUserId(userId);
             monthBlotter.setMonthBlotters(0l);
         }

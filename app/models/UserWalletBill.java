@@ -18,7 +18,7 @@ public class UserWalletBill extends Model {
     @Column(name="oper_type")
     private Integer operType;
     
-    @Column(name="trigger")
+    @Column(name="`trigger`")
     private Integer trigger;
     
     @Column(name="amount")

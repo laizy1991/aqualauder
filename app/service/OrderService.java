@@ -10,6 +10,7 @@ import models.RefundOrder;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import play.Logger;
 import common.constants.OrderStatus;
 import common.constants.RefundStatus;
 import common.constants.Separator;
@@ -47,7 +48,8 @@ public class OrderService {
     
     public static boolean setStatusAndUpdate(Order order, OrderStatus state) {
         order.setState(state.getState());
-        order.setStateHistory(order.getStateHistory() + OrderStatus.DELIVERED.getState() + Separator.COMMON_SEPERATOR_BL);
+        String dbHis = StringUtils.isBlank(order.getStateHistory()) ? "" : order.getStateHistory();
+        order.setStateHistory(dbHis + OrderStatus.DELIVERED.getState() + Separator.COMMON_SEPERATOR_BL);
         return update(order);
     }
     
@@ -126,5 +128,29 @@ public class OrderService {
     		return null;
     	}
     	return OrderDao.getOrderByOutTradeNo(outTradeNo);
+    }
+
+    public static void compele(int userId, long orderId) {
+        Order order = OrderService.get(orderId);
+        if(order == null || order.getUserId().intValue() != userId) {
+            Logger.error("order not found, id:%s", orderId);
+        }
+        
+        RefundOrder refund = RefundOrderService.getByOrder(orderId);
+        if (refund != null
+                && (refund.getRefundState().intValue() == RefundStatus.APPLY.getCode()
+                        || refund.getRefundState().intValue() == RefundStatus.ING.getCode() || refund
+                        .getRefundState().intValue() == RefundStatus.SUCCESS.getCode())) {
+            return;
+        }
+        
+        //不处于退款中，设置为完成订单
+        order.setFinishTime(System.currentTimeMillis());
+        boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.COMPLETE);
+        if(isSucc) {
+            DistributorService.blotterProduce(order.getUserId(), order.getTotalFee() , order.getOutTradeNo());
+        } else {
+            Logger.error("compele order fail. id:%s", order.getId());
+        }
     }
 }

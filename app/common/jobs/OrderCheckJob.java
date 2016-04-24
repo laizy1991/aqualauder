@@ -3,22 +3,19 @@ package common.jobs;
 import java.util.List;
 
 import models.Order;
-import models.RefundOrder;
 
 import org.apache.commons.collections.CollectionUtils;
 
 import play.Logger;
 import play.jobs.Job;
 import play.jobs.On;
+import service.BuyerService;
 import service.CommonDictService;
-import service.DistributorService;
 import service.OrderService;
-import service.RefundOrderService;
 
 import common.constants.CommonDictKey;
 import common.constants.CommonDictType;
 import common.constants.OrderStatus;
-import common.constants.RefundStatus;
 
 import dao.OrderDao;
 
@@ -60,18 +57,8 @@ public class OrderCheckJob extends Job {
                 continue;
             }
             
-            //走到这里说明到了自动确认收货的时间。需要判断是否处于中，或退款成功的状态，如果是不能确认收货
-            RefundOrder refund = RefundOrderService.getByOrder(order.getId());
-            if (refund != null
-                    && (refund.getRefundState().intValue() == RefundStatus.APPLY.getCode()
-                            || refund.getRefundState().intValue() == RefundStatus.ING.getCode() || refund
-                            .getRefundState().intValue() == RefundStatus.SUCCESS.getCode())) {
-                continue;
-            }
-            
-            //不处于退款中，设置为确认收货
-            order.setRecevTime(currTs);
-            OrderService.setStatusAndUpdate(order, OrderStatus.RECE);
+            //走到这里说明到了自动确认收货的时间。
+            BuyerService.receiving(order.getUserId(), order.getId());
         }
     }
     
@@ -97,22 +84,7 @@ public class OrderCheckJob extends Job {
             }
             
             //走到这里说明到了自动完成订单的时间。需要判断是否处于中，或退款成功的状态，如果是不能确认收货
-            RefundOrder refund = RefundOrderService.getByOrder(order.getId());
-            if (refund != null
-                    && (refund.getRefundState().intValue() == RefundStatus.APPLY.getCode()
-                            || refund.getRefundState().intValue() == RefundStatus.ING.getCode() || refund
-                            .getRefundState().intValue() == RefundStatus.SUCCESS.getCode())) {
-                continue;
-            }
-            
-            //不处于退款中，设置为完成订单
-            order.setFinishTime(currTs);
-            boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.COMPLETE);
-            if(isSucc) {
-                DistributorService.blotterProduce(order.getUserId(), order.getTotalFee() , order.getOutTradeNo());
-            } else {
-                Logger.error("compele order fail. id:%s", order.getId());
-            }
+            OrderService.compele(order.getUserId(), order.getId());
         }
     }
 }

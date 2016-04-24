@@ -12,7 +12,6 @@ import play.test.UnitTest;
 
 import com.google.gson.Gson;
 
-import common.constants.PayType;
 import dto.OrderDetail;
 import exception.BusinessException;
 
@@ -20,6 +19,16 @@ public class OrderTest extends UnitTest {
     private static final Gson gson = new Gson();
     //下订单
     @Test
+    public void test() {
+//        addOrder();
+//        pay();
+//       list();
+//        delivered();
+//        receiving();
+        compele();
+        refundApply();
+    }
+    
     public void addOrder() {
         Order order= new Order();
         order.setMobilePhone("15989104721");
@@ -34,19 +43,59 @@ public class OrderTest extends UnitTest {
         System.err.println(gson.toJson(detail));
     }
     
-    @Test
     public void pay() {
         try {
             boolean isSucc = PayService.balancePay(1461429647439000000l);
+            System.err.println(isSucc);
+            isSucc = PayService.balancePay(1461465779439000000l);
+            System.err.println(isSucc);
+            isSucc = PayService.balancePay(1461467793439000000l);
+            System.err.println(isSucc);
+            isSucc = PayService.balancePay(1461467883439000000l);
             System.err.println(isSucc);
         } catch (BusinessException e) {
             e.printStackTrace();
         }
     }
     
-    @Test
     public void list() {
         List<OrderDetail> details = OrderService.listOrder(3, 1, 10);
         System.err.println(gson.toJson(details));
+    }
+    
+    public void delivered() {
+        boolean isSucc = SellerService.delivered(1461429647439000000l, 3, "22222222222222222222");
+        System.err.println(isSucc);
+        isSucc = SellerService.delivered(1461465779439000000l, 3, "22222222222222222222");
+        System.err.println(isSucc);
+        isSucc = SellerService.delivered(1461467793439000000l, 3, "22222222222222222222");
+        System.err.println(isSucc);
+        isSucc = SellerService.delivered(1461467883439000000l, 3, "22222222222222222222");
+        System.err.println(isSucc);
+    }
+    
+    public void receiving() {
+        boolean isSucc = BuyerService.receiving(3, 1461429647439000000l);
+        System.err.println(isSucc);
+        isSucc = BuyerService.receiving(3, 1461465779439000000l);
+        System.err.println(isSucc);
+        isSucc = BuyerService.receiving(3, 1461467883439000000l);
+        System.err.println(isSucc);
+    }
+    
+    public void compele() {
+        OrderService.compele(3, 1461429647439000000l);
+        OrderService.compele(3, 1461465779439000000l);
+    }
+    
+    public void refundApply() {
+        boolean isSucc = BuyerService.refundApply(3, 1461429647439000000l, "大小不合适");
+        System.err.println(isSucc);
+        isSucc = BuyerService.refundApply(3, 1461465779439000000l, "大小不合适");
+        System.err.println(isSucc);
+        isSucc = BuyerService.refundApply(3, 1461467793439000000l, "大小不合适");
+        System.err.println(isSucc);
+        isSucc = BuyerService.refundApply(3, 1461467883439000000l, "大小不合适");
+        System.err.println(isSucc);
     }
 }
