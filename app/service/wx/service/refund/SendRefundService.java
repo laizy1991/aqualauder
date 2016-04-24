@@ -25,14 +25,14 @@ public class SendRefundService extends BaseService{
     public SendRefundRspDto request(SendRefundReqDto sendRefundReqDto) throws BusinessException {
     	String responseString = "";
     	try {
-    		responseString = sendPost(sendRefundReqDto, false).trim();
+    		responseString = sendPost(sendRefundReqDto, true).trim();
     	} catch(Exception e) {
     		e.printStackTrace();
     		throw new BusinessException("请求微信请求退款接口发生错误");
     	}
     	Logger.info("请求退款API返回的数据是：%s", responseString);
         //将从API返回的XML数据映射到Java对象
-    	SendRefundRspDto rsp = (SendRefundRspDto)Util.getObjectFromXMLWithXStream(responseString, SendRefundReqDto.class);
+    	SendRefundRspDto rsp = (SendRefundRspDto)Util.getObjectFromXMLWithXStream(responseString, SendRefundRspDto.class);
 	   if(null == rsp || null == rsp.getReturn_code() || rsp.getReturn_code().equals("FAIL")) {
 			//通信失败
 			Logger.error("微信请求退款接口通信失败，请求数据为：%s, 返回数据为：%s", JSONObject.fromObject(sendRefundReqDto).toString(),

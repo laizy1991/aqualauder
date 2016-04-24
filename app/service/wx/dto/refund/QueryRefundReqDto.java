@@ -13,6 +13,7 @@ public class QueryRefundReqDto {
     //每个字段具体的意思请查看API文档
     private String appid = "";
     private String mch_id = "";
+    private String device_info = "";
     private String nonce_str = "";
     private String sign = "";
     private String out_refund_no = "";	//以下四选一，暂选商户退款单号
@@ -20,14 +21,19 @@ public class QueryRefundReqDto {
     //商户订单号		out_trade_no	String(32)		商户系统内部的订单号
     //商户退款单号	out_refund_no	String(32)		商户侧传给微信的退款单号
     //微信退款单号	refund_id		String(28)		微信生成的退款单号，在申请退款接口有返回
-    public QueryRefundReqDto(String out_refund_no){
+    
+    /**
+     * 请求退款查询服务
+     * @param device_info 微信支付分配的终端设备号，与下单一致
+     */
+    public QueryRefundReqDto(String device_info, String out_refund_no) {
 
         //微信分配的公众号ID（开通公众号之后可以获取到）
         setAppid(Configure.getAppid());
         
         //微信支付分配的商户号ID（开通公众号的微信支付功能之后可以获取到）
         setMch_id(Configure.getMchid());
-        
+        setDevice_info(device_info);
         setOut_refund_no(out_refund_no);
         
         //随机字符串，不长于32 位
@@ -79,6 +85,14 @@ public class QueryRefundReqDto {
 
 	public void setNonce_str(String nonce_str) {
 		this.nonce_str = nonce_str;
+	}
+
+	public String getDevice_info() {
+		return device_info;
+	}
+
+	public void setDevice_info(String device_info) {
+		this.device_info = device_info;
 	}
 
 	public String getSign() {

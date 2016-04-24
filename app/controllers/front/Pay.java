@@ -8,6 +8,7 @@ import java.util.Date;
 
 import models.CashInfo;
 import models.Order;
+import models.RefundOrder;
 import models.User;
 
 import org.apache.commons.lang.StringUtils;
@@ -16,8 +17,10 @@ import play.Logger;
 import service.CashInfoService;
 import service.OrderService;
 import service.PayService;
+import service.RefundOrderService;
 import service.UserService;
 import service.wx.WXPay;
+import service.wx.common.Configure;
 import service.wx.common.Signature;
 import service.wx.common.Util;
 import service.wx.dto.order.UnifiedOrderCallbackDto;
@@ -25,6 +28,8 @@ import service.wx.dto.redpack.QueryRedpackReqDto;
 import service.wx.dto.redpack.QueryRedpackRspDto;
 import service.wx.dto.redpack.SendRedpackReqDto;
 import service.wx.dto.redpack.SendRedpackRspDto;
+import service.wx.dto.refund.SendRefundReqDto;
+import service.wx.dto.refund.SendRefundRspDto;
 
 import com.google.gson.Gson;
 
@@ -227,6 +232,36 @@ public class Pay extends FrontController {
     	QueryRedpackRspDto rsp = null;
 		try {
 			rsp = WXPay.queryRedpackStatusService(queryRedpackReqDto);
+			renderText(gson.toJson(rsp));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public static void sendRefund(long refundId) {
+    	if(refundId <= 0) {
+    		Logger.error("请求退款入参不正确，refundId: %d", refundId);
+    		return;
+    	}
+    	RefundOrder refundOrder = RefundOrderService.get(refundId);
+    	if(null == refundOrder) {
+    		Logger.error("获取退款记录为空，refundId: %d, orderId: %d", refundId, refundOrder.getOrderId());
+    		return;
+    	}
+    	if(null == refundOrder.getOrderId() || refundOrder.getOrderId() <= 0) {
+    		Logger.error("从退款记录中获取订单ID不正确, orderId: %d", refundOrder.getOrderId());
+    		return;
+    	}
+    	Order order = OrderService.get(refundOrder.getOrderId());
+    	if(null == order) {
+    		Logger.error("获取订单记录记录为空，orderId: %d", refundOrder.getOrderId());
+    		return;
+    	}
+    	SendRefundReqDto sendRefundReqDto = new SendRefundReqDto(order.getOutTradeNo(), ""+refundOrder.getId(), 
+    			order.getTotalFee(), order.getTotalFee(), Configure.getMchid());
+    	SendRefundRspDto rsp = null;
+		try {
+			rsp = WXPay.sendRefundServcie(sendRefundReqDto);
 			renderText(gson.toJson(rsp));
 		} catch (Exception e) {
 			e.printStackTrace();

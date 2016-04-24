@@ -7,7 +7,7 @@ package common.constants;
  *
  */
 public enum RefundStatus {
-//-1=无退款，0=申请退款,2=退款中,3=退款成功,4=拒绝退款，5=取消退款',
+	//-1=无退款，0=申请退款,1=退款中,2=退款成功,3=拒绝,4=取消'
     APPLY(0, "申请退款"),
     ING(1, "退款中"),
     SUCCESS(2, "退款成功"),

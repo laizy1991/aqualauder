@@ -17,9 +17,9 @@ public class SendRefundReqDto {
     private String sign = "";
     private String out_trade_no = "";
     private String out_refund_no = "";	//商户系统内部的退款单号，商户系统内部唯一，同一退款单号多次请求只退一笔
-    private Integer total_fee = 0;
-    private Integer refund_fee = 0;
-    private String op_user_id = "";
+    private Integer total_fee = 0;	//订单总金额，单位为分
+    private Integer refund_fee = 0;  //退款总金额，单位为分
+    private String op_user_id = "";	//操作员帐号, 默认为商户号
 
     public SendRefundReqDto(String out_trade_no, String out_refund_no, Integer total_fee, Integer refund_fee,
     		String op_user_id){
