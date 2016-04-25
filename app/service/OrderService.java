@@ -11,6 +11,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
+import utils.DateUtil;
 import common.constants.OrderStatus;
 import common.constants.RefundStatus;
 import common.constants.Separator;
@@ -49,7 +50,9 @@ public class OrderService {
     public static boolean setStatusAndUpdate(Order order, OrderStatus state) {
         order.setState(state.getState());
         String dbHis = StringUtils.isBlank(order.getStateHistory()) ? "" : order.getStateHistory();
-        order.setStateHistory(dbHis + OrderStatus.DELIVERED.getState() + Separator.COMMON_SEPERATOR_BL);
+        order.setStateHistory(dbHis + OrderStatus.DELIVERED.getState() + Separator.COMMON_SEPERATOR_BL
+                + DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss")
+                + Separator.COMMON_SEPERATOR_COMME);
         return update(order);
     }
     

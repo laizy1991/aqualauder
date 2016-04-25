@@ -112,7 +112,13 @@ public class BuyerService {
             return false;
         }
         
-        boolean isSucc = RefundOrderService.updateRefundState(refundId, refundState);
+        Order order = OrderService.get(refundOrder.getOrderId());
+        if(order == null || order.getUserId().intValue() != userId) {
+            Logger.error("order on found, id:%s, userId:%s", refundOrder.getOrderId(), userId);
+            return false;
+        }
+        
+        boolean isSucc = RefundOrderService.updateRefundState(refundId, RefundStatus.CANCEL);
         return isSucc;
     }
     

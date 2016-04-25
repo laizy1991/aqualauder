@@ -1,28 +1,12 @@
 package service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import models.Goods;
 import models.Order;
-import models.OrderGoods;
 import models.RefundOrder;
-
-import org.apache.commons.collections.CollectionUtils;
-
 import play.Logger;
-import utils.DateUtil;
-import utils.IdGenerator;
 
-import common.constants.GoodsType;
 import common.constants.OrderStatus;
 import common.constants.RefundStatus;
-import common.constants.Separator;
 
-import dao.GoodsDao;
-import dao.OrderGoodsDao;
-import dto.OrderDetail;
 import exception.BusinessException;
 
 public class SellerService {
@@ -54,8 +38,7 @@ public class SellerService {
         }
 
         refundOrder.setSellerMemo(reason);
-        
-        boolean isSucc = RefundOrderService.updateRefundState(refundId, refundState);
+        boolean isSucc = RefundOrderService.setStatusAndUpdate(refundOrder, refundState);
         return isSucc;
     }
     

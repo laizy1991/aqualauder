@@ -25,8 +25,10 @@ public class OrderTest extends UnitTest {
 //       list();
 //        delivered();
 //        receiving();
-        compele();
-        refundApply();
+//        compele();
+//        refundApply();
+        refundCancel();
+//        refundAudit();
     }
     
     public void addOrder() {
@@ -97,5 +99,13 @@ public class OrderTest extends UnitTest {
         System.err.println(isSucc);
         isSucc = BuyerService.refundApply(3, 1461467883439000000l, "大小不合适");
         System.err.println(isSucc);
+    }
+    
+    public void refundCancel() {
+        BuyerService.refundCancel(3, 6l);
+    }
+    
+    public void refundAudit() {
+        SellerService.refundAudit(7l, 0, "促销商品不能退款");
     }
 }
