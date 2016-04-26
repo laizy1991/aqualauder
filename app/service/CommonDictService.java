@@ -29,7 +29,7 @@ public class CommonDictService {
         }
         
         List<CommonDict> dicts = CommonDictDao.getByType(type.getCode());
-        Map<String, CommonDict> map = MapUtil.wrapToMap(dicts, "dictKey", new String());
+        Map<String, CommonDict> map = MapUtil.wrapToMap(dicts, "key", new String());
         commonDictMap.put(type.getCode(), map);
         return map;
     }
