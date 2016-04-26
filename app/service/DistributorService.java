@@ -129,9 +129,9 @@ public class DistributorService {
             if(user != null && StringUtils.isNotBlank(user.getNickname())) {
                 userName = user.getNickname();
             }
-            BillType billType = BillType.CONSUMPTION;
+            BillType billType = BillType.SPREAD;
             if(depth == 1) {
-                billType = BillType.SPREAD;
+                billType = BillType.CONSUMPTION;
             }
             String desc = String.format(billType.getTemplate(), userName);
             billType.setDesc(desc);
@@ -227,7 +227,7 @@ public class DistributorService {
         //生成推广链接
         String link = "";
         //生成推广二维码
-        String qrcodeUrl = "";
+        String qrcodeUrl = "http://";
         return createDistributor(userId, "", DistributorType.PERSONAL, link, qrcodeUrl);
         
     }    
@@ -243,6 +243,7 @@ public class DistributorService {
         
         distributor = new Distributor();
         distributor.setJoinTime(System.currentTimeMillis());
+        distributor.setType(type.getCode());
         distributor.setLink(link);
         distributor.setQrcodeUrl(qrcodeUrl);
         distributor.setRealName(realName);
@@ -332,6 +333,11 @@ public class DistributorService {
         distributor.setRealName(realName);
         boolean isSucc =DistributorDao.update(distributor);
         if(!isSucc) {
+            return false;
+        }
+        
+        if(AuditInfoDao.isExist(userId, AuditType.DISTRIBUTOR.getCode())) {
+            Logger.error("audit info is exist, userId:%s, type:%s", userId, AuditType.DISTRIBUTOR.getCode());
             return false;
         }
         

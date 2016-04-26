@@ -31,9 +31,9 @@ public class AuditService {
         }
         if(info.getAuditType().intValue() == AuditType.DISTRIBUTOR.getCode()) {
             if(status == AuditStatus.PASS.getStatus()) {
-                isSucc = DistributorService.updateStatus(info.getUserId(), DistributorStatus.FAILED.getCode());
+                isSucc = DistributorService.updateStatus(info.getUserId(), DistributorStatus.PASS.getCode());
             } else if(status == AuditStatus.FAILED.getStatus()) {
-                isSucc = DistributorService.updateStatus(info.getUserId(), DistributorStatus.INIT.getCode());
+                isSucc = DistributorService.updateStatus(info.getUserId(), DistributorStatus.FAILED.getCode());
             }
         }
         

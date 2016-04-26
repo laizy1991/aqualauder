@@ -15,6 +15,10 @@ public class AuditInfoDao {
         return info.create();
     }
     
+    public static boolean isExist(int userId, int type) {
+        return AuditInfo.count("userId=? and auditType=? and auditStatus!=-1", userId, type) > 0;
+    }
+    
     public static AuditInfo get(long id) {
         return AuditInfo.findById(id);
     }
