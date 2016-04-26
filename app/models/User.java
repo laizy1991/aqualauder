@@ -47,6 +47,9 @@ public class User extends GenericModel{
     @Column(name = "create_time")
     private Long createTime;
     
+    @Column(name = "ticket")
+    private String ticket;
+    
     @Column(name = "update_time")
     private Long updateTime;
     
@@ -142,5 +145,13 @@ public class User extends GenericModel{
 
 	public void setHeadImgUrl(String headImgUrl) {
 		this.headImgUrl = headImgUrl;
+	}
+
+	public String getTicket() {
+		return ticket;
+	}
+
+	public void setTicket(String ticket) {
+		this.ticket = ticket;
 	}
 }

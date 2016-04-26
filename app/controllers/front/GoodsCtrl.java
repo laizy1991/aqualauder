@@ -2,7 +2,8 @@ package controllers.front;
 
 import org.apache.commons.lang.StringUtils;
 
-import play.Logger;
+import service.wx.service.user.WxUserService;
+
 import common.constants.GoodsTag;
 import common.core.FrontController;
 
@@ -17,7 +18,7 @@ public class GoodsCtrl extends FrontController {
 	 * @param code
 	 */
     public static void list(int tag, String code) {
-    	String openId = getOpenId(code);
+    	String openId = WxUserService.getUserOpenId(code);
     	if(StringUtils.isEmpty(openId)) {
     		// TODO 获取用户OpenId失败
     	}
