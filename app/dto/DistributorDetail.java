@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DistributorDetail {
-    private Map<Integer,List<Integer>> underling = new HashMap<Integer, List<Integer>>();
+    private Map<Integer,List<String>> underling = new HashMap<Integer, List<String>>();
     private Map<Integer, Map<Integer, Long>> underlingBlotter = new HashMap<Integer, Map<Integer, Long>>();
     private Integer allBalance;
     private Integer usefulBalance;
@@ -17,10 +17,10 @@ public class DistributorDetail {
      * 累计收入
      */
     private Integer totalIncome;
-    public Map<Integer, List<Integer>> getUnderling() {
+    public Map<Integer, List<String>> getUnderling() {
         return underling;
     }
-    public void setUnderling(Map<Integer, List<Integer>> underling) {
+    public void setUnderling(Map<Integer, List<String>> underling) {
         this.underling = underling;
     }
     public Map<Integer, Map<Integer, Long>> getUnderlingBlotter() {
@@ -66,18 +66,18 @@ public class DistributorDetail {
         this.totalIncome = totalIncome;
     }
     
-    public void addUnderling(int level, int userId) {
-        List<Integer> underlings = underling.get(level);
+    public void addUnderling(int level, String userName) {
+        List<String> underlings = underling.get(level);
         if(underlings == null) {
-            underlings = new ArrayList<Integer>();
+            underlings = new ArrayList<String>();
             underling.put(level, underlings);
         }
         
-        if(underlings.contains(userId)) {
+        if(underlings.contains(userName)) {
             return;
         }
         
-        underlings.add(userId);
+        underlings.add(userName);
         
     }
     

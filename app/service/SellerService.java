@@ -1,5 +1,6 @@
 package service;
 
+import models.Express;
 import models.Order;
 import models.RefundOrder;
 import play.Logger;
@@ -7,6 +8,7 @@ import play.Logger;
 import common.constants.OrderStatus;
 import common.constants.RefundStatus;
 
+import dao.ExpressDao;
 import exception.BusinessException;
 
 public class SellerService {
@@ -70,7 +72,12 @@ public class SellerService {
             Logger.error("can not delivered, orderId:{}", orderId);
             return false;
         }
-        order.setExpressId(expressId);
+        
+        Express express = ExpressDao.get(expressId);
+        if(express != null) {
+            order.setExpressName(express.getName());
+        }
+        
         order.setExpressNum(expressNum);
         order.setDeliverTime(System.currentTimeMillis());
         boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.DELIVERED);

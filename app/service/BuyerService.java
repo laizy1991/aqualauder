@@ -77,7 +77,7 @@ public class BuyerService {
         order.setUpdateTime(System.currentTimeMillis());
         
         order.setDeliverTime(0l);
-        order.setExpressId(null);
+        order.setExpressName("");
         order.setExpressNum("");
         order.setFinishTime(0l);
         order.setPayTime(0l);

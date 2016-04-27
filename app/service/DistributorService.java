@@ -178,9 +178,11 @@ public class DistributorService {
             superiors.clear();
             for(DistributorSuperior item : list) {
                 superiors.add(item.getUserId());
+                User user = UserService.get(item.getUserId());
+                detail.addUnderling(level, user == null ? "" : user.getNickname());
             }
             
-            List<UserMonthBlotter> blotters = UserMonthBlotterDao.getByIds(superiors);
+            List<UserMonthBlotter> blotters = UserMonthBlotterDao.getByUserIds(superiors);
             for(UserMonthBlotter item : blotters) {
                 detail.addBlotter(level, item.getUserId(), item.getMonthBlotters());
             }
@@ -195,7 +197,7 @@ public class DistributorService {
         List<Integer> types = new ArrayList<Integer>();
         types.add(CashStatus.APPLY.getCode());
         types.add(CashStatus.ING.getCode());
-        List<CashInfo> cashInfos = CashInfoDao.getByTypes(userId, types);
+        List<CashInfo> cashInfos = CashInfoDao.getByStatus(userId, types);
         int amount = 0;
         for(CashInfo info : cashInfos) {
             amount += info.getAmount();

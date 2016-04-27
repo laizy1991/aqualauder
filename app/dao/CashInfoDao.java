@@ -2,15 +2,27 @@ package dao;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
+import models.CashInfo;
+
 import org.apache.commons.collections.CollectionUtils;
 
 import play.Logger;
-import models.CashInfo;
+import play.db.jpa.Model;
 
 public class CashInfoDao {
 
-    public static List<CashInfo> getByTypes(int userId, List<Integer> types) {
-        return CashInfo.find("userId = ? and cashStatus in ?", userId, types).fetch();
+    public static List<CashInfo> getByStatus(int userId, List<Integer> statusList) {
+        String statusArr = "";
+        String split = "";
+        for(Integer status : statusList) {
+            statusArr = statusArr + split + status;
+            split = ",";
+        }
+        String sql = "SELECT * from cash_info where user_id=%s and cash_status in (%s);";  
+        Query query = Model.em().createNativeQuery(String.format(sql, userId, statusArr),CashInfo.class);  
+        return query.getResultList();  
     }
     
     public static boolean insert(CashInfo info) {

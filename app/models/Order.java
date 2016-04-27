@@ -24,8 +24,8 @@ public class Order extends GenericModel {
     @Column(name="pay_type")
     private Integer payType;
 
-    @Column(name="express_id")
-    private Integer expressId;
+    @Column(name="express_name")
+    private String expressName;
 
     @Column(name="express_num")
     private String expressNum;
@@ -117,12 +117,12 @@ public class Order extends GenericModel {
         this.payType = payType;
     }
 
-    public Integer getExpressId() {
-        return expressId;
+    public String getExpressName() {
+        return expressName;
     }
 
-    public void setExpressId(Integer expressId) {
-        this.expressId = expressId;
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
     }
 
     public String getExpressNum() {

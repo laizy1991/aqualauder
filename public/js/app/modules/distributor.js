@@ -15,6 +15,7 @@ define(function(require) {
             this.delete($('[role="delete"]'));
             this.update($('[role="update"]'));
             this.view($('[role="view"]'));
+            this.viewDetail($('[role="viewDetail"]'));
         },
 
         /**
@@ -204,6 +205,55 @@ define(function(require) {
                         $("#qrcodeUrlToView").text(qrcodeUrl);
                         $("#createTimeToView").text(createTime);
                         $("#updateTimeToView").text(updateTime);
+                    }
+                }).showModal();
+            });
+        },
+
+        /**
+         * 查看详情
+         */
+        viewDetail: function(obj) {
+            obj.click(function() {
+                var $this = $(this),
+                    $wrap = $this.closest('tr'),
+                    userId = $wrap.find('.userId').val(),
+                    viewDialog = dialog({
+                    id: 'viewDetailDialog',
+                    title: '查看详情',
+                    content: document.getElementById('viewDetailDialogTmpl').innerHTML,
+                    button: [],
+                    cancelValue: '关闭',
+                    cancel: function() {
+
+                    },
+                    onshow:function() {
+                    	var params={"userId":userId};
+                        ajax.post('/ajax.DistributorCtrl/distributorDetail', params, function(result){
+                            if(result.error){
+                            }else{
+                            	if(result.underling["1"] != null) {
+                            		$("#underling_1").text(result.underling["1"].length);
+                            	} else {
+                            		$("#underling_1").text(0);
+                            	}
+                            	if(result.underling["2"] != null) {
+                            		$("#underling_2").text(result.underling["2"].length);
+                            	} else {
+                            		$("#underling_2").text(0);
+                            	}
+                            	if(result.underling["3"] != null) {
+                            		$("#underling_3").text(result.underling["3"].length);
+                            	} else {
+                            		$("#underling_3").text(0);
+                            	}
+
+                            	$("#allBalance").text(result.allBalance/100);
+                            	$("#usefulBalance").text(result.usefulBalance/100);
+                            	$("#totalIncome").text(result.totalIncome/100);
+                            	$("#extensionQrCode").text(result.extensionQrCode);
+                            }
+                        });
                     }
                 }).showModal();
             });

@@ -21,7 +21,7 @@ public class OrderDetail {
     private String outTradeNo;
     private Integer payType;
     private Integer totalFee;
-    private Integer expressId;
+    private String expressName;
     private String expressNum;
     private Integer state;
     private Integer forbidRefund;
@@ -50,7 +50,7 @@ public class OrderDetail {
     
     public void init(Order order) {
         this.deliverTime = order.getDeliverTime();
-        this.expressId = order.getExpressId();
+        this.expressName = order.getExpressName();
         this.expressNum = order.getExpressNum();
         this.finishTime = order.getFinishTime();
         this.forbidRefund = order.getForbidRefund();
@@ -197,12 +197,12 @@ public class OrderDetail {
         this.payType = payType;
     }
 
-    public Integer getExpressId() {
-        return expressId;
+    public String getExpressName() {
+        return expressName;
     }
 
-    public void setExpressId(Integer expressId) {
-        this.expressId = expressId;
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
     }
 
     public String getExpressNum() {

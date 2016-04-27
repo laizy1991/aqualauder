@@ -1,9 +1,12 @@
 package controllers.ajax;
 
-import common.core.AjaxController;
-import exception.BusinessException;
 import models.Distributor;
 import service.DistributorService;
+
+import common.core.AjaxController;
+
+import dto.DistributorDetail;
+import exception.BusinessException;
 
 public class DistributorCtrl extends AjaxController {
 
@@ -22,4 +25,8 @@ public class DistributorCtrl extends AjaxController {
         renderSuccessJson();
     }
 
+    public static void distributorDetail(int userId) {
+        DistributorDetail detail = DistributorService.distributorDetail(userId);
+        renderJSON(detail);
+    }
 }
