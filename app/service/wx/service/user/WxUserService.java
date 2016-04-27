@@ -10,6 +10,7 @@ import play.Play;
 import play.cache.Cache;
 import service.UserService;
 import service.wx.dto.user.SubscribeReqDto;
+import utils.EmojiFilter;
 import utils.WxUtil;
 import utils.http.HttpRequester;
 import utils.http.HttpRespons;
@@ -19,6 +20,7 @@ import com.google.gson.Gson;
 import common.constants.RegType;
 
 public class WxUserService {
+	public static Gson gson = new Gson();
 	/**
 	 * 获取用户OpenID
 	 * @return
@@ -96,7 +98,7 @@ public class WxUserService {
 			Logger.error("传入的关注事件Dto为空");
 			return false;
 		}
-		Gson gson = new Gson();
+		Logger.info("传入的关注参数为: %s", gson.toJson(subscribeReqDto));
 		String openId = subscribeReqDto.getFromUserName();
 		//微信服务器在五秒内收不到响应会断掉连接，并且重新发起请求，总共重试三次。
 		//关于重试的消息排重，推荐使用FromUserName + CreateTime 排重。
@@ -112,8 +114,9 @@ public class WxUserService {
 		}
 		int sex = userJson.optInt("sex", 0);
 		String nickname = userJson.optString("nickname", "用户");
+		nickname = EmojiFilter.filterEmoji(nickname);
 		String headImgUrl = userJson.optString("headimgurl");
-		int subTime = userJson.optInt("subscribe_time");
+		long subTime = userJson.optLong("subscribe_time");
 		long subscribeTime = subTime*1000;
 		String ticket = subscribeReqDto.getTicket();
 		//先通过用户openId查询是否存在

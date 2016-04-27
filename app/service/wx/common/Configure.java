@@ -12,6 +12,14 @@ public class Configure {
 	// 每次自己Post数据给API的时候都要用这个key来对所有字段进行签名，生成的签名会放在Sign这个字段，API收到Post数据的时候也会用同样的签名算法对Post过来的数据进行签名和验证
 	// 收到API的返回的时候也要用这个key来对返回的数据算下签名，跟API的Sign数据进行比较，如果值不一致，有可能数据被第三方给篡改
 
+	public static String getWxServertoken() {
+		return wxServertoken;
+	}
+
+	public static void setWxServertoken(String wxServertoken) {
+		Configure.wxServertoken = wxServertoken;
+	}
+
 	private static String key = "";
 
 	//微信分配的公众号ID（开通公众号之后可以获取到）
@@ -31,6 +39,8 @@ public class Configure {
 
 	//是否使用异步线程的方式来上报API测速，默认为异步模式
 	private static boolean useThreadToDoReport = true;
+	
+	private static String wxServertoken = "";
 
 	//机器IP
 	private static String ip = "";
@@ -41,6 +51,7 @@ public class Configure {
 		mchID = Play.configuration.getProperty("wx.config.mchid", "1326679501");
 		certLocalPath = Play.configuration.getProperty("wx.config.sslcert.path");
 		certPwdPath = Play.configuration.getProperty("wx.config.sslkey.path");
+		wxServertoken = Play.configuration.getProperty("wx.config.token");
 	}
 
 	//以下是API的路径：
