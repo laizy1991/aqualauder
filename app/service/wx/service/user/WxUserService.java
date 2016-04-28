@@ -21,11 +21,12 @@ import common.constants.RegType;
 
 public class WxUserService {
 	public static Gson gson = new Gson();
+	public static final String USERINFO_CACHE_TIME = "12h";
 	/**
 	 * 获取用户OpenID
 	 * @return
 	 */
-	public static String getUserOpenId(String code) {
+	public static String getUserOpenIdByCode(String code) {
 		if(StringUtils.isEmpty(code))
 			return null;
 		//通过code换取openid
@@ -61,7 +62,7 @@ public class WxUserService {
 	 * @param openId
 	 * @return
 	 */
-	public static JSONObject getUserInfoByOpenId(String openId) {
+	private static JSONObject getUserInfoByOpenId(String openId) {
 		if(StringUtils.isEmpty(openId)) {
 			return null;
 		}
@@ -91,6 +92,88 @@ public class WxUserService {
 	}
 	
 	/**
+	 * 将用户信息入库，所有需要将用户信息入库的代码，统一调这个接口
+	 * 目前的触发条件为：用户关注公众号和进入公众号(用户关注公众号后将用户信息入库失败的情况下)
+	 * 1. 先从缓存拿
+	 * 2. 缓存若没有，则从库拿并放入缓存，缓存key为用户openId, value为用户对象
+	 * 3. 库也没有，向微信拿，入库并放缓存
+	 * @param openId
+	 * @return
+	 */
+	private static User addUser(JSONObject userJson) {
+		if(null == userJson) {
+			Logger.error("将用户信息入库时，入参为空");
+			return null;
+		}
+		String openId = userJson.getString("openid");
+		if(StringUtils.isBlank(openId)) {
+			Logger.error("即将入库的用户对象openId为空, 参数: %s", userJson);
+			return null;
+		}
+		User user = new User();
+		user.setMobile("");
+		user.setRegType(RegType.WeiXin.getValue());
+		user.setOpenId(openId);
+		user.setNickname(EmojiFilter.filterEmoji(userJson.optString("nickname", "用户")));
+		user.setSex(userJson.optInt("sex", 0));
+		user.setHeadImgUrl(userJson.optString("headimgurl"));
+		user.setSubscribeTime(userJson.optLong("subscribe_time") * 1000);
+		user.setCreateTime(System.currentTimeMillis());
+		user.setUpdateTime(System.currentTimeMillis());
+		
+		if(!UserService.add(user)) {
+			Logger.error("新增用户失败, 参数为: %s", gson.toJson(user));
+			return null;
+		}
+		//将用户信息从库中拿来，并放入缓存中，userId可能有用
+		User u = UserService.getByOpenId(openId);
+		if(null == u) {
+			Logger.error("新增用户成功，但查库时获取到的用户对象为空, openId: %s", openId);
+			return null;
+		}
+		
+		Logger.info("新增用户成功，并将用户信息放入缓存中，用户信息: %s", gson.toJson(user));
+		Cache.add(openId, u, USERINFO_CACHE_TIME);
+		return u;
+	}
+	
+	/**
+	 * 获取用户信息
+	 * 1. 先从缓存拿
+	 * 2. 缓存若没有，则从库拿并放入缓存，缓存key为用户openId, value为用户对象
+	 * 3. 库也没有，向微信拿，入库并放缓存
+	 * @param openId
+	 * @return
+	 */
+	public static User getUserInfo(String openId) {
+		if(StringUtils.isBlank(openId)) {
+			Logger.error("获取用户信息时，入库的openId[%s]为空", openId);
+		}
+		User user = Cache.get(openId, User.class);
+		if(null != user) {
+			return user;
+		}
+		
+		Logger.info("缓存中没有用户信息，从库里获取, openId: %s", openId);
+		user = UserService.getByOpenId(openId);
+		if(null != user) {
+			//将用户信息放入缓存中
+			Cache.add(openId, user, USERINFO_CACHE_TIME);
+			return user;
+		}
+		
+		Logger.info("库里没有用户信息, 向微信获取, openId: %s", openId);
+		JSONObject userJson = WxUserService.getUserInfoByOpenId(openId);
+		if(null == userJson) {
+			Logger.error("向微信获取用户信息失败, openId: %s", openId);
+			return null;
+		}
+		
+		Logger.info("向微信获取用户信息成功, 准备入库, 参数为: %s", userJson);
+		return WxUserService.addUser(userJson);
+	}
+	
+	/**
 	 * 用户关注事件
 	 */
 	public static boolean subscribe(SubscribeReqDto subscribeReqDto) {
@@ -106,49 +189,42 @@ public class WxUserService {
 		if(!StringUtils.isBlank(isSubscribed)) {
 			return true;
 		}
+		
 		//向微信获取用户的信息，新增入库
 		JSONObject userJson = WxUserService.getUserInfoByOpenId(openId);
 		if(null == userJson) {
 			Logger.error("用户关注后向微信请求用户信息失败, openId[%s]", openId);
 			return false;
 		}
-		int sex = userJson.optInt("sex", 0);
-		String nickname = userJson.optString("nickname", "用户");
-		nickname = EmojiFilter.filterEmoji(nickname);
-		String headImgUrl = userJson.optString("headimgurl");
-		long subTime = userJson.optLong("subscribe_time");
-		long subscribeTime = subTime*1000;
-		String ticket = subscribeReqDto.getTicket();
-		//先通过用户openId查询是否存在
+		
+		//先通过用户openId查询是否有该用户的信息
 		User user = UserService.getByOpenId(openId);
 		if(null != user) {
-			user.setSex(sex);
-			user.setNickname(nickname);
-			user.setSubscribeTime(subscribeTime);
+			Logger.info("用户关注之前，其用户信息已在库中，可能是之前关注或关注后用户信息入库失败，参数为: %s", gson.toJson(user));
+			user.setSex(userJson.optInt("sex", 0));
+			user.setNickname(EmojiFilter.filterEmoji(userJson.optString("nickname", "用户")));
+			user.setSubscribeTime(userJson.optLong("subscribe_time") * 1000 );
+			user.setHeadImgUrl(userJson.optString("headimgurl"));
 			user.setUpdateTime(System.currentTimeMillis());
-			user.setTicket(ticket);
 			Logger.info("用户已关注过该公众号，进行更新操作, 参数为: %s", gson.toJson(user));
 			UserService.update(user);
+			user = UserService.getByOpenId(openId);
+			if(null != user) {
+				Cache.set(openId, user, USERINFO_CACHE_TIME);
+			} else {
+				Cache.delete(openId);
+			}
 			return true;
 		}
-		Logger.info("用户未关注过该公众号，进行入表操作, openId[%s]", openId);
-		user = new User();
-		user.setOpenId(openId);
-		user.setRegType(RegType.WeiXin.getValue());
-		user.setNickname(nickname);
-		user.setSex(sex);
-		user.setHeadImgUrl(headImgUrl);
-		user.setSubscribeTime(subscribeTime);
-		user.setCreateTime(System.currentTimeMillis());
-		user.setUpdateTime(System.currentTimeMillis());
-		user.setTicket(ticket);
-		if(!UserService.add(user)) {
-			Logger.error("新增用户失败, 参数为: %s", gson.toJson(user));
+		
+		Logger.info("用户未关注过该公众号，进行入库操作, openId[%s]", openId);
+		User u = WxUserService.addUser(userJson);
+		if(null == u) {
 			return false;
 		}
-		Cache.set(subscribeReqDto.getFromUserName()+"_"+subscribeReqDto.getCreateTime(), "added", "30mn");
-		Logger.error("新增用户成功, 参数为: %s", gson.toJson(user)); 
 		
+		//这里主要是用于微信消息重试的排重
+		Cache.set(subscribeReqDto.getFromUserName()+"_"+subscribeReqDto.getCreateTime(), "added", "30mn");
 		return true;
 	}
 	

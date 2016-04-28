@@ -40,49 +40,19 @@ public class Demo extends FrontController {
 	
 	public static Gson gson = new Gson();
 
-	
-    public static void getUserInfo(String code) throws BusinessException{
+    public static void getUserInfo(String code) {
     	if(StringUtils.isBlank(code)) {
     		renderText("code为空");
     	}
-    	String openId = WxUserService.getUserOpenId(code);
+    	String openId = WxUserService.getUserOpenIdByCode(code);
     	if(StringUtils.isBlank(openId)) {
     		renderText("获取到的openId为空");
     	}
-    	User user = UserService.getByOpenId(openId);
+    	User user = WxUserService.getUserInfo(openId);
     	if(null == user) {
-    		Logger.info("表中没有此用户, 向微信获取用户信息, openId[%s]", openId);
-    		JSONObject userInfoJson = WxUserService.getUserInfoByOpenId(openId);
-    		if(null == userInfoJson) {
-    			renderText("获取到的用户信息为空");
-    		}
-    		Logger.info("获取到的用户信息为: %s", userInfoJson);
-    		user = new User();
-    		user.setMobile("");
-    		user.setRegType(RegType.WeiXin.getValue());
-    		user.setOpenId(openId);
-    		user.setNickname(userInfoJson.optString("nickname"));
-    		user.setSex(userInfoJson.getInt("sex"));
-    		user.setBirthday(null);
-    		user.setHeadImgUrl(userInfoJson.optString("headimgurl"));
-    		user.setSubscribeTime(userInfoJson.getLong("subscribe_time") * 1000);
-    		user.setCreateTime(System.currentTimeMillis());
-    		user.setUpdateTime(System.currentTimeMillis());
-    		if(!UserService.add(user)) {
-    			renderText("创建用户失败，用户信息为：%s", gson.toJson(user));
-    		}
+    		renderText("获取用户信息失败, openId: %s", openId);
     	}
-    	user = UserService.getByOpenId(openId);
-    	if(null == user) {
-    		renderText("插入用户表后获取到的用户信息为空");
-    	}
-    	renderText("创建用户成功，信息为：%s", gson.toJson(user));
-//    	Logger.info("开始创建订单, code[%s], openId[%s]", code, openId);
-//    	Order order = new Order();
-//    	order.setUserId(user.getUserId());
-    	
-//    	OrderService.add(order);
-//    	render("/Front/Pay/wxPay.html", jsRequestBody, totalFee, order);
+    	renderText(gson.toJson(user));
+    	session.put("openId", openId);
     }
-    
 }

@@ -18,9 +18,9 @@ public class GoodsCtrl extends FrontController {
 	 * @param code
 	 */
     public static void list(int tag, String code) {
-    	String openId = WxUserService.getUserOpenId(code);
+    	// TODO 从入口处拿取session中的openId，没有的话用code去换，换回来后放入session中
+    	String openId = WxUserService.getUserOpenIdByCode(code);
     	if(StringUtils.isEmpty(openId)) {
-    		// TODO 获取用户OpenId失败
     	}
     	switch(tag) {
 			case GoodsTag.NEW: 
