@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Query;
+
 import models.CashInfo;
 import models.Order;
 import models.RefundOrder;
@@ -14,6 +16,8 @@ import models.User;
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
+import play.db.jpa.JPA;
+import play.db.jpa.Model;
 import service.CashInfoService;
 import service.OrderService;
 import service.PayService;
@@ -30,13 +34,16 @@ import service.wx.dto.redpack.SendRedpackReqDto;
 import service.wx.dto.redpack.SendRedpackRspDto;
 import service.wx.dto.refund.SendRefundReqDto;
 import service.wx.dto.refund.SendRefundRspDto;
+import utils.DateUtil;
 
 import com.google.gson.Gson;
 
 import common.constants.GlobalConstants;
 import common.constants.MessageCode;
 import common.constants.OrderStatus;
-import common.constants.wx.OutTradeStatus;
+import common.constants.Separator;
+import common.constants.wx.PayStatus;
+import common.constants.wx.WxCallbackStatus;
 import common.core.FrontController;
 import exception.BusinessException;
 
@@ -69,9 +76,10 @@ public class Pay extends FrontController {
     	BigDecimal b = new BigDecimal(order.getTotalFee()/100D);  
 		double totalFee = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		
-		int payFail = OutTradeStatus.PAY_FAILED;
-		int paySucc = OutTradeStatus.PAY_SUCC;
-    	render("/Front/Pay/wxPay.html", jsRequestBody, totalFee, order, payFail, paySucc);
+		int payFail = PayStatus.PAY_FAIL.getStatus();
+		int paySucc = PayStatus.PAY_SUCC.getStatus();
+		int payCancel = PayStatus.PAY_CANCEL.getStatus();
+    	render("/Front/Pay/wxPay.html", jsRequestBody, totalFee, order, payFail, paySucc, payCancel);
     }
     
     /**
@@ -82,7 +90,7 @@ public class Pay extends FrontController {
     		Logger.error("微信统一下单后前台传来的订单编号为空");
     		return;
     	}
-    	if(payStatus <= 0 || (payStatus != OutTradeStatus.PAY_FAILED && payStatus != OutTradeStatus.PAY_SUCC)) {
+    	if(payStatus <= PayStatus.PAY_READY.getStatus()) {
     		Logger.error("微信统一下单后前台传来的订单支付状态有误，payStatus[%d]", payStatus);
     		return;
     	}
@@ -90,18 +98,19 @@ public class Pay extends FrontController {
     	if(null == order) {
     		Logger.error("获取到的订单为空，id[%d]", id);
     	}
-    	if(order.getPayStatus() >= OutTradeStatus.PAY_SUCC) {
-    		Logger.info("该订单之前已支付成功，id[%d]", id);
-    		return;
-    	}
     	
     	//更新订单前台回调时间
-    	order.setPayTime(System.currentTimeMillis());
-    	order.setPayStatus(payStatus);
-    	if(!OrderService.setStatusAndUpdate(order, OrderStatus.PAYED)) {
-    		Logger.error("更新订单前台回调时间时失败，id[%d]", id);
+    	String updateSql = "update order set pay_status=?,pay_time=?,update_time=? where id=?";
+    	Query query = Model.em().createNativeQuery(updateSql);
+    	query.setParameter(1, payStatus);
+    	query.setParameter(2, System.currentTimeMillis());
+    	query.setParameter(3, System.currentTimeMillis());
+    	query.setParameter(4, id);
+    	if(query.executeUpdate() > 0) {
+    		Logger.info("更新订单前台回调态和时间成功，id[%d]", id);
+    	} else {
+    		Logger.error("更新订单前台回调态和时间失败，id[%d]", id);
     	}
-    	Logger.info("更新订单前台回调时间时成功，id[%d]", id);
     }
     
     /**
@@ -119,26 +128,27 @@ public class Pay extends FrontController {
 			}
 			if(StringUtils.isBlank(backStr.toString())) {
 				Logger.error("微信回调返回的参数为空");
-				return;
+				renderXml("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[参数为空]]></return_msg></xml>");
 			}
 			Logger.info("微信回调返回的参数为：%s", backStr);
 			if (!Signature.checkIsSignValidFromResponseString(backStr.toString())) {
 				Logger.error("统一下单API返回的数据签名验证失败，有可能数据被篡改了");
+				renderXml("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>");
 			}
 			rsp = (UnifiedOrderCallbackDto)Util.getObjectFromXMLWithXStream(backStr.toString(), UnifiedOrderCallbackDto.class);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return;
+			rsp = null;
 		}
-    	
     	if(null == rsp) {
     		Logger.error("解析微信回调返回参时失败");
-    		return;
+    		renderXml("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[参数格式校验错误]]></return_msg></xml>");
     	}
     	Logger.info("微信回调经解析为对象后的结果为：%s", gson.toJson(rsp));
     	String outTradeNo = rsp.getOut_trade_no();
     	if(StringUtils.isEmpty(outTradeNo)) {
     		Logger.error("微信回调返回的outTradeNo为空");
+    		renderXml("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[商户系统的订单号为空]]></return_msg></xml>");
     	}
     	
     	//查看订单状态
@@ -148,32 +158,53 @@ public class Pay extends FrontController {
     		return;
     	}
     	
-    	if(order.getPayStatus() == OutTradeStatus.CALLBACK_SUCC) {
+    	if(order.getPayStatus() == WxCallbackStatus.CALLBACK_SUCC.getStatus()) {
     		Logger.info("微信订单之前已回调成功，不再进行更新，outTradeNo[%s], callbackTime[%s], 订单参数: %s", 
     				outTradeNo, GlobalConstants.fullTimeSdf.format(new Date(order.getCallbackTime())), gson.toJson(order));
-    		return;
+    		renderXml("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
     	}
     	
     	long nowTime = System.currentTimeMillis();
     	//查看返回的参数
-    	if(!rsp.getResult_code().equals("SUCCESS")) {
-    		Logger.error("微信回调返回的结果错误");
-    		order.setPayStatus(OutTradeStatus.CALLBACK_FAILED);
-    		order.setPlatformTradeMsg(rsp.getReturn_msg());
-    	} else {
+    	if(rsp.getReturn_code().equals("SUCCESS") && rsp.getResult_code().equals("SUCCESS")) {
     		Logger.info("微信回调返回的结果正确");
-    		order.setPayStatus(OutTradeStatus.CALLBACK_SUCC);
-    		order.setPlatformTradeMsg("回调成功");
+    		String updateSql = "update order set callback_status=?,callback_time=?,platform_trade_msg=?," +
+    				"platform_transation_id=?,state=?,state_history=?,update_time=? where id=?";
+    		Query query = Model.em().createNativeQuery(updateSql);
+    		query.setParameter(1, WxCallbackStatus.CALLBACK_SUCC.getStatus());
+    		query.setParameter(2, nowTime);
+    		query.setParameter(3, "回调成功");
+    		query.setParameter(4, rsp.getTransaction_id());
+    		query.setParameter(5, OrderStatus.PAYED.getState());
+    		String dbHis = StringUtils.isBlank(order.getStateHistory()) ? "" : order.getStateHistory();
+    		dbHis += OrderStatus.DELIVERED.getState() + Separator.COMMON_SEPERATOR_BL
+    				+ DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss")
+    				+ Separator.COMMON_SEPERATOR_COMME;
+    		query.setParameter(6, dbHis);
+    		query.setParameter(7, nowTime);
+    		query.setParameter(8, order.getId());
+            if(query.executeUpdate() > 0) {
+            	Logger.info("微信回调成功，更新回调结果成功，orderId：%d", order.getId());
+            	renderXml("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+            } else {
+            	Logger.error("微信回调成功，更新回调结果失败，orderId：%d", order.getId());
+            }
+    	} else {
+    		Logger.error("微信回调返回的结果错误");
+    		String updateSql = "update order set callback_status=?,callback_time=?,platform_trade_msg=?,update_time=? where id=?";
+    		Query query = Model.em().createNativeQuery(updateSql);
+    		query.setParameter(1, WxCallbackStatus.CALLBACK_FAIL.getStatus());
+    		query.setParameter(2, nowTime);
+    		query.setParameter(3, rsp.getErr_code_des());
+    		query.setParameter(4, nowTime);
+    		query.setParameter(5, order.getId());
+    		if(query.executeUpdate() > 0) {
+            	Logger.info("微信回调失败，更新回调结果成功，orderId：%d", order.getId());
+            } else {
+            	Logger.error("微信回调失败，更新回调结果失败，orderId：%d", order.getId());
+            }
     	}
-    	order.setState(OrderStatus.PAYED.getState());
-    	order.setCallbackTime(nowTime);
-    	order.setUpdateTime(nowTime);
-    	//开始更新订单表
-    	if(!OrderService.update(order)) {
-    		Logger.error("更新微信回调结果失败，order参数为：%s", gson.toJson(order));
-    		return;
-    	}
-    	Logger.info("更新微信回调结果成功，order参数为：%s", gson.toJson(order));
+    	renderXml("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[回调失败]]></return_msg></xml>");
     }
     
     public static boolean sendRedPack(long cashId) {

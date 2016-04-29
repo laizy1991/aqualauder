@@ -19,9 +19,9 @@ public class DistributeCacheLock {
     private static DistributeCacheLock lock = new DistributeCacheLock();
     private static ConcurrentHashMap<String, String> records = new ConcurrentHashMap<String, String>();
     /* 缓存锁失效时间，不能过大，最好控制在1min以内 */
-    public static String cacheTimeout = "1min";
+    public static String cacheTimeout = "1mn";
     /* 缓存锁失效时间 */
-    public static String cacheTimeout_2 = "2min";
+    public static String cacheTimeout_2 = "2mn";
 
     private DistributeCacheLock() {
     }

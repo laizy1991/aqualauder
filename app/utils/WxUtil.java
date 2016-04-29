@@ -3,6 +3,7 @@ package utils;
 import net.sf.json.JSONObject;
 
 import java.io.IOException;
+
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
@@ -41,12 +42,18 @@ public class WxUtil {
 	 */
 	private static String getAccessTokenFromWx() {
 		//判断是否加锁了
-		if(StringUtils.isEmpty(Cache.get(ACCESS_TOKEN_CACHE_LOCKED, String.class))) {
+		DistributeCacheLock lockMgr = DistributeCacheLock.getInstance();
+		if(lockMgr.isCacheLocked(ACCESS_TOKEN_CACHE_LOCKED)) {
+			Logger.error("微信accessToken缓存被加锁了，可能是别的线程正在更新accessToken");
 			return null;
 		}
 		
 		//加锁5秒
-		Cache.set(ACCESS_TOKEN_CACHE_LOCKED, "locked", "5s");
+		if(lockMgr.tryCacheLock(ACCESS_TOKEN_CACHE_LOCKED, "locked", "5s")) {
+			Logger.info("微信accessToken缓存加锁成功，加锁时间为5秒");
+		} else {
+			Logger.error("微信accessToken缓存加锁失败");
+		}
 		
 		String accessToken = getAccessTokenFromWxWithValidation();
 		//代码写在这里
@@ -56,13 +63,13 @@ public class WxUtil {
 			accessToken = getAccessTokenFromWxWithValidation();
 			if(StringUtils.isEmpty(accessToken)) {
 				//解锁
-				Cache.delete(ACCESS_TOKEN_CACHE_LOCKED);
+				lockMgr.unLock(ACCESS_TOKEN_CACHE_LOCKED);
 				Logger.error("从微信获取AccessToken又失败，打个日志算了");
 				return null;
 			}
 		}
 		Cache.set(ACCESS_TOKEN_CACHE_KEY, accessToken, ACCESS_TOKEN_CACHE_TIMEOUT);
-		Cache.delete(ACCESS_TOKEN_CACHE_LOCKED);
+		lockMgr.unLock(ACCESS_TOKEN_CACHE_LOCKED);
 		return accessToken;
 	}
 	

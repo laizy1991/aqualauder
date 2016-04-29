@@ -54,9 +54,6 @@ public class Order extends GenericModel {
     @Column(name="state_history")
     private String stateHistory;
 
-    @Column(name="pay_time")
-    private Long payTime;
-
     @Column(name="deliver_time")
     private Long deliverTime;
 
@@ -80,7 +77,16 @@ public class Order extends GenericModel {
     
     @Column(name="pay_status")
     private Integer payStatus;
-
+    
+    @Column(name="pay_time")
+    private Long payTime;
+    
+    @Column(name="callback_status")
+    private Integer callbackStatus;
+    
+    @Column(name="callback_time")
+    private Long callbackTime;
+    
     @Column(name="callback_url")
     private String callbackUrl;
 
@@ -90,8 +96,10 @@ public class Order extends GenericModel {
     @Column(name="platform_trade_msg")
     private String platformTradeMsg;
     
-    @Column(name="callback_time")
-    private Long callbackTime;
+    @Column(name="platform_transation_id")
+    private String platformTransationId;
+    
+    
     
     public Integer getUserId() {
         return userId;
@@ -301,11 +309,27 @@ public class Order extends GenericModel {
 		this.platformTradeMsg = platformTradeMsg;
 	}
 
+	public String getPlatformTransationId() {
+		return platformTransationId;
+	}
+
+	public void setPlatformTransationId(String platformTransationId) {
+		this.platformTransationId = platformTransationId;
+	}
+
 	public Long getCallbackTime() {
 		return callbackTime;
 	}
 
 	public void setCallbackTime(Long callbackTime) {
 		this.callbackTime = callbackTime;
+	}
+
+	public Integer getCallbackStatus() {
+		return callbackStatus;
+	}
+
+	public void setCallbackStatus(Integer callbackStatus) {
+		this.callbackStatus = callbackStatus;
 	}
 }

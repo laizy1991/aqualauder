@@ -29,7 +29,7 @@
 				</li>
 				<li class="list">
 					<span class="list-title">联系电话</span>
-					<span class="list-content">${mobilePhone}</span>
+					<span class="list-content">${order.mobilePhone}</span>
 				</li>
 				<li class="list">
 					<span class="list-title">收货地址</span>
@@ -57,15 +57,14 @@ function onBridgeReady(){
         	   payStatus = ${paySucc};
 			} else if(res.err_msg == 'get_brand_wcpay_request:fail') {
 				payStatus = ${payFail};
-			} 
+			} else if(res.err_msg == 'get_brand_wcpay_request:cancel') {
+				payStatus = ${payCancel};
+			}
             $.ajax({
       	        type:"POST",
       	        url:"/front/Pay/payCallBack",
       	        data:{'id':${order.id}, 'payStatus': payStatus},
-      	        success:function(result){
-      	            if(undefined != result && result.length > 0) {
-      	            }
-      	        }
+      	        success:function(result){}
       	    });
        }
    ); 

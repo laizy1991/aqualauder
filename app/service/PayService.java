@@ -20,13 +20,14 @@ import service.wx.dto.order.UnifiedOrderReqDto;
 import service.wx.dto.order.UnifiedOrderRspDto;
 
 import com.google.gson.Gson;
+
 import common.constants.BillType;
 import common.constants.MessageCode;
 import common.constants.OrderStatus;
 import common.constants.PayType;
-import common.constants.wx.OutTradeStatus;
+import common.constants.wx.PayStatus;
+import common.constants.wx.WxCallbackStatus;
 import common.constants.wx.PayMode;
-
 import dao.OrderDao;
 import dao.OrderGoodsDao;
 import exception.BusinessException;
@@ -50,24 +51,14 @@ public class PayService {
 		if(null == user || StringUtils.isBlank(user.getOpenId())) {
 			throw new BusinessException(MessageCode.GET_USER_FAILED.getMsg());
 		}
-		List<OrderGoods> goods = OrderGoodsDao.getByOrder(order.getId());
-		String subject = "";
-		if(null != goods && goods.size() > 0) {
-			for(int i=0; i<goods.size(); i++) {
-				if(0 != i) {
-					subject += "_";
-				}
-				subject += goods.get(i).getGoodsTitle();
-			}
-		} else {
-			subject = "服装商品";
-		}
+		
+		// TODO 这里是否要写死，商量后再确定
+		String subject = "服装商品";
 		String callbackUrl = Play.configuration.getProperty("local.host.domain") + 
 				Play.configuration.getProperty("wx.pay.callback.path");
 				
-		// TODO 获取客户端地址，在controller那里，写入order表
 		String clientIp = order.getClientIp();
-		if(StringUtils.isBlank(clientIp)) {
+		if(StringUtils.isBlank(clientIp) || clientIp.equals("127.0.0.1")) {
 			clientIp = Play.configuration.getProperty("local.host.ip");
 		}
 		UnifiedOrderReqDto req = new UnifiedOrderReqDto("WEB", subject, order.getOutTradeNo(), order.getTotalFee(),
@@ -77,7 +68,7 @@ public class PayService {
 		if(null != rsp && rsp.getResult_code().equals("SUCCESS")) {
 			//对订单表进行更新
 			order.setCallbackUrl(callbackUrl);
-			order.setPayStatus(OutTradeStatus.ADDED);
+			order.setPayStatus(PayStatus.PAY_READY.getStatus());
 			order.setPayType(PayType.WX.getCode());
 			order.setPlatformTradeNo(rsp.getPrepay_id());
 			order.setPlatformTradeMsg("");
@@ -133,7 +124,7 @@ public class PayService {
         
         if(isSucc) {
             order.setPayTime(System.currentTimeMillis());
-            order.setPayStatus(OutTradeStatus.PAY_SUCC);
+            order.setPayStatus(PayStatus.PAY_SUCC.getStatus());
             order.setPayType(PayType.BALANCE.getCode());
             order.setState(OrderStatus.PAYED.getState());
             return OrderService.setStatusAndUpdate(order, OrderStatus.PAYED);

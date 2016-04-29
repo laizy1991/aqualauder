@@ -1,45 +1,26 @@
 package controllers.front;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Date;
-
-import models.CashInfo;
 import models.Order;
 import models.User;
-import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import play.Play;
-import service.CashInfoService;
 import service.OrderService;
 import service.OutTradeNo;
 import service.UserService;
-import service.wx.WXPay;
-import service.wx.common.Signature;
-import service.wx.common.Util;
-import service.wx.dto.order.UnifiedOrderCallbackDto;
-import service.wx.dto.redpack.QueryRedpackReqDto;
-import service.wx.dto.redpack.QueryRedpackRspDto;
-import service.wx.dto.redpack.SendRedpackReqDto;
-import service.wx.dto.redpack.SendRedpackRspDto;
 import service.wx.service.user.WxUserService;
 import utils.IdGenerator;
 import utils.NumberUtil;
-import utils.WxUtil;
 
 import com.google.gson.Gson;
-
-import common.constants.GlobalConstants;
 import common.constants.OrderStatus;
 import common.constants.PayType;
-import common.constants.RefundStatus;
-import common.constants.RegType;
-import common.constants.wx.OutTradeStatus;
+import common.constants.wx.PayStatus;
+import common.constants.wx.WxCallbackStatus;
 import common.core.FrontController;
+
 import exception.BusinessException;
 
 
@@ -47,13 +28,7 @@ public class Demo extends FrontController {
 	
 	public static Gson gson = new Gson();
 	public static void test() {
-		Order order = OrderService.getOrderByOutTradeNo("201604291355057752");
-		try {
-			Pay.wxPay(order.getId());
-		} catch (BusinessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		renderXml("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[参数格式校验错误]]></return_msg></xml>");
 	}
 	
     public static void getUserInfo(String code) {
@@ -101,7 +76,8 @@ public class Demo extends FrontController {
     	order.setUpdateTime(System.currentTimeMillis());
     	order.setOpenId(user.getOpenId());
     	order.setClientIp(request.remoteAddress.equals("127.0.0.1")?Play.configuration.getProperty("local.host.ip"):request.remoteAddress);
-    	order.setPayStatus(OutTradeStatus.ADDED);
+    	order.setPayStatus(PayStatus.INIT.getStatus());
+    	order.setCallbackStatus(WxCallbackStatus.INIT.getStatus());
     	order.setCallbackUrl(Play.configuration.getProperty("local.host.domain")+Play.configuration.getProperty("wx.pay.callback.path"));
     	
     	boolean addFlag = OrderService.add(order);
