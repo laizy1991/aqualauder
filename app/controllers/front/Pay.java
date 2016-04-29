@@ -69,7 +69,9 @@ public class Pay extends FrontController {
     	BigDecimal b = new BigDecimal(order.getTotalFee()/100D);  
 		double totalFee = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		
-    	render("/Front/Pay/wxPay.html", jsRequestBody, totalFee, order);
+		int payFail = OutTradeStatus.PAY_FAILED;
+		int paySucc = OutTradeStatus.PAY_SUCC;
+    	render("/Front/Pay/wxPay.html", jsRequestBody, totalFee, order, payFail, paySucc);
     }
     
     /**
@@ -94,7 +96,6 @@ public class Pay extends FrontController {
     	}
     	
     	//更新订单前台回调时间
-    	order.setState(OrderStatus.PAYED.getState());
     	order.setPayTime(System.currentTimeMillis());
     	order.setPayStatus(payStatus);
     	if(!OrderService.setStatusAndUpdate(order, OrderStatus.PAYED)) {
@@ -160,10 +161,11 @@ public class Pay extends FrontController {
     		order.setPayStatus(OutTradeStatus.CALLBACK_FAILED);
     		order.setPlatformTradeMsg(rsp.getReturn_msg());
     	} else {
-    		Logger.error("微信回调返回的结果正确");
+    		Logger.info("微信回调返回的结果正确");
     		order.setPayStatus(OutTradeStatus.CALLBACK_SUCC);
     		order.setPlatformTradeMsg("回调成功");
     	}
+    	order.setState(OrderStatus.PAYED.getState());
     	order.setCallbackTime(nowTime);
     	order.setUpdateTime(nowTime);
     	//开始更新订单表
