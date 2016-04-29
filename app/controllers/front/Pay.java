@@ -97,19 +97,20 @@ public class Pay extends FrontController {
     	Order order = OrderService.get(id);
     	if(null == order) {
     		Logger.error("获取到的订单为空，id[%d]", id);
+    		return;
     	}
     	
     	//更新订单前台回调时间
-    	String updateSql = "update order set pay_status=?,pay_time=?,update_time=? where id=?";
+    	String updateSql = "UPDATE `order` SET pay_status=?,pay_time=?,update_time=? WHERE id=?";
     	Query query = Model.em().createNativeQuery(updateSql);
     	query.setParameter(1, payStatus);
     	query.setParameter(2, System.currentTimeMillis());
     	query.setParameter(3, System.currentTimeMillis());
     	query.setParameter(4, id);
     	if(query.executeUpdate() > 0) {
-    		Logger.info("更新订单前台回调态和时间成功，id[%d]", id);
+    		Logger.info("更新订单前台回调状态和时间成功，id[%d]", id);
     	} else {
-    		Logger.error("更新订单前台回调态和时间失败，id[%d]", id);
+    		Logger.error("更新订单前台回调状态和时间失败，id[%d]", id);
     	}
     }
     
@@ -158,7 +159,7 @@ public class Pay extends FrontController {
     		return;
     	}
     	
-    	if(order.getPayStatus() == WxCallbackStatus.CALLBACK_SUCC.getStatus()) {
+    	if(order.getCallbackStatus() == WxCallbackStatus.CALLBACK_SUCC.getStatus()) {
     		Logger.info("微信订单之前已回调成功，不再进行更新，outTradeNo[%s], callbackTime[%s], 订单参数: %s", 
     				outTradeNo, GlobalConstants.fullTimeSdf.format(new Date(order.getCallbackTime())), gson.toJson(order));
     		renderXml("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
@@ -168,8 +169,8 @@ public class Pay extends FrontController {
     	//查看返回的参数
     	if(rsp.getReturn_code().equals("SUCCESS") && rsp.getResult_code().equals("SUCCESS")) {
     		Logger.info("微信回调返回的结果正确");
-    		String updateSql = "update order set callback_status=?,callback_time=?,platform_trade_msg=?," +
-    				"platform_transation_id=?,state=?,state_history=?,update_time=? where id=?";
+    		String updateSql = "UPDATE `order` SET callback_status=?,callback_time=?,platform_trade_msg=?," +
+    				"platform_transation_id=?,state=?,state_history=?,update_time=? WHERE id=?";
     		Query query = Model.em().createNativeQuery(updateSql);
     		query.setParameter(1, WxCallbackStatus.CALLBACK_SUCC.getStatus());
     		query.setParameter(2, nowTime);
@@ -191,7 +192,7 @@ public class Pay extends FrontController {
             }
     	} else {
     		Logger.error("微信回调返回的结果错误");
-    		String updateSql = "update order set callback_status=?,callback_time=?,platform_trade_msg=?,update_time=? where id=?";
+    		String updateSql = "UPDATE `order` SET callback_status=?,callback_time=?,platform_trade_msg=?,update_time=? WHERE id=?";
     		Query query = Model.em().createNativeQuery(updateSql);
     		query.setParameter(1, WxCallbackStatus.CALLBACK_FAIL.getStatus());
     		query.setParameter(2, nowTime);
