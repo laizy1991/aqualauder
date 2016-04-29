@@ -15,6 +15,7 @@ public class WxUtil {
 	public static final String CACHE_PREFIX = "wx_";
 	private static String ACCESS_TOKEN_CACHE_KEY = null;		//access_token缓存key
 	public static String ACCESS_TOKEN_CACHE_TIMEOUT = null;		//access_token在缓存中有效时间
+	private static String ACCESS_TOKEN_CACHE_LOCKED = "access_token_cache_locked";
 	
 	static {
 		ACCESS_TOKEN_CACHE_KEY = CACHE_PREFIX + "accessToken";
@@ -39,6 +40,14 @@ public class WxUtil {
 	 * @return
 	 */
 	private static String getAccessTokenFromWx() {
+		//判断是否加锁了
+		if(StringUtils.isEmpty(Cache.get(ACCESS_TOKEN_CACHE_LOCKED, String.class))) {
+			return null;
+		}
+		
+		//加锁5秒
+		Cache.set(ACCESS_TOKEN_CACHE_LOCKED, "locked", "5s");
+		
 		String accessToken = getAccessTokenFromWxWithValidation();
 		//代码写在这里
 		if(StringUtils.isEmpty(accessToken)) {
@@ -46,11 +55,14 @@ public class WxUtil {
 			//可能是网络原因，再试一次
 			accessToken = getAccessTokenFromWxWithValidation();
 			if(StringUtils.isEmpty(accessToken)) {
+				//解锁
+				Cache.delete(ACCESS_TOKEN_CACHE_LOCKED);
 				Logger.error("从微信获取AccessToken又失败，打个日志算了");
 				return null;
 			}
 		}
 		Cache.set(ACCESS_TOKEN_CACHE_KEY, accessToken, ACCESS_TOKEN_CACHE_TIMEOUT);
+		Cache.delete(ACCESS_TOKEN_CACHE_LOCKED);
 		return accessToken;
 	}
 	
@@ -74,8 +86,9 @@ public class WxUtil {
 			Logger.error("请求微信基础支持AccessToken发生错误");
 			e.printStackTrace();
 		}
-		if(null == resp)
+		if(null == resp) 
 			return null;
+		
 		JSONObject json = JSONObject.fromObject(resp.getContent());
 		if(StringUtils.isBlank(json.optString("access_token"))) {
 			Logger.error("微信返回的基础支持AccessToken错误，错误码：%s，错误信息：%s", 

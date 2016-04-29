@@ -40,7 +40,7 @@
 				<li>&nbsp;</li>
 			</ul>
 			<div class="info-btn">
-				<a href="javascript:void(0)" class="btn btn-green" onclick="callpay()" id="pay_btn">确认支付</a>
+				<a href="javascript:void(0)" class="btn btn-green" onclick="callpay();" id="pay_btn">确认支付</a>
 			</div>
 		</div>
 </section>
@@ -61,7 +61,7 @@ function onBridgeReady(){
             $.ajax({
       	        type:"POST",
       	        url:"/front/Pay/payCallBack",
-      	        data:{'id':${order.id}}
+      	        data:{'id':${order.id}},
       	        success:function(result){
       	            if(undefined != result && result.length > 0) {
       	            }

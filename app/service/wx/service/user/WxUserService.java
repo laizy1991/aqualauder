@@ -111,7 +111,6 @@ public class WxUserService {
 			return null;
 		}
 		User user = new User();
-		user.setMobile("");
 		user.setRegType(RegType.WeiXin.getValue());
 		user.setOpenId(openId);
 		user.setNickname(EmojiFilter.filterEmoji(userJson.optString("nickname", "用户")));
