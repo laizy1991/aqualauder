@@ -110,6 +110,10 @@ public class Pay extends FrontController {
     		Logger.error("通过订单id[%d]获取到的订单为空", id);
     		return;
     	}
+    	if(order.getPayStatus() == PayStatus.PAY_SUCC.getStatus()) {
+    		Logger.info("该订单较前时间已支付过，id: %d", id);
+    		return;
+    	}
     	
     	//更新订单前台回调时间
     	String updateSql = "UPDATE `order` SET pay_status=?,pay_time=?,update_time=? WHERE id=?";

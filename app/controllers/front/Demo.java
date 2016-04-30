@@ -10,17 +10,21 @@ import play.Play;
 import service.OrderService;
 import service.OutTradeNo;
 import service.UserService;
+import service.wx.WXPay;
+import service.wx.dto.order.OrderQueryReqDto;
+import service.wx.dto.order.OrderQueryRspDto;
 import service.wx.service.user.WxUserService;
 import utils.IdGenerator;
 import utils.NumberUtil;
 
 import com.google.gson.Gson;
+
 import common.constants.OrderStatus;
 import common.constants.PayType;
 import common.constants.wx.PayStatus;
+import common.constants.wx.TradeStatus;
 import common.constants.wx.WxCallbackStatus;
 import common.core.FrontController;
-
 import exception.BusinessException;
 
 
@@ -57,6 +61,7 @@ public class Demo extends FrontController {
      * 统一下单
      */
     public static void unifiedOrder(String code) throws BusinessException {
+    	//TODO 使用微信支付，预支付订单有效期为2小时
     	String openId = session.get("openId");
     	if(StringUtils.isEmpty(openId)) {
     		Logger.info("从session中获取用户openId为空，通过code[%s]向微信换取", code);
@@ -92,5 +97,32 @@ public class Demo extends FrontController {
     	}
     	order = OrderService.getOrderByOutTradeNo(outTradeNo);
 		Pay.wxPay(order.getId());
+    }
+    
+    /**
+     * 查询订单状态
+     * @throws BusinessException
+     */
+    public static void queryOrderStatus() throws BusinessException {
+    	long id = 0;
+    	Order order = OrderService.get(id);
+    	if(StringUtils.isBlank(order.getPlatformTransationId())) {
+    		renderText("订单商户交易单号为空, 订单详情为: %s", gson.toJson(order));
+    	}
+    	
+    	OrderQueryReqDto req = new OrderQueryReqDto(order.getPlatformTransationId(), order.getOutTradeNo());
+    	OrderQueryRspDto rsp = WXPay.requestOrderQueryService(req);
+    	if(null == rsp) {
+    		renderText("向微信查询订单状态返回数据为空, 订单详情为: %s", gson.toJson(order));
+    	}
+    	if(rsp.getTrade_state().equals(TradeStatus.SUCCESS.getStatus())) {
+    		renderText("订单状态为成功, 订单详情为: %s，查询状态数据为: %s", gson.toJson(order), gson.toJson(rsp));
+    	} 
+		TradeStatus trade = TradeStatus.getPayStatus(rsp.getTrade_state());
+		if(null == trade) {
+			renderText("获取订单status[%s]对应的状态失败", rsp.getTrade_state());
+		}
+		renderText("订单状态为%s, 订单详情为: %s，查询状态数据为: %s", trade.getDesc(), 
+				gson.toJson(order), gson.toJson(rsp ));
     }
 }
