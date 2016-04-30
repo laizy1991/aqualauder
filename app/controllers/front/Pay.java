@@ -83,20 +83,31 @@ public class Pay extends FrontController {
     }
     
     /**
-     * 前台回调
+     * 前台回调，订单id用String类型是因为从js传过来时最后一位会被截断
      */
-    public static void payCallBack(long id, int payStatus) {
+    public static void payCallBack(String idStr, int payStatus) {
+    	if(StringUtils.isBlank(idStr)) {
+    		Logger.error("微信统一下单后前台传来的订单id[%s]为空", idStr);
+    		return;
+    	}
+    	long id = 0;
+    	try {
+    		id = Long.parseLong(idStr);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			id = 0;
+		}
     	if(id <= 0) {
-    		Logger.error("微信统一下单后前台传来的订单编号为空");
+    		Logger.error("微信统一下单后前台传来的订单id[%d]不正确", id);
     		return;
     	}
     	if(payStatus <= PayStatus.PAY_READY.getStatus()) {
-    		Logger.error("微信统一下单后前台传来的订单支付状态有误，payStatus[%d]", payStatus);
+    		Logger.error("微信统一下单后前台传来的订单支付状态payStatus[%d]有误", payStatus);
     		return;
     	}
     	Order order = OrderService.get(id);
     	if(null == order) {
-    		Logger.error("获取到的订单为空，id[%d]", id);
+    		Logger.error("通过订单id[%d]获取到的订单为空", id);
     		return;
     	}
     	

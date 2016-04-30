@@ -63,7 +63,7 @@ function onBridgeReady(){
             $.ajax({
       	        type:"POST",
       	        url:"/front/Pay/payCallBack",
-      	        data:{'id':${order.id}, 'payStatus': payStatus},
+      	        data:{'idStr':'${order.id}', 'payStatus': payStatus},
       	        success:function(result){}
       	    });
        }

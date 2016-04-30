@@ -28,7 +28,13 @@ public class Demo extends FrontController {
 	
 	public static Gson gson = new Gson();
 	public static void test() {
-		renderXml("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[参数格式校验错误]]></return_msg></xml>");
+		String jsRequestBody = "";
+		double totalFee = 0.01;
+		Order order = OrderService.get(1461984874678000006L);
+		int payFail = PayStatus.PAY_FAIL.getStatus();
+		int paySucc = PayStatus.PAY_SUCC.getStatus();
+		int payCancel = PayStatus.PAY_CANCEL.getStatus();
+		render("/Front/Pay/wxPay.html", jsRequestBody, totalFee, order, payFail, paySucc, payCancel);
 	}
 	
     public static void getUserInfo(String code) {

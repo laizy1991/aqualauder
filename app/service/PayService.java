@@ -74,7 +74,7 @@ public class PayService {
 			order.setPlatformTradeMsg("");
 			order.setUpdateTime(System.currentTimeMillis());
 			if(OrderDao.update(order)) {
-				Logger.error("微信纺一下单后更新订单表成功，订单参数为：%s", gson.toJson(order));
+				Logger.info("微信统一下单后更新订单表成功，订单参数为：%s", gson.toJson(order));
 			}
 		}
 		//准备生成签名
