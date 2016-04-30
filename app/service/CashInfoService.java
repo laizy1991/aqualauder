@@ -29,9 +29,9 @@ public class CashInfoService {
         	Logger.error("获取微信商户Mchid为空");
         	return false; 
         }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         mchBillno += sdf.format(new Date());
-        mchBillno += NumberUtil.getRandomNumberString(10);
+        mchBillno += NumberUtil.getRandomNumberString(4);
         
         info.setMchBillno(mchBillno);
         return CashInfoDao.insert(info);

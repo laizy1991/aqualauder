@@ -29,10 +29,10 @@ public class SendRedpackReqDto {
     	setWxappid(Configure.getAppid());
     	setMch_id(Configure.getMchid());
     	
-    	String sendName = Play.configuration.getProperty("wx.redpack.sendName", "安琪儿");
+    	String sendName = Play.configuration.getProperty("wx.redpack.sendName", "安淇兰黛");
     	int totalNum = 1;
     	String wishing = Play.configuration.getProperty("wx.redpack.wishing", "感谢您进行提现！");
-    	String clientIp = Play.configuration.getProperty("local.host.ip", "127.0.0.1");	
+    	String clientIp = Play.configuration.getProperty("local.host.ip", "120.25.58.100");	
     	String actName = Play.configuration.getProperty("wx.redpack.actName", "微信提现活动");
     	String remark = "感谢您的参与！";
     	

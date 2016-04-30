@@ -1,6 +1,6 @@
 package common.constants.wx;
 
-public enum RedPackType {
+public enum RedPackStatus {
 	
 	SENDING("SENDING", "发放中"),
 	SENT("SENT", "已发放待领取"),
@@ -11,7 +11,7 @@ public enum RedPackType {
 	private String type;
 	private String desc;
 	
-	private RedPackType(String type, String desc) {
+	private RedPackStatus(String type, String desc) {
 		this.type = type;
 		this.desc = desc;
 	}
@@ -24,8 +24,8 @@ public enum RedPackType {
 		return this.desc;
 	}
 	
-	public static RedPackType getRedPackType(String type) {
-		for (RedPackType tradeType: RedPackType.values()) {
+	public static RedPackStatus getRedPackType(String type) {
+		for (RedPackStatus tradeType: RedPackStatus.values()) {
 			if (type.equals(tradeType.getType())) {
 				return tradeType;
 			}

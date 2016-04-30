@@ -38,6 +38,7 @@ import utils.DateUtil;
 
 import com.google.gson.Gson;
 
+import common.constants.CashStatus;
 import common.constants.GlobalConstants;
 import common.constants.MessageCode;
 import common.constants.OrderStatus;
@@ -221,70 +222,6 @@ public class Pay extends FrontController {
             }
     	}
     	renderXml("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[回调失败]]></return_msg></xml>");
-    }
-    
-    public static boolean sendRedPack(long cashId) {
-    	if(cashId <= 0) {
-    		Logger.error("发送现金红包入参不正确，cashId: %d", cashId);
-    		return false;
-    	}
-    	CashInfo ci = CashInfoService.get(cashId);
-    	if(null == ci) {
-    		Logger.error("获取提现的记录为空，cashId: %d", cashId);
-    		return false;
-    	}
-    	if(ci.getCashStatus() == 2) {
-    		//已提现成功
-    		Logger.info("该订单之前已提现成功，cashId: %d", cashId);
-    		return false;
-    	}
-    	String mchBillno = ci.getMchBillno();
-    	User user = UserService.get(ci.getUserId());
-    	if(null == user || StringUtils.isEmpty(user.getOpenId())) {
-    		Logger.error("发送微信红包时无法获取用户Openid，cashId: %d", cashId);
-    		return false;
-    	}
-    	String openid = user.getOpenId();
-    	int totalAmount = ci.getAmount();
-    	SendRedpackReqDto sendRedpackReqDto = new SendRedpackReqDto(mchBillno, openid, totalAmount);
-    	SendRedpackRspDto rsp = null;
-		try {
-			rsp = WXPay.sendRedpackService(sendRedpackReqDto);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		if(null == rsp) {
-			return false;
-		}
-		
-		return true;
-    }
-    
-    public static void queryRedPack(long cashId) {
-    	if(cashId <= 0) {
-    		Logger.error("发送现金红包入参不正确，cashId: %d", cashId);
-    		renderText("发送现金红包入参不正确，cashId: %d", cashId);
-    	}
-    	CashInfo ci = CashInfoService.get(cashId);
-    	if(null == ci) {
-    		Logger.error("获取提现的记录为空，cashId: %d", cashId);
-    		renderText("获取提现的记录为空，cashId: %d", cashId);
-    	}
-    	if(ci.getCashStatus() == 2) {
-    		//已提现成功
-    		Logger.info("该订单之前已提现成功，cashId: %d", cashId);
-    		renderText("该订单之前已提现成功，cashId: %d", cashId);
-    	}
-    	String mchBillno = ci.getMchBillno();
-    	String bill_type = "MCHT";
-    	QueryRedpackReqDto queryRedpackReqDto = new QueryRedpackReqDto(mchBillno, bill_type);
-    	QueryRedpackRspDto rsp = null;
-		try {
-			rsp = WXPay.queryRedpackStatusService(queryRedpackReqDto);
-			renderText(gson.toJson(rsp));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
     }
     
     public static void sendRefund(long refundId) {

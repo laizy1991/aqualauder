@@ -1,5 +1,7 @@
 package service.wx.service.redpack;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.google.gson.Gson;
 
 import net.sf.json.JSONObject;
@@ -27,6 +29,12 @@ public class SendRedpackService extends BaseService{
      */
     public SendRedpackRspDto request(SendRedpackReqDto sendRedpackReqDto) throws BusinessException {
 
+    	if(StringUtils.isBlank(sendRedpackReqDto.getMch_billno()) || 
+    			StringUtils.isBlank(sendRedpackReqDto.getRe_openid()) || 
+    			null == sendRedpackReqDto.getTotal_amount() || sendRedpackReqDto.getTotal_amount() <= 0) {
+    		throw new BusinessException("参数错误");
+    	}
+    	
     	String responseString = "";
     	try {
     		responseString = sendPost(sendRedpackReqDto, true);

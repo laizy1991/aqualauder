@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import models.CashInfo;
 import models.Order;
 import models.OrderGoods;
 import models.User;
@@ -18,10 +19,15 @@ import service.wx.common.RandomStringGenerator;
 import service.wx.common.Signature;
 import service.wx.dto.order.UnifiedOrderReqDto;
 import service.wx.dto.order.UnifiedOrderRspDto;
+import service.wx.dto.redpack.QueryRedpackReqDto;
+import service.wx.dto.redpack.QueryRedpackRspDto;
+import service.wx.dto.redpack.SendRedpackReqDto;
+import service.wx.dto.redpack.SendRedpackRspDto;
 
 import com.google.gson.Gson;
 
 import common.constants.BillType;
+import common.constants.CashStatus;
 import common.constants.MessageCode;
 import common.constants.OrderStatus;
 import common.constants.PayType;
@@ -53,7 +59,7 @@ public class PayService {
 		}
 		
 		// TODO 这里是否要写死，商量后再确定
-		String subject = "服装商品";
+		String subject = Play.configuration.getProperty("wx.redpack.sendName") + "服装商品";
 		String callbackUrl = Play.configuration.getProperty("local.host.domain") + 
 				Play.configuration.getProperty("wx.pay.callback.path");
 				
@@ -132,4 +138,5 @@ public class PayService {
         
         return isSucc;
 	}
+	
 }

@@ -1,5 +1,6 @@
 package controllers.front;
 
+import models.CashInfo;
 import models.Order;
 import models.User;
 
@@ -7,24 +8,29 @@ import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import play.Play;
+import service.CashInfoService;
 import service.OrderService;
 import service.OutTradeNo;
+import service.RedPackService;
 import service.UserService;
 import service.wx.WXPay;
 import service.wx.dto.order.OrderQueryReqDto;
 import service.wx.dto.order.OrderQueryRspDto;
+import service.wx.dto.redpack.QueryRedpackReqDto;
+import service.wx.dto.redpack.QueryRedpackRspDto;
+import service.wx.dto.redpack.SendRedpackRspDto;
 import service.wx.service.user.WxUserService;
 import utils.IdGenerator;
 import utils.NumberUtil;
 
 import com.google.gson.Gson;
-
 import common.constants.OrderStatus;
 import common.constants.PayType;
 import common.constants.wx.PayStatus;
 import common.constants.wx.TradeStatus;
 import common.constants.wx.WxCallbackStatus;
 import common.core.FrontController;
+
 import exception.BusinessException;
 
 
@@ -34,7 +40,7 @@ public class Demo extends FrontController {
 	public static void test() {
 		String jsRequestBody = "";
 		double totalFee = 0.01;
-		Order order = OrderService.get(1461984874678000006L);
+		Order order = OrderService.get(1462009398678000000L);
 		int payFail = PayStatus.PAY_FAIL.getStatus();
 		int paySucc = PayStatus.PAY_SUCC.getStatus();
 		int payCancel = PayStatus.PAY_CANCEL.getStatus();
@@ -104,7 +110,7 @@ public class Demo extends FrontController {
      * @throws BusinessException
      */
     public static void queryOrderStatus() throws BusinessException {
-    	long id = 0;
+    	long id = 1462009398678000000L;
     	Order order = OrderService.get(id);
     	if(StringUtils.isBlank(order.getPlatformTransationId())) {
     		renderText("订单商户交易单号为空, 订单详情为: %s", gson.toJson(order));
@@ -124,5 +130,32 @@ public class Demo extends FrontController {
 		}
 		renderText("订单状态为%s, 订单详情为: %s，查询状态数据为: %s", trade.getDesc(), 
 				gson.toJson(order), gson.toJson(rsp ));
+    }
+    
+    public static void sendRedPack() throws BusinessException {
+    	long cashId = 1L;
+    	Logger.info("发送现金红包记录, cashId: %d", cashId);
+    	SendRedpackRspDto rsp = RedPackService.sendRedPack(cashId);
+    	//1.若return_code为FAIL，则通信失败
+    	//2.若return_code为SUCCESS，则有
+    	//	1) result_code为SUCCESS，则发送成功
+    	//	2) result_code为FAIL，则err_code_des为出错信息
+    	renderText(gson.toJson(rsp));
+    }
+    
+    public static void queryRedPack() throws BusinessException {
+    	long cashId = 1L;
+    	Logger.info("查询提现记录, cashId: %d", cashId);
+    	CashInfo ci = CashInfoService.get(cashId);
+    	if(null == ci) {
+    		Logger.error("查询提现记录失败，cashId: %d", cashId);
+    		renderText("查询提现记录失败，cashId: %d", cashId);
+    	}
+    	QueryRedpackRspDto rsp = RedPackService.queryRedPack(cashId);
+    	//1.若return_code为FAIL，则通信失败
+    	//2.若return_code为SUCCESS，则有
+    	//	1) result_code为SUCCESS，则status代表红包状态(如RECEIVED)，对应的enum为RedPackStatus
+    	//	2) result_code为FAIL，则err_code_des为出错信息
+    	renderText(gson.toJson(rsp));
     }
 }

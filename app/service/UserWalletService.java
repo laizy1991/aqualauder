@@ -164,10 +164,10 @@ public class UserWalletService {
             
             CashStatus status = CashStatus.APPLY;
             CashType cashType = CashType.BANK;
-            if(type == CashType.EREDPACKET.getCode()) {
+            if(type == CashType.REDPACK.getCode()) {
                 //发红包
                 status = CashStatus.SUCCESS;
-                cashType = CashType.EREDPACKET;
+                cashType = CashType.REDPACK;
             }
             return CashInfoService.create(userId, cashType, amount, slipNo, status);
         } finally {

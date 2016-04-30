@@ -18,11 +18,11 @@ public class QueryRedpackReqDto {
     private String nonce_str = "";
     private String sign = "";
     
-    public QueryRedpackReqDto(String mch_billno, String bill_type) {
+    public QueryRedpackReqDto(String mch_billno) {
     	setMch_billno(mch_billno);
     	setMch_id(Configure.getMchid());
     	setAppid(Configure.getAppid());
-    	setBill_type(bill_type);
+    	setBill_type("MCHT"); //MCHT:通过商户订单号获取红包信息
     	
     	//随机字符串，不长于32 位
         setNonce_str(RandomStringGenerator.getRandomStringByLength(32));
