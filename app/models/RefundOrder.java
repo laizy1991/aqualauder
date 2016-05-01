@@ -12,10 +12,25 @@ public class RefundOrder extends Model {
 
     @Column(name="order_id")
     private Long orderId;
+    
+    @Column(name="refund_type")
+    private Integer refundTtype;
 
+    @Column(name="transaction_id")
+    private String transactionId;
+    
+    @Column(name="out_trade_no")
+    private String outTradeNo;
+   
+    @Column(name="out_refund_no")
+    private String outRefundNo;
+    
+    @Column(name="refund_id")
+    private String refundId;
+    
     @Column(name="refund_state")
     private Integer refundState;
-
+    
     @Column(name="user_memo")
     private String userMemo;
 
@@ -24,6 +39,9 @@ public class RefundOrder extends Model {
 
     @Column(name="state_history")
     private String stateHistory;
+    
+    @Column(name="op_user_id")
+    private Long opUserId;
 
     @Column(name="create_time")
     private Long createTime;
@@ -31,59 +49,107 @@ public class RefundOrder extends Model {
     @Column(name="update_time")
     private Long updateTime;
 
-    public Long getOrderId() {
-        return orderId;
-    }
+	public Long getOrderId() {
+		return orderId;
+	}
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
 
-    public Integer getRefundState() {
-        return refundState;
-    }
+	public Integer getRefundTtype() {
+		return refundTtype;
+	}
 
-    public void setRefundState(Integer refundState) {
-        this.refundState = refundState;
-    }
+	public void setRefundTtype(Integer refundTtype) {
+		this.refundTtype = refundTtype;
+	}
 
-    public String getUserMemo() {
-        return userMemo;
-    }
+	public String getTransactionId() {
+		return transactionId;
+	}
 
-    public void setUserMemo(String userMemo) {
-        this.userMemo = userMemo;
-    }
+	public void setTransactionId(String transactionId) {
+		this.transactionId = transactionId;
+	}
 
-    public String getSellerMemo() {
-        return sellerMemo;
-    }
+	public String getOutTradeNo() {
+		return outTradeNo;
+	}
 
-    public void setSellerMemo(String sellerMemo) {
-        this.sellerMemo = sellerMemo;
-    }
+	public void setOutTradeNo(String outTradeNo) {
+		this.outTradeNo = outTradeNo;
+	}
 
-    public String getStateHistory() {
-        return stateHistory;
-    }
+	public String getOutRefundNo() {
+		return outRefundNo;
+	}
 
-    public void setStateHistory(String stateHistory) {
-        this.stateHistory = stateHistory;
-    }
+	public void setOutRefundNo(String outRefundNo) {
+		this.outRefundNo = outRefundNo;
+	}
 
-    public Long getCreateTime() {
-        return createTime;
-    }
+	public String getRefundId() {
+		return refundId;
+	}
 
-    public void setCreateTime(Long createTime) {
-        this.createTime = createTime;
-    }
+	public void setRefundId(String refundId) {
+		this.refundId = refundId;
+	}
 
-    public Long getUpdateTime() {
-        return updateTime;
-    }
+	public Integer getRefundState() {
+		return refundState;
+	}
 
-    public void setUpdateTime(Long updateTime) {
-        this.updateTime = updateTime;
-    }
+	public void setRefundState(Integer refundState) {
+		this.refundState = refundState;
+	}
+
+	public String getUserMemo() {
+		return userMemo;
+	}
+
+	public void setUserMemo(String userMemo) {
+		this.userMemo = userMemo;
+	}
+
+	public String getSellerMemo() {
+		return sellerMemo;
+	}
+
+	public void setSellerMemo(String sellerMemo) {
+		this.sellerMemo = sellerMemo;
+	}
+
+	public String getStateHistory() {
+		return stateHistory;
+	}
+
+	public void setStateHistory(String stateHistory) {
+		this.stateHistory = stateHistory;
+	}
+
+	public Long getOpUserId() {
+		return opUserId;
+	}
+
+	public void setOpUserId(Long opUserId) {
+		this.opUserId = opUserId;
+	}
+
+	public Long getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Long createTime) {
+		this.createTime = createTime;
+	}
+
+	public Long getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Long updateTime) {
+		this.updateTime = updateTime;
+	}
 }

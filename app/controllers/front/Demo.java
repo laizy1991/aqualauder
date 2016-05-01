@@ -1,36 +1,46 @@
 package controllers.front;
 
+import javax.persistence.Query;
+
 import models.CashInfo;
 import models.Order;
+import models.RefundOrder;
 import models.User;
 
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import play.Play;
+import play.db.jpa.Model;
 import service.CashInfoService;
 import service.OrderService;
 import service.OutTradeNo;
 import service.RedPackService;
+import service.RefundOrderService;
 import service.UserService;
 import service.wx.WXPay;
 import service.wx.dto.order.OrderQueryReqDto;
 import service.wx.dto.order.OrderQueryRspDto;
-import service.wx.dto.redpack.QueryRedpackReqDto;
 import service.wx.dto.redpack.QueryRedpackRspDto;
 import service.wx.dto.redpack.SendRedpackRspDto;
+import service.wx.dto.refund.QueryRefundReqDto;
+import service.wx.dto.refund.QueryRefundRspDto;
+import service.wx.dto.refund.SendRefundReqDto;
+import service.wx.dto.refund.SendRefundRspDto;
 import service.wx.service.user.WxUserService;
 import utils.IdGenerator;
 import utils.NumberUtil;
 
 import com.google.gson.Gson;
+
 import common.constants.OrderStatus;
 import common.constants.PayType;
+import common.constants.RefundStatus;
 import common.constants.wx.PayStatus;
 import common.constants.wx.TradeStatus;
 import common.constants.wx.WxCallbackStatus;
+import common.constants.wx.WxRefundStatus;
 import common.core.FrontController;
-
 import exception.BusinessException;
 
 
@@ -157,5 +167,87 @@ public class Demo extends FrontController {
     	//	1) result_code为SUCCESS，则status代表红包状态(如RECEIVED)，对应的enum为RedPackStatus
     	//	2) result_code为FAIL，则err_code_des为出错信息
     	renderText(gson.toJson(rsp));
+    }
+    
+    public static void queryRefundOrder() throws BusinessException {
+    	long id = 1L;
+    	RefundOrder ro = RefundOrderService.get(id);
+    	if(null == ro) {
+    		Logger.error("查询退款记录失败，refundId: %d", id);
+    		renderText("查询退款记录失败，refundId: %d", id);
+    	}
+    	if(ro.getRefundState() == RefundStatus.SUCCESS.getCode() ||
+    			ro.getRefundState() == RefundStatus.REFUSE.getCode() ||
+    			ro.getRefundState() == RefundStatus.CANCEL.getCode() ||
+				ro.getRefundState() == RefundStatus.NOTREFUND.getCode()) {
+    		Logger.info("该笔订单状态为%s, 禁止退款，refundId: %d", RefundStatus.resolveType(ro.getRefundState()).getDesc(),
+    				id);
+    		renderText("该笔订单状态为%s, 禁止退款，refundId: %d", RefundStatus.resolveType(ro.getRefundState()).getDesc(),
+    				id);
+    	}
+    	QueryRefundReqDto req = new QueryRefundReqDto(ro.getTransactionId());
+    	QueryRefundRspDto rsp = WXPay.queryRefundServcie(req);
+    	if(null != rsp && rsp.getReturn_code().equals("SUCCESS") && rsp.getResult_code().equals("SUCCESS")) {
+    		Logger.info("开始更新退款记录状态，refundId: %s", id);
+    		String updateSql = "UPDATE `refund_order` SET refund_state=?,update_time=? WHERE id=?";
+        	Query query = Model.em().createNativeQuery(updateSql);
+        	query.setParameter(1, WxRefundStatus.getRefundStatus(rsp.getRefund_status_0()).getStatus());
+        	query.setParameter(2, System.currentTimeMillis());
+        	query.setParameter(3, id);
+        	if(query.executeUpdate() > 0) {
+        		Logger.info("更新退款订单状态和时间成功，id: %d", id);
+        		renderText("更新退款订单状态和时间成功，id: %d", id);
+        	} else {
+        		Logger.error("更新退款订单状态和时间失败，id: %d", id);
+        		renderText("更新退款订单状态和时间失败，id: %d", id);
+        	}
+    	} else {
+    		renderText(gson.toJson(rsp));
+    	}
+    }
+    
+    public static void sendRefundOrder() throws BusinessException {
+    	long id = 1L;
+    	//String transaction_id, String out_refund_no, Integer total_fee, Integer refund_fee, String op_user_id
+    	RefundOrder ro = RefundOrderService.get(id);
+    	if(null == ro) {
+    		Logger.error("查询退款记录失败，refundId: %d", id);
+    		renderText("查询退款记录失败，refundId: %d", id);
+    	}
+    	if(ro.getRefundState() == RefundStatus.ING.getCode() ||
+    			ro.getRefundState() == RefundStatus.SUCCESS.getCode() ||
+    			ro.getRefundState() == RefundStatus.REFUSE.getCode() ||
+    			ro.getRefundState() == RefundStatus.CANCEL.getCode() ||
+				ro.getRefundState() == RefundStatus.NOTREFUND.getCode()) {
+    		Logger.info("该笔订单状态为%s, 禁止退款，refundId: %d", RefundStatus.resolveType(ro.getRefundState()).getDesc(),
+    				id);
+    		renderText("该笔订单状态为%s, 禁止退款，refundId: %d", RefundStatus.resolveType(ro.getRefundState()).getDesc(),
+    				id);
+    	}
+    	Order order = OrderService.get(ro.getOrderId());
+    	if(null == order) {
+    		Logger.error("查询订单记录失败，orderId: %d", ro.getOrderId());
+    		renderText("查询订单记录失败，orderId: %d", ro.getOrderId());
+    	}
+    	SendRefundReqDto req = new SendRefundReqDto(ro.getTransactionId(), ro.getOutTradeNo(), 
+    				order.getTotalFee(), order.getTotalFee(), String.valueOf(order.getUserId()));
+    	SendRefundRspDto rsp = WXPay.sendRefundServcie(req);
+    	if(null != rsp && rsp.getReturn_code().equals("SUCCESS") && rsp.getResult_code().equals("SUCCESS")) {
+    		Logger.info("开始更新退款记录，refundId: %s", id);
+    		String updateSql = "UPDATE `refund_order` SET refund_id=?,update_time=? WHERE id=?";
+        	Query query = Model.em().createNativeQuery(updateSql);
+        	query.setParameter(1, rsp.getRefund_id());
+        	query.setParameter(2, System.currentTimeMillis());
+        	query.setParameter(3, id);
+        	if(query.executeUpdate() > 0) {
+        		Logger.info("更新退款订单支付平台退款单号和时间成功，refundId: %d", id);
+        		renderText("更新退款订单支付平台退款单号和时间成功，refundId: %d", id);
+        	} else {
+        		Logger.error("更新退款订单支付平台退款单号和时间失败，refundId: %d", id);
+        		renderText("更新退款订单支付平台退款单号和时间失败，refundId: %d", id);
+        	}
+    	} else {
+    		renderText(gson.toJson(rsp));
+    	}
     }
 }

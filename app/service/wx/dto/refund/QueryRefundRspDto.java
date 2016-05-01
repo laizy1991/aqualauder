@@ -12,22 +12,24 @@ public class QueryRefundRspDto {
     private String err_code_des = "";
     private String appid = "";
     private String mch_id = "";
+    private String device_info = "";
     private String nonce_str = "";
     private String sign = "";
 
 
-    private String device_info = "";
     private String transaction_id = "";
     private String out_trade_no = "";
+    private Integer total_fee = 0;
+    private Integer cash_fee = 0;
     private int refund_count = 0;
 
     //TODO 这里要用对象来装，因为有可能出现多个数据
-    private String out_refund_no = "";
-    private String refund_id = "";
-    private String refund_channel = "";
-    private String refund_fee = "";
-    private String coupon_refund_fee = "";
-    private String refund_status = "";
+    private String out_refund_no_0 = "";
+    private String refund_id_0 = "";
+    private String refund_channel_0 = "";
+    private String refund_fee_0 = "";
+    private String coupon_refund_fee_0 = "";
+    private String refund_status_0 = "";
 
     public String getReturn_code() {
         return return_code;
@@ -133,52 +135,68 @@ public class QueryRefundRspDto {
         this.refund_count = refund_count;
     }
 
-    public String getOut_refund_no() {
-        return out_refund_no;
-    }
+	public Integer getTotal_fee() {
+		return total_fee;
+	}
 
-    public void setOut_refund_no(String out_refund_no) {
-        this.out_refund_no = out_refund_no;
-    }
+	public void setTotal_fee(Integer total_fee) {
+		this.total_fee = total_fee;
+	}
 
-    public String getRefund_id() {
-        return refund_id;
-    }
+	public Integer getCash_fee() {
+		return cash_fee;
+	}
 
-    public void setRefund_id(String refund_id) {
-        this.refund_id = refund_id;
-    }
+	public void setCash_fee(Integer cash_fee) {
+		this.cash_fee = cash_fee;
+	}
 
-    public String getRefund_channel() {
-        return refund_channel;
-    }
+	public String getOut_refund_no_0() {
+		return out_refund_no_0;
+	}
 
-    public void setRefund_channel(String refund_channel) {
-        this.refund_channel = refund_channel;
-    }
+	public void setOut_refund_no_0(String out_refund_no_0) {
+		this.out_refund_no_0 = out_refund_no_0;
+	}
 
-    public String getRefund_fee() {
-        return refund_fee;
-    }
+	public String getRefund_id_0() {
+		return refund_id_0;
+	}
 
-    public void setRefund_fee(String refund_fee) {
-        this.refund_fee = refund_fee;
-    }
+	public void setRefund_id_0(String refund_id_0) {
+		this.refund_id_0 = refund_id_0;
+	}
 
-    public String getCoupon_refund_fee() {
-        return coupon_refund_fee;
-    }
+	public String getRefund_channel_0() {
+		return refund_channel_0;
+	}
 
-    public void setCoupon_refund_fee(String coupon_refund_fee) {
-        this.coupon_refund_fee = coupon_refund_fee;
-    }
+	public void setRefund_channel_0(String refund_channel_0) {
+		this.refund_channel_0 = refund_channel_0;
+	}
 
-    public String getRefund_status() {
-        return refund_status;
-    }
+	public String getRefund_fee_0() {
+		return refund_fee_0;
+	}
 
-    public void setRefund_status(String refund_status) {
-        this.refund_status = refund_status;
-    }
-    
+	public void setRefund_fee_0(String refund_fee_0) {
+		this.refund_fee_0 = refund_fee_0;
+	}
+
+	public String getCoupon_refund_fee_0() {
+		return coupon_refund_fee_0;
+	}
+
+	public void setCoupon_refund_fee_0(String coupon_refund_fee_0) {
+		this.coupon_refund_fee_0 = coupon_refund_fee_0;
+	}
+
+	public String getRefund_status_0() {
+		return refund_status_0;
+	}
+
+	public void setRefund_status_0(String refund_status_0) {
+		this.refund_status_0 = refund_status_0;
+	}
+
 }

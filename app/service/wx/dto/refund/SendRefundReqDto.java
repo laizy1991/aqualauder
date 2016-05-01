@@ -9,19 +9,22 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 public class SendRefundReqDto {
     //每个字段具体的意思请查看API文档
     private String appid = "";
     private String mch_id = "";
     private String nonce_str = "";
+    private String device_info = "";	//非必填
     private String sign = "";
-    private String out_trade_no = "";
+    private String transaction_id = "";
     private String out_refund_no = "";	//商户系统内部的退款单号，商户系统内部唯一，同一退款单号多次请求只退一笔
     private Integer total_fee = 0;	//订单总金额，单位为分
     private Integer refund_fee = 0;  //退款总金额，单位为分
     private String op_user_id = "";	//操作员帐号, 默认为商户号
 
-    public SendRefundReqDto(String out_trade_no, String out_refund_no, Integer total_fee, Integer refund_fee,
+    public SendRefundReqDto(String transaction_id, String out_refund_no, Integer total_fee, Integer refund_fee,
     		String op_user_id){
 
         //微信分配的公众号ID（开通公众号之后可以获取到）
@@ -30,11 +33,15 @@ public class SendRefundReqDto {
         //微信支付分配的商户号ID（开通公众号的微信支付功能之后可以获取到）
         setMch_id(Configure.getMchid());
         
-        setOut_trade_no(out_trade_no);
+        setTransaction_id(transaction_id);
         setOut_refund_no(out_refund_no);
         setTotal_fee(total_fee);
         setRefund_fee(refund_fee);
+        
         setOp_user_id(op_user_id);
+        if(StringUtils.isBlank(op_user_id)) {
+        	setOp_user_id(Configure.getMchid());
+        }
         
         //随机字符串，不长于32 位
         setNonce_str(RandomStringGenerator.getRandomStringByLength(32));
@@ -95,12 +102,12 @@ public class SendRefundReqDto {
 		this.sign = sign;
 	}
 
-	public String getOut_trade_no() {
-		return out_trade_no;
+	public String getTransaction_id() {
+		return transaction_id;
 	}
 
-	public void setOut_trade_no(String out_trade_no) {
-		this.out_trade_no = out_trade_no;
+	public void setTransaction_id(String transaction_id) {
+		this.transaction_id = transaction_id;
 	}
 
 	public String getOut_refund_no() {
@@ -133,5 +140,13 @@ public class SendRefundReqDto {
 
 	public void setOp_user_id(String op_user_id) {
 		this.op_user_id = op_user_id;
+	}
+
+	public String getDevice_info() {
+		return device_info;
+	}
+
+	public void setDevice_info(String device_info) {
+		this.device_info = device_info;
 	}
 }

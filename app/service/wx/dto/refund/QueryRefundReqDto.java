@@ -16,7 +16,7 @@ public class QueryRefundReqDto {
     private String device_info = "";
     private String nonce_str = "";
     private String sign = "";
-    private String out_refund_no = "";	//以下四选一，暂选商户退款单号
+    private String transaction_id = "";	//以下四选一，暂选微信订单号
     //微信订单号		transaction_id	String(32)		微信订单号
     //商户订单号		out_trade_no	String(32)		商户系统内部的订单号
     //商户退款单号	out_refund_no	String(32)		商户侧传给微信的退款单号
@@ -26,7 +26,7 @@ public class QueryRefundReqDto {
      * 请求退款查询服务
      * @param device_info 微信支付分配的终端设备号，与下单一致
      */
-    public QueryRefundReqDto(String device_info, String out_refund_no) {
+    public QueryRefundReqDto(String transaction_id) {
 
         //微信分配的公众号ID（开通公众号之后可以获取到）
         setAppid(Configure.getAppid());
@@ -34,7 +34,7 @@ public class QueryRefundReqDto {
         //微信支付分配的商户号ID（开通公众号的微信支付功能之后可以获取到）
         setMch_id(Configure.getMchid());
         setDevice_info(device_info);
-        setOut_refund_no(out_refund_no);
+        setTransaction_id(transaction_id);
         
         //随机字符串，不长于32 位
         setNonce_str(RandomStringGenerator.getRandomStringByLength(32));
@@ -79,20 +79,20 @@ public class QueryRefundReqDto {
 		this.mch_id = mch_id;
 	}
 
-	public String getNonce_str() {
-		return nonce_str;
-	}
-
-	public void setNonce_str(String nonce_str) {
-		this.nonce_str = nonce_str;
-	}
-
 	public String getDevice_info() {
 		return device_info;
 	}
 
 	public void setDevice_info(String device_info) {
 		this.device_info = device_info;
+	}
+
+	public String getNonce_str() {
+		return nonce_str;
+	}
+
+	public void setNonce_str(String nonce_str) {
+		this.nonce_str = nonce_str;
 	}
 
 	public String getSign() {
@@ -103,11 +103,11 @@ public class QueryRefundReqDto {
 		this.sign = sign;
 	}
 
-	public String getOut_refund_no() {
-		return out_refund_no;
+	public String getTransaction_id() {
+		return transaction_id;
 	}
 
-	public void setOut_refund_no(String out_refund_no) {
-		this.out_refund_no = out_refund_no;
+	public void setTransaction_id(String transaction_id) {
+		this.transaction_id = transaction_id;
 	}
 }
