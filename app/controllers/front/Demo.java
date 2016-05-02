@@ -47,16 +47,11 @@ import exception.BusinessException;
 public class Demo extends FrontController {
 	
 	public static Gson gson = new Gson();
-	public static void test() {
-		String jsRequestBody = "";
-		double totalFee = 0.01;
-		Order order = OrderService.get(1462009398678000000L);
-		int payFail = PayStatus.PAY_FAIL.getStatus();
-		int paySucc = PayStatus.PAY_SUCC.getStatus();
-		int payCancel = PayStatus.PAY_CANCEL.getStatus();
-		render("/Front/Pay/wxPay.html", jsRequestBody, totalFee, order, payFail, paySucc, payCancel);
-	}
 	
+	/**
+	 * 公众号自定义菜单进入后获取用户信息
+	 * @param code
+	 */
     public static void getUserInfo(String code) {
     	if(StringUtils.isBlank(code)) {
     		renderText("code为空");
@@ -142,6 +137,10 @@ public class Demo extends FrontController {
 				gson.toJson(order), gson.toJson(rsp ));
     }
     
+    /**
+     * 发送现金红包
+     * @throws BusinessException
+     */
     public static void sendRedPack() throws BusinessException {
     	long cashId = 1L;
     	Logger.info("发送现金红包记录, cashId: %d", cashId);
@@ -153,6 +152,10 @@ public class Demo extends FrontController {
     	renderText(gson.toJson(rsp));
     }
     
+    /**
+     * 查询现金红包状态
+     * @throws BusinessException
+     */
     public static void queryRedPack() throws BusinessException {
     	long cashId = 1L;
     	Logger.info("查询提现记录, cashId: %d", cashId);
@@ -169,6 +172,10 @@ public class Demo extends FrontController {
     	renderText(gson.toJson(rsp));
     }
     
+    /**
+     * 查询退款状态
+     * @throws BusinessException
+     */
     public static void queryRefundOrder() throws BusinessException {
     	long id = 1L;
     	RefundOrder ro = RefundOrderService.get(id);
@@ -207,6 +214,10 @@ public class Demo extends FrontController {
     	}
     }
     
+    /**
+     * 发送退款请求
+     * @throws BusinessException
+     */
     public static void sendRefundOrder() throws BusinessException {
     	long id = 1L;
     	//String transaction_id, String out_refund_no, Integer total_fee, Integer refund_fee, String op_user_id
