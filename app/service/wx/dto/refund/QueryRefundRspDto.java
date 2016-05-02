@@ -30,8 +30,17 @@ public class QueryRefundRspDto {
     private String refund_fee_0 = "";
     private String coupon_refund_fee_0 = "";
     private String refund_status_0 = "";
+    private String refund_recv_accout_0 = "";
 
-    public String getReturn_code() {
+    public String getRefund_recv_accout_0() {
+		return refund_recv_accout_0;
+	}
+
+	public void setRefund_recv_accout_0(String refund_recv_accout_0) {
+		this.refund_recv_accout_0 = refund_recv_accout_0;
+	}
+
+	public String getReturn_code() {
         return return_code;
     }
 

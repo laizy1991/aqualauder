@@ -189,11 +189,12 @@ public class Demo extends FrontController {
     	QueryRefundRspDto rsp = WXPay.queryRefundServcie(req);
     	if(null != rsp && rsp.getReturn_code().equals("SUCCESS") && rsp.getResult_code().equals("SUCCESS")) {
     		Logger.info("开始更新退款记录状态，refundId: %s", id);
-    		String updateSql = "UPDATE `refund_order` SET refund_state=?,update_time=? WHERE id=?";
+    		String updateSql = "UPDATE `refund_order` SET refund_state=?,update_time=?,refund_recv_accout=? WHERE id=?";
         	Query query = Model.em().createNativeQuery(updateSql);
         	query.setParameter(1, WxRefundStatus.getRefundStatus(rsp.getRefund_status_0()).getStatus());
         	query.setParameter(2, System.currentTimeMillis());
-        	query.setParameter(3, id);
+        	query.setParameter(3, rsp.getRefund_recv_accout_0());
+        	query.setParameter(4, id);
         	if(query.executeUpdate() > 0) {
         		Logger.info("更新退款订单状态和时间成功，id: %d", id);
         		renderText("更新退款订单状态和时间成功，id: %d", id);

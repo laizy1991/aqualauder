@@ -31,6 +31,9 @@ public class RefundOrder extends Model {
     @Column(name="refund_state")
     private Integer refundState;
     
+    @Column(name="refund_recv_accout")
+    private String refundRecvAccout;
+    
     @Column(name="user_memo")
     private String userMemo;
 
@@ -151,5 +154,13 @@ public class RefundOrder extends Model {
 
 	public void setUpdateTime(Long updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getRefundRecvAccout() {
+		return refundRecvAccout;
+	}
+
+	public void setRefundRecvAccout(String refundRecvAccout) {
+		this.refundRecvAccout = refundRecvAccout;
 	}
 }
