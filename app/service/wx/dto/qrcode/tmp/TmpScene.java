@@ -1,9 +1,9 @@
-package service.wx.dto.qrcode;
+package service.wx.dto.qrcode.tmp;
 
-public class Scene {
+public class TmpScene {
 	private Integer scene_id = 0;
 
-	public Scene(Integer scene_id) {
+	public TmpScene(Integer scene_id) {
 		this.scene_id = new Integer(scene_id);
 	}
 	

@@ -4,9 +4,9 @@ import service.wx.dto.order.OrderQueryReqDto;
 import service.wx.dto.order.OrderQueryRspDto;
 import service.wx.dto.order.UnifiedOrderReqDto;
 import service.wx.dto.order.UnifiedOrderRspDto;
-import service.wx.dto.qrcode.CreateLimitQrCodeReqDto;
 import service.wx.dto.qrcode.CreateQrCodeRspDto;
-import service.wx.dto.qrcode.CreateTmpQrCodeReqDto;
+import service.wx.dto.qrcode.limit.CreateLimitQrCodeReqDto;
+import service.wx.dto.qrcode.tmp.CreateTmpQrCodeReqDto;
 import service.wx.dto.redpack.QueryRedpackReqDto;
 import service.wx.dto.redpack.QueryRedpackRspDto;
 import service.wx.dto.redpack.SendRedpackReqDto;
@@ -54,7 +54,7 @@ public class WXPay {
     }
     
     //生成永久二维码，返回的是一张图片
-    public static String CreateLimitQrCodeService(CreateLimitQrCodeReqDto createLimitQrCodeReqDto)
+    public static CreateQrCodeRspDto CreateLimitQrCodeService(CreateLimitQrCodeReqDto createLimitQrCodeReqDto)
     		throws BusinessException {
     	return new CreateLimitQrCodeService().request(createLimitQrCodeReqDto);
     }
@@ -68,6 +68,5 @@ public class WXPay {
     public static QueryRefundRspDto queryRefundServcie(QueryRefundReqDto queryRefundReqDto) throws BusinessException {
     	return new QueryRefundService().request(queryRefundReqDto);
     }
-    //TODO 2016-04-23 23:30 做到这里，二维码和退款还没测试，查询退款中的RedDto没写完
 
 }

@@ -29,6 +29,9 @@ public class Distributor extends GenericModel {
     @Column(name="link")
     private String link;
     
+    @Column(name="qrcode_type")
+    private Integer qrcodeType;
+    
     @Column(name="qrcode_url")
     private String qrcodeUrl;
     
@@ -119,5 +122,13 @@ public class Distributor extends GenericModel {
 
 	public void setQrcodePath(String qrcodePath) {
 		this.qrcodePath = qrcodePath;
+	}
+
+	public Integer getQrcodeType() {
+		return qrcodeType;
+	}
+
+	public void setQrcodeType(Integer qrcodeType) {
+		this.qrcodeType = qrcodeType;
 	}
 }

@@ -24,7 +24,8 @@ import service.wx.WXPay;
 import service.wx.dto.order.OrderQueryReqDto;
 import service.wx.dto.order.OrderQueryRspDto;
 import service.wx.dto.qrcode.CreateQrCodeRspDto;
-import service.wx.dto.qrcode.CreateTmpQrCodeReqDto;
+import service.wx.dto.qrcode.limit.CreateLimitQrCodeReqDto;
+import service.wx.dto.qrcode.tmp.CreateTmpQrCodeReqDto;
 import service.wx.dto.redpack.QueryRedpackRspDto;
 import service.wx.dto.redpack.SendRedpackRspDto;
 import service.wx.dto.refund.QueryRefundReqDto;
@@ -40,6 +41,7 @@ import common.constants.OrderStatus;
 import common.constants.PayType;
 import common.constants.RefundStatus;
 import common.constants.wx.PayStatus;
+import common.constants.wx.QrCodeType;
 import common.constants.wx.TradeStatus;
 import common.constants.wx.WxCallbackStatus;
 import common.constants.wx.WxRefundStatus;
@@ -224,7 +226,6 @@ public class Demo extends FrontController {
      */
     public static void sendRefundOrder() throws BusinessException {
     	long id = 1L;
-    	//String transaction_id, String out_refund_no, Integer total_fee, Integer refund_fee, String op_user_id
     	RefundOrder ro = RefundOrderService.get(id);
     	if(null == ro) {
     		Logger.error("查询退款记录失败，refundId: %d", id);
@@ -267,6 +268,10 @@ public class Demo extends FrontController {
     	}
     }
     
+    /**
+     * 生成临时二维码，CreateTmpQrCodeReqDto中的scene_id为用户ID
+     * @throws BusinessException
+     */
     public static void createTmpQrCode() throws BusinessException {
     	int userId = 10010;
     	User user = UserService.get(userId);
@@ -290,12 +295,52 @@ public class Demo extends FrontController {
     	dis.setRealName("林守煌");
     	dis.setJoinTime(System.currentTimeMillis());
     	dis.setLink("");
+    	dis.setQrcodeType(QrCodeType.TMP.getType());
     	dis.setQrcodeUrl(rsp.getUrl());
     	dis.setQrcodePath(rsp.getPicRelPath());
     	dis.setCreateTime(System.currentTimeMillis());
     	dis.setUpdateTime(System.currentTimeMillis());
     	
-    	if(DistributorService.checkAndBecomeDistributor(userId)) {
+    	if(DistributorService.add(dis)) {
+    		renderText("创建用户推广记录成功，userId: %d", userId);
+    	}
+    	renderText("创建用户推广记录失败，userId: %d", userId);
+    }
+    
+    /**
+     * 生成永久二维码，CreateLimitQrCodeReqDto中的scene_str为用户ID
+     * @throws BusinessException
+     */
+    public static void createLimitQrCode() throws BusinessException {
+    	int userId = 10010;
+    	User user = UserService.get(userId);
+    	if(null == user) {
+    		Logger.error("查询用户记录失败，userId: %d", userId);
+    		renderText("查询用户记录失败，userId: %d", userId);
+    	}
+    	
+    	
+    	CreateLimitQrCodeReqDto req = new CreateLimitQrCodeReqDto(user.getOpenId());
+    	CreateQrCodeRspDto rsp = WXPay.CreateLimitQrCodeService(req);
+    	if(null == rsp || rsp.isSuccess() == false) {
+    		Logger.error("获取用户二维码图片失败，userId: %d", userId);
+    		renderText("获取用户二维码图片失败，userId: %d", userId);
+    	}
+    	//将二维码地址和本地相对路径入库
+    	Distributor dis = new Distributor();
+    	dis.setUserId(userId);
+    	dis.setType(0);
+    	dis.setStatus(1);
+    	dis.setRealName("林守煌");
+    	dis.setJoinTime(System.currentTimeMillis());
+    	dis.setLink("");
+    	dis.setQrcodeType(QrCodeType.LIMIT.getType());
+    	dis.setQrcodeUrl(rsp.getUrl());
+    	dis.setQrcodePath(rsp.getPicRelPath());
+    	dis.setCreateTime(System.currentTimeMillis());
+    	dis.setUpdateTime(System.currentTimeMillis());
+    	
+    	if(DistributorService.add(dis)) {
     		renderText("创建用户推广记录成功，userId: %d", userId);
     	}
     	renderText("创建用户推广记录失败，userId: %d", userId);

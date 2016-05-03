@@ -14,7 +14,7 @@ import play.Logger;
 import play.Play;
 import service.wx.common.Configure;
 import service.wx.dto.qrcode.CreateQrCodeRspDto;
-import service.wx.dto.qrcode.CreateTmpQrCodeReqDto;
+import service.wx.dto.qrcode.tmp.CreateTmpQrCodeReqDto;
 import utils.FileTypeUtil;
 import utils.WxUtil;
 import utils.http.HttpRequester;
@@ -25,14 +25,12 @@ import com.google.gson.Gson;
 import exception.BusinessException;
 
 public class CreateTmpQrCodeService {
-
+	public static Gson gson = new Gson();
     public CreateTmpQrCodeService() {
     }
 
     /**
      * 创建临时二维码
-     * @return 返回本地相对二维码路径
-     * @throws Exception
      */
     public CreateQrCodeRspDto request(CreateTmpQrCodeReqDto createTmpQrCodeReqDto) throws BusinessException {
     	if(null == createTmpQrCodeReqDto.getAction_info().getScene().getScene_id() || 
@@ -42,7 +40,7 @@ public class CreateTmpQrCodeService {
     	String responseString = "";
     	try {
     		String url = String.format(new String(Configure.CREATE_QRCODE_API), WxUtil.getAccessToken());
-    		String params = new Gson().toJson(createTmpQrCodeReqDto);
+    		String params = gson.toJson(createTmpQrCodeReqDto);
     		
     		HttpRespons rsp = HttpRequester.sendPost(url, params);
     		if(null == rsp || StringUtils.isBlank(rsp.getContent())) {
@@ -57,8 +55,7 @@ public class CreateTmpQrCodeService {
     	if(StringUtils.isBlank(responseString)) {
     		throw new BusinessException("请求微信创建临时二维码接口返回数据为空");
     	}
-        //将从API返回的XML数据映射到Java对象
-    	CreateQrCodeRspDto rsp = new CreateQrCodeRspDto();;
+    	CreateQrCodeRspDto rsp = new CreateQrCodeRspDto();
     	JSONObject json = JSONObject.fromObject(responseString);
     	if(!StringUtils.isBlank(json.optString("errcode"))) {
     		rsp.setSuccess(false);
@@ -66,7 +63,7 @@ public class CreateTmpQrCodeService {
     		rsp.setErrmsg(json.optString("errmsg"));
     		return rsp;
     	} else {
-    		Logger.info("创建临时二维码API成功返回数据");
+    		Logger.info("请求创建临时二维码API成功返回数据, %s", gson.toJson(json));
     		rsp.setSuccess(true);
     		rsp.setExpire_seconds(json.optInt("expire_seconds"));
     		rsp.setTicket(json.optString("ticket"));
@@ -87,7 +84,7 @@ public class CreateTmpQrCodeService {
     		
     		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/");
     		String dateDir = sdf.format(new Date());
-    		String picRelPath =  dateDir + createTmpQrCodeReqDto.getAction_info().getScene().getScene_id();
+    		String picRelPath =  dateDir + "tmp_" + createTmpQrCodeReqDto.getAction_info().getScene().getScene_id();
     		String picAbsPath = picPrefixDir + picRelPath;
     		String picAbsDir = picPrefixDir + dateDir;
     		
@@ -110,7 +107,7 @@ public class CreateTmpQrCodeService {
     			Logger.error("下载二维码图片失败");
     			throw new BusinessException("请求微信下载二维码图片发生错误");
     		}
-    		//准备更新图片命名
+    		//准备重命名图片
     		String fileType = FileTypeUtil.getImageFileType(imageFile);
     		if(StringUtils.isNotBlank(fileType)) {
     			fileType = fileType.toLowerCase();
@@ -119,12 +116,10 @@ public class CreateTmpQrCodeService {
     			File newFile = new File(newFileAbsPath);
     			if(imageFile.renameTo(newFile)) {
     				rsp.setPicRelPath(newFileRelPath);
-    				Logger.info("将二维码图片重命名成功");
+    				Logger.info("将二维码图片重命名成功, 重命名后文件路径: %s", newFileAbsPath);
     			} else {
-    				Logger.error("将二维码图片重命名失败");
+    				Logger.error("将二维码图片重命名失败，文件路径：%s", picAbsPath);
     			}
-    		} else {
-    			Logger.error("将二维码图片重命名失败");
     		}
     	}
 		return rsp;

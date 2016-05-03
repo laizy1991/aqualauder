@@ -285,7 +285,6 @@ public class HttpRequester {
             byte[] buffer = new byte[1024];
             while ((byteread = inStream.read(buffer)) != -1) {
                 bytesum += byteread;
-                System.out.println(bytesum);
                 fs.write(buffer, 0, byteread);
             }
             //查看本地文件是否存在
