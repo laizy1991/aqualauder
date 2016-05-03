@@ -3,13 +3,23 @@ package service.wx.dto.qrcode;
 
 public class CreateTmpQrCodeReqDto {
     //每个字段具体的意思请查看API文档
-    private Integer expire_seconds = 2592000;  //默认为30天
+    private Integer expire_seconds = 0;  
     private String action_name = "QR_SCENE";   //QR_SCENE为临时,QR_LIMIT_SCENE为永久,QR_LIMIT_STR_SCENE为永久的字符串参数值
     private ActionInfo action_info  = null;
     
-    public CreateTmpQrCodeReqDto(Integer expire_seconds, Integer scene_id){
+    /**
+     * 创建临时二维码请求req
+     * @param expire_seconds 过期时间，以秒为单位，不填，则默认有效期为30秒。
+     * @param scene_id 场景ID，临时二维码用户userID代替(32位非0整型)
+     */
+    public CreateTmpQrCodeReqDto(Integer expire_seconds, Integer scene_id) {
     	this.expire_seconds = expire_seconds;
-    	action_info = new ActionInfo(scene_id);
+    	this.action_info = new ActionInfo(scene_id);
+    }
+    
+    public CreateTmpQrCodeReqDto(Integer scene_id) {
+    	this.expire_seconds = 2592000;	//默认为30天
+    	this.action_info = new ActionInfo(scene_id);
     }
 
 	public Integer getExpire_seconds() {

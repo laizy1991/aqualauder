@@ -14,6 +14,8 @@ import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Vector;
+
+import org.apache.commons.lang.StringUtils;
  
 /**
  * HTTP请求对象
@@ -94,6 +96,37 @@ public class HttpRequester {
 	public static HttpRespons sendPost(String urlString, Map<String, String> params)
 			throws IOException {
 		return send(urlString, "POST", params, null);
+	}
+	
+	/**
+	 * 发送POST请求
+	 * 
+	 * @param urlString
+	 *            URL地址
+	 * @param param 参数
+	 * @return 响应对象
+	 * @throws IOException
+	 */
+	public static HttpRespons sendPost(String urlString, String params)
+			throws IOException {
+		HttpURLConnection urlConnection = null;
+		
+		URL url = new URL(urlString);
+		urlConnection = (HttpURLConnection) url.openConnection();
+		
+		urlConnection.setRequestMethod("POST");
+		urlConnection.setDoOutput(true);
+		urlConnection.setDoInput(true);
+		urlConnection.setUseCaches(false);
+		
+		
+		if (!StringUtils.isBlank(params)) {
+			urlConnection.getOutputStream().write(params.toString().getBytes());
+			urlConnection.getOutputStream().flush();
+			urlConnection.getOutputStream().close();
+		}
+		
+		return makeContent(urlString, urlConnection);
 	}
  
 	/**

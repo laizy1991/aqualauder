@@ -3,6 +3,7 @@ package controllers.front;
 import javax.persistence.Query;
 
 import models.CashInfo;
+import models.Distributor;
 import models.Order;
 import models.RefundOrder;
 import models.User;
@@ -13,6 +14,7 @@ import play.Logger;
 import play.Play;
 import play.db.jpa.Model;
 import service.CashInfoService;
+import service.DistributorService;
 import service.OrderService;
 import service.OutTradeNo;
 import service.RedPackService;
@@ -21,6 +23,8 @@ import service.UserService;
 import service.wx.WXPay;
 import service.wx.dto.order.OrderQueryReqDto;
 import service.wx.dto.order.OrderQueryRspDto;
+import service.wx.dto.qrcode.CreateQrCodeRspDto;
+import service.wx.dto.qrcode.CreateTmpQrCodeReqDto;
 import service.wx.dto.redpack.QueryRedpackRspDto;
 import service.wx.dto.redpack.SendRedpackRspDto;
 import service.wx.dto.refund.QueryRefundReqDto;
@@ -32,7 +36,6 @@ import utils.IdGenerator;
 import utils.NumberUtil;
 
 import com.google.gson.Gson;
-
 import common.constants.OrderStatus;
 import common.constants.PayType;
 import common.constants.RefundStatus;
@@ -41,6 +44,7 @@ import common.constants.wx.TradeStatus;
 import common.constants.wx.WxCallbackStatus;
 import common.constants.wx.WxRefundStatus;
 import common.core.FrontController;
+
 import exception.BusinessException;
 
 
@@ -261,5 +265,40 @@ public class Demo extends FrontController {
     	} else {
     		renderText(gson.toJson(rsp));
     	}
+    }
+    
+    public static void createTmpQrCode() throws BusinessException {
+    	int userId = 10010;
+    	User user = UserService.get(userId);
+    	if(null == user) {
+    		Logger.error("查询用户记录失败，userId: %d", userId);
+    		renderText("查询用户记录失败，userId: %d", userId);
+    	}
+    	
+    	
+    	CreateTmpQrCodeReqDto req = new CreateTmpQrCodeReqDto(user.getUserId());
+    	CreateQrCodeRspDto rsp = WXPay.CreateTmpQrCodeService(req);
+    	if(null == rsp || rsp.isSuccess() == false) {
+    		Logger.error("获取用户二维码图片失败，userId: %d", userId);
+    		renderText("获取用户二维码图片失败，userId: %d", userId);
+    	}
+    	//将二维码地址和本地相对路径入库
+    	Distributor dis = new Distributor();
+    	dis.setUserId(userId);
+    	dis.setType(0);
+    	dis.setStatus(1);
+    	dis.setRealName("林守煌");
+    	dis.setJoinTime(System.currentTimeMillis());
+    	dis.setLink("");
+    	dis.setQrcodeUrl(rsp.getUrl());
+    	dis.setQrcodePath(rsp.getPicRelPath());
+    	dis.setCreateTime(System.currentTimeMillis());
+    	dis.setUpdateTime(System.currentTimeMillis());
+    	
+    	if(DistributorService.checkAndBecomeDistributor(userId)) {
+    		renderText("创建用户推广记录成功，userId: %d", userId);
+    	}
+    	renderText("创建用户推广记录失败，userId: %d", userId);
+    	
     }
 }

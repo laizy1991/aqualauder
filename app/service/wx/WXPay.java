@@ -5,6 +5,7 @@ import service.wx.dto.order.OrderQueryRspDto;
 import service.wx.dto.order.UnifiedOrderReqDto;
 import service.wx.dto.order.UnifiedOrderRspDto;
 import service.wx.dto.qrcode.CreateLimitQrCodeReqDto;
+import service.wx.dto.qrcode.CreateQrCodeRspDto;
 import service.wx.dto.qrcode.CreateTmpQrCodeReqDto;
 import service.wx.dto.redpack.QueryRedpackReqDto;
 import service.wx.dto.redpack.QueryRedpackRspDto;
@@ -47,7 +48,7 @@ public class WXPay {
     }
     
     //生成临时二维码，返回的是一张图片
-    public static String CreateTmpQrCodeService(CreateTmpQrCodeReqDto createTmpQrCodeReqDto)
+    public static CreateQrCodeRspDto CreateTmpQrCodeService(CreateTmpQrCodeReqDto createTmpQrCodeReqDto)
     		throws BusinessException {
     	return new CreateTmpQrCodeService().request(createTmpQrCodeReqDto);
     }

@@ -8,20 +8,12 @@ public class ActionInfo {
 		scene = new Scene(scene_id);
 	}
 	
-	public class Scene {
-		private Integer scene_id = 0;
-
-		public Scene(Integer scene_id) {
-			scene_id = new Integer(scene_id);
-		}
-		
-		public Integer getScene_id() {
-			return scene_id;
-		}
-
-		public void setScene_id(Integer scene_id) {
-			this.scene_id = scene_id;
-		}
+	public Scene getScene() {
+		return scene;
 	}
-	
+
+	public void setScene(Scene scene) {
+		this.scene = scene;
+	}
+
 }
