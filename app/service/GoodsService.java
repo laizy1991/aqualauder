@@ -23,10 +23,27 @@ public class GoodsService {
         return GoodsDao.get(id);
     }
 
-    public static void add(Goods goods) {
-        goods.setCreateTime(System.currentTimeMillis());
-        goods.setUpdateTime(System.currentTimeMillis());
-        GoodsDao.insert(goods);
+    public static void add(Goods goods, List<GoodsStock> goodsStock, List<GoodsIcon> goodsIcon) {
+        long now = System.currentTimeMillis();
+        goods.setCreateTime(now);
+        goods.setUpdateTime(now);
+        boolean saved = GoodsDao.insert(goods);
+
+        if (saved && goodsStock != null && goodsStock.size() != 0) {
+            for (GoodsStock gs : goodsStock) {
+                gs.setGoodsId(goods.getId());
+                gs.setCreateTime(now);
+                gs.setUpdateTime(now);
+                GoodsStockDao.insert(gs);
+            }
+        }
+
+        if (saved && goodsIcon != null && goodsIcon.size() != 0) {
+            for (GoodsIcon gi : goodsIcon) {
+                gi.setGoodsId(goods.getId());
+                GoodsIconDao.insert(gi);
+            }
+        }
     }
 
     public static void delete(Goods goods) {

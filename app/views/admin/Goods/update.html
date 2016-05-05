@@ -1,0 +1,91 @@
+#{extends 'main.html' /}
+
+#{set 'moreStyles'}
+<link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+<link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+#{/set}
+<style>
+</style>
+<!-- 页头 begin -->
+<div class="main-header">
+    <div class="breadcrumb">
+        <span class="nolink">编辑商品</span>
+    </div>
+</div>
+<!-- 页头 end -->
+<table>
+    <tbody>
+    <tr>
+        <td i="body" class="ui-dialog-body">
+            <div i="content" class="ui-dialog-content" id="content:createDialog">
+                <div class="dialog dialog-create">
+                    <form action="@{ajax.GoodsCtrl.update}" id="update">
+                        <input name="goods.id" value="${goods.id}" hidden="hidden">
+                        <div class="form-group">
+                            <label class="label"><span class="asterisk">*</span>商品名称</label>
+                            <div class="col">
+                                <input type="text" name="goods.title" value="${goods.title}">
+                                <span class="msg error-text">必填项！</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="label"><span class="asterisk">*</span>详细描述</label>
+                            <div class="col">
+                                <input type="text" name="goods.goodsDesc" value="${goods.goodsDesc}">
+                                <span class="msg error-text">必填项！</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="label"><span class="asterisk">*</span>价格(分)</label>
+                            <div class="col">
+                                <input type="text" name="goods.price" value="${goods.price}">
+                                <span class="msg error-text">必填项！</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="label"><span class="asterisk">*</span>温馨提示</label>
+                            <div class="col">
+                                <input type="text" name="goods.warmPrompt" value="${goods.warmPrompt}">
+                                <span class="msg error-text">必填项！</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="label"><span class="asterisk">*</span>状态</label>
+                            <div class="col">
+                                <select name="goods.state" value="${goods.state}">
+                                    <option value="0">下架</option>
+                                    <option value="1">上架</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td i="footer" class="ui-dialog-footer">
+            <div i="button" class="ui-dialog-button">
+                <button role="submitUpdate" type="button" data-id="保存" autofocus="" class="ui-dialog-autofocus">保存</button>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+#{include file="common/jsinclude.html" /}
+
+#{set 'moreScripts'}
+
+<script>
+    var verNum = new Date();
+    seajs.config({
+        base:"../",
+        // 加版本号
+        map: [
+            [ '.js', '.js?v='+verNum]
+        ]
+    });
+    seajs.use("@{'/public/js/app/modules/goods.js'}");
+</script>
+#{/set}

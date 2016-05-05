@@ -14,6 +14,13 @@ public class GoodsIconDao {
 
    public static List<GoodsIcon> getByGoods(long goodsId) {
        return GoodsIcon.find("goodsId", goodsId).fetch();
-   } 
-    
+   }
+
+    public static boolean insert(GoodsIcon goodsIcon) {
+        if(goodsIcon == null) {
+            return false;
+        }
+        return goodsIcon.create();
+    }
+
 }
