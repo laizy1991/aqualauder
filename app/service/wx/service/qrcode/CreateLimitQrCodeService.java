@@ -41,7 +41,7 @@ public class CreateLimitQrCodeService {
     	try {
     		String url = String.format(new String(Configure.CREATE_QRCODE_API), WxUtil.getAccessToken());
     		String params = gson.toJson(createLimitQrCodeReqDto);
-    		
+    		Logger.info("请求微信创建永久二维码入参为：%s", params);
     		HttpRespons rsp = HttpRequester.sendPost(url, params);
     		if(null == rsp || StringUtils.isBlank(rsp.getContent())) {
     			throw new BusinessException("请求微信创建永久二维码接口返回数据为空");

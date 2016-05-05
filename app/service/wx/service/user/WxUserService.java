@@ -1,5 +1,6 @@
 package service.wx.service.user;
 
+import models.DistributorSuperior;
 import models.User;
 import net.sf.json.JSONObject;
 
@@ -18,6 +19,7 @@ import utils.http.HttpRespons;
 import com.google.gson.Gson;
 
 import common.constants.RegType;
+import dao.DistributorSuperiorDao;
 
 public class WxUserService {
 	public static Gson gson = new Gson();
@@ -220,6 +222,47 @@ public class WxUserService {
 		User u = WxUserService.addUser(userJson);
 		if(null == u) {
 			return false;
+		}
+
+		try {
+			//判断是否有用户分享带来其它用户
+			if(!StringUtils.isBlank(subscribeReqDto.getEventKey()) && subscribeReqDto.getEventKey().toLowerCase().startsWith("qrscene_")) {
+				//qrscene_后为二维码参数，若为Integer则为临时二维码(用户ID)，若为String，则为永久二维码(用户openId)
+				String[] args = subscribeReqDto.getEventKey().split("_");
+				if(null != args && args.length >=2) {
+					String param = args[1];
+					Integer superiorId = null;
+					if(StringUtils.isNumeric(param)) {
+						//临时二维码(用户ID)
+						superiorId = Integer.parseInt(param);
+					} else {
+						//永久二维码(用户openId)
+						User superiorUser = UserService.getByOpenId(param);
+						if(null == superiorUser) {
+							Logger.error("用户分享带来的下线通过openId获取到的用户时空, openId: %s", param);
+							superiorId = null;
+						} else {
+							superiorId = superiorUser.getUserId();
+						}
+					}
+					if(null == superiorId) {
+						Logger.error("获取用户上线userId为空");
+					} else {
+						//将信息写入分销商上线表，这里不先检验userId, superiorId组合是否存在，因为执行到下面这一步之前
+						//库中必须没有userId所对应的记录，即用户之前并不存在于库中
+						if(superiorId != u.getUserId() && DistributorSuperiorDao.create(u.getUserId(), superiorId)) {
+							Logger.info("用户[%d]分享带来的下线[%d]入库成功", superiorId, u.getUserId());
+						} else {
+							Logger.error("用户[%d]分享带来的下线[%d]相同或入库失败", superiorId, u.getUserId());
+						}
+					}
+				} else {
+					Logger.error("用户分享带来的下线解析参数时发生错误, eventKey: %s", subscribeReqDto.getEventKey());
+				}
+			}
+		} catch(Exception e) {
+			Logger.error("用户分享带来下线进行逻辑处理时发生错误");
+			e.printStackTrace();
 		}
 		
 		//这里主要是用于微信消息重试的排重
