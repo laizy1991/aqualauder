@@ -1,4 +1,4 @@
-package service.wx.dto.orderQuery;
+package service.wx.dto.order;
 
 import service.wx.common.Configure;
 import service.wx.common.RandomStringGenerator;
@@ -9,15 +9,18 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 public class OrderQueryReqDto {
     //每个字段具体的意思请查看API文档
     private String appid = "";
     private String mch_id = "";
     private String transaction_id = "";
+    private String out_trade_no = "";
     private String nonce_str = "";
     private String sign = "";
 
-    public OrderQueryReqDto(String transaction_id){
+    public OrderQueryReqDto(String transaction_id, String out_trade_no){
 
         //微信分配的公众号ID（开通公众号之后可以获取到）
         setAppid(Configure.getAppid());
@@ -25,7 +28,11 @@ public class OrderQueryReqDto {
         //微信支付分配的商户号ID（开通公众号的微信支付功能之后可以获取到）
         setMch_id(Configure.getMchid());
         
+        if(StringUtils.isBlank(transaction_id)) {
+        	setTransaction_id(null);
+        }
         setTransaction_id(transaction_id);
+        setOut_trade_no(out_trade_no);
         
         //随机字符串，不长于32 位
         setNonce_str(RandomStringGenerator.getRandomStringByLength(32));
@@ -92,5 +99,13 @@ public class OrderQueryReqDto {
 
 	public void setSign(String sign) {
 		this.sign = sign;
+	}
+
+	public String getOut_trade_no() {
+		return out_trade_no;
+	}
+
+	public void setOut_trade_no(String out_trade_no) {
+		this.out_trade_no = out_trade_no;
 	}
 }

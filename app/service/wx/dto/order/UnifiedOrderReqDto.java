@@ -1,4 +1,4 @@
-package service.wx.dto.unifiedOrder;
+package service.wx.dto.order;
 
 import service.wx.common.Configure;
 import service.wx.common.RandomStringGenerator;

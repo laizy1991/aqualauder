@@ -60,15 +60,15 @@ public class HttpsRequest implements IServiceRequest{
 
     	if(withCertFlag) {
     		KeyStore keyStore = KeyStore.getInstance("PKCS12");
-//    		FileInputStream instream = new FileInputStream(new File(Configure.getCertLocalPath()));//加载本地的证书进行https加密传输
-//    			keyStore.load(instream, Configure.getCertPassword().));//设置证书密码
+    		
+    		FileInputStream instream = new FileInputStream(new File(Configure.getCertPwdPath()));//加载本地的证书进行https加密传输
 			try {
-				keyStore.load(Configure.getCertPassword(), Configure.getMchid().toCharArray());
+				keyStore.load(instream, Configure.getMchid().toCharArray());
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-    			Configure.getCertPassword().close();
-    		}
+				instream.close();
+			}
     		
     		// Trust own CA and all self-signed certs
     		SSLContext sslcontext = SSLContexts.custom()

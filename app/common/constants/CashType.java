@@ -8,7 +8,7 @@ package common.constants;
  */
 public enum CashType {
 
-    EREDPACKET(0, "红包"),
+    REDPACK(0, "红包"),
     BANK(1, "银行卡");
     
     private int code;

@@ -1,18 +1,104 @@
 package service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+
+import models.Goods;
 import models.Order;
+import models.OrderGoods;
 import models.RefundOrder;
 import play.Logger;
 import utils.DateUtil;
-
+import utils.IdGenerator;
+import common.constants.GoodsType;
 import common.constants.OrderStatus;
 import common.constants.RefundStatus;
-
+import common.constants.Separator;
+import dao.GoodsDao;
+import dao.OrderGoodsDao;
 import dao.RefundOrderDao;
+import dto.OrderDetail;
 
 
 public class BuyerService {
 
+
+    /**
+     * 创建一个订单
+     * @return
+     */
+    public static OrderDetail createOrder(int userId, Order order, Map<Long, Integer> goodsNum) {
+        if(order == null || goodsNum == null || goodsNum.isEmpty()) {
+            return null;
+        }
+        
+        long cussTs = System.currentTimeMillis();
+        List<OrderGoods> orderGoodsList = new ArrayList<OrderGoods>();
+        int totalFee = 0;
+        for(Long id : goodsNum.keySet()) {
+            if(goodsNum.get(id).intValue() <= 0) {
+                continue;
+            }
+            Goods goods = GoodsDao.get(id);
+            if(goods == null || goods.getState().intValue() == 0) {
+                Logger.error("goods not found, id:%s", id);
+            }
+            OrderGoods og = new OrderGoods();
+            og.setCreateTime(cussTs);
+            og.setGoodsDesc(goods.getGoodsDesc());
+            //暂时不加上折扣信息
+            og.setGoodsDiscountPrice(goods.getPrice());
+            og.setGoodsOriginPrice(goods.getPrice());
+            og.setGoodsIcon(GoodsService.getIcon(goods.getId()));
+            og.setGoodsId(goods.getId());
+            og.setGoodsTitle(goods.getTitle());
+            og.setGoodsNumber(goodsNum.get(id));
+            og.setGoodsType(GoodsType.GOODS.getType());
+            totalFee += (og.getGoodsDiscountPrice() * og.getGoodsNumber());
+            orderGoodsList.add(og);
+        }
+        
+        if(CollectionUtils.isEmpty(orderGoodsList)) {
+            return null;
+        }
+        
+        order.setTotalFee(totalFee);
+        order.setId(IdGenerator.getId());
+        order.setForbidRefund(0);
+        order.setOutTradeNo(OutTradeNo.getOutTradeNo());
+        order.setState(OrderStatus.INIT.getState());
+        order.setStateHistory(OrderStatus.INIT.getState() + Separator.COMMON_SEPERATOR_BL
+                + DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss"));
+        order.setCreateTime(System.currentTimeMillis());
+        order.setUpdateTime(System.currentTimeMillis());
+        
+        order.setDeliverTime(0l);
+        order.setExpressName("");
+        order.setExpressNum("");
+        order.setFinishTime(0l);
+        order.setPayTime(0l);
+        order.setUserId(userId);
+        order.setRecevTime(0l);
+        boolean isSucc = OrderService.add(order);
+        
+        if(!isSucc) {
+            return null;
+        }
+        
+        OrderDetail detail = new OrderDetail(order);
+        for(OrderGoods og : orderGoodsList) {
+            og.setOrderId(order.getId());
+            OrderGoodsDao.insert(og);
+            detail.addGoodsInfo(og);
+        }
+        
+        return detail;
+    }
+    
     public static boolean refundCancel(Integer userId, long refundId) {
         RefundOrder refundOrder = RefundOrderService.get(refundId);
         if(refundOrder == null) {
@@ -26,7 +112,13 @@ public class BuyerService {
             return false;
         }
         
-        boolean isSucc = RefundOrderService.updateRefundState(refundId, refundState);
+        Order order = OrderService.get(refundOrder.getOrderId());
+        if(order == null || order.getUserId().intValue() != userId) {
+            Logger.error("order on found, id:%s, userId:%s", refundOrder.getOrderId(), userId);
+            return false;
+        }
+        
+        boolean isSucc = RefundOrderService.updateRefundState(refundId, RefundStatus.CANCEL);
         return isSucc;
     }
     
@@ -43,7 +135,11 @@ public class BuyerService {
             return false;
         }
         
-        if(order.getForbidRefund().intValue() == 1 || order.getUserId().intValue() != userId) {
+        if (order.getState().intValue() == OrderStatus.COMPLETE.getState()
+                || order.getState().intValue() == OrderStatus.CLOSE.getState()
+                || order.getState().intValue() == OrderStatus.INIT.getState()
+                || order.getForbidRefund().intValue() == 1
+                || order.getUserId().intValue() != userId) {
             Logger.error("can not refund.");
             return false;
         }
@@ -60,7 +156,9 @@ public class BuyerService {
         if(refundOrder == null) {
             refundOrder = new RefundOrder();
         }
-        refundOrder.setStateHistory(refundOrder.getStateHistory() + RefundStatus.APPLY.getCode()
+        
+        String dbHis = StringUtils.isBlank(refundOrder.getStateHistory()) ? "" : refundOrder.getStateHistory();
+        refundOrder.setStateHistory(dbHis + RefundStatus.APPLY.getCode()
                 + "_" + DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss"));
         refundOrder.setCreateTime(System.currentTimeMillis());
         refundOrder.setOrderId(orderId);
@@ -79,7 +177,7 @@ public class BuyerService {
      */
     public static boolean receiving(int userId, long orderId) {
         Order order = OrderService.get(orderId);
-        if(order == null) {
+        if(order == null || order.getUserId().intValue() != userId) {
             Logger.error("order not found, id:%s", orderId);
         }
         int dbOrderState = order.getState() == null ? OrderStatus.INIT.getState() : order.getState();

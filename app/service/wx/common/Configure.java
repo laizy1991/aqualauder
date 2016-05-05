@@ -12,6 +12,14 @@ public class Configure {
 	// 每次自己Post数据给API的时候都要用这个key来对所有字段进行签名，生成的签名会放在Sign这个字段，API收到Post数据的时候也会用同样的签名算法对Post过来的数据进行签名和验证
 	// 收到API的返回的时候也要用这个key来对返回的数据算下签名，跟API的Sign数据进行比较，如果值不一致，有可能数据被第三方给篡改
 
+	public static String getWxServertoken() {
+		return wxServertoken;
+	}
+
+	public static void setWxServertoken(String wxServertoken) {
+		Configure.wxServertoken = wxServertoken;
+	}
+
 	private static String key = "";
 
 	//微信分配的公众号ID（开通公众号之后可以获取到）
@@ -27,10 +35,12 @@ public class Configure {
 	private static String certLocalPath = "";
 
 	//HTTPS证书密码，默认密码等于商户号MCHID
-	private static InputStream certPassword = null;
+	private static String certPwdPath = null;
 
 	//是否使用异步线程的方式来上报API测速，默认为异步模式
 	private static boolean useThreadToDoReport = true;
+	
+	private static String wxServertoken = "";
 
 	//机器IP
 	private static String ip = "";
@@ -39,15 +49,9 @@ public class Configure {
 		key = Play.configuration.getProperty("wx.config.key", "726Ujis98wJ93S8hv634Hj934f92424j");
 		appID = Play.configuration.getProperty("wx.config.appid", "wxcec16984044e8658");
 		mchID = Play.configuration.getProperty("wx.config.mchid", "1326679501");
-//		subMchID = Play.configuration.getProperty("", "");
 		certLocalPath = Play.configuration.getProperty("wx.config.sslcert.path");
-		ip = Play.configuration.getProperty("local.host.ip");
-//		certPassword = Play.configuration.getProperty("wx.config.sslkey.path");
-		try {
-			certPassword = new FileInputStream(new File(Play.configuration.getProperty("wx.config.sslkey.path")));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		certPwdPath = Play.configuration.getProperty("wx.config.sslkey.path");
+		wxServertoken = Play.configuration.getProperty("wx.config.token");
 	}
 
 	//以下是API的路径：
@@ -59,6 +63,14 @@ public class Configure {
 	public static String QUERY_REDPACK_API = "https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo";
 	//4) 查询订单
 	public static String ORDER_QUERY_API = "https://api.mch.weixin.qq.com/pay/orderquery";
+	//5) 创建二维码
+	public static String CREATE_QRCODE_API = "https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=%s";
+	//6) 下载二维码
+	public static String DOWNLOAD_QRCODE_API = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=%s";
+	//7) 请求退款
+	public static String SEND_REFUND_API = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+	//8) 查询退款
+	public static String QUERY_REFUND_API = "https://api.mch.weixin.qq.com/pay/refundquery";
 
 	public static boolean isUseThreadToDoReport() {
 		return useThreadToDoReport;
@@ -91,10 +103,6 @@ public class Configure {
 		Configure.certLocalPath = certLocalPath;
 	}
 
-	public static void setCertPassword(InputStream certPassword) {
-		Configure.certPassword = certPassword;
-	}
-
 	public static void setIp(String ip) {
 		Configure.ip = ip;
 	}
@@ -119,8 +127,8 @@ public class Configure {
 		return certLocalPath;
 	}
 	
-	public static InputStream getCertPassword(){
-		return certPassword;
+	public static String getCertPwdPath(){
+		return certPwdPath;
 	}
 
 	public static String getIP(){

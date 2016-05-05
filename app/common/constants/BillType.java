@@ -10,7 +10,8 @@ public enum BillType {
     CONSUMPTION(0, "", "推广提成(来自%s的消费)"),
     SPREAD(1, "", "推广提成(来自%s的推广)"),
     CASH(2, "提现", ""),
-    CASHFAIL(3, "提现失败", "");
+    CASHFAIL(3, "提现失败", ""),
+    PAY(4, "支付", "");
     
     private int code;
     private String template;

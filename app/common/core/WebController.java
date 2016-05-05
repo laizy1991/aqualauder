@@ -20,7 +20,7 @@ import exception.BusinessException;
  *
  */
 public class WebController extends BaseController {
-	protected static String loginTpl = "guildLogin.html";
+	protected static String loginTpl = "login.html";
 	
 	@Before
 	protected static void beforeAction() throws SecurityException, NoSuchMethodException {

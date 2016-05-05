@@ -4,9 +4,8 @@ import models.Order;
 import models.RefundOrder;
 import play.Logger;
 import utils.DateUtil;
-
 import common.constants.RefundStatus;
-
+import common.constants.Separator;
 import dao.RefundOrderDao;
 
 public class RefundOrderService {
@@ -57,9 +56,14 @@ public class RefundOrderService {
         if (refundOrder.getRefundState().intValue() == status.getCode()) {
             return true;
         }
-
-        refundOrder.setStateHistory(refundOrder.getStateHistory() + RefundStatus.APPLY.getCode()
-                + "_" + DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss"));
+        return setStatusAndUpdate(refundOrder, status);
+    }
+    
+    public static boolean setStatusAndUpdate(RefundOrder refundOrder, RefundStatus status) {
+        refundOrder.setRefundState(status.getCode());
+        refundOrder.setStateHistory(refundOrder.getStateHistory() + status.getCode() + Separator.COMMON_SEPERATOR_BL
+                + DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss")
+                + Separator.COMMON_SEPERATOR_COMME);
         refundOrder.setUpdateTime(System.currentTimeMillis());
         return RefundOrderDao.update(refundOrder);
     }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import models.CashInfo;
 import models.Order;
 import models.OrderGoods;
 import models.User;
@@ -16,14 +17,23 @@ import service.wx.WXPay;
 import service.wx.common.Configure;
 import service.wx.common.RandomStringGenerator;
 import service.wx.common.Signature;
-import service.wx.dto.unifiedOrder.UnifiedOrderReqDto;
-import service.wx.dto.unifiedOrder.UnifiedOrderRspDto;
+import service.wx.dto.order.UnifiedOrderReqDto;
+import service.wx.dto.order.UnifiedOrderRspDto;
+import service.wx.dto.redpack.QueryRedpackReqDto;
+import service.wx.dto.redpack.QueryRedpackRspDto;
+import service.wx.dto.redpack.SendRedpackReqDto;
+import service.wx.dto.redpack.SendRedpackRspDto;
 
 import com.google.gson.Gson;
-import common.constants.MessageCode;
-import common.constants.wx.OutTradeStatus;
-import common.constants.wx.PayType;
 
+import common.constants.BillType;
+import common.constants.CashStatus;
+import common.constants.MessageCode;
+import common.constants.OrderStatus;
+import common.constants.PayType;
+import common.constants.wx.PayStatus;
+import common.constants.wx.WxCallbackStatus;
+import common.constants.wx.PayMode;
 import dao.OrderDao;
 import dao.OrderGoodsDao;
 import exception.BusinessException;
@@ -47,39 +57,30 @@ public class PayService {
 		if(null == user || StringUtils.isBlank(user.getOpenId())) {
 			throw new BusinessException(MessageCode.GET_USER_FAILED.getMsg());
 		}
-		List<OrderGoods> goods = OrderGoodsDao.getByOrder(order.getId());
-		String subject = "";
-		if(null != goods && goods.size() > 0) {
-			for(int i=0; i<goods.size(); i++) {
-				if(0 != i) {
-					subject += "_";
-				}
-				subject += goods.get(i).getGoodsTitle();
-			}
-		} else {
-			subject = "服装商品";
-		}
+		
+		// TODO 这里是否要写死，商量后再确定
+		String subject = Play.configuration.getProperty("wx.redpack.sendName") + "服装商品";
 		String callbackUrl = Play.configuration.getProperty("local.host.domain") + 
 				Play.configuration.getProperty("wx.pay.callback.path");
 				
-		// TODO 获取客户端地址，在controller那里，写入order表
 		String clientIp = order.getClientIp();
-		if(StringUtils.isBlank(clientIp)) {
+		if(StringUtils.isBlank(clientIp) || clientIp.equals("127.0.0.1")) {
 			clientIp = Play.configuration.getProperty("local.host.ip");
 		}
 		UnifiedOrderReqDto req = new UnifiedOrderReqDto("WEB", subject, order.getOutTradeNo(), order.getTotalFee(),
-				clientIp, callbackUrl, PayType.JS.getType(), user.getOpenId());
+				clientIp, callbackUrl, PayMode.JS.getType(), user.getOpenId());
 		
 		UnifiedOrderRspDto rsp  = WXPay.requestUnifiedOrderService(req);
 		if(null != rsp && rsp.getResult_code().equals("SUCCESS")) {
 			//对订单表进行更新
 			order.setCallbackUrl(callbackUrl);
-			order.setPayStatus(OutTradeStatus.ADDED);
+			order.setPayStatus(PayStatus.PAY_READY.getStatus());
+			order.setPayType(PayType.WX.getCode());
 			order.setPlatformTradeNo(rsp.getPrepay_id());
 			order.setPlatformTradeMsg("");
 			order.setUpdateTime(System.currentTimeMillis());
 			if(OrderDao.update(order)) {
-				Logger.error("微信纺一下单后更新订单表成功，订单参数为：%s", gson.toJson(order));
+				Logger.info("微信统一下单后更新订单表成功，订单参数为：%s", gson.toJson(order));
 			}
 		}
 		//准备生成签名
@@ -103,6 +104,39 @@ public class PayService {
 		jsRequestBody += "paySign:'" + paySign + "'}"; 
 		
 		return jsRequestBody;
+	}
+
+	/**
+	 * 余额支付
+	 * @param orderId
+	 */
+	public static boolean balancePay(long orderId) throws BusinessException{
+	    if(orderId <= 0) {
+            throw new BusinessException(MessageCode.ORDER_ID_INVALID.getMsg());
+        }
+        //获取订单信息
+        Order order = OrderService.get(orderId);
+        if(null == order) {
+            throw new BusinessException(MessageCode.ORDER_NULL_ERROR.getMsg());
+        }
+        //获取用户信息
+        User user = UserService.get(order.getUserId());
+        if(null == user || StringUtils.isBlank(user.getOpenId())) {
+            throw new BusinessException(MessageCode.GET_USER_FAILED.getMsg());
+        }
+        
+        boolean isSucc = UserWalletService.spend(user.getUserId(), order.getTotalFee(), order.getOutTradeNo(),
+                BillType.PAY, user.getUserId(), user.getUserId());
+        
+        if(isSucc) {
+            order.setPayTime(System.currentTimeMillis());
+            order.setPayStatus(PayStatus.PAY_SUCC.getStatus());
+            order.setPayType(PayType.BALANCE.getCode());
+            order.setState(OrderStatus.PAYED.getState());
+            return OrderService.setStatusAndUpdate(order, OrderStatus.PAYED);
+        }
+        
+        return isSucc;
 	}
 	
 }

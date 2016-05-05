@@ -1,12 +1,13 @@
-package service.wx.service;
+package service.wx.service.order;
 
 import net.sf.json.JSONObject;
 import play.Logger;
 import service.wx.common.Configure;
 import service.wx.common.Signature;
 import service.wx.common.Util;
-import service.wx.dto.orderQuery.OrderQueryReqDto;
-import service.wx.dto.orderQuery.OrderQueryRspDto;
+import service.wx.dto.order.OrderQueryReqDto;
+import service.wx.dto.order.OrderQueryRspDto;
+import service.wx.service.BaseService;
 import exception.BusinessException;
 
 public class OrderQueryService extends BaseService{
@@ -32,13 +33,12 @@ public class OrderQueryService extends BaseService{
     	Logger.info("查询订单API返回的数据是：%s", responseString);
         //将从API返回的XML数据映射到Java对象
     	OrderQueryRspDto rsp = (OrderQueryRspDto)Util.getObjectFromXMLWithXStream(responseString, OrderQueryRspDto.class);
-	   if(null == rsp || null == rsp.getReturn_code()) {
+	   if(null == rsp || null == rsp.getReturn_code() || rsp.getReturn_code().equals("FAIL")) {
 			//通信失败
 			Logger.error("查询订单接口通信失败，请求数据为：%s, 返回数据为：%s", JSONObject.fromObject(orderQueryReqDto).toString(),
 					JSONObject.fromObject(rsp).toString());
 			 throw new BusinessException("查询订单接口通信失败");
 		} else {
-			//TODO 查看所有的微信接口，看sign是否只在resultcode=="SUCCESS"时返回
 			Logger.info("查询订单API成功返回数据");
 			//先验证一下数据有没有被第三方篡改，确保安全
 			try {
@@ -50,11 +50,7 @@ public class OrderQueryService extends BaseService{
 	    		throw new BusinessException("查询订单API返回的数据签名验证失败");
 	    	}
 			
-			if (rsp.getResult_code().equals("SUCCESS")) {
-				return rsp;
-            } else {
-            	throw new BusinessException("查询订单API返回的数据签名验证失败");
-            }
+			return rsp;
 	   }
     }
 }

@@ -3,6 +3,8 @@ package dto;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Column;
+
 import models.Order;
 import models.OrderGoods;
 import play.db.jpa.Model;
@@ -17,10 +19,9 @@ import play.db.jpa.Model;
 public class OrderDetail {
     private Integer userId;
     private String outTradeNo;
-    private String slipNo;
     private Integer payType;
     private Integer totalFee;
-    private Integer expressId;
+    private String expressName;
     private String expressNum;
     private Integer state;
     private Integer forbidRefund;
@@ -33,6 +34,13 @@ public class OrderDetail {
     private Long deliverTime;
     private Long recevTime;
     private Long finishTime;
+    private String openId;
+    private String clientIp;
+    private Integer payStatus;
+    private String callbackUrl;
+    private String platformTradeNo;
+    private String platformTradeMsg;
+    private Long callbackTime;
     private List<OrderGoodsInfo> goodsInfo = new ArrayList<OrderGoodsInfo>();
 
     
@@ -42,7 +50,7 @@ public class OrderDetail {
     
     public void init(Order order) {
         this.deliverTime = order.getDeliverTime();
-        this.expressId = order.getExpressId();
+        this.expressName = order.getExpressName();
         this.expressNum = order.getExpressNum();
         this.finishTime = order.getFinishTime();
         this.forbidRefund = order.getForbidRefund();
@@ -53,12 +61,74 @@ public class OrderDetail {
         this.totalFee = order.getTotalFee();
         this.recevTime = order.getRecevTime();
         this.shippingAddress = order.getShippingAddress();
-        this.slipNo = order.getSlipNo();
         this.state = order.getState();
         this.stateHistory = order.getStateHistory();
         this.userId = order.getUserId();
+        this.openId = order.getOpenId();
+        this.platformTradeMsg = order.getPlatformTradeMsg();
+        this.platformTradeNo = order.getPlatformTradeNo();
+        this.clientIp= order.getClientIp();
+        this.payStatus = order.getPayStatus();
+        this.callbackUrl = order.getCallbackUrl();
+        this.callbackTime = order.getCallbackTime();
     }
     
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public String getClientIp() {
+        return clientIp;
+    }
+
+    public void setClientIp(String clientIp) {
+        this.clientIp = clientIp;
+    }
+
+    public Integer getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(Integer payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    public String getCallbackUrl() {
+        return callbackUrl;
+    }
+
+    public void setCallbackUrl(String callbackUrl) {
+        this.callbackUrl = callbackUrl;
+    }
+
+    public String getPlatformTradeNo() {
+        return platformTradeNo;
+    }
+
+    public void setPlatformTradeNo(String platformTradeNo) {
+        this.platformTradeNo = platformTradeNo;
+    }
+
+    public String getPlatformTradeMsg() {
+        return platformTradeMsg;
+    }
+
+    public void setPlatformTradeMsg(String platformTradeMsg) {
+        this.platformTradeMsg = platformTradeMsg;
+    }
+
+    public Long getCallbackTime() {
+        return callbackTime;
+    }
+
+    public void setCallbackTime(Long callbackTime) {
+        this.callbackTime = callbackTime;
+    }
+
     public Integer getTotalFee() {
         return totalFee;
     }
@@ -119,14 +189,6 @@ public class OrderDetail {
         this.outTradeNo = outTradeNo;
     }
 
-    public String getSlipNo() {
-        return slipNo;
-    }
-
-    public void setSlipNo(String slipNo) {
-        this.slipNo = slipNo;
-    }
-
     public Integer getPayType() {
         return payType;
     }
@@ -135,12 +197,12 @@ public class OrderDetail {
         this.payType = payType;
     }
 
-    public Integer getExpressId() {
-        return expressId;
+    public String getExpressName() {
+        return expressName;
     }
 
-    public void setExpressId(Integer expressId) {
-        this.expressId = expressId;
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
     }
 
     public String getExpressNum() {

@@ -1,6 +1,5 @@
-import service.wx.common.Util;
 import service.wx.common.XMLParser;
-import service.wx.dto.unifiedOrder.UnifiedOrderRspDto;
+import service.wx.dto.order.UnifiedOrderRspDto;
 
 
 public class MainMethodTest {

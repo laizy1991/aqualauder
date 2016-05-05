@@ -21,14 +21,11 @@ public class Order extends GenericModel {
     @Column(name="out_trade_no")
     private String outTradeNo;
 
-    @Column(name="slip_no")
-    private String slipNo;
-
     @Column(name="pay_type")
     private Integer payType;
 
-    @Column(name="express_id")
-    private Integer expressId;
+    @Column(name="express_name")
+    private String expressName;
 
     @Column(name="express_num")
     private String expressNum;
@@ -57,9 +54,6 @@ public class Order extends GenericModel {
     @Column(name="state_history")
     private String stateHistory;
 
-    @Column(name="pay_time")
-    private Long payTime;
-
     @Column(name="deliver_time")
     private Long deliverTime;
 
@@ -83,7 +77,16 @@ public class Order extends GenericModel {
     
     @Column(name="pay_status")
     private Integer payStatus;
-
+    
+    @Column(name="pay_time")
+    private Long payTime;
+    
+    @Column(name="callback_status")
+    private Integer callbackStatus;
+    
+    @Column(name="callback_time")
+    private Long callbackTime;
+    
     @Column(name="callback_url")
     private String callbackUrl;
 
@@ -93,8 +96,10 @@ public class Order extends GenericModel {
     @Column(name="platform_trade_msg")
     private String platformTradeMsg;
     
-    @Column(name="callback_time")
-    private Long callbackTime;
+    @Column(name="platform_transation_id")
+    private String platformTransationId;
+    
+    
     
     public Integer getUserId() {
         return userId;
@@ -112,14 +117,6 @@ public class Order extends GenericModel {
         this.outTradeNo = outTradeNo;
     }
 
-    public String getSlipNo() {
-        return slipNo;
-    }
-
-    public void setSlipNo(String slipNo) {
-        this.slipNo = slipNo;
-    }
-
     public Integer getPayType() {
         return payType;
     }
@@ -128,12 +125,12 @@ public class Order extends GenericModel {
         this.payType = payType;
     }
 
-    public Integer getExpressId() {
-        return expressId;
+    public String getExpressName() {
+        return expressName;
     }
 
-    public void setExpressId(Integer expressId) {
-        this.expressId = expressId;
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
     }
 
     public String getExpressNum() {
@@ -312,11 +309,27 @@ public class Order extends GenericModel {
 		this.platformTradeMsg = platformTradeMsg;
 	}
 
+	public String getPlatformTransationId() {
+		return platformTransationId;
+	}
+
+	public void setPlatformTransationId(String platformTransationId) {
+		this.platformTransationId = platformTransationId;
+	}
+
 	public Long getCallbackTime() {
 		return callbackTime;
 	}
 
 	public void setCallbackTime(Long callbackTime) {
 		this.callbackTime = callbackTime;
+	}
+
+	public Integer getCallbackStatus() {
+		return callbackStatus;
+	}
+
+	public void setCallbackStatus(Integer callbackStatus) {
+		this.callbackStatus = callbackStatus;
 	}
 }

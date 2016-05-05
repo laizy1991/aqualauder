@@ -29,8 +29,14 @@ public class Distributor extends GenericModel {
     @Column(name="link")
     private String link;
     
+    @Column(name="qrcode_type")
+    private Integer qrcodeType;
+    
     @Column(name="qrcode_url")
     private String qrcodeUrl;
+    
+    @Column(name="qrcode_path")
+    private String qrcodePath;
 
     @Column(name="create_time")
     private Long createTime;
@@ -109,4 +115,20 @@ public class Distributor extends GenericModel {
     public void setUpdateTime(Long updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getQrcodePath() {
+		return qrcodePath;
+	}
+
+	public void setQrcodePath(String qrcodePath) {
+		this.qrcodePath = qrcodePath;
+	}
+
+	public Integer getQrcodeType() {
+		return qrcodeType;
+	}
+
+	public void setQrcodeType(Integer qrcodeType) {
+		this.qrcodeType = qrcodeType;
+	}
 }

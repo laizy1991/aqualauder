@@ -19,6 +19,11 @@ import dao.UserWalletDao;
  *
  */
 public class UserWalletService {
+
+    public static boolean spend(int userId, int amount, String outTradeNo, BillType billType,
+            Integer consumerId, long blotter) {
+        return spend(userId, amount, outTradeNo, billType, consumerId, blotter, DateUtil.getThisMonth());
+    }
     /**
      * 用户消费
      * @param userId
@@ -28,7 +33,6 @@ public class UserWalletService {
      * @param consumerId
      * @param blotter
      * @param month
-     * @param limit 是否限额
      * @return
      */
     public static boolean spend(int userId, int amount, String outTradeNo, BillType billType,
@@ -160,10 +164,10 @@ public class UserWalletService {
             
             CashStatus status = CashStatus.APPLY;
             CashType cashType = CashType.BANK;
-            if(type == CashType.EREDPACKET.getCode()) {
+            if(type == CashType.REDPACK.getCode()) {
                 //发红包
                 status = CashStatus.SUCCESS;
-                cashType = CashType.EREDPACKET;
+                cashType = CashType.REDPACK;
             }
             return CashInfoService.create(userId, cashType, amount, slipNo, status);
         } finally {

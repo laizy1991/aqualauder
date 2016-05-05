@@ -1,14 +1,21 @@
 package utils.http;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.Map;
 import java.util.Vector;
+
+import org.apache.commons.lang.StringUtils;
  
 /**
  * HTTP请求对象
@@ -89,6 +96,37 @@ public class HttpRequester {
 	public static HttpRespons sendPost(String urlString, Map<String, String> params)
 			throws IOException {
 		return send(urlString, "POST", params, null);
+	}
+	
+	/**
+	 * 发送POST请求
+	 * 
+	 * @param urlString
+	 *            URL地址
+	 * @param param 参数
+	 * @return 响应对象
+	 * @throws IOException
+	 */
+	public static HttpRespons sendPost(String urlString, String params)
+			throws IOException {
+		HttpURLConnection urlConnection = null;
+		
+		URL url = new URL(urlString);
+		urlConnection = (HttpURLConnection) url.openConnection();
+		
+		urlConnection.setRequestMethod("POST");
+		urlConnection.setDoOutput(true);
+		urlConnection.setDoInput(true);
+		urlConnection.setUseCaches(false);
+		
+		
+		if (!StringUtils.isBlank(params)) {
+			urlConnection.getOutputStream().write(params.toString().getBytes());
+			urlConnection.getOutputStream().flush();
+			urlConnection.getOutputStream().close();
+		}
+		
+		return makeContent(urlString, urlConnection);
 	}
  
 	/**
@@ -231,5 +269,32 @@ public class HttpRequester {
 	public static void setDefaultContentEncoding(String encoding) {
 		defaultContentEncoding = encoding;
 	}
+	
+	public static boolean downloadFromNet(String remoteUrl, String savePath) {
+        // 下载网络文件
+        int bytesum = 0;
+        int byteread = 0;
+
+
+        try {
+        	URL url = new URL(remoteUrl);
+            URLConnection conn = url.openConnection();
+            InputStream inStream = conn.getInputStream();
+            FileOutputStream fs = new FileOutputStream(savePath);
+
+            byte[] buffer = new byte[1024];
+            while ((byteread = inStream.read(buffer)) != -1) {
+                bytesum += byteread;
+                fs.write(buffer, 0, byteread);
+            }
+            //查看本地文件是否存在
+            return new File(savePath).exists();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
  

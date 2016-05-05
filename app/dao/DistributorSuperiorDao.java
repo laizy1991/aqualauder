@@ -2,7 +2,10 @@ package dao;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import models.DistributorSuperior;
+import play.db.jpa.Model;
 
 /**
  * 用户上线表
@@ -17,7 +20,15 @@ public class DistributorSuperiorDao {
     }
     
     public static List<DistributorSuperior> getBySuperiors(List<Integer> superiors) {
-        return DistributorSuperior.find("superior in ?", superiors).fetch();
+      String ids = "";
+      String split = "";
+      for(Integer id : superiors) {
+          ids = ids + split + id;
+          split = ",";
+      }
+      String sql = "SELECT * FROM distributor_superior where superior in (%s);";  
+      Query query = Model.em().createNativeQuery(String.format(sql, ids),DistributorSuperior.class);  
+      return query.getResultList();  
     }
     
     public static boolean create(int userId, int superior) {

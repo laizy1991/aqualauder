@@ -74,6 +74,7 @@ public class DistributorService {
             monthBlotter = new UserMonthBlotter();
             monthBlotter.setBlotterMonth(currMonth);
             monthBlotter.setCreateTime(System.currentTimeMillis());
+            monthBlotter.setUpdateTime(System.currentTimeMillis());
             monthBlotter.setUserId(userId);
             monthBlotter.setMonthBlotters(0l);
         }
@@ -128,9 +129,9 @@ public class DistributorService {
             if(user != null && StringUtils.isNotBlank(user.getNickname())) {
                 userName = user.getNickname();
             }
-            BillType billType = BillType.CONSUMPTION;
+            BillType billType = BillType.SPREAD;
             if(depth == 1) {
-                billType = BillType.SPREAD;
+                billType = BillType.CONSUMPTION;
             }
             String desc = String.format(billType.getTemplate(), userName);
             billType.setDesc(desc);
@@ -177,9 +178,11 @@ public class DistributorService {
             superiors.clear();
             for(DistributorSuperior item : list) {
                 superiors.add(item.getUserId());
+                User user = UserService.get(item.getUserId());
+                detail.addUnderling(level, user == null ? "" : user.getNickname());
             }
             
-            List<UserMonthBlotter> blotters = UserMonthBlotterDao.getByIds(superiors);
+            List<UserMonthBlotter> blotters = UserMonthBlotterDao.getByUserIds(superiors);
             for(UserMonthBlotter item : blotters) {
                 detail.addBlotter(level, item.getUserId(), item.getMonthBlotters());
             }
@@ -194,7 +197,7 @@ public class DistributorService {
         List<Integer> types = new ArrayList<Integer>();
         types.add(CashStatus.APPLY.getCode());
         types.add(CashStatus.ING.getCode());
-        List<CashInfo> cashInfos = CashInfoDao.getByTypes(userId, types);
+        List<CashInfo> cashInfos = CashInfoDao.getByStatus(userId, types);
         int amount = 0;
         for(CashInfo info : cashInfos) {
             amount += info.getAmount();
@@ -226,7 +229,7 @@ public class DistributorService {
         //生成推广链接
         String link = "";
         //生成推广二维码
-        String qrcodeUrl = "";
+        String qrcodeUrl = "http://";
         return createDistributor(userId, "", DistributorType.PERSONAL, link, qrcodeUrl);
         
     }    
@@ -242,6 +245,7 @@ public class DistributorService {
         
         distributor = new Distributor();
         distributor.setJoinTime(System.currentTimeMillis());
+        distributor.setType(type.getCode());
         distributor.setLink(link);
         distributor.setQrcodeUrl(qrcodeUrl);
         distributor.setRealName(realName);
@@ -331,6 +335,11 @@ public class DistributorService {
         distributor.setRealName(realName);
         boolean isSucc =DistributorDao.update(distributor);
         if(!isSucc) {
+            return false;
+        }
+        
+        if(AuditInfoDao.isExist(userId, AuditType.DISTRIBUTOR.getCode())) {
+            Logger.error("audit info is exist, userId:%s, type:%s", userId, AuditType.DISTRIBUTOR.getCode());
             return false;
         }
         

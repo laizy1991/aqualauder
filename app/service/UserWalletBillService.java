@@ -29,7 +29,7 @@ public class UserWalletBillService {
         bill.setObjId(outTradeNo);
         boolean isSucc = UserWalletBillDao.insert(bill);
         if(isSucc) {
-            Logger.error(new Gson().toJson(bill));
+            Logger.info(new Gson().toJson(bill));
         }
     }
     
