@@ -121,7 +121,7 @@ define(function(require) {
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
                     outTradeNo = $wrap.find('.outTradeNo').val(),
-                    expressId = $wrap.find('.expressId').val(),
+                    //expressId = $wrap.find('.expressId').val(),
                     expressNum = $wrap.find('.expressNum').val(),
                     forbidRefund = $wrap.find('.forbidRefund').val(),
                     state = $wrap.find('.state').val(),
@@ -178,7 +178,6 @@ define(function(require) {
                     id = $wrap.find('.id').val(),
                     userId = $wrap.find('.userId').val(),
                     outTradeNo = $wrap.find('.outTradeNo').val(),
-                    slipNo = $wrap.find('.slipNo').val(),
                     payType = $wrap.find('.payType').val(),
                     expressId = $wrap.find('.expressId').val(),
                     expressNum = $wrap.find('.expressNum').val(),
@@ -211,9 +210,8 @@ define(function(require) {
                         $("#idToView").text(id);
                         $("#userIdToView").text(userId);
                         $("#outTradeNoToView").text(outTradeNo);
-                        $("#slipNoToView").text(slipNo);
                         $("#payTypeToView").text(payType=="0"?"微信支付":payType=="1"?"余额":"未知");
-                        $("#expressIdToView_" + expressId).show();
+                        //$("#expressIdToView_" + expressId).show();
                         $("#expressNumToView").text(expressNum);
                         $("#totalFeeToView").text(totalFee);
                         $("#stateToView").text(stateList[state]);
