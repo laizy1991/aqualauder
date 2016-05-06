@@ -10,7 +10,7 @@ define(function(require) {
 
     var Initiator = {
         init: function() {
-            this.create($('#create'), $('[role="submitAdd"]'));
+            this.create($('[role="submitAdd"]'));
             this.delete($('[role="delete"]'));
             this.update($('#update'), $('[role="submitUpdate"]'));
             this.view($('[role="view"]'));
@@ -38,18 +38,10 @@ define(function(require) {
         /**
          * 添加
          */
-        create: function($form, $btn) {
+        create: function($btn) {
             $btn.click(function() {
+                swfu.startUpload();
 
-                ajax.post($form.attr('action'), $form.serialize(), function(result){
-                    if(result.success){
-                        dd.alert('保存成功！', function(){
-                            window.location.reload(false);
-                        });
-                    }else{
-                        dd.alert(result.error);
-                    }
-                });
             });
         },
 
