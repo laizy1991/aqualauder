@@ -163,7 +163,7 @@ public class DistributorService {
             return null;
         }
         
-        detail.setExtensionQrCode(distributor.getQrcodeUrl());
+//        detail.setExtensionQrCode(distributor.getQrcodeUrl());
         detail.setExtensionUrl(distributor.getLink());
         detail.setType(distributor.getType());
         
@@ -247,7 +247,7 @@ public class DistributorService {
         distributor.setJoinTime(System.currentTimeMillis());
         distributor.setType(type.getCode());
         distributor.setLink(link);
-        distributor.setQrcodeUrl(qrcodeUrl);
+//        distributor.setQrcodeUrl(qrcodeUrl);
         distributor.setRealName(realName);
         distributor.setStatus(DistributorStatus.INIT.getCode());
         distributor.setUserId(userId);

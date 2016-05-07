@@ -51,19 +51,19 @@ public class CreateTmpQrCodeService {
     		e.printStackTrace();
     		throw new BusinessException("请求微信创建临时二维码接口发生错误");
     	}
-    	Logger.info("创建临时二维码API返回的数据是：%s", responseString);
+    	Logger.info("请求创建临时二维码API返回的数据是：%s", responseString);
     	if(StringUtils.isBlank(responseString)) {
     		throw new BusinessException("请求微信创建临时二维码接口返回数据为空");
     	}
     	CreateQrCodeRspDto rsp = new CreateQrCodeRspDto();
     	JSONObject json = JSONObject.fromObject(responseString);
+    	Logger.info("请求创建临时二维码API返回数据经解析后为: %s", gson.toJson(json));
     	if(!StringUtils.isBlank(json.optString("errcode"))) {
     		rsp.setSuccess(false);
     		rsp.setErrcode(json.optInt("errcode"));
     		rsp.setErrmsg(json.optString("errmsg"));
     		return rsp;
     	} else {
-    		Logger.info("请求创建临时二维码API成功返回数据, %s", gson.toJson(json));
     		rsp.setSuccess(true);
     		rsp.setExpire_seconds(json.optInt("expire_seconds"));
     		rsp.setTicket(json.optString("ticket"));
