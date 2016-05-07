@@ -388,13 +388,13 @@ public class Demo extends FrontController {
     }
     
     public static void share(int userId) {
-    	String querystring = "userId="+userId;
+    	String querystring = request.querystring;
     	String protocol = request.secure?"https://":"http://";
     	String action = request.action.replace(".", "/");
     	String url =  protocol + request.domain +"/"+ action + "?" + querystring;
     	Logger.info("生成的分享链接为: %s", url);
     	JsapiConfig config = JsApiService.getSign(url);
     	Logger.info("config参数为: %s", gson.toJson(config));
-    	render("Front/Demo/share.html", config);
+    	render("Front/Demo/share.html", config, userId);
     }
 }
