@@ -12,7 +12,7 @@ import play.cache.Cache;
 import service.UserService;
 import service.wx.dto.user.SubscribeReqDto;
 import utils.EmojiFilter;
-import utils.WxUtil;
+import utils.WxAccessTokenUtil;
 import utils.http.HttpRequester;
 import utils.http.HttpRespons;
 
@@ -68,7 +68,7 @@ public class WxUserService {
 		if(StringUtils.isEmpty(openId)) {
 			return null;
 		}
-		String accessToken = WxUtil.getAccessToken();
+		String accessToken = WxAccessTokenUtil.getAccessToken();
 		String accessUserUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN";
 		if(StringUtils.isBlank(accessToken)) {
 			return null;

@@ -21,6 +21,7 @@ import service.RedPackService;
 import service.RefundOrderService;
 import service.UserService;
 import service.wx.WXPay;
+import service.wx.dto.jspai.JsapiConfig;
 import service.wx.dto.order.OrderQueryReqDto;
 import service.wx.dto.order.OrderQueryRspDto;
 import service.wx.dto.qrcode.CreateQrCodeRspDto;
@@ -32,11 +33,13 @@ import service.wx.dto.refund.QueryRefundReqDto;
 import service.wx.dto.refund.QueryRefundRspDto;
 import service.wx.dto.refund.SendRefundReqDto;
 import service.wx.dto.refund.SendRefundRspDto;
+import service.wx.service.jsapi.JsApiService;
 import service.wx.service.user.WxUserService;
 import utils.IdGenerator;
 import utils.NumberUtil;
 
 import com.google.gson.Gson;
+
 import common.constants.OrderStatus;
 import common.constants.PayType;
 import common.constants.RefundStatus;
@@ -45,7 +48,6 @@ import common.constants.wx.TradeStatus;
 import common.constants.wx.WxCallbackStatus;
 import common.constants.wx.WxRefundStatus;
 import common.core.FrontController;
-
 import exception.BusinessException;
 
 
@@ -383,5 +385,16 @@ public class Demo extends FrontController {
         	}
         	renderText("更新用户推广记录失败，入参为: %s", gson.toJson(dis));
     	}
+    }
+    
+    public static void share(int userId) {
+    	String querystring = "userId="+userId;
+    	String protocol = request.secure?"https://":"http://";
+    	String action = request.action.replace(".", "/");
+    	String url =  protocol + request.domain +"/"+ action + "?" + querystring;
+    	Logger.info("生成的分享链接为: %s", url);
+    	JsapiConfig config = JsApiService.getSign(url);
+    	Logger.info("config参数为: %s", gson.toJson(config));
+    	render("Front/Demo/share.html", config);
     }
 }

@@ -18,7 +18,7 @@ import service.wx.common.Configure;
 import service.wx.dto.qrcode.CreateQrCodeRspDto;
 import service.wx.dto.qrcode.limit.CreateLimitQrCodeReqDto;
 import utils.FileTypeUtil;
-import utils.WxUtil;
+import utils.WxAccessTokenUtil;
 import utils.http.HttpRequester;
 import utils.http.HttpRespons;
 
@@ -41,7 +41,7 @@ public class CreateLimitQrCodeService {
     	}
     	String responseString = "";
     	try {
-    		String url = String.format(new String(Configure.CREATE_QRCODE_API), WxUtil.getAccessToken());
+    		String url = String.format(new String(Configure.CREATE_QRCODE_API), WxAccessTokenUtil.getAccessToken());
     		String params = gson.toJson(createLimitQrCodeReqDto);
     		Logger.info("请求微信创建永久二维码入参为：%s", params);
     		HttpRespons rsp = HttpRequester.sendPost(url, params);
