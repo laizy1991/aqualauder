@@ -3,7 +3,7 @@ package controllers.front;
 import org.apache.commons.lang.StringUtils;
 
 import service.wx.service.user.WxUserService;
-
+import common.annotation.GuestAuthorization;
 import common.constants.GoodsTag;
 import common.core.FrontController;
 
@@ -17,6 +17,7 @@ public class GoodsCtrl extends FrontController {
 	 * @param tag
 	 * @param code
 	 */
+    @GuestAuthorization
     public static void list(int tag, String code) {
     	// TODO 从入口处拿取session中的openId，没有的话用code去换，换回来后放入session中
     	String openId = WxUserService.getUserOpenIdByCode(code);
@@ -36,5 +37,7 @@ public class GoodsCtrl extends FrontController {
 			default:
 				
     	}
+    	
+    	render("/Front/goods/list.html");
     }
 }
