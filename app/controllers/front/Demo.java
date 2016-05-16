@@ -21,6 +21,7 @@ import service.RedPackService;
 import service.RefundOrderService;
 import service.UserService;
 import service.wx.WXPay;
+import service.wx.dto.jspai.JsapiConfig;
 import service.wx.dto.order.OrderQueryReqDto;
 import service.wx.dto.order.OrderQueryRspDto;
 import service.wx.dto.qrcode.CreateQrCodeRspDto;
@@ -32,21 +33,21 @@ import service.wx.dto.refund.QueryRefundReqDto;
 import service.wx.dto.refund.QueryRefundRspDto;
 import service.wx.dto.refund.SendRefundReqDto;
 import service.wx.dto.refund.SendRefundRspDto;
+import service.wx.service.jsapi.JsApiService;
 import service.wx.service.user.WxUserService;
 import utils.IdGenerator;
 import utils.NumberUtil;
 
 import com.google.gson.Gson;
+
 import common.constants.OrderStatus;
 import common.constants.PayType;
 import common.constants.RefundStatus;
 import common.constants.wx.PayStatus;
-import common.constants.wx.QrCodeType;
 import common.constants.wx.TradeStatus;
 import common.constants.wx.WxCallbackStatus;
 import common.constants.wx.WxRefundStatus;
 import common.core.FrontController;
-
 import exception.BusinessException;
 
 
@@ -272,14 +273,12 @@ public class Demo extends FrontController {
      * 生成临时二维码，CreateTmpQrCodeReqDto中的scene_id为用户ID
      * @throws BusinessException
      */
-    public static void createTmpQrCode() throws BusinessException {
-    	int userId = 10010;
+    public static void createTmpQrCode(int userId) throws BusinessException {
     	User user = UserService.get(userId);
     	if(null == user) {
     		Logger.error("查询用户记录失败，userId: %d", userId);
     		renderText("查询用户记录失败，userId: %d", userId);
     	}
-    	
     	
     	CreateTmpQrCodeReqDto req = new CreateTmpQrCodeReqDto(user.getUserId());
     	CreateQrCodeRspDto rsp = WXPay.CreateTmpQrCodeService(req);
@@ -287,38 +286,59 @@ public class Demo extends FrontController {
     		Logger.error("获取用户二维码图片失败，userId: %d", userId);
     		renderText("获取用户二维码图片失败，userId: %d", userId);
     	}
-    	//将二维码地址和本地相对路径入库
-    	Distributor dis = new Distributor();
-    	dis.setUserId(userId);
-    	dis.setType(0);
-    	dis.setStatus(1);
-    	dis.setRealName("林守煌");
-    	dis.setJoinTime(System.currentTimeMillis());
-    	dis.setLink("");
-    	dis.setQrcodeType(QrCodeType.TMP.getType());
-    	dis.setQrcodeUrl(rsp.getUrl());
-    	dis.setQrcodePath(rsp.getPicRelPath());
-    	dis.setCreateTime(System.currentTimeMillis());
-    	dis.setUpdateTime(System.currentTimeMillis());
-    	
-    	if(DistributorService.add(dis)) {
-    		renderText("创建用户推广记录成功，userId: %d", userId);
+    	Distributor dis = DistributorService.get(userId);
+    	long nowTime = System.currentTimeMillis();
+    	//这里expire_seconds一定要先转为long
+    	long expireTime = nowTime + Long.parseLong(rsp.getExpire_seconds()+"") * 1000;
+    	//TODO 前台展示二维码时，用如下规则，nginx对qrcode作解析
+    	//Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") + Play.configuration.getProperty("wx.qrcode.prefix", "/qrcode/")+ rsp.getPicRelPath();
+    	if(null == dis) {
+    		Logger.info("该用户较前时间未成为分销商，准备新增，userId: %d", userId);
+    		//将二维码地址和本地相对路径入库
+        	dis = new Distributor();
+        	dis.setUserId(userId);
+        	dis.setType(0);
+        	dis.setStatus(1);
+        	dis.setRealName(user.getNickname());
+        	dis.setJoinTime(System.currentTimeMillis());
+        	dis.setLink("");
+        	dis.setQrcodeTmpWxUrl(rsp.getUrl());
+        	dis.setQrcodeTmpPath(rsp.getPicRelPath());
+        	dis.setQrcodeTmpTicket(rsp.getTicket());
+        	dis.setQrcodeTmpExpireTime(expireTime);
+        	dis.setQrcodeLimitWxUrl("");
+        	dis.setQrcodeLimitPath("");
+        	dis.setQrcodeLimitTicket("");
+        	dis.setCreateTime(nowTime);
+        	dis.setUpdateTime(nowTime);
+        	if(DistributorService.add(dis)) {
+        		renderText("创建用户推广记录成功，入参为: %s", gson.toJson(dis));
+        	}
+        	renderText("创建用户推广记录失败，入参为: %s", gson.toJson(dis));
+    	} else {
+    		Logger.info("该用户较前时间已成为分销商，准备更新，userId: %d", userId);
+    		dis.setQrcodeTmpWxUrl(rsp.getUrl());
+    		dis.setQrcodeTmpPath(rsp.getPicRelPath());
+    		dis.setQrcodeTmpTicket(rsp.getTicket());
+    		dis.setQrcodeTmpExpireTime(expireTime);
+    		dis.setUpdateTime(nowTime);
+    		if(DistributorService.update(dis)) {
+        		renderText("更新用户推广记录成功，入参为: %s", gson.toJson(dis));
+        	}
+        	renderText("更新用户推广记录失败，入参为: %s", gson.toJson(dis));
     	}
-    	renderText("创建用户推广记录失败，userId: %d", userId);
     }
     
     /**
      * 生成永久二维码，CreateLimitQrCodeReqDto中的scene_str为用户ID
      * @throws BusinessException
      */
-    public static void createLimitQrCode() throws BusinessException {
-    	int userId = 10010;
+    public static void createLimitQrCode(int userId) throws BusinessException {
     	User user = UserService.get(userId);
     	if(null == user) {
     		Logger.error("查询用户记录失败，userId: %d", userId);
     		renderText("查询用户记录失败，userId: %d", userId);
     	}
-    	
     	
     	CreateLimitQrCodeReqDto req = new CreateLimitQrCodeReqDto(user.getOpenId());
     	CreateQrCodeRspDto rsp = WXPay.CreateLimitQrCodeService(req);
@@ -326,24 +346,55 @@ public class Demo extends FrontController {
     		Logger.error("获取用户二维码图片失败，userId: %d", userId);
     		renderText("获取用户二维码图片失败，userId: %d", userId);
     	}
-    	//将二维码地址和本地相对路径入库
-    	Distributor dis = new Distributor();
-    	dis.setUserId(userId);
-    	dis.setType(0);
-    	dis.setStatus(1);
-    	dis.setRealName("林守煌");
-    	dis.setJoinTime(System.currentTimeMillis());
-    	dis.setLink("");
-    	dis.setQrcodeType(QrCodeType.LIMIT.getType());
-    	dis.setQrcodeUrl(rsp.getUrl());
-    	dis.setQrcodePath(rsp.getPicRelPath());
-    	dis.setCreateTime(System.currentTimeMillis());
-    	dis.setUpdateTime(System.currentTimeMillis());
     	
-    	if(DistributorService.add(dis)) {
-    		renderText("创建用户推广记录成功，userId: %d", userId);
+    	Distributor dis = DistributorService.get(userId);
+    	long nowTime = System.currentTimeMillis();
+    	//TODO 前台展示二维码时，用如下规则，nginx对qrcode作解析
+    	//Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") + Play.configuration.getProperty("wx.qrcode.prefix", "/qrcode/")+ rsp.getPicRelPath();
+    	if(null == dis) {
+    		Logger.info("该用户较前时间未成为分销商，准备新增，userId: %d", userId);
+    		//将二维码地址和本地相对路径入库
+        	dis = new Distributor();
+        	dis.setUserId(userId);
+        	dis.setType(0);
+        	dis.setStatus(1);
+        	dis.setRealName(user.getNickname());
+        	dis.setJoinTime(System.currentTimeMillis());
+        	dis.setLink("");
+        	dis.setQrcodeTmpWxUrl("");
+        	dis.setQrcodeTmpPath("");
+        	dis.setQrcodeTmpTicket("");
+        	dis.setQrcodeTmpExpireTime(0L);
+        	dis.setQrcodeLimitWxUrl(rsp.getUrl());
+        	dis.setQrcodeLimitPath(rsp.getPicRelPath());
+        	dis.setQrcodeLimitTicket(rsp.getTicket());
+        	dis.setCreateTime(nowTime);
+        	dis.setUpdateTime(nowTime);
+        	if(DistributorService.add(dis)) {
+        		renderText("创建用户推广记录成功，入参为: %s", gson.toJson(dis));
+        	}
+        	renderText("创建用户推广记录失败，入参为: %s", gson.toJson(dis));
+    	} else {
+    		Logger.info("该用户较前时间已成为分销商，准备更新，userId: %d", userId);
+    		dis.setQrcodeLimitWxUrl(rsp.getUrl());
+    		dis.setQrcodeLimitPath(rsp.getPicRelPath());
+    		dis.setQrcodeLimitTicket(rsp.getTicket());
+    		dis.setUpdateTime(nowTime);
+    		if(DistributorService.update(dis)) {
+        		renderText("更新用户推广记录成功，入参为: %s", gson.toJson(dis));
+        	}
+        	renderText("更新用户推广记录失败，入参为: %s", gson.toJson(dis));
     	}
-    	renderText("创建用户推广记录失败，userId: %d", userId);
-    	
+    }
+    
+    public static void share(int userId) {
+    	String querystring = request.querystring;
+    	String protocol = request.secure?"https://":"http://";
+    	String action = request.action.replace(".", "/");
+    	String url =  protocol + request.domain +"/"+ action + "?" + querystring;
+    	Logger.info("生成的分享链接为: %s", url);
+    	JsapiConfig config = JsApiService.getSign(url);
+    	Logger.info("config参数为: %s", gson.toJson(config));
+    	render("Front/Demo/share.html", config, userId);
     }
 }

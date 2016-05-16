@@ -12,7 +12,7 @@ import play.cache.Cache;
 import utils.http.HttpRequester;
 import utils.http.HttpRespons;
 
-public class WxUtil {
+public class WxAccessTokenUtil {
 	public static final String CACHE_PREFIX = "wx_";
 	private static String ACCESS_TOKEN_CACHE_KEY = null;		//access_token缓存key
 	public static String ACCESS_TOKEN_CACHE_TIMEOUT = null;		//access_token在缓存中有效时间

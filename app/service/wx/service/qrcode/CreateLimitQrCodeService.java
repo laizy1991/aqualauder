@@ -6,22 +6,24 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import models.User;
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
+
+import play.Logger;
+import play.Play;
+import service.UserService;
+import service.wx.common.Configure;
+import service.wx.dto.qrcode.CreateQrCodeRspDto;
+import service.wx.dto.qrcode.limit.CreateLimitQrCodeReqDto;
+import utils.FileTypeUtil;
+import utils.WxAccessTokenUtil;
+import utils.http.HttpRequester;
+import utils.http.HttpRespons;
 
 import com.google.gson.Gson;
 
-import net.sf.json.JSONObject;
-import play.Logger;
-import play.Play;
-import service.wx.common.Configure;
-import service.wx.common.Util;
-import service.wx.dto.qrcode.CreateQrCodeRspDto;
-import service.wx.dto.qrcode.limit.CreateLimitQrCodeReqDto;
-import service.wx.service.BaseService;
-import utils.FileTypeUtil;
-import utils.WxUtil;
-import utils.http.HttpRequester;
-import utils.http.HttpRespons;
 import exception.BusinessException;
 
 public class CreateLimitQrCodeService {
@@ -39,7 +41,7 @@ public class CreateLimitQrCodeService {
     	}
     	String responseString = "";
     	try {
-    		String url = String.format(new String(Configure.CREATE_QRCODE_API), WxUtil.getAccessToken());
+    		String url = String.format(new String(Configure.CREATE_QRCODE_API), WxAccessTokenUtil.getAccessToken());
     		String params = gson.toJson(createLimitQrCodeReqDto);
     		Logger.info("请求微信创建永久二维码入参为：%s", params);
     		HttpRespons rsp = HttpRequester.sendPost(url, params);
@@ -51,20 +53,20 @@ public class CreateLimitQrCodeService {
     		e.printStackTrace();
     		throw new BusinessException("请求微信创建永久二维码接口发生错误");
     	}
-    	Logger.info("创建永久二维码API返回的数据是：%s", responseString);
+    	Logger.info("请求创建永久二维码API返回的数据是：%s", responseString);
     	if(StringUtils.isBlank(responseString)) {
     		throw new BusinessException("请求微信创建永久二维码接口返回数据为空");
     	}
     	
     	CreateQrCodeRspDto rsp = new CreateQrCodeRspDto();
     	JSONObject json = JSONObject.fromObject(responseString);
+    	Logger.info("请求创建永久二维码API返回数据经解析后为: %s", gson.toJson(json));
     	if(!StringUtils.isBlank(json.optString("errcode"))) {
     		rsp.setSuccess(false);
     		rsp.setErrcode(json.optInt("errcode"));
     		rsp.setErrmsg(json.optString("errmsg"));
     		return rsp;
     	} else {
-    		Logger.info("请求创建永久二维码API成功返回数据, %s", gson.toJson(json));
     		rsp.setSuccess(true);
     		rsp.setExpire_seconds(json.optInt("expire_seconds"));
     		rsp.setTicket(json.optString("ticket"));
@@ -82,10 +84,15 @@ public class CreateLimitQrCodeService {
     		}
     		//文件夹前缀
     		String picPrefixDir = Play.configuration.getProperty("wx.qrcode.path", "/data/project/aqualauder/pic/");
-    		
+    		String picRelPath = "";
     		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/");
     		String dateDir = sdf.format(new Date());
-    		String picRelPath =  dateDir + "limit_" + createLimitQrCodeReqDto.getAction_info().getScene().getScene_str();
+    		User user = UserService.getByOpenId(createLimitQrCodeReqDto.getAction_info().getScene().getScene_str());
+    		if(null == user) {
+    			picRelPath = dateDir + "limit_" + createLimitQrCodeReqDto.getAction_info().getScene().getScene_str();
+    		} else {
+    			picRelPath = dateDir + "limit_" + user.getUserId();
+    		}
     		String picAbsPath = picPrefixDir + picRelPath;
     		String picAbsDir = picPrefixDir + dateDir;
     		

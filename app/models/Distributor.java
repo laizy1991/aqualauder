@@ -29,15 +29,27 @@ public class Distributor extends GenericModel {
     @Column(name="link")
     private String link;
     
-    @Column(name="qrcode_type")
-    private Integer qrcodeType;
+    @Column(name="qrcode_tmp_wx_url")
+    private String qrcodeTmpWxUrl;
     
-    @Column(name="qrcode_url")
-    private String qrcodeUrl;
+    @Column(name="qrcode_tmp_path")
+    private String qrcodeTmpPath;
     
-    @Column(name="qrcode_path")
-    private String qrcodePath;
+    @Column(name="qrcode_tmp_ticket")
+    private String qrcodeTmpTicket;
 
+    @Column(name="qrcode_tmp_expire_time")
+    private Long qrcodeTmpExpireTime;
+    
+    @Column(name="qrcode_limit_wx_url")
+    private String qrcodeLimitWxUrl;
+    
+    @Column(name="qrcode_limit_path")
+    private String qrcodeLimitPath;
+    
+    @Column(name="qrcode_limit_ticket")
+    private String qrcodeLimitTicket;
+    
     @Column(name="create_time")
     private Long createTime;
 
@@ -92,43 +104,76 @@ public class Distributor extends GenericModel {
         this.link = link;
     }
 
-    public String getQrcodeUrl() {
-        return qrcodeUrl;
-    }
-
-    public void setQrcodeUrl(String qrcodeUrl) {
-        this.qrcodeUrl = qrcodeUrl;
-    }
-
-    public Long getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Long createTime) {
-        this.createTime = createTime;
-    }
-
-    public Long getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Long updateTime) {
-        this.updateTime = updateTime;
-    }
-
-	public String getQrcodePath() {
-		return qrcodePath;
+	public String getQrcodeTmpPath() {
+		return qrcodeTmpPath;
 	}
 
-	public void setQrcodePath(String qrcodePath) {
-		this.qrcodePath = qrcodePath;
+	public void setQrcodeTmpPath(String qrcodeTmpPath) {
+		this.qrcodeTmpPath = qrcodeTmpPath;
 	}
 
-	public Integer getQrcodeType() {
-		return qrcodeType;
+	public String getQrcodeTmpTicket() {
+		return qrcodeTmpTicket;
 	}
 
-	public void setQrcodeType(Integer qrcodeType) {
-		this.qrcodeType = qrcodeType;
+	public void setQrcodeTmpTicket(String qrcodeTmpTicket) {
+		this.qrcodeTmpTicket = qrcodeTmpTicket;
 	}
+
+	public Long getQrcodeTmpExpireTime() {
+		return qrcodeTmpExpireTime;
+	}
+
+	public void setQrcodeTmpExpireTime(Long qrcodeTmpExpireTime) {
+		this.qrcodeTmpExpireTime = qrcodeTmpExpireTime;
+	}
+
+	public String getQrcodeLimitPath() {
+		return qrcodeLimitPath;
+	}
+
+	public void setQrcodeLimitPath(String qrcodeLimitPath) {
+		this.qrcodeLimitPath = qrcodeLimitPath;
+	}
+
+	public String getQrcodeLimitTicket() {
+		return qrcodeLimitTicket;
+	}
+
+	public void setQrcodeLimitTicket(String qrcodeLimitTicket) {
+		this.qrcodeLimitTicket = qrcodeLimitTicket;
+	}
+
+	public Long getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Long createTime) {
+		this.createTime = createTime;
+	}
+
+	public Long getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Long updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public String getQrcodeTmpWxUrl() {
+		return qrcodeTmpWxUrl;
+	}
+
+	public void setQrcodeTmpWxUrl(String qrcodeTmpWxUrl) {
+		this.qrcodeTmpWxUrl = qrcodeTmpWxUrl;
+	}
+
+	public String getQrcodeLimitWxUrl() {
+		return qrcodeLimitWxUrl;
+	}
+
+	public void setQrcodeLimitWxUrl(String qrcodeLimitWxUrl) {
+		this.qrcodeLimitWxUrl = qrcodeLimitWxUrl;
+	}
+
 }
