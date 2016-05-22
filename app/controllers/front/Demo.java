@@ -407,4 +407,8 @@ public class Demo extends FrontController {
     	Logger.info("config参数为: %s", gson.toJson(config));
     	render("Front/Demo/share.html", config, userId);
     }
+    
+    public static void qrcode() {
+    	render("Front/Demo/qrcode.html");
+    }
 }
