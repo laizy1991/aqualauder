@@ -60,7 +60,7 @@ public class Demo extends FrontController {
 	 * @param code
 	 */
     public static void getUserInfo(String code) {
-    	if(StringUtils.isBlank(code)) {
+    	/*if(StringUtils.isBlank(code)) {
     		renderText("code为空");
     	}
     	String openId = WxUserService.getUserOpenIdByCode(code);
@@ -71,8 +71,11 @@ public class Demo extends FrontController {
     	if(null == user) {
     		renderText("获取用户信息失败, openId: %s", openId);
     	}
-    	renderText(gson.toJson(user));
-    	session.put("openId", openId);
+    	session.put("openId", openId);*/
+        User user = new User();
+        user.setHeadImgUrl("http://wx.qlogo.cn/mmopen/kO0N6cWm18f9ia3lam6gMSUiaeicNkDPHlH8R4LVzibOaGYZK4Wgx1CxibLLbynWFjpLo7KQhvZrm9TMKANs3g8wL5ya8JxMWUYOK/0");
+        user.setNickname("Daniel");
+        render("/Front/user/myspace.html", user);
     }
     
     /**

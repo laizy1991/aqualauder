@@ -1,0 +1,207 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="author" content="m.178hui.com" />
+<meta name="applicable-device" content="mobile" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<title>个人中心 </title>
+<link href="/public/css/public.css" rel="stylesheet" type="text/css" />
+<link href="/public/css/user.css" rel="stylesheet" type="text/css">
+<script src="/public/js/thirdParty/jquery-1.9.1/jquery.min.js"></script>
+<script src="/public/js/layer.js"></script>
+<script>
+$(window).load(function() {
+    $("#status").fadeOut();
+    $("#preloader").delay(350).fadeOut("slow");
+})
+</script>
+
+<style type="text/css">
+a,img{border:0;}
+body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
+/* menuDiv */
+.menuDiv{border:1px solid #CCCCCC;background:#FFFFFF;padding:1px;}
+.menuDiv h3{font-size:14px;font-weight:bold;color:#FFFFFF;padding:5px 5px 5px 15px;background:#006699;cursor:pointer;height:22px;line-height:22px;overflow:hidden;}
+.menuDiv ul li{color:#333333;background:#EEEEEE;padding:5px 5px 5px 15px;font-size:12px;margin:1px 0 0 0;height:16px;}
+.menuDiv ul li a{color:#333333;background:#F4F4F4;display:block;padding:5px 5px 5px 15px;font-size:12px;margin:-5px -5px -5px -15px;text-decoration:none;height:16px;}
+.menuDiv ul li a:hover{color:#FFFFFF;background:#006699;}
+</style>
+</head>
+
+<body>
+<div class="mobile">
+    <!--页面加载 开始-->
+  <div id="preloader">
+    <div id="status">
+      <p class="center-text"><span>拼命加载中···</span></p>
+    </div>
+  </div>
+  <!--页面加载 结束--> 
+  <!--header 开始-->
+  <header>
+    <div class="header"> <a class="new-a-back" href="javascript:history.back();"> <span><img src="images/iconfont-fanhui.png"></span> </a>
+      <h2>个人中心</h2>
+      <div class="header_right shaixuan"><a href="index.html"><img src="images/iconfont-shouye.png"></a></div>
+    </div>
+  </header>
+  <!--header 结束-->
+
+    <div class="user_top w">
+        <div class="user_logo"><div class="img"><img src="${user.headImgUrl}"></div></div>
+        <div class="user_info">
+            <div class="user_name">${user.nickname}</div>
+            <div class="user_dengji">你是又【赖泽原】推荐</div>
+        </div>
+    </div>
+    
+    <div style="width:268px;margin:50px auto;">
+
+    <div class="menuDiv"> 
+        <h3>JS代码</h3>     
+        <ul style="display: none;">
+            <li><a href="http://www.17sucai.com/">导航菜单</a></li>
+            <li><a href="http://www.17sucai.com/">焦点幻灯片</a></li>
+            <li><a href="http://www.17sucai.com/">网页特效</a></li>
+            <li><a href="http://www.17sucai.com/">广告代码</a></li>
+            <li><a href="http://www.17sucai.com/">jQuery</a></li>
+            <li><a href="http://www.17sucai.com/">jQuery弹出层</a></li>
+            <li><a href="http://www.17sucai.com/">QQ客服</a></li>
+        </ul>
+    </div>
+
+    <div class="menuDiv"> 
+        <h3>欣赏借鉴</h3> 
+        <ul style="display: none;">
+            <li><a href="http://www.17sucai.com/">企业类网站</a></li>
+            <li><a href="http://www.17sucai.com/">行业类网站</a></li>
+            <li><a href="http://www.17sucai.com/">BLOG类网站</a></li>
+            <li><a href="http://www.17sucai.com/">门户类网站</a></li>
+            <li><a href="http://www.17sucai.com/">商城类网站</a></li>
+        </ul>
+    </div>
+
+    <div class="menuDiv"> 
+        <h3>建站技巧</h3> 
+        <ul style="display: none;">
+            <li><a href="http://www.17sucai.com/">企业类网站</a></li>
+            <li><a href="http://www.17sucai.com/">行业类网站</a></li>
+            <li><a href="http://www.17sucai.com/">BLOG类网站</a></li>
+            <li><a href="http://www.17sucai.com/">门户类网站</a></li>
+            <li><a href="http://www.17sucai.com/">商城类网站</a></li>
+            <li><a href="http://www.17sucai.com/">企业类网站</a></li>
+            <li><a href="http://www.17sucai.com/">行业类网站</a></li>
+            <li><a href="http://www.17sucai.com/">BLOG类网站</a></li>
+            <li><a href="http://www.17sucai.com/">门户类网站</a></li>
+            <li><a href="http://www.17sucai.com/">商城类网站</a></li>
+        </ul>
+    </div>
+
+    <div class="menuDiv"> 
+        <h3>YY频道设计</h3> 
+        <ul style="display: none;">
+            <li><a href="http://www.17sucai.com/">yy娱乐频道设计</a></li>
+            <li><a href="http://www.17sucai.com/">yy情侣频道设计图</a></li>
+            <li><a href="http://www.17sucai.com/">yy游戏频道设计图</a></li>
+            <li><a href="http://www.17sucai.com/">YY个性签名</a></li>
+        </ul>
+    </div>
+
+</div>
+
+</div>
+
+<script type="text/javascript">
+function MenuSwitch(className){     
+    this._elements = [];
+    this._default = -1;
+    this._className = className;
+    this._previous = false;
+}
+MenuSwitch.prototype.setDefault = function(id){
+    this._default = Number(id);
+}
+MenuSwitch.prototype.setPrevious = function(flag){
+    this._previous = Boolean(flag);
+}
+MenuSwitch.prototype.collectElementbyClass = function(){
+    this._elements = [];
+    var allelements = document.getElementsByTagName("div");
+    for(var i=0;i<allelements.length;i++){
+        var mItem = allelements[i];
+        if (typeof mItem.className == "string" && mItem.className == this._className){
+            var h3s = mItem.getElementsByTagName("h3");
+            var uls = mItem.getElementsByTagName("ul");
+            if(h3s.length == 1 && uls.length == 1){
+                h3s[0].style.cursor = "hand";                   
+                if(this._default == this._elements.length){
+                    uls[0].style.display = "block"; 
+                }else{
+                    uls[0].style.display = "none";  
+                }
+                this._elements[this._elements.length] = mItem;
+            }               
+        }
+    }
+}
+MenuSwitch.prototype.open = function(mElement){
+    var uls = mElement.getElementsByTagName("ul");
+    uls[0].style.display = "block";
+}
+MenuSwitch.prototype.close = function(mElement){
+    var uls = mElement.getElementsByTagName("ul");
+    uls[0].style.display = "none";
+}
+MenuSwitch.prototype.isOpen = function(mElement){
+    var uls = mElement.getElementsByTagName("ul");      
+    return uls[0].style.display == "block";
+}
+MenuSwitch.prototype.toggledisplay = function(header){
+    var mItem;
+    if(window.addEventListener){
+        mItem = header.parentNode;
+    }else{
+        mItem = header.parentElement;
+    }
+    if(this.isOpen(mItem)){
+        this.close(mItem);
+    }else{
+        this.open(mItem);
+    }       
+    if(!this._previous){
+        for(var i=0;i<this._elements.length;i++){
+            if(this._elements[i] != mItem){             
+                var uls = this._elements[i].getElementsByTagName("ul");
+                uls[0].style.display = "none";      
+            }
+        }
+    }
+}   
+MenuSwitch.prototype.init = function(){     
+    var instance = this;
+    this.collectElementbyClass();
+    if(this._elements.length==0){
+        return;
+    }
+    for(var i=0;i<this._elements.length;i++){
+        var h3s = this._elements[i].getElementsByTagName("h3");         
+        if(window.addEventListener){
+            h3s[0].addEventListener("click",function(){instance.toggledisplay(this);},false);
+        }else{
+            h3s[0].onclick = function(){instance.toggledisplay(this);}
+        }
+    }
+}
+</script>
+
+
+
+<script language="javascript">
+var mSwitch = new MenuSwitch("menuDiv");
+mSwitch.setDefault(0);
+mSwitch.setPrevious(false);
+mSwitch.init();
+</script>
+
+
+</body>
+</html>
