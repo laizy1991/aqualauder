@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        #{if isFromClient==false}
+            <title>#{get 'title' /}·游易</title>
+            
+        #{/if}
+        #{else}
+            <head>
+                <title>#{get 'title' /}·游易</title>
+            </head>
+        #{/else}
+        <meta charset="${_response_encoding}">
+        <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+        <meta baidu-gxt-verify-token="dd5fa959df2b25244c42c01aa47e153d">
+        #{get 'moreMeta' /}
+        <link rel="shortcut icon" type="image/png" href="@{'/public/images/web/favicon.png'}">
+        <link rel="stylesheet" href="@{'/public/csslib/pure-min.css'}">
+         <!--[if lt IE 9]>
+        	<link rel="stylesheet" href="@{'/public/csslib/grids-responsive-old-ie-min.css'}">
+		<![endif]-->
+		<!--[if gt IE 8]><!-->
+	    <link rel="stylesheet" href="@{'/public/csslib/grids-responsive-min.css'}">
+	    <!--<![endif]-->
+	    <link rel="stylesheet" href="@{'/public/css/web/common/common.css'}">
+
+        <link rel="stylesheet" href="/public/css/web/wx-pop.css?v=1510211722">
+        <link rel="stylesheet" href="/public/css/web/main.css">
+	    <style>
+	    	body{
+	    		max-width: 480px;
+	    		margin: 0px auto;
+	    	}
+            * {
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+	    	.p-header{
+                background-color: white;
+                width: 100%;
+                color: #353535;
+                margin-bottom: 16px;
+                height: 48px;
+                line-height:48px;
+                font-size: 18px;
+                margin: 0 auto;
+            }
+            .h-left{
+                float: left;
+                padding-left: 16px;
+            }
+            .h-middle{
+                text-align: center;
+            }
+            .h-right{
+                float: right;
+                padding-right: 16px;
+            }
+            .p-header img{
+               width: 30px;
+            }
+	    </style>
+        #{get 'moreStyles' /}
+        <script type="text/javascript" src="@{'/public/jslib/jquery-1.11.3.min.js'}"></script>
+        <script src="@{'/public/jslib/sea_2.1.1.js'}"></script>
+		<script src="@{'/public/js/web/common/config.js'}"></script>
+        #{get 'moreScripts' /}
+      
+    </head>
+    <body>
+    #{if isFromClient==false}
+    		#{include 'common/header_mobile.html' /}
+    </div>
+#{/if}
+        #{doLayout /}
+        <script>
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "//hm.baidu.com/hm.js?c3c1a2d4e6154d2bfbcb4ef53be2ff16";
+              var s = document.getElementsByTagName("script")[0];
+              s.parentNode.insertBefore(hm, s);
+            })();
+
+        </script>
+        <script src="/public/js/web/common/download.js?v=1510211722"></script>
+        <script src="@{'/public/js/web/common/openapp.js'}"></script>
+        <script src="@{'/public/js/web/common/layout.min.js'}"></script>
+    </body>
+</html>

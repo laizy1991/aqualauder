@@ -4,9 +4,13 @@ import java.util.List;
 
 import javax.persistence.Query;
 
-import play.db.jpa.Model;
-import models.DistributorSuperior;
 import models.UserMonthBlotter;
+
+import org.apache.commons.collections.CollectionUtils;
+
+import play.db.jpa.Model;
+
+import com.google.gson.Gson;
 
 public class UserMonthBlotterDao {
 
@@ -22,6 +26,16 @@ public class UserMonthBlotterDao {
         return query.getResultList();  
     }
     
+    public static long getSaleAmount(int userId) {
+        String sql = "SELECT * FROM user_month_blotters where user_id = %s;";  
+        Query query = Model.em().createNativeQuery(String.format(sql, userId),UserMonthBlotter.class);
+        List<UserMonthBlotter> list = query.getResultList();
+        if(list == null || list.isEmpty()) {
+            return 0;
+        }
+        System.err.println(new Gson().toJson(list.get(0)));
+        return list.get(0).getMonthBlotters(); 
+    }
     
     public static UserMonthBlotter get(int month, int userId) {
         return UserMonthBlotter.find("blotterMonth = ? and userId = ?", month, userId).first();

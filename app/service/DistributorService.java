@@ -1,12 +1,16 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import models.AuditInfo;
 import models.CashInfo;
 import models.Distributor;
 import models.DistributorSuperior;
+import models.Order;
 import models.User;
 import models.UserMonthBlotter;
 import models.UserWallet;
@@ -15,8 +19,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
-import sun.security.krb5.internal.crypto.crc32;
 import utils.DateUtil;
+
 import common.constants.AuditStatus;
 import common.constants.AuditType;
 import common.constants.BillType;
@@ -24,10 +28,13 @@ import common.constants.CashStatus;
 import common.constants.CommonDictType;
 import common.constants.DistributorStatus;
 import common.constants.DistributorType;
+import common.constants.OrderStatus;
+
 import dao.AuditInfoDao;
 import dao.CashInfoDao;
 import dao.DistributorDao;
 import dao.DistributorSuperiorDao;
+import dao.OrderDao;
 import dao.UserDao;
 import dao.UserMonthBlotterDao;
 import dao.UserWalletDao;
@@ -109,34 +116,22 @@ public class DistributorService {
             return;
         }
         
-        String levelPay = CommonDictService.getValue(CommonDictType.LEVEL_PAY, String.valueOf(depth));
-        if(StringUtils.isBlank(levelPay)) {
+        int addMoney = getAddMoney(depth, blotterAmount);
+        if(addMoney <= 0) {
             return;
         }
-        int per = 0;
-        try {
-            per = Integer.valueOf(levelPay);
-        } catch(Exception e) {
-            Logger.error("level pay invalid, level:%s, value:%s", depth, levelPay);
-            return;
+        String userName = "未命名";
+        User user = UserService.get(consumerId);
+        if(user != null && StringUtils.isNotBlank(user.getNickname())) {
+            userName = user.getNickname();
         }
-        
-        //加50做四舍五入
-        int addMoney = (int)((blotterAmount * per + 50) / 100);
-        if(addMoney > 0) {
-            String userName = "未命名";
-            User user = UserService.get(consumerId);
-            if(user != null && StringUtils.isNotBlank(user.getNickname())) {
-                userName = user.getNickname();
-            }
-            BillType billType = BillType.SPREAD;
-            if(depth == 1) {
-                billType = BillType.CONSUMPTION;
-            }
-            String desc = String.format(billType.getTemplate(), userName);
-            billType.setDesc(desc);
-            UserWalletService.income(billType, original.getUserId(), consumerId, currMonth, addMoney, outTradeNo);
+        BillType billType = BillType.SPREAD;
+        if(depth == 1) {
+            billType = BillType.CONSUMPTION;
         }
+        String desc = String.format(billType.getTemplate(), userName);
+        billType.setDesc(desc);
+        UserWalletService.income(billType, original.getUserId(), consumerId, currMonth, addMoney, outTradeNo);
         
         
         DistributorSuperior superior = DistributorSuperiorDao.get(original.getUserId());
@@ -146,14 +141,32 @@ public class DistributorService {
             return;
         }
 
-        Distributor user = DistributorDao.get(superior.getSuperior());
-        if(user == null) {
+        Distributor distributor = DistributorDao.get(superior.getSuperior());
+        if(distributor == null) {
             return;
         }
         
         // 递归访问上上线, 给上上线增加下下线流水
         depth++;
-        flushBlotterToSuperiors(user, blotterAmount, depth, currMonth, consumerId, outTradeNo);
+        flushBlotterToSuperiors(distributor, blotterAmount, depth, currMonth, consumerId, outTradeNo);
+    }
+    
+    public static int getAddMoney(int level, long blotterAmount) {
+        String levelPay = CommonDictService.getValue(CommonDictType.LEVEL_PAY, String.valueOf(level));
+        if(StringUtils.isBlank(levelPay)) {
+            return 0;
+        }
+        int per = 0;
+        try {
+            per = Integer.valueOf(levelPay);
+        } catch(Exception e) {
+            Logger.error("level pay invalid, level:%s, value:%s", level, levelPay);
+            return 0;
+        }
+        
+        //加50做四舍五入
+        int addMoney = (int)((blotterAmount * per + 50) / 100);
+        return addMoney;
     }
     
     public static DistributorDetail distributorDetail(Integer userId) {
@@ -162,6 +175,13 @@ public class DistributorService {
         if(distributor == null) {
             return null;
         }
+        DistributorSuperior ds = DistributorSuperiorDao.get(userId);
+        if(ds != null) {
+            User user = UserDao.get(ds.getSuperior());
+            if(user != null) {
+                detail.setSuperior(user.getNickname());
+            }
+        }
         
 //        detail.setExtensionQrCode(distributor.getQrcodeUrl());
         detail.setExtensionUrl(distributor.getLink());
@@ -169,6 +189,8 @@ public class DistributorService {
         
         List<Integer> superiors = new ArrayList<Integer>();
         superiors.add(userId);
+        List<Integer> undelingUids = new ArrayList<Integer>();
+        Map<Integer, List<Integer>> underlingLevel = new HashMap<Integer, List<Integer>>();
         for(int level=1; level<=MAX_BLOTTER_DEPTH; level++) {
             List<DistributorSuperior> list = DistributorSuperiorDao.getBySuperiors(superiors);
             if(CollectionUtils.isEmpty(list)) {
@@ -180,6 +202,15 @@ public class DistributorService {
                 superiors.add(item.getUserId());
                 User user = UserService.get(item.getUserId());
                 detail.addUnderling(level, user == null ? "" : user.getNickname());
+                if(user != null) {
+                    undelingUids.add(user.getUserId());
+                    List<Integer> tmpList = underlingLevel.get(level);
+                    if(tmpList == null) {
+                        tmpList = new ArrayList<Integer>();
+                        underlingLevel.put(level, tmpList);
+                    }
+                    tmpList.add(user.getUserId());
+                }
             }
             
             List<UserMonthBlotter> blotters = UserMonthBlotterDao.getByUserIds(superiors);
@@ -213,6 +244,53 @@ public class DistributorService {
             detail.setUsefulBalance(userWallet.getBalances());
         }
         
+        List<Order> orders = OrderDao.getByUserIds(undelingUids);
+        int orderSuccessCount = 0;
+        long orderSuccessAmount = 0;
+        int orderFailCount = 0;
+        long orderFailAmount = 0;
+        for(Order order : orders) {
+            
+            if(order.getState().intValue() == OrderStatus.COMPLETE.getState()) {
+                orderSuccessCount ++;
+                orderSuccessAmount += order.getTotalFee();
+            } else {
+                orderFailCount ++;
+                orderFailAmount += order.getTotalFee();
+            }
+            int level = -1;
+            for(Entry<Integer, List<Integer>> entry : underlingLevel.entrySet()) {
+                if(entry.getValue().contains(order.getUserId())) {
+                    level = entry.getKey();
+                    break;
+                }
+            }
+            
+            if(level > 0) {
+                int addMoney = getAddMoney(level, order.getTotalFee());
+                if(order.getState().intValue() == OrderStatus.INIT.getState()) {
+                    if(addMoney > 0) {
+                        detail.addUnpayWealth(addMoney);
+                    }
+                }
+                if (order.getState().intValue() == OrderStatus.PAYED.getState()
+                        || order.getState().intValue() == OrderStatus.DELIVERING.getState()
+                        || order.getState().intValue() == OrderStatus.DELIVERED.getState()) {
+                    if(addMoney > 0) {
+                        detail.addPayWealth(addMoney);
+                    }
+                }
+                if(order.getState().intValue() == OrderStatus.RECE.getState()) {
+                    if(addMoney > 0) {
+                        detail.addReceWealth(addMoney);
+                    }
+                }
+            }
+        }
+        detail.setOrderFailAmount(orderFailAmount);
+        detail.setOrderFailCount(orderFailCount);
+        detail.setOrderSuccessAmount(orderSuccessAmount);
+        detail.setOrderSuccessCount(orderSuccessCount);
         return detail;
     }
     

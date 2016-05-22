@@ -2,12 +2,15 @@ package dao;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import models.Order;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
+import play.db.jpa.Model;
 
 public class OrderDao {
 
@@ -65,4 +68,17 @@ public class OrderDao {
     	
     	return list.get(0);
     }
+    
+    public static List<Order> getByUserIds(List<Integer> userIds) {
+        String ids = "";
+        String split = "";
+        for(Integer id : userIds) {
+            ids = ids + split + id;
+            split = ",";
+        }
+        String sql = "SELECT * FROM `order` where user_id in (%s);";  
+        Query query = Model.em().createNativeQuery(String.format(sql, ids),Order.class);  
+        return query.getResultList();  
+    }
+    
 }

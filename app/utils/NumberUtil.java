@@ -1,6 +1,9 @@
 package utils;
 
+import java.math.BigDecimal;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NumberUtil {
 	
@@ -16,5 +19,27 @@ public class NumberUtil {
         String fixLenthString = String.valueOf(rm.nextDouble());
         // 返回固定的长度的随机数
         return fixLenthString.substring(2, strLength + 2);
+    }
+
+    public static String fen2yuan(Integer fen){
+        if( fen == null ){
+            return "0.00";
+        }
+        return fen2yuan(new Long(fen));
+    }
+
+    public static String fen2yuan(Long fen){
+        if( fen == null ){
+            return "0.00";
+        }
+        final int MULTIPLIER = 100;  
+        Pattern pattern = Pattern.compile("^[1-9][0-9]*{1}");  
+        Matcher matcher = pattern.matcher(fen.toString());  
+        
+        if (matcher.matches()) {  
+            return  new BigDecimal(fen).divide(new BigDecimal(MULTIPLIER)).setScale(2).toString();  
+        } else {  
+            return "0.00";  
+        }  
     }
 }

@@ -39,7 +39,6 @@ import utils.IdGenerator;
 import utils.NumberUtil;
 
 import com.google.gson.Gson;
-
 import common.constants.OrderStatus;
 import common.constants.PayType;
 import common.constants.RefundStatus;
@@ -48,6 +47,9 @@ import common.constants.wx.TradeStatus;
 import common.constants.wx.WxCallbackStatus;
 import common.constants.wx.WxRefundStatus;
 import common.core.FrontController;
+
+import dto.DistributorDetail;
+import dto.MySpaceDto;
 import exception.BusinessException;
 
 
@@ -72,10 +74,16 @@ public class Demo extends FrontController {
     		renderText("获取用户信息失败, openId: %s", openId);
     	}
     	session.put("openId", openId);*/
-        User user = new User();
-        user.setHeadImgUrl("http://wx.qlogo.cn/mmopen/kO0N6cWm18f9ia3lam6gMSUiaeicNkDPHlH8R4LVzibOaGYZK4Wgx1CxibLLbynWFjpLo7KQhvZrm9TMKANs3g8wL5ya8JxMWUYOK/0");
-        user.setNickname("Daniel");
-        render("/Front/user/myspace.html", user);
+        
+        String openId = "olVhYv0N4I24GhgF7dyf9mBm9wgE";
+        User user = WxUserService.getUserInfo(openId);
+        
+        DistributorDetail detail = DistributorService.distributorDetail(user.getUserId());
+        
+        MySpaceDto data = new MySpaceDto();
+        data.setUser(user);
+        data.setDetail(detail);
+        render("/Front/user/myspace.html", data);
     }
     
     /**
