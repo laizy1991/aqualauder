@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -14,6 +15,9 @@ import play.db.jpa.Model;
 public class CashInfoDao {
 
     public static List<CashInfo> getByStatus(int userId, List<Integer> statusList) {
+        if(statusList == null || statusList.isEmpty()) {
+            return Collections.EMPTY_LIST;
+        }
         String statusArr = "";
         String split = "";
         for(Integer status : statusList) {

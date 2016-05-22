@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -15,6 +16,9 @@ import com.google.gson.Gson;
 public class UserMonthBlotterDao {
 
     public static List<UserMonthBlotter> getByUserIds(List<Integer> userIds) {
+        if(userIds == null || userIds.isEmpty()) {
+            return Collections.EMPTY_LIST;
+        }
         String ids = "";
         String split = "";
         for(Integer id : userIds) {

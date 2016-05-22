@@ -62,21 +62,20 @@ public class Demo extends FrontController {
 	 * @param code
 	 */
     public static void getUserInfo(String code) {
-    	/*if(StringUtils.isBlank(code)) {
-    		renderText("code为空");
+    	if(StringUtils.isBlank(code)) {
+    	    Logger.error("code为空");
+    	    renderText("非法请求");
     	}
     	String openId = WxUserService.getUserOpenIdByCode(code);
     	if(StringUtils.isBlank(openId)) {
-    		renderText("获取到的openId为空");
+    	    Logger.error("openId为空");
+    	    renderText("非法请求");
     	}
     	User user = WxUserService.getUserInfo(openId);
     	if(null == user) {
-    		renderText("获取用户信息失败, openId: %s", openId);
+    		Logger.error("获取用户信息失败, openId: %s", openId);
+    		renderText("非法请求");
     	}
-    	session.put("openId", openId);*/
-        
-        String openId = "olVhYv0N4I24GhgF7dyf9mBm9wgE";
-        User user = WxUserService.getUserInfo(openId);
         
         DistributorDetail detail = DistributorService.distributorDetail(user.getUserId());
         

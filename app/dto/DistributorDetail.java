@@ -190,7 +190,8 @@ public class DistributorDetail {
     }
     
     public int getOrderCount() {
-        return orderFailCount + orderSuccessCount;
+        int count = orderFailCount + orderSuccessCount;
+        return count;
     }
     
     public long getOrderAmount() {

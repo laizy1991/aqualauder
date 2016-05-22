@@ -21,13 +21,6 @@ public class NumberUtil {
         return fixLenthString.substring(2, strLength + 2);
     }
 
-    public static String fen2yuan(Integer fen){
-        if( fen == null ){
-            return "0.00";
-        }
-        return fen2yuan(new Long(fen));
-    }
-
     public static String fen2yuan(Long fen){
         if( fen == null ){
             return "0.00";

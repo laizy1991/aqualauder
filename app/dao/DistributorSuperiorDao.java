@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -20,15 +21,19 @@ public class DistributorSuperiorDao {
     }
     
     public static List<DistributorSuperior> getBySuperiors(List<Integer> superiors) {
-      String ids = "";
-      String split = "";
-      for(Integer id : superiors) {
-          ids = ids + split + id;
-          split = ",";
-      }
-      String sql = "SELECT * FROM distributor_superior where superior in (%s);";  
-      Query query = Model.em().createNativeQuery(String.format(sql, ids),DistributorSuperior.class);  
-      return query.getResultList();  
+        if (superiors == null || superiors.isEmpty()) {
+            return Collections.EMPTY_LIST;
+        }
+        String ids = "";
+        String split = "";
+        for (Integer id : superiors) {
+            ids = ids + split + id;
+            split = ",";
+        }
+        String sql = "SELECT * FROM distributor_superior where superior in (%s);";
+        Query query = Model.em().createNativeQuery(String.format(sql, ids),
+                DistributorSuperior.class);
+        return query.getResultList();
     }
     
     public static boolean create(int userId, int superior) {

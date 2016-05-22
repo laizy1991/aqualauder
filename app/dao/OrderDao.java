@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -70,6 +71,9 @@ public class OrderDao {
     }
     
     public static List<Order> getByUserIds(List<Integer> userIds) {
+        if(userIds == null || userIds.isEmpty()) {
+            return Collections.EMPTY_LIST;
+        }
         String ids = "";
         String split = "";
         for(Integer id : userIds) {
