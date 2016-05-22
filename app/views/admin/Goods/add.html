@@ -37,7 +37,7 @@
         <td i="body" class="ui-dialog-body ui-dialog-body-thin">
             <div i="content" class="ui-dialog-content" id="content:createDialog">
                 <div class="dialog dialog-create">
-                    <form action="@{ajax.GoodsCtrl.add}" id="create">
+                    <form action="@{ajax.GoodsCtrl.add}" id="create" method="post" enctype="multipart/form-data">
                         <div class="form-group">
                             <label class="label"><span class="asterisk">*</span>商品名称</label>
                             <div class="col">
@@ -89,7 +89,6 @@
                 <div style="background-color: #C5D9FF; padding: 5px;">
                     <span id="spanButtonPlaceholder"></span>
                 </div>
-                <input id="btnUpload" type="button" value="上  传" onclick="startUploadFile();" class="btn3_mouseout"/>
                 <div id="divFileProgressContainer"></div>
                 <div id="thumbnails">
                     <table id="infoTable" border="0" width="530">
@@ -113,7 +112,7 @@
 #{set 'moreScripts'}
 <script id="addGoodIconTmpl" type="text/html">
     <div>
-            <input class="inputTmpl" type="hidden" name="" nameTmpl="goodsIcon[{index}].iconUrl" value="">
+            <input type="hidden" name="goodsIcon[{index}].iconUrl" value="{value}">
     </div>
 </script>
 

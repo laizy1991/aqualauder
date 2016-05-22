@@ -18,3 +18,4 @@ test-result/*
 *.ipr
 *.iws
 target
+public/pictures/goods
