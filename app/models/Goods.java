@@ -2,9 +2,9 @@ package models;
 
 import play.db.jpa.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="goods")
@@ -33,6 +33,10 @@ public class Goods extends Model {
 
     @Column(name="update_time")
     private Long updateTime;
+
+    @OneToMany
+    @JoinColumn(name="goods_id", insertable = false, updatable = false)
+    private List<GoodsIcon> goodsIcons;
 
     public Long getCreateTime() {
         return createTime;
@@ -96,5 +100,21 @@ public class Goods extends Model {
 
     public void setWarmPrompt(String warmPrompt) {
         this.warmPrompt = warmPrompt;
+    }
+
+    public List<GoodsIcon> getGoodsIcons() {
+        return goodsIcons;
+    }
+
+    public void setGoodsIcons(List<GoodsIcon> goodsIcons) {
+        this.goodsIcons = goodsIcons;
+    }
+
+    public synchronized void addGoodsIcons(GoodsIcon icon) {
+        if(null == goodsIcons) {
+            goodsIcons = new ArrayList<>();
+        }
+
+        goodsIcons.add(icon);
     }
 }

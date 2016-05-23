@@ -1,12 +1,15 @@
 package controllers.front;
 
-import org.apache.commons.lang.StringUtils;
-
-import play.Logger;
-import service.wx.service.user.WxUserService;
 import common.annotation.GuestAuthorization;
 import common.constants.GoodsTag;
 import common.core.FrontController;
+import models.Goods;
+import org.apache.commons.lang.StringUtils;
+import play.Logger;
+import service.GoodsService;
+import service.wx.service.user.WxUserService;
+
+import java.util.List;
 
 
 public class GoodsCtrl extends FrontController {
@@ -27,25 +30,26 @@ public class GoodsCtrl extends FrontController {
     		openId = WxUserService.getUserOpenIdByCode(code);
     	}
     	switch(tag) {
-			case GoodsTag.NEW: 
+			case GoodsTag.NEW:
 				Logger.info("name: 新品, tag: %d", tag);
 				break;
-			case GoodsTag.DRESS: 
+			case GoodsTag.DRESS:
 				Logger.info("name: 裙装, tag: %d", tag);
 				break;
-			case GoodsTag.SUIT: 
+			case GoodsTag.SUIT:
 				Logger.info("name: 整体搭配, tag: %d", tag);
 				break;
-			case GoodsTag.TOPS: 
+			case GoodsTag.TOPS:
 				Logger.info("name: 上装, tag: %d", tag);
 				break;
-			case GoodsTag.BOTTOMS: 
+			case GoodsTag.BOTTOMS:
 				Logger.info("name: 下装, tag: %d", tag);
 				break;
 			default:
-				
+
     	}
-    	
-    	render("/Front/goods/list.html");
+
+		List<Goods> goods = GoodsService.list(-1, -1, 0);
+		render("/Front/goods/list.html", goods);
     }
 }

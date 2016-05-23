@@ -36,6 +36,10 @@ public class GoodsDao {
     }
     
     public static List<Goods> getBy(int type, int page, int size)  {
-        return Goods.find("goods_type = ? and state = 1", type).fetch(page, size);
+        if(page == -1 && size == -1) {
+            return Goods.find("goods_type = ? and state = 1", type).fetch();
+        } else {
+            return Goods.find("goods_type = ? and state = 1", type).fetch(page, size);
+        }
     }
 }

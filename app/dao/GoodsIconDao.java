@@ -3,6 +3,7 @@ package dao;
 import java.util.List;
 
 import models.GoodsIcon;
+import utils.StringUtil;
 
 /**
  * 

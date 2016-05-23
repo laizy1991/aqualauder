@@ -1,32 +1,620 @@
-<!DOCTYPE html>
-<!-- saved from url=(0128)http://mp.weixin.qq.com/s?__biz=MzA4ODEyNTQ1Mw==&mid=209219890&idx=8&sn=34a2453b504b87429d1c4464b4d007d6&scene=0#wechat_redirect -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-<meta name="format-detection" content="telephone=no">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>安淇兰黛</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="/public/css/front/foods.css" rel="stylesheet" type="text/css">
+    <link href="/public/css/front/swiper.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/public/js/front/jquery.min.js"></script>
+    <script type="text/javascript" src="/public/js/front/wemall.js?112"></script>
+    <script type="text/javascript" src="/public/js/front/alert.js"></script>
+    <script type="text/javascript" src="/public/js/front/cookie.js"></script>
+    <script type='text/javascript' src='/public/js/front/PCASClass.js'></script>
+    <script type="text/javascript" src="/public/js/front/swiper.min.js"></script>
+    <style>
+        .swiper-container {
+            width: 100%;
+        }
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+        }
+        .button_img{margin-left:10px;height:40px;float:left;margin-top:3px;}
+        .button_buy{margin-right:10px;float:right;}
+        .button_buy a p{height: 3em;overflow: hidden;}
 
 
-        <script type="text/javascript">
-            window.logs = {
-                pagetime: {}
-            };
-            window.logs.pagetime['html_begin'] = (+new Date());
-        </script>
-        
+        .mui-sku input:checked+label {
+            border-color: #b10000;
+            color: #000;
+        }
+        .mui-sku label {
+            -webkit-tap-highlight-color: transparent;
+            display: inline-block;
+            border: 1px solid #e5e5e5;
+            background-color: #fff;
+            min-width: 2em;
+            padding: .5em 1.2em;
+            margin: 0 .5em .5em 0;
+            max-width: 100%;
+            text-align: center;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            -webkit-border-radius: 3px;
+            border-radius: 3px;
+        }
 
-        <link rel="dns-prefetch" href="http://res.wx.qq.com/">
-<link rel="dns-prefetch" href="http://mmbiz.qpic.cn/">
-<link rel="shortcut icon" type="image/x-icon" href="http://res.wx.qq.com/mmbizwap/zh_CN/htmledition/images/icon/common/favicon22c41b.ico">
+        .mui-sku input {
+            display: none;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        <title>订单中心</title>
-        
-<link rel="stylesheet" type="text/css" href="./联系客服_files/page_mp_article_improve2d1390.css">
-<style>
-     
+
+        .bg_color{background-color: #000000 }
+        .submit{background-color: #000000 }
+        .submit:active {background-color: #000000}
+        .menu_topbar {background-color: #000000 ;background: -webkit-linear-gradient(top, #000000 , #000000);border-bottom: 1px solid #000000;}
+        .footermenu ul {border-top: 1px solid #000000 ;background-color: #000000;background: -webkit-linear-gradient(top, #000000, #000000);}
+        .footermenu ul li a.active {background: -webkit-linear-gradient(top, #000000 , #000000);}
+
+        .head{background-color: #000000 }
+
+        .sort_on ul{background: -webkit-linear-gradient(top, #000000 , #000000);}
+        #s_province{width:25%; height:25px; text-align:center;}
+        #s_city{width:30%; height:25px;  text-align:center;}
+        #s_county{width:30%; height:25px;  text-align:center;}
     </style>
-设计中
- 
-</body></html>
+    <script type="text/javascript">
+        var appurl = '/index.php';
+        var rooturl = '';
+        $(function(){
+//$(".img-lazyload").scrollLoading();
+        })
+    </script>
+    <script src="/public/js/front/jquery.lazyload.js?v=1.9.1"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(function() {
+
+            $("img.lazy").lazyload({effect: "fadeIn"});
+
+        });
+    </script>
+
+
+</head>
+<body class="sanckbg mode_webapp" style="display:none;">
+<div id="menu-container" style="display: block;">
+    <div class="menu_header" style="display:block;">
+        <div class="menu_topbar">
+            <div id="menu" class="sort sort_on">
+                <a href="" style="overflow:hidden; height:40px; color:#fff">安琪兰黛</a>
+                <ul>
+                    <li><a href="javascript:showProducts('9')">2016新品</a></li><li><a href="javascript:showProducts('7')">新品</a></li><li><a href="javascript:showProducts('8')">经典</a></li><li><a href="javascript:showProducts('6')">礼服裙</a></li>						<li><a href="javascript:showAll()">所有商品</a></li>
+                </ul>
+            </div>
+            <a class="head_btn_right" href="javascript:showMenu();"><i
+                    class="menu_header_home"></i> </a>
+        </div>
+    </div>
+
+    <div class="gonggao" style="margin-top:39px;">
+        <div class="hot" >
+            <strong>公告</strong>
+        </div>
+        <div class="content"  >
+            <div align="">欢迎关注SOIREE设计师安琪兰黛集合平台，一个只卖安琪兰黛的互联网品牌。关于发货时间及退换货说明：SOIREE所售安琪兰黛实行预售制，下订单后7-10天发货（礼服裙10-15天发货），收货后3天内无条件退换货，运费由SOIREE承担，做一个有态度的品牌！客服电话4008907345(9:00-18:00)。更多介绍可点击“我的助手”--“代言人指南”查看。</div>
+        </div>
+    </div>
+
+
+
+    <!-- Swiper -->
+    <div class="swiper-container" style="width:100%;">
+        <div class="swiper-wrapper" style='height:251px;'>
+            <div class="swiper-slide"><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODEyNTQ1Mw==&mid=517038444&idx=1&sn=36c4c89b64e4cdc295a0242c9b37b8cb&scene=0&previewkey=%2F3WEVIpHQl6Z%2FoRgUO8KK8NS9bJajjJKzz%2F0By7ITJA%3D#wechat_redirect "><img style="width:100%;" src='http://oss-cn-hangzhou.aliyuncs.com/winbz/Public/Uploads/57319bb2216d6.jpg'></a></div><div class="swiper-slide"><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODEyNTQ1Mw==&mid=209219890&idx=6&sn=cf6e8a6d17519fd42eb31d5d43b03b4b&scene=18#wechat_redirect"><img style="width:100%;" src='http://oss-cn-hangzhou.aliyuncs.com/winbz/Public/Uploads/57319bc26b5f7.jpg'></a></div>			</div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <!-- Initialize Swiper -->
+    <script>
+        $(window).load(function() {
+            var swiper = new Swiper('.swiper-container', {
+                pagination: '.swiper-pagination',
+                paginationClickable: true,
+                spaceBetween: 30,
+                centeredSlides: true,
+                autoplay:2500,
+                speed:300,
+                autoplayDisableOnInteraction: false
+            });
+
+            $(function(){
+                var height = $('.swiper-slide img:eq(0)').height();
+                if(height<=0){height=320;}
+                $('.swiper-wrapper').css('height', height);
+            })
+        })
+    </script>
+
+    <script>
+        function getCookie(name)
+        {
+            var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+            if(arr=document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+        function delCookie(name)//删除cookie
+        {
+
+            var exp = new Date();
+
+            exp.setTime(exp.getTime() - 1);
+
+            var cval=getCookie(name);
+
+            if(cval!=null) document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+
+        }
+        var username='F' + getCookie('username');
+    </script>
+
+    <section class="menu" style='margin-top: 10px;'>
+        <section class="list listimg">
+            <dl>
+
+                <style>
+                    .promotion{width:100%;margin:0 auto;}
+                    .promotion ul{width:100%;overflow:hidden;}
+                    .promotion li{width:100%;display:inline;margin:10px 10px 0 10px;}
+                    .promotion .pic{width:100%;overflow:hidden;background:#fff;}
+                    .promotion .title{overflow:hidden;margin-top:5px;}
+                    .promotion .price{font-weight:bold;color:#e00000;line-height:20px;}
+                    .promotion .price del{font-weight:normal;color:#999;}
+                </style>
+                <script>
+                    function getCookie(name)
+                    {
+                        var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+                        if(arr=document.cookie.match(reg))
+                            return unescape(arr[2]);
+                        else
+                            return null;
+                    }
+                    function delCookie(name)//删除cookie
+                    {
+
+                        var exp = new Date();
+
+                        exp.setTime(exp.getTime() - 1);
+
+                        var cval=getCookie(name);
+
+                        if(cval!=null) document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+
+                    }
+                    var username='F' + getCookie('username');
+                </script>
+                <script>
+                    window.onload=function top(){
+                        var mTop = document.getElementsByClassName(username)[0].offsetTop;
+                        window.scrollTo(0,mTop)
+                    }
+                </script>
+
+
+                <div class="promotion" data-type="productGroup" data-id="product_promotion" data-spec="280X280" style="margin-bottom: 50px;">
+                    <ul class="clearfix" id="menu_id">
+                        <!--商品-->
+                        #{if goods == null || goods.size() == 0 }
+                            <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+                        #{/if}
+                        #{else}
+                            #{list items:goods, as:'info'}
+                                #{if info.goodsIcons.get(0) != null}
+                                    <li class="F152" style="position:relative;" menu='9'><div class="pic" style="position: relative">
+                                        <a href="${info.id}" title="${info.title}"></a>
+                                        <img data-original="/public/pictures/goods/${info.goodsIcons.get(0).iconUrl}" class="lazy" width="100%">
+                                        </a>
+                                        </div>
+                                    </li>
+                                #{/if}
+
+                            #{/list}
+                        #{/else}
+                        <!--商品 end-->
+
+                    </ul>
+                </div>
+            </dl>
+        </section>
+
+        <div id="mcover">
+
+            <section class="head">
+                <a href="javascript:void(0)" onClick="window.history.go(-1)" class="head_back"><i class="icon-back"></i></a>
+                <div class="head-title">商品详情</div>
+            </section>
+
+            <div id="Popup" style="display: block;margin-top:40px;">
+                <div class="imgPopup" style="padding:0px;">
+                    <img id="detailpic" src="" style="display:none;">
+                    <h3 id="detailtitle"></h3>
+                    <p class="jianjie" id="detailinfo"></p>
+                </div>
+            </div>
+
+            <div class="footermenu" style='z-index:1000'>
+                <ul>
+                    <script type="text/javascript">
+                        var id=$_GET['id'];
+                        if (id>0)
+                        {
+                            document.cookie="username=" + id;
+                        }
+                        var title = location.href + username;
+                        function goBack(){
+                            window.history.length<=1?
+                                    window.location.href = './index.php?g=App&m=Index&a=index' :
+                                    window.history.back();
+                        }
+                    </script>
+                    <li><a href="javascript:void(0);" onClick="goBack();"> <img
+                            src="/public/images/22.png">
+                        <p>返回</p>
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+
+    </section>
+</div>
+
+<div id="cart-container" style="display: none;">
+    <div class="menu_header">
+        <div class="menu_topbar">
+            <div id="menu" class="sort">
+                <a href="">购买</a>
+            </div>
+        </div>
+    </div>
+
+    <img style="width:100%;" id='good_pic' src=''>
+
+    <section class="order">
+        <div class="orderlist">
+
+            <ul id="ullist">
+                <dt  style="display:none;">已选购的</dt>
+            </ul>
+
+
+            <ul>
+                <li class="ccbg2" >今日限购剩余：<span style='color:red' id='last_cnt'>9775</span></li>
+            </ul>
+
+            <ul id="cartinfo">
+                <dt>购物车总计</dt>
+                <li class="ccbg2" id="emptyLii">已选：<span id="totalNum">0</span>份　共计：￥<span id="totalPrice">0</span>元</li>
+            </ul>			</div>
+        <form name="infoForm" id="infoForm" method="post" action="">
+            <div class="contact-info">
+                <ul>
+                    <li class="title">联系信息</li>
+                    <li>
+                        <table style="padding: 0; margin: 0; width: 100%;">
+                            <tbody>
+                            <tr>
+                                <td width="90px"><label for="name" class="ui-input-text"><span style="color:red">*</span>联系人：</label></td>
+                                <td>
+                                    <div class="ui-input-text">
+                                        <input id="name" name="name" placeholder="" value="" type="text"
+                                               class="ui-input-text">
+                                    </div></td>
+                            </tr>
+
+                            <tr>
+                                <td width="90px"><label for="phone" class="ui-input-text"><span style="color:red">*</span>联系电话：</label></td>
+                                <td>
+                                    <div class="ui-input-text">
+                                        <input id="phone" name="phone" placeholder="" value="" type="tel"
+                                               class="ui-input-text">
+                                    </div>
+                                </td>
+                            </tr>
+                            <!--tr>
+                                <td width="80px"><label for="pay" class="ui-input-text">支付方式：</label></td>
+                                <td colspan="2"><select name="pay" class="selectstyle"
+                                    id="select1">
+                                        <option value="0">货到付款</option>
+                                        <option value="1">支付宝在线支付</option>												<option value="2">微信支付</option>
+                                </select></td>
+                            </tr-->
+                            <!--<tr>
+                                <td width="90px"><label for="weixin" class="ui-input-text"><span style="color:red">*</span>微信号</label></td>
+                                <td>
+                                    <div class="ui-input-text">
+                                        <input id="weixin" name="weixin" placeholder="" value="" type="text"
+                                            class="ui-input-text">
+                                    </div></td>
+                            </tr>：-->
+                            <tr>
+                                <td width="90px"><label for="address"
+                                                        class="ui-input-text"><span style="color:red">*</span>联系地址：</label></td>
+                                <td>
+                                    <select name="s_province" id='s_province'></select>&nbsp;
+                                    <select name="s_city" id='s_city'></select>&nbsp;
+                                    <select name="s_county" id='s_county'></select><br/>
+											<textarea id="address" name="address" placeholder=""
+                                                      value="" class="ui-input-text"></textarea>
+                                    <script>
+                                        var province_check=true;
+                                    </script>
+                                </td>
+                            </tr>
+
+                            <script type="text/javascript">
+                                /*var Gid  = document.getElementById ;
+                                 var showArea = function(){
+                                 Gid('show').innerHTML = "<h3>省" + Gid('s_province').value + " - 市" +
+                                 Gid('s_city').value + " - 县/区" +
+                                 Gid('s_county').value + "</h3>"
+                                 }
+                                 Gid('s_county').setAttribute('onchange','showArea()');*/
+                                var provice='';
+                                var city='';
+                                var county='';
+                                new PCAS("s_province","s_city","s_county",provice,city,county);
+                            </script>
+
+                            <tr id='type_siz1' style="display:none;" show=0>
+                                <td width="90px"><label for="note" class="ui-input-text" id="guigename1"></label></td>
+                                <td>
+                                    <div class="mui-sku" id='guigevalue1'>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr id='type_siz2' style="display:none;" show=0>
+                                <td width="90px"><label for="note" class="ui-input-text" id="guigename2"></label></td>
+                                <td>
+                                    <div class="mui-sku" id='guigevalue2'>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td width="90px"><label for="note" class="ui-input-text">备注：</label></td>
+                                <td><textarea name="note" placeholder=""
+                                              class="ui-input-text"></textarea></td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                        <div class="footReturn">
+                            <a id="showcard" class="submit" href="javascript:submitOrder();">立即购买</a>
+                        </div>
+
+                    </li>
+                </ul>
+            </div>
+        </form>		</section>
+
+    <!-- 正在提交数据 -->
+    <div id="menu-shadow" hidefocus="true"
+         style="display: none; z-index: 10;">
+        <div class="btn-group"
+             style="position: fixed; font-size: 12px; width: 220px; bottom: 80px; left: 50%; margin-left: -110px; z-index: 999;">
+            <div class="del" style="font-size: 14px;">
+                <img src="/public/images/ajax-loader.gif" alt="loader">正在提交订单...
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="user-container" style="display: none;">
+
+    <div class="menu_header">
+        <div class="menu_topbar">
+            <div id="menu" class="sort ">
+                <a href="">查看我的订单</a>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <ul class="round" style="margin:0;padding:0;border-radius:0;border:0px;border-bottom:1px solid #C6C6C6">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" class="cpbiaoge">
+                <tr>
+                    <td> <span>订单详情</span> <span style='float:right'><a href='./index.php?g=App&m=Index&a=index_info'>继续购物>>></a></span> </td>
+                </tr>
+            </table>
+        </ul>
+    </div>
+
+    <div class="cardexplain">
+        <div id="page_tag_load" hidefocus="true"
+             style="display: none; z-index: 10;">
+            <div class="btn-group"
+                 style="position: fixed; font-size: 12px; width: 220px; bottom: 80px; left: 50%; margin-left: -110px; z-index: 999;">
+                <div class="del" style="font-size: 14px;">
+                    <img src="/public/images/ajax-loader.gif" alt="loader">正在获取订单...
+                </div>
+            </div>
+        </div>
+        <ul class="round"  id="orderlistinsert" style='color:#000;font-size:12px;'>
+            <!--插入订单ul-->
+        </ul>
+    </div>
+</div>
+
+
+<style>
+
+</style>
+
+<div class="footermenu">
+
+    <ul>
+        <li><a class="active" href="./index.php?g=App&m=Index&a=index_info"> <img
+                src="/public/images/21.png">
+            <p>首页</p>
+        </a></li>
+
+        <li><a href="./index.php?g=App&m=Index&a=member&page_type=order">  <img
+                src="/public/images/22.png">
+            <p>订单</p>
+        </a></li>
+
+        <li ><a href="./index.php?g=App&m=Index&a=member">  <img
+                src="/public/images/25.png">
+            <p>会员中心</p>
+        </a></li>
+    </ul>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+            WeixinJSBridge.call('showOptionMenu');
+        });
+    })
+    $('#good').click(function(){
+        showMenu();
+    })
+    var shareData_url = "http://xhq.winbz.com";
+    var shareData_sendFriendLink = "http://xhq.winbz.com/index.php?g=App&m=Index&a=index&user_id=2728512";
+    var shareData_tTitle = "nemo 的店铺";
+    function go_buy(){
+        now_buy();
+    };
+    function go_guanzhu(){
+        location.href='http://mp.weixin.qq.com/s?__biz=MzA4ODEyNTQ1Mw==&mid=209219890&idx=7&sn=3a0d0e4583c7d1e92856718708102fa1#rd';
+    };
+
+    $('body').show();
+    window.shareData = {
+        "imgUrl": "http://xhq.winbz.com/Public/Uploads/55c495e7ba9d0.jpg",
+        "sendFriendLink": 'http://xhq.winbz.com/index.php?g=App&m=Index&a=index&user_id=2728512',
+        "tTitle": "nemo 的店铺",
+        "tContent": "nemo 的店铺"
+    };
+</script>
+<script src='http://res.wx.qq.com/open/js/jweixin-1.0.0.js'></script><script>
+    wx.config({
+        debug: false,
+        appId: 'wxa33d0b489d1f8f5c',
+        timestamp: '1463897576',
+        nonceStr: 'dqWwp6I8DVZgnHLw',
+        signature: 'c77fe0f015a87784047ba0e009af17e32f8ec32a',
+        jsApiList: ['checkJsApi','onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo']
+    });
+    /* wx.error(function (res) {
+     alert('wx.error: '+JSON.stringify(res));
+     }); */
+    wx.ready(function () {
+
+        wx.onMenuShareTimeline({
+            title: window.shareData.tTitle, // 分享标题
+            link: window.shareData.sendFriendLink, // 分享链接
+            imgUrl: window.shareData.imgUrl, // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+        wx.onMenuShareAppMessage({
+            title: window.shareData.tTitle, // 分享标题
+            desc: window.shareData.tContent, // 分享描述
+            link: window.shareData.sendFriendLink, // 分享链接
+            imgUrl: window.shareData.imgUrl, // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+        wx.onMenuShareQQ({
+            title: window.shareData.tTitle, // 分享标题
+            desc: window.shareData.tContent, // 分享描述
+            link: window.shareData.sendFriendLink, // 分享链接
+            imgUrl: window.shareData.imgUrl, // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+
+        wx.onMenuShareWeibo({
+            title: window.shareData.tTitle, // 分享标题
+            desc: window.shareData.tContent, // 分享描述
+            link: window.shareData.sendFriendLink, // 分享链接
+            imgUrl: window.shareData.imgUrl, // 分享图标
+            success: function () {
+                // 用户确认分享后执行的回调函数
+            },
+            cancel: function () {
+                // 用户取消分享后执行的回调函数
+            }
+        });
+    });
+</script><script>$(function(){
+    $('#add_cart').after().click(function(){
+        WeixinJSBridge.invoke(
+                'editAddress',
+                {"appId":"wxa33d0b489d1f8f5c","scope":"jsapi_address","signType":"sha1","addrSign":"39389407e77f36c179f7571badf92b58f2b8e734","timeStamp":"1463897576","nonceStr":"aIzZALli9kqcBu9Z"},
+                function(res){
+                    if(res.err_msg=='edit_address:ok'){
+                        $('#name').val(res.userName);			//用户名
+                        $('#phone').val(res.telNumber);			//手机号
+                        var provice=res.proviceFirstStageName;	//省
+                        var city=res.addressCitySecondStageName;//市
+                        var county=res.addressCountiesThirdStageName;//县
+                        new PCAS('s_province','s_city','s_county',provice,city,county);
+                        $('#address').val(res.addressDetailInfo);
+                    }
+                }
+        );
+    });
+});</script><script type='text/javascript'>
+    (function(m, ei, q, i, a, j, s) {
+        m[a] = m[a] || function() {
+                    (m[a].a = m[a].a || []).push(arguments)
+                };
+        j = ei.createElement(q),
+                s = ei.getElementsByTagName(q)[0];
+        j.async = true;
+        j.charset = 'UTF-8';
+        j.src = i + '?v=' + new Date().getUTCDate();
+        s.parentNode.insertBefore(j, s);
+    })(window, document, 'script', '//static.meiqia.com/dist/meiqia.js', '_MEIQIA');
+    _MEIQIA('entId', 15963);
+</script></body>
+</html>

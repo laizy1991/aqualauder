@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 public class StringUtil {
 
@@ -54,5 +55,20 @@ public class StringUtil {
 			return str.replaceAll("(\\n)+", "\n");
 		}
 		return str;
+	}
+
+	public static String join(List<Long> list, String separator) {
+		StringBuilder sb = new StringBuilder();
+		if(list.isEmpty()) {
+			return sb.toString();
+		} else {
+			sb.append(list.get(0));
+
+			for(int i = 1; i < list.size(); ++i) {
+				sb.append(separator).append(list.get(i));
+			}
+
+			return sb.toString();
+		}
 	}
 }
