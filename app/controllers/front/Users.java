@@ -24,7 +24,6 @@ public class Users extends WebController {
     @GuestAuthorization
     public static void getUserInfo(String code) {
         String openId = session.get("openId");
-        openId = "olVhYv0N4I24GhgF7dyf9mBm9wgE";
         if(StringUtils.isBlank(openId)) {
             if(StringUtils.isBlank(code)) {
                 Logger.error("code为空");
