@@ -37,8 +37,10 @@ import service.wx.service.jsapi.JsApiService;
 import service.wx.service.user.WxUserService;
 import utils.IdGenerator;
 import utils.NumberUtil;
+import utils.WxAccessTokenUtil;
 
 import com.google.gson.Gson;
+
 import common.constants.OrderStatus;
 import common.constants.PayType;
 import common.constants.RefundStatus;
@@ -47,7 +49,6 @@ import common.constants.wx.TradeStatus;
 import common.constants.wx.WxCallbackStatus;
 import common.constants.wx.WxRefundStatus;
 import common.core.FrontController;
-
 import dto.DistributorDetail;
 import dto.MySpaceDto;
 import exception.BusinessException;
@@ -56,6 +57,11 @@ import exception.BusinessException;
 public class Demo extends FrontController {
 	
 	public static Gson gson = new Gson();
+	
+	public static void getAT() {
+		String accessToken = WxAccessTokenUtil.getAccessToken();
+		Logger.info("accessToken: %s", accessToken);
+    }
 	
 	/**
 	 * 公众号自定义菜单进入后获取用户信息
