@@ -1,7 +1,16 @@
 package controllers.front;
 
+import models.User;
+
+import org.apache.commons.lang.StringUtils;
+
+import play.Logger;
+import service.DistributorService;
+import service.wx.service.user.WxUserService;
 import common.annotation.GuestAuthorization;
 import common.core.WebController;
+import dto.DistributorDetail;
+import dto.MySpaceDto;
 
 public class Users extends WebController {
     @GuestAuthorization
@@ -12,5 +21,33 @@ public class Users extends WebController {
     public static void qrcode() {
         render("/Front/user/qrcode.html");
     }
-    
+    @GuestAuthorization
+    public static void getUserInfo(String code) {
+        String openId = session.get("openId");
+        openId = "olVhYv0N4I24GhgF7dyf9mBm9wgE";
+        if(StringUtils.isBlank(openId)) {
+            if(StringUtils.isBlank(code)) {
+                Logger.error("code为空");
+                renderText("非法请求");
+            }
+            openId = WxUserService.getUserOpenIdByCode(code);
+        }
+        
+        if(StringUtils.isBlank(openId)) {
+            Logger.error("openId为空");
+            renderText("非法请求");
+        }
+        User user = WxUserService.getUserInfo(openId);
+        if(null == user) {
+            Logger.error("获取用户信息失败, openId: %s", openId);
+            renderText("非法请求");
+        }
+        
+        DistributorDetail detail = DistributorService.distributorDetail(user.getUserId());
+        
+        MySpaceDto data = new MySpaceDto();
+        data.setUser(user);
+        data.setDetail(detail);
+        render("/Front/user/myspace.html", data, code);
+    }
 }
