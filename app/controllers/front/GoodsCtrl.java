@@ -21,14 +21,7 @@ public class GoodsCtrl extends FrontController {
 	 * @param tag
 	 * @param code
 	 */
-    @GuestAuthorization
     public static void list(int tag, String code) {
-    	// TODO 从入口处拿取session中的openId，没有的话用code去换，换回来后放入session中
-    	Logger.info("code: %s", code);
-    	String openId = session.get("openId");
-    	if(StringUtils.isBlank(openId)) {
-    		openId = WxUserService.getUserOpenIdByCode(code);
-    	}
     	switch(tag) {
 			case GoodsTag.NEW:
 				Logger.info("name: 新品, tag: %d", tag);
