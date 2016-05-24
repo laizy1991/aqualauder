@@ -29,8 +29,7 @@ public class Users extends FrontController {
     }
     @GuestAuthorization
     public static void qrcode() {
-//    	String openId = session.get("openId");
-    	String openId = "olVhYv2ogEVJYgaRhEpIh83NZh5c";
+    	String openId = session.get("openId");
     	User user = null;
     	if(!StringUtils.isBlank(openId)) {
     		 user = WxUserService.getUserInfo(openId);
