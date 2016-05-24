@@ -21,7 +21,6 @@ public class GoodsCtrl extends WebController {
 	 */
     @GuestAuthorization
     public static void list() {
-
 		List<Goods> goods = GoodsService.list(-1, -1, 0);
 		render("/Front/goods/list.html", goods);
     }

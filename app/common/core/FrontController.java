@@ -12,9 +12,7 @@ import play.mvc.Catch;
 import play.mvc.Http.Request;
 import service.UserService;
 import service.wx.service.user.WxUserService;
-
 import common.constants.RegType;
-
 import exception.BusinessException;
 
 /**
@@ -26,6 +24,17 @@ public class FrontController extends BaseController {
 	@Before
 	protected static void beforeAction() throws SecurityException, NoSuchMethodException {
 		Logger.info("Action - %s", Request.current().path);
+		String code = request.params.get("code");
+		if(!StringUtils.isBlank(code)) {
+			Logger.info("code: %s", code);
+	    	String openId = session.get("openId");
+	    	if(StringUtils.isBlank(openId)) {
+	    		openId = WxUserService.getUserOpenIdByCode(code);
+	    		if(!StringUtils.isBlank(openId)) {
+	    			session.put("openId", openId);
+	    		}
+	    	}
+		}
 	}
 	
 	@Catch(Exception.class)
@@ -35,7 +44,7 @@ public class FrontController extends BaseController {
 			BusinessException be = (BusinessException)throwable;
 			Logger.warn(throwable, "@Catch Exception: " + be.getMessage());
 			String msg = be.getMessage();
-			renderTemplate("errors/error.html", msg);
+			renderTemplate("errors/500.html", msg);
 		} else {
 			Logger.error(throwable, "Unknown Exception: " + throwable.getMessage());
 			error(Messages.get("server.error"));
@@ -43,6 +52,6 @@ public class FrontController extends BaseController {
 	}
 	
 	protected static void renderError(String msg) {
-		renderTemplate("errors/error.html", msg);
+		renderTemplate("errors/500.html", msg);
 	}
 }

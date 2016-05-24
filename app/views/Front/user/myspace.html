@@ -204,11 +204,8 @@ $(function () {
             <span style='float:left;margin-left:10px;margin-right:10px;'>
                 <img src='http://wx.qlogo.cn/mmopen/pUNYhn9qq6GAwPtahjSb7QliaicDAFibBP1aaFG5ibf2gAlXj22S0jSf6pupGmQFk2aR6mCnJibZTR4nbBgPlvNBfccX4CyStuIQn/0' width='80px;' height='90px;'>          </span>
             <span class="header_right">
-                <div><span>昵称：Daniel</span></div>
-                <div><span>会员：否(<a style='color:red' href='./index.php?g=App&m=Index&a=index'>点击链接成为会员</a>)</span></div>
-                <div><span>关注时间：2016-03-02</span></div>
-                <div><span>会员ID：2718433 </span></div>
-                <div><span>积分：0</span></div>
+                <div><span>昵称：${data?.user?.nickname}</span></div>
+                <div><span>关注时间：%{out.print(utils.DateUtil.getDateString(data?.user?.subscribeTime, "yyyy-MM-dd"))}%</span></div>
             </span>
         </div>
 
@@ -216,15 +213,15 @@ $(function () {
             <form name="txinfoForm" id="txinfoForm" method="post" action="">
                 <div class="contact-info">
                     <ul>
-                        <li class="title">提现信息</li>
+                        <li class="title">提现信息(可提现：%{out.print(utils.NumberUtil.fen2yuan(data?.detail?.usefulBalance))}%元)</li>
                                                 <li>
                             <table style="padding: 0; margin: 0; width: 100%;">
                                 <tbody>
                                     <tr>
-                                        <td width="80px"><label for="price" class="ui-input-text">提现金额：</label></td>
+                                        <td width="80px"><label for="amount" class="ui-input-text">提现金额：</label></td>
                                         <td>
                                             <div class="ui-input-text">
-                                                <input id="price" name="price" placeholder="" value="0.00" type="text"
+                                                <input id="amount" name="amount" placeholder="" value="0.00" type="text"
                                                     class="ui-input-text">
                                             </div></td>
                                     </tr>
@@ -248,12 +245,12 @@ $(function () {
             <div class="btn-group"
                 style="position: fixed; font-size: 12px; width: 220px; bottom: 80px; left: 50%; margin-left: -110px; z-index: 999;">
                 <div class="del" style="font-size: 14px;">
-                    <img src="/Application/Tpl/App/member_default/Public/Static/images/ajax-loader.gif" alt="loader">正在提交申请...
+                    正在提交申请...
                 </div>
             </div>
         </div>
         
-        <ul class="round">
+        <!-- <ul class="round">
                 <table width="100%" border="0" cellpadding="0" cellspacing="0" class="cpbiaoge">
                     <tr>
                         <th>编号</th>
@@ -264,7 +261,7 @@ $(function () {
                                         </tbody>
                 </table>
             </ul>
-        
+         -->
         
     </div>
     

@@ -6,9 +6,13 @@ import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import service.DistributorService;
+import service.UserWalletService;
 import service.wx.service.user.WxUserService;
+
 import common.annotation.GuestAuthorization;
+import common.constants.CashType;
 import common.core.WebController;
+
 import dto.DistributorDetail;
 import dto.MySpaceDto;
 
@@ -48,5 +52,27 @@ public class Users extends WebController {
         data.setUser(user);
         data.setDetail(detail);
         render("/Front/user/myspace.html", data, code);
+    }
+    @GuestAuthorization
+    public static void cash(String amount) {
+        String openId = session.get("openId");
+        boolean isSucc = false;
+        if(StringUtils.isBlank(openId)) {
+            renderJSON(isSucc);
+        }
+        User user = WxUserService.getUserInfo(openId);
+        if(null == user) {
+            Logger.error("获取用户信息失败, openId: %s", openId);
+            renderJSON(isSucc);
+        }
+        try {
+            int cashAmount = (int)(Double.parseDouble(amount) * 100);
+            if(cashAmount > 0) {
+                isSucc = UserWalletService.cash(user.getUserId(), cashAmount, CashType.REDPACK.getCode(), "");
+            }
+        } catch(Exception e) {
+            Logger.error(e, "");
+        }
+        renderJSON(isSucc);
     }
 }
