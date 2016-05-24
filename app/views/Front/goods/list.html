@@ -101,7 +101,7 @@
     <div class="menu_header" style="display:block;">
         <div class="menu_topbar">
             <div id="menu" class="sort sort_on">
-                <a href="" style="overflow:hidden; height:40px; color:#fff">安琪兰黛</a>
+                <a href="" style="overflow:hidden; height:40px; color:#fff">安淇兰黛</a>
                 <ul>
                     <li><a href="javascript:showProducts('9')">2016新品</a></li><li><a href="javascript:showProducts('7')">新品</a></li><li><a href="javascript:showProducts('8')">经典</a></li><li><a href="javascript:showProducts('6')">礼服裙</a></li>						<li><a href="javascript:showAll()">所有商品</a></li>
                 </ul>
@@ -226,7 +226,7 @@
                         #{/if}
                         #{else}
                             #{list items:goods, as:'info'}
-                                #{if info.goodsIcons.get(0) != null}
+                                #{if info.goodsIcons.size() > 0 && info.goodsIcons.get(0) != null}
                                     <li class="F152" style="position:relative;" menu='9'><div class="pic" style="position: relative">
                                         <a href="${info.id}" title="${info.title}"></a>
                                         <img data-original="/public/pictures/goods/${info.goodsIcons.get(0).iconUrl}" class="lazy" width="100%">
@@ -234,7 +234,14 @@
                                         </div>
                                     </li>
                                 #{/if}
-
+                                #{else}
+                                    <li class="F152" style="position:relative;" menu='9'><div class="pic" style="position: relative">
+                                        <a href="${info.id}" title="${info.title}"></a>
+                                        <img data-original="#" class="lazy" width="100%">
+                                        </a>
+                                    </div>
+                                    </li>
+                                #{/else}
                             #{/list}
                         #{/else}
                         <!--商品 end-->
