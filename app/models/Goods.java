@@ -112,7 +112,7 @@ public class Goods extends Model {
 
     public synchronized void addGoodsIcons(GoodsIcon icon) {
         if(null == goodsIcons) {
-            goodsIcons = new ArrayList<>();
+            goodsIcons = new ArrayList<GoodsIcon>();
         }
 
         goodsIcons.add(icon);

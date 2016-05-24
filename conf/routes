@@ -18,6 +18,7 @@ GET /link.html            front.Helps.link
 * /orders.html            front.Users.orders
 * /qrcode.html            front.Users.qrcode
 * /goods_list.html            front.GoodsCtrl.list
+* /myspace.html             front.Users.getUserInfo
 
 *       /front/{controller}/{action}            front.{controller}.{action}
 *       /{controller}/{action}                  {controller}.{action}

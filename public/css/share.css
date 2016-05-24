@@ -185,7 +185,7 @@ html, body, * {     font-family: "Microsoft YaHei" ! important; }   code {     f
 }
 
 .culture {
-	top:80%;
+	top:85%;
 	font-size:1.0rem;
 	line-height:2.0rem;
 	position: absolute;
@@ -212,7 +212,7 @@ html, body, * {     font-family: "Microsoft YaHei" ! important; }   code {     f
 }
 
 .qrcode {
-	top:50%;
+	top:52%;
 	font-size:1.0rem;
 	line-height:2.0rem;
 	position: absolute;
