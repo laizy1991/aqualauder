@@ -11,12 +11,12 @@ import service.wx.service.user.WxUserService;
 
 import common.annotation.GuestAuthorization;
 import common.constants.CashType;
-import common.core.WebController;
+import common.core.FrontController;
 
 import dto.DistributorDetail;
 import dto.MySpaceDto;
 
-public class Users extends WebController {
+public class Users extends FrontController {
     @GuestAuthorization
     public static void orders() {
         render("/Front/user/orders.html");
