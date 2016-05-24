@@ -6,7 +6,7 @@
     <link href="/public/css/front/foods.css" rel="stylesheet" type="text/css">
     <link href="/public/css/front/swiper.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="/public/js/front/jquery.min.js"></script>
-    <script type="text/javascript" src="/public/js/front/wemall.js?112"></script>
+    <script type="text/javascript" src="/public/js/front/wemall.js"></script>
     <script type="text/javascript" src="/public/js/front/alert.js"></script>
     <script type="text/javascript" src="/public/js/front/cookie.js"></script>
     <script type='text/javascript' src='/public/js/front/PCASClass.js'></script>
@@ -228,7 +228,7 @@
                             #{list items:goods, as:'info'}
                                 #{if info.goodsIcons.size() > 0 && info.goodsIcons.get(0) != null}
                                     <li class="F152" style="position:relative;" menu='9'><div class="pic" style="position: relative">
-                                        <a href="${info.id}" title="${info.title}"></a>
+                                        <a href="@{front.GoodsCtrl.details}?id=${info.id}" title="${info.title}">
                                         <img data-original="/public/pictures/goods/${info.goodsIcons.get(0).iconUrl}" class="lazy" width="100%">
                                         </a>
                                         </div>
@@ -236,7 +236,7 @@
                                 #{/if}
                                 #{else}
                                     <li class="F152" style="position:relative;" menu='9'><div class="pic" style="position: relative">
-                                        <a href="${info.id}" title="${info.title}"></a>
+                                        <a href="@{front.GoodsCtrl.details}?id=${info.id}" title="${info.title}">
                                         <img data-original="#" class="lazy" width="100%">
                                         </a>
                                     </div>
