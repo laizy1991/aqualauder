@@ -417,4 +417,8 @@ public class Demo extends FrontController {
     public static void qrcode() {
     	render("Front/Demo/qrcode.html");
     }
+    
+    public static void companyQrcode() {
+    	render("Front/user/companyQrcode.html");
+    }
 }
