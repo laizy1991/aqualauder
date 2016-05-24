@@ -434,24 +434,17 @@ function submitTxOrder () {
 
 	$.ajax({
 		type : 'POST',
-		url : appurl+'/App/Index/addtxorder',
+		url : '/cash.html',
 		data : {
-			uid : $_GET['uid'],
-			userData : $('form').serializeArray()
+			amount : $('#amount').val()
 		},
 		success : function (response , status , xhr) {
-			if(response.error==true || response.error==false)
+			if(response==true)
 			{
-				alert(response.msg);
-				if(response.error==false){
-					//window.location.reload();
-				}
-				return false;
-			}
-			else
-			{
-				alert("系统繁忙，请稍候再试");
-				return false;
+				alert("提现成功");
+				location.reload();
+			} else {
+				alert("提现失败");
 			}
 		},
 		beforeSend : function(){
