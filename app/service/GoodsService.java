@@ -1,24 +1,17 @@
 package service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import models.Goods;
-import models.GoodsIcon;
-import models.GoodsStock;
-
-import org.apache.commons.collections.CollectionUtils;
-
-import play.Logger;
-
 import common.constants.Separator;
-
 import dao.GoodsDao;
 import dao.GoodsIconDao;
 import dao.GoodsStockDao;
 import dto.GoodsDetail;
+import models.Goods;
+import models.GoodsIcon;
+import models.GoodsStock;
+import org.apache.commons.collections.CollectionUtils;
+import play.Logger;
+
+import java.util.List;
 
 public class GoodsService {
 
