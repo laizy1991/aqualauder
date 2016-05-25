@@ -13,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import play.Logger;
 import play.Play;
 import play.db.jpa.Model;
+import play.mvc.Http.Request;
 import service.CashInfoService;
 import service.DistributorService;
 import service.OrderService;
@@ -422,6 +423,7 @@ public class Demo extends FrontController {
     	render("Front/user/companyQrcode.html");
     }
     public static void redit() {
+    	Logger.info("dddddddddd Action: %s, QueryString: %s", request.path, Request.current().querystring);
     	redirect("/front/Demo/aaa?userId=333333");
     }
     public static void aaa(String userId) {

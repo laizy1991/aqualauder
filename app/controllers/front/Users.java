@@ -34,7 +34,7 @@ public class Users extends FrontController {
     	try {
     		id = Integer.parseInt(userId);
     	} catch(Exception e) {
-    		e.printStackTrace();
+    		Logger.error("userId[%s]非整型", userId);
     	}
     	if(id > 0) {
     		user = UserService.get(id);
@@ -48,8 +48,8 @@ public class Users extends FrontController {
     	}
     	String querystring = request.querystring;
     	String protocol = request.secure?"https://":"http://";
-    	String action = request.action.replace(".", "/");
-    	String url =  protocol + request.domain +"/"+ action + "?" + querystring;
+    	String action = request.path;
+    	String url =  protocol + request.domain + action + "?" + querystring;
     	
     	Logger.info("生成的分享链接为: %s", url);
     	JsapiConfig config = JsApiService.getSign(url);

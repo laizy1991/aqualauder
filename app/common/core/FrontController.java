@@ -23,7 +23,7 @@ import exception.BusinessException;
 public class FrontController extends BaseController {
 	@Before
 	protected static void beforeAction() throws SecurityException, NoSuchMethodException {
-		Logger.info("Action - %s", Request.current().path);
+		Logger.info("Action: %s, QueryString: %s", Request.current().path, Request.current().querystring);
 		String code = request.params.get("code");
 		if(!StringUtils.isBlank(code)) {
 			Logger.info("code: %s", code);
