@@ -125,7 +125,6 @@ define(function(require) {
                     expressNum = $wrap.find('.expressNum').val(),
                     forbidRefund = $wrap.find('.forbidRefund').val(),
                     state = $wrap.find('.state').val(),
-
                     updateDialog = dialog({
                     id: 'updateDialog',
                     title: '修改',
@@ -159,7 +158,7 @@ define(function(require) {
                     onshow:function() {
                     	$("#idToUpdate").val(id);
                     	$("#outTradeNoToUpdate").text(outTradeNo);
-                        $("#expressIdToUpdate").val(expressId);
+                        //$("#expressIdToUpdate").val(expressId);
                         $("#expressNumToUpdate").val(expressNum);
                         $("#forbidRefundToUpdate").val(forbidRefund);
                         $("#stateToUpdate").val(state);
