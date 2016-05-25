@@ -421,4 +421,10 @@ public class Demo extends FrontController {
     public static void companyQrcode() {
     	render("Front/user/companyQrcode.html");
     }
+    public static void redit() {
+    	redirect("/front/Demo/aaa?userId=333333");
+    }
+    public static void aaa(String userId) {
+    	renderText("AAAAAAAAAA___userId="+userId);
+    }
 }
