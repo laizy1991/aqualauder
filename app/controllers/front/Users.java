@@ -1,29 +1,80 @@
 package controllers.front;
 
+import models.Distributor;
 import models.User;
 
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
+import play.Play;
 import service.DistributorService;
+import service.UserService;
 import service.UserWalletService;
+import service.wx.dto.jspai.JsapiConfig;
+import service.wx.service.jsapi.JsApiService;
 import service.wx.service.user.WxUserService;
+
+import com.google.gson.Gson;
 
 import common.annotation.GuestAuthorization;
 import common.constants.CashType;
-import common.core.WebController;
-
+import common.core.FrontController;
 import dto.DistributorDetail;
 import dto.MySpaceDto;
 
-public class Users extends WebController {
+public class Users extends FrontController {
+	public static Gson gson = new Gson();
     @GuestAuthorization
     public static void orders() {
         render("/Front/user/orders.html");
     }
+    public static void qrcodeShare(String userId) {
+    	User user = null;
+    	int id = -1;
+    	try {
+    		id = Integer.parseInt(userId);
+    	} catch(Exception e) {
+    		Logger.error("userId[%s]非整型", userId);
+    	}
+    	if(id > 0) {
+    		user = UserService.get(id);
+    	} 
+    	if(null == user) {
+    		render("/Front/user/companyQrcode.html");
+    	}
+    	Distributor dist = DistributorService.get(user.getUserId());
+    	if(null == dist) {
+    		render("/Front/user/companyQrcode.html");
+    	}
+    	String querystring = request.querystring;
+    	String protocol = request.secure?"https://":"http://";
+    	String action = request.path;
+    	String url =  protocol + request.domain + action + "?" + querystring;
+    	
+    	Logger.info("生成的分享链接为: %s", url);
+    	JsapiConfig config = JsApiService.getSign(url);
+    	Logger.info("config参数为: %s", gson.toJson(config));
+    	
+    	String qrImg = Play.configuration.getProperty("wx.qrcode.prefix", "/qrcode/")+ dist.getQrcodeLimitPath();
+    	render("/Front/user/qrcodeShare.html", user, qrImg, config);
+    	
+    }
+    
     @GuestAuthorization
     public static void qrcode() {
-        render("/Front/user/qrcode.html");
+    	String openId = session.get("openId");
+    	User user = null; 
+		if(!StringUtils.isBlank(openId)) {
+			user = WxUserService.getUserInfo(openId);
+		}
+		if(null == user) {
+    		render("/Front/user/companyQrcode.html");
+    	}
+    	Distributor dist = DistributorService.get(user.getUserId());
+    	if(null == dist) {
+    		render("/Front/user/companyQrcode.html");
+    	}
+    	redirect("/front/Users/qrcodeShare?userId="+user.getUserId());
     }
     @GuestAuthorization
     public static void getUserInfo(String code) {

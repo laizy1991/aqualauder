@@ -1,0 +1,96 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>我的二维码</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="apple-touch-fullscreen" content="YES"/>
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<meta name="format-detection" content="telephone=no"/>
+		<script type="text/javascript" src="/public/js/lib/jquery-1.11.3.min.js"></script>
+		<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+		<link type="text/css" rel="stylesheet" href="/public/css/share.css"/>
+	</head>
+	<body>
+		<div class="container">
+			<div class="lable-cont user">
+				<div class="background"></div>
+				<div class="lable-info">
+					<div class="logo" >
+						<img src="${user.headImgUrl}"/>
+					</div>
+					<ul class="profile">
+						<li>我是安淇兰黛代言人</li>
+						<li>${user.nickname}</li>
+						<li>成就独立自信完美女人</li>
+					</ul>
+				</div>
+			</div>
+			<div class="lable-cont desc">
+				<div class="background"></div>
+				<div class="lable-info">
+					<ul class="intro">
+						<li class="start">——&nbsp;&nbsp;&nbsp;&nbsp;AQUALAUDER&nbsp;&nbsp;·&nbsp;&nbsp;安淇兰黛&nbsp;&nbsp;&nbsp;&nbsp;——</li>
+						<li class="middle">源自伦敦高端时装品牌安淇兰黛</li>
+						<li class="end">——&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;&nbsp;LONDON&nbsp;&nbsp;&nbsp;&nbsp;——</li>
+					</ul>
+				</div>
+			</div>
+			
+			<div class="lable-cont qrcode">
+				<div class="background"></div>
+				<div class="lable-info">
+						<img class="qrcode-dist" src="${qrImg}"/>
+				</div>
+			</div>
+			
+			<div class="lable-cont culture">
+				<div class="background"></div>
+				<div class="lable-info">
+					<ul class="culture-desc">
+						<li class="middle">安淇兰黛分享文化，将欧美时装分享给全球女人</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<img class="bg" src="/public/images/qrcode_bg.jpg"/>
+	</body>
+	<script type="text/javascript">
+	wx.config({
+	    appId: "${config.appId}", // 必填，公众号的唯一标识
+	    timestamp: ${config.timestamp}, // 必填，生成签名的时间戳
+	    nonceStr: "${config.nonceStr}", // 必填，生成签名的随机串
+	    signature: "${config.signature}",// 必填，签名，见附录1
+	    jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	});
+	wx.ready(function(){
+	    // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+		wx.onMenuShareTimeline({
+		    title: "我是安淇兰黛代言人", // 分享标题
+		    link: "${config.url}", // 分享链接
+		    imgUrl: "${user.headImgUrl}", // 分享图标
+		    success: function () { 
+		        // 用户确认分享后执行的回调函数
+		        console.log("分享到朋友圈成功");
+		    },
+		    cancel: function () { 
+		        // 用户取消分享后执行的回调函数
+		    	console.log("取消分享到朋友圈");
+		    }
+		});
+		wx.onMenuShareAppMessage({
+		    title: "我是安淇兰黛代言人", // 分享标题
+		    desc: "安淇兰黛分享文化，将欧美时装分享给全球女人", // 分享描述
+		    link: "${config.url}", // 分享链接
+		    imgUrl: "${user.headImgUrl}", // 分享图标
+		    type: "link", // 分享类型,music、video或link，不填默认为link
+		 //   dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+		    success: function () { 
+		    	console.log("分享到好友成功");
+		    },
+		    cancel: function () { 
+		    	console.log("取消分享到好友");
+		    }
+		});
+	});
+	</script>
+</html>
