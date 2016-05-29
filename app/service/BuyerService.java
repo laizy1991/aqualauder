@@ -31,7 +31,7 @@ public class BuyerService {
      * 创建一个订单
      * @return
      */
-    public static OrderDetail createOrder(int userId, Order order, Map<Long, Integer> goodsNum) {
+    public static OrderDetail createOrder(int userId, Order order, Map<Long, Integer> goodsNum, String goodsSize) {
         if(order == null || goodsNum == null || goodsNum.isEmpty()) {
             return null;
         }
@@ -58,6 +58,7 @@ public class BuyerService {
             og.setGoodsTitle(goods.getTitle());
             og.setGoodsNumber(goodsNum.get(id));
             og.setGoodsType(GoodsType.GOODS.getType());
+            og.setGoodsSize(goodsSize);
             totalFee += (og.getGoodsDiscountPrice() * og.getGoodsNumber());
             orderGoodsList.add(og);
         }
@@ -205,6 +206,7 @@ public class BuyerService {
             Logger.error("order not found, id:%s", orderId);
             return false;
         }
+        DistributorService.checkAndBecomeDistributor(order.getUserId());
         order.setPayTime(System.currentTimeMillis());
         boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.PAYED);
         return isSucc;

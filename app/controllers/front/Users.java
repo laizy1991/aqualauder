@@ -1,5 +1,7 @@
 package controllers.front;
 
+import java.util.List;
+
 import models.Distributor;
 import models.User;
 
@@ -8,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import play.Logger;
 import play.Play;
 import service.DistributorService;
+import service.OrderService;
 import service.UserService;
 import service.UserWalletService;
 import service.wx.dto.jspai.JsapiConfig;
@@ -21,12 +24,22 @@ import common.constants.CashType;
 import common.core.FrontController;
 import dto.DistributorDetail;
 import dto.MySpaceDto;
+import dto.OrderDetail;
 
 public class Users extends FrontController {
 	public static Gson gson = new Gson();
     @GuestAuthorization
     public static void orders() {
-        render("/Front/user/orders.html");
+        String openId = session.get("openId");
+        User user = null; 
+        if(!StringUtils.isBlank(openId)) {
+            user = WxUserService.getUserInfo(openId);
+        }
+        if(null == user) {
+            render("/Front/user/orders.html");
+        }
+        List<OrderDetail> orders = OrderService.listOrder(user.getUserId(), 1, -1);
+        render("/Front/user/orders.html", orders);
     }
     public static void qrcodeShare(String userId) {
     	User user = null;
@@ -55,7 +68,7 @@ public class Users extends FrontController {
     	JsapiConfig config = JsApiService.getSign(url);
     	Logger.info("config参数为: %s", gson.toJson(config));
     	
-    	String qrImg = Play.configuration.getProperty("wx.qrcode.prefix", "/qrcode/")+ dist.getQrcodeLimitPath();
+    	String qrImg = dist.getQrcodeLimitPath();
     	render("/Front/user/qrcodeShare.html", user, qrImg, config);
     	
     }
@@ -101,6 +114,10 @@ public class Users extends FrontController {
         
         MySpaceDto data = new MySpaceDto();
         data.setUser(user);
+        if(detail == null) {
+            detail = new DistributorDetail();
+        }
+        
         data.setDetail(detail);
         render("/Front/user/myspace.html", data, code);
     }

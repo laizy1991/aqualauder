@@ -307,8 +307,6 @@ public class Demo extends FrontController {
     	long nowTime = System.currentTimeMillis();
     	//这里expire_seconds一定要先转为long
     	long expireTime = nowTime + Long.parseLong(rsp.getExpire_seconds()+"") * 1000;
-    	//TODO 前台展示二维码时，用如下规则，nginx对qrcode作解析
-    	//Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") + Play.configuration.getProperty("wx.qrcode.prefix", "/qrcode/")+ rsp.getPicRelPath();
     	if(null == dis) {
     		Logger.info("该用户较前时间未成为分销商，准备新增，userId: %d", userId);
     		//将二维码地址和本地相对路径入库
@@ -366,8 +364,6 @@ public class Demo extends FrontController {
     	
     	Distributor dis = DistributorService.get(userId);
     	long nowTime = System.currentTimeMillis();
-    	//TODO 前台展示二维码时，用如下规则，nginx对qrcode作解析
-    	//Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") + Play.configuration.getProperty("wx.qrcode.prefix", "/qrcode/")+ rsp.getPicRelPath();
     	if(null == dis) {
     		Logger.info("该用户较前时间未成为分销商，准备新增，userId: %d", userId);
     		//将二维码地址和本地相对路径入库
@@ -428,5 +424,8 @@ public class Demo extends FrontController {
     }
     public static void aaa(String userId) {
     	renderText("AAAAAAAAAA___userId="+userId);
+    }
+    public static void become(Integer userId) {
+        DistributorService.checkAndBecomeDistributor(userId);
     }
 }

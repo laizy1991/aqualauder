@@ -183,6 +183,130 @@ $(document).ready(function () {
 	});
 });
 
+function clickTx() {
+	$('#ticket-container').hide();
+	$('#member-container').hide();
+	$('#user-container').hide();
+	$('#tx-container').show();
+	
+	$(".footermenu ul li a").each(function(){
+		$(this).attr("class","");
+	});
+	$(this).children("a").attr("class","active");
+}
+
+function clickUser() {
+
+	$('#menu-container').hide();
+	$('#cart-container').hide();
+	$('#ticket-container').hide();
+	$('#member-container').hide();
+	$('#tx-container').hide();
+	$('#user-container').show();
+
+	$(".footermenu ul li a").each(function(){
+		$(this).attr("class","");
+	});
+	$(this).children("a").attr("class","active");
+    
+	$.ajax({
+		type : 'POST',
+		url : appurl+'/App/Index/getorders',
+		data : {
+			uid : $_GET['uid']
+		},
+		success : function (response , status , xhr){
+			if(response){
+				var json = eval(response); 
+				var html = '';
+				var order_status = '';
+				var host='http://'+window.location.host+appurl+'?g=App&m=Index&a=member&page_type=order';
+				host=host.replace(/\&/g, "%26");
+				$.each(json, function (index, value) {
+					var pay = '';
+					var order = '';
+					var url = '?g=App&m=Index&a=del_order&id='+value.id;
+					var url2 ='?g=App&m=Index&a=refund_good&id='+value.id;
+					var regoodurl = '/App/Index/refund_good';//退换货
+					if (value.order_status == '0'){
+						order_status = 'no';
+						order = '未发货';
+					}else if ( value.order_status == '1'){
+						order_status = 'no';
+						var confirm_url = appurl+'?g=App&m=Index&a=confirm_order&id='+value.orderid+'&uid='+$_GET['uid'];
+						order = '<a href="'+confirm_url+'" style="color:red">确认收货</a>';
+					}else if ( value.order_status == '4'){
+						order_status = 'no';
+						order = '已退货';
+					}else{
+						order_status = 'ok';
+						order = '已完成';
+					}
+					
+					if (value.pay_status == '0'){
+						pay_status = 'no';
+						pay = '<a href="'+value.pay_url+'">去支付</a>';
+						$('.regood').hide();
+					}else if ( value.pay_status == '1'){
+						pay_status = 'ok';
+						pay = '已支付';
+					}
+					//html += '<tr><td>'+value.orderid+'</td><td class="cc">'+value.totalprice+'元</td><td class="cc"><em class="'+pay_status+'">'+pay+'</em></td><td class="cc"><em class="'+order_status+'">'+order+'</em></td></tr>';
+					
+					html += '<li style="border: 1px solid #d0d0d0;border-radius: 10px;margin-bottom:10px;background-color:#FFF;"><table style="width:100%;"><tr><td style="border-bottom:0px">订单编号:'+value.orderid+'</td></tr>';
+					html += '<td style="border-bottom:0px">订单金额:'+value.totalprice+'元</td></tr>';
+					html += '<td style="border-bottom:0px">订单时间:'+value.time+'</td></tr>';
+					html += '<td style="border-bottom:0px">支付状态:<em class="'+pay_status+'">'+pay+'</em>';
+					if (value.pay_status == '0')
+					{
+						html += '<a href="'+value.pay_url+'">(已经支付?)</a>';
+					}
+					html += '</td></tr>';
+					if(value.order_status == '1')
+					{
+						html += '<td style="border-bottom:0px">订单状态:<em class="'+order_status+'" style="background-color:#FFFF00;">'+order+'</em></td></tr>';
+					}
+					else
+					{
+						html += '<td style="border-bottom:0px">订单状态:<em class="'+order_status+'">'+order+'</em></td></tr>';
+					}
+					
+					html += '<td style="border-bottom:0px">商品名称:'+value.cart_name+'</td></tr>';
+					html += '<td style="border-bottom:0px">订单详情:'+value.note+'</td></tr>';
+					
+					html += '<td style="border-bottom:0px">快递公司:'+value.order_info_name+'</em></td></tr>';
+					html += '<td style="border-bottom:0px">快递单号:'+value.order_info_num+'</em></td></tr>';
+					html+='<tr><td>';
+					if(window.location.host=='bcs.winbz.com'){
+						html += '取消订单，请联系DDY客服：4000755867</td></tr><tr><td>';
+					}else if(value.pay_status==0){
+						html += '<a href='+appurl+url+' onclick = "return func_('+value.order_status+','+value.pay_status+')"><div class="del_order">取消订单</div></a>';
+					}
+					if(value.order_status == '1'){
+						html+='<a href="http://m.kuaidi100.com/index_all.html?type='+value.order_info_name+'&postid='+value.order_info_num+'&callbackurl='+host+'"><div class="see_order">查看物流</div></a>';
+					}
+					if(value.pay_status=='1' && value.order_status<4 && value.show==1){
+						
+						html+='<a href="'+appurl+url2+'"><div class="qc_order">退/换货</div></a>';						
+					}
+					html+='</td></tr>';
+					html += '</table></li>';
+				});
+				
+				$('#orderlistinsert').empty();
+				$('#orderlistinsert').append( html );					
+			}
+
+		},
+		beforeSend : function(){
+			$('#page_tag_load').show();
+    	},
+    	complete : function(){
+    		$('#page_tag_load').hide();
+    	}
+	});
+}
+
 /* 取消订单 */
 function func_(order_status,pay_status){
 
@@ -236,67 +360,29 @@ function clearCache(){
 	$('#cartN2').html(0);
 	$('#totalPrice').html(0);
 }
-function addProductN (wemallId){
-	var jqueryid = wemallId.split('_')[0]+'_'+wemallId.split('_')[1];
-	var price = parseFloat( wemallId.split('_')[2] );
-	var productN = parseFloat( $('#'+jqueryid).find('.count').html() );
-	$('#'+jqueryid).find('.count').html( productN + 1);
-
-	var cartMenuN = parseFloat($('#cartN2').html())+1;
-	$('#totalNum').html( cartMenuN );
-	$('#cartN2').html( cartMenuN );
-	
-	var totalPrice = parseFloat($('#totalPrice').html())+ parseFloat(good_price);
-	$('#totalPrice').html( totalPrice.toFixed(2) );
+function addProductN (){
+	var price = $("#goods_price").val();
+	var cartMenuN = parseFloat($('#buy_count').html())+1;
+	$('#buy_count').html( cartMenuN );
+	$('#goods_num').val(cartMenuN);
+	doProduct(price)
 }
-function reduceProductN ( wemallId ){
-	var price = parseFloat( wemallId.split('_')[2] );
-	var jqueryid = wemallId.split('_')[0]+'_'+wemallId.split('_')[1];
-	var reduceProductN = parseFloat( $('#'+jqueryid).find('.count').html() );
-	if ( reduceProductN == 1) {
-		return false;
+function reduceProductN (){
+	var price = $("#goods_price").val();
+	var cartMenuN = parseFloat($('#buy_count').html())-1;
+	if(cartMenuN < 0) {
+		cartMenuN = 0;
 	}
-	
-	$('#'+jqueryid).find('.count').html( reduceProductN - 1);
-	
-	var cartMenuN = parseFloat($('#cartN2').html())-1;
-	$('#totalNum').html( cartMenuN );
-	$('#cartN2').html( cartMenuN );
-
-	var totalPrice = parseFloat($('#totalPrice').html())- parseFloat(good_price);
-	$('#totalPrice').html( totalPrice.toFixed(2) );
+	$('#buy_count').html( cartMenuN );
+	$('#goods_num').val(cartMenuN);
+	doProduct(price)
 }
-function doProduct (id , name , price,img) {
-	var bgcolor = $('#'+id).children().css('background-color').colorHex().toUpperCase();
-	if (bgcolor == '#FFFFFF') {
-		$('#'+id).children().css('background-color','#D00A0A');
-
-		var cartMenuN = parseFloat($('#cartN2').html())+1;
-		$('#totalNum').html( cartMenuN );
-		$('#cartN2').html( cartMenuN );
-
-		var totalPrice = parseFloat($('#totalPrice').html())+ parseFloat(price);
-		$('#totalPrice').html( totalPrice.toFixed(2) );
-
-		var wemallId = 'wemall_'+id;
-		var html = '<li class="ccbg2" id="'+wemallId+'"><div class="orderdish"><span class="idss"  style="display:none;">'+id+'</span><span name="title">'+name+'</span><span class="price" id="v_0" style="display:none;">'+price+'</span><span style="display:none; class="price">元</span></div><div class="orderchange"><a href=javascript:addProductN("'+wemallId+'_'+price+'") class="increase"><b class="ico_increase">加一份</b></a><span class="count" id="num_1_499">1</span><a href=javascript:reduceProductN("'+wemallId+'_'+price+'") class="reduce"><b class="ico_reduce">减一份</b></a></div></li>';
-	
-		$('#ullist').append(html);
-		
-		$('#good_pic').attr('src',img)
-	}else{
-		$('#'+id).children().css('background-color','');
-
-		var cartMenuN = parseFloat($('#cartN2').html())-1;
-		$('#totalNum').html( cartMenuN );
-		$('#cartN2').html( cartMenuN );
-
-		var totalPrice = parseFloat($('#totalPrice').html())- parseFloat(price);
-		$('#totalPrice').html( totalPrice.toFixed(2) );
-
-		var wemallId = 'wemall_'+id;
-		$('#'+wemallId).remove();
-	}
+function doProduct (price) {
+	price = price / 100;
+	var cartMenuN = $('#buy_count').html();
+	$('#totalNum').html( cartMenuN );
+	var totalPrice = parseFloat(price * cartMenuN);
+	$('#totalPrice').html( totalPrice.toFixed(2) );
 }
 
 function submitTxOrder () {
@@ -308,24 +394,17 @@ function submitTxOrder () {
 
 	$.ajax({
 		type : 'POST',
-		url : appurl+'/App/Index/addtxorder',
+		url : '/cash.html',
 		data : {
-			uid : $_GET['uid'],
-			userData : $('form').serializeArray()
+			amount : $('#amount').val()
 		},
 		success : function (response , status , xhr) {
-			if(response.error==true || response.error==false)
+			if(response==true)
 			{
-				alert(response.msg);
-				if(response.error==false){
-					//window.location.reload();
-				}
-				return false;
-			}
-			else
-			{
-				alert("系统繁忙，请稍候再试");
-				return false;
+				alert("提现成功");
+				location.reload();
+			} else {
+				alert("提现失败");
 			}
 		},
 		beforeSend : function(){
@@ -610,157 +689,23 @@ var good_num_id = 0;
 var good_price_key = '';
 var good_price = 0;
 var good_old_price = 0;
-function showDetail(id , name , price,img){
-
-	window.shareData = {
-		"imgUrl": shareData_url+"/Public"+img,
-		"sendFriendLink": shareData_sendFriendLink,
-		"tTitle": name,
-		"tContent": shareData_tTitle
-	};
-	
-	good_old_price = price;
-
-	$.ajax({
-		type : 'post',
-		url : appurl+'/App/Index/fetchgooddetail',
-		data : {
-			id : id,
-		},
-		success : function(response , status , xhr){
-			$('body').show();
-			$('.disgood').each(function(){
-				$(this).hide();
-			});
-			$('#mcover').show();
-			var json = eval(response);
-			$('#detailpic').attr('src',rooturl+'/Public/Uploads/'+json.image);
-			$('#detailtitle').html(json.title);
-			$('#detailinfo').html(json.detail);
-			
-			if(json.jfgood == 1){
-				$("#jfjfgood").html("积分");
-			}
-			good_num_key = json.good_num;
-			good_num_id = id;
-			
-			if(typeof(json.guigename1) != "object" && typeof(json.guigevalue1) != "object")
-			{
-				if(json.guigename1.length>0 && json.guigevalue1.length>0)
-				{
-					$('#guigename1').html(json.guigename1+'：');
-					$('#guigevalue1').html(json.guigevalue1);
-					
-					$('#type_siz1').attr('show',1);
-					$('#type_siz1').show();
-				}
-			}
-			
-			if(typeof(json.guigename2) != "object" && typeof(json.guigevalue2) != "object")
-			{
-				if(json.guigename2.length>0 && json.guigevalue2.length>0)
-				{
-					$('#guigename2').html(json.guigename2+'：');
-					$('#guigevalue2').html(json.guigevalue2);
-					
-					$('#type_siz2').attr('show',1);
-					$('#type_siz2').show();
-				}
-			}
-			
-			good_price = good_old_price;
-			
-			check_shengyu();
-			
-			$('#detailinfo img').click(function(){
-				img=$(this).attr('src');
-				show1(img);	
-			});
-			function show1(img) {
-			var arr = []
-			  $("#detailinfo img").each(function () {
-			  arr.push($(this).attr("src"));
-			  })
-				wx.previewImage({
-				  current: img,
-				  urls: arr
-				});
-			}
-			
-			$('#add_cart').click(function(){
-				doProductNew (id , name , good_price,json.img);
-				//$('#cart').click();
-			});		
-		}
+function showDetail(price){
+	console.log("showDetail");
+	$('body').show();
+	$('.disgood').each(function(){
+		$(this).hide();
 	});
+	$('#mcover').show();
+	
+	check_shengyu();
+	
+	$('#add_cart').click(function(){
+		doProduct(price);
+	});		
 }
 function check_shengyu()
 {
-	var type1 = $('#type_siz1').attr('show');
-	var type2 = $('#type_siz2').attr('show');
-
-	if(type1==1 && type2==1)
-	{
-		var type1_value = $("input[name='type_size1']:checked").attr('id');
-		var type2_value = $("input[name='type_size2']:checked").attr('id');
-		
-		var name = type1_value+'|'+type2_value;
-	}
-	else
-	{
-		var type1_value = $("input[name='type_size1']:checked").attr('id');
-		
-		var name = type1_value+'|gz2_0';
-	}
 	
-	if(typeof(good_num_key[name])!='object')
-	{
-		return false;
-	}
-	var good_num = good_num_key[name]['num'];
-	good_num_cnt = good_num_key[name]['key'];
-	good_price = good_num_key[name]['price'];
-
-	if(typeof(good_price)!="string" || good_price<=0)
-	{
-		good_price = good_old_price;
-	}
-	$('#ullist li').find('span[class=price]').html(good_price);  //更换商品规格时商品的单价
-	
-	var totalNum = parseFloat($('#totalNum').html()); 
-	var totalPrice = parseFloat(good_price)*totalNum;
-	$('#totalPrice').html(totalPrice);
-	
-	if(typeof(good_num)=='object')
-	{
-		good_num = 0;
-	}
-	
-	if(typeof(good_num_cnt)=='object')
-	{
-		good_num_cnt = 'null';
-	}
-	
-	$('#last_cnt').html(good_num);
-	
-	if(good_num<=0)
-	{
-		$('#showcard').css("background-color","#E0E0E0");
-		$('#showcard').css("border","#E0E0E0");
-		if(window.location.host=='bcs.winbz.com'){
-			$('#showcard').attr("href","javascript:alert('请选择尺码规格！');");
-		}
-		else{
-			$('#showcard').attr("href","javascript:alert('该规格的产品已经卖完了！');");
-		}
-		
-	}
-	else
-	{
-		$('#showcard').css("background-color","");
-		$('#showcard').css("border","");
-		$('#showcard').attr("href","javascript:submitOrder();");
-	}
 }
 
 var order_list = new Array();
@@ -778,39 +723,6 @@ function in_array(search,array){
 function now_buy(){
 	$('#add_cart').click();
 	$('#cart').click();
-}
-
-function doProductNew (id , name , price,img) {
-	$(".footermenu ul li a").each(function(){
-		$(this).attr("class","");
-	});
-	$('#add_cart').children("a").attr("class","active");
-	
-	if (!in_array(id,order_list)) {
-		order_list[id]= id;
-		var cartMenuN = parseFloat($('#cartN2').html())+1;
-		$('#totalNum').html( cartMenuN );
-		$('#cartN2').html( cartMenuN );
-		$('#cartN3').html( cartMenuN );
-
-		var totalPrice = parseFloat($('#totalPrice').html())+ parseFloat(good_price);
-		$('#totalPrice').html( totalPrice.toFixed(2) );
-
-		var wemallId = 'wemall_'+id;
-		var html= '<li class="ccbg2" id="'+wemallId+'"><div class="orderdish">';
-		html+='<span class="idss" style="display:none;">'+id+'</span>';
-		html+='<span name="title">'+name+'</span><span class="price" id="v_0" style="display:none;">'+price+'</span>';
-		html+='<span style="display:none; class="price">元</span></div><div class="orderchange">';
-		html+='<a href=javascript:addProductN("'+wemallId+'_'+price+'") class="increase">';
-		html+='<b class="ico_increase">加一份</b></a><span class="count" id="num_1_499">1</span>';
-		html+='<a href=javascript:reduceProductN("'+wemallId+'_'+price+'") class="reduce">';
-		html+='<b class="ico_reduce">减一份</b></a></div></li>';
-		$('#ullist').append(html);
-		$('#good_pic').attr('src',img);
-		
-		check_shengyu();
-	}
-	return false;
 }
 
 function showMenu(){

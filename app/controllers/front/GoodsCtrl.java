@@ -1,18 +1,23 @@
 package controllers.front;
 
-import common.annotation.GuestAuthorization;
-import common.constants.GoodsTag;
-import common.core.WebController;
+import java.util.List;
+
 import models.Goods;
+import models.ShippingAddress;
+import models.User;
+
 import org.apache.commons.lang.StringUtils;
-import play.Logger;
+
 import service.GoodsService;
 import service.wx.service.user.WxUserService;
 
-import java.util.List;
+import common.annotation.GuestAuthorization;
+import common.core.FrontController;
+
+import dao.ShippingAddressDao;
 
 
-public class GoodsCtrl extends WebController {
+public class GoodsCtrl extends FrontController {
 
 	
 	/**
@@ -28,6 +33,14 @@ public class GoodsCtrl extends WebController {
 	@GuestAuthorization
 	public static void details(int id) {
 		Goods goods = GoodsService.get(id);
-		render("/Front/goods/details.html", goods);
+		ShippingAddress address = null;
+		String openId = session.get("openId");
+        if(StringUtils.isNotBlank(openId)) {
+            User user = WxUserService.getUserInfo(openId);
+            if(user != null) {
+                address = ShippingAddressDao.getByUserId(user.getUserId());
+            }
+        }
+		render("/Front/goods/details.html", goods, address);
 	}
 }

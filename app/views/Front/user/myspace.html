@@ -4,11 +4,11 @@
 <title>会员中心</title>
 <meta name="viewport"
     content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link href="/public/css/foods.css?t=666" rel="stylesheet"
+<link href="/public/css/front/foods.css?t=666" rel="stylesheet"
     type="text/css">
 <link href="/Public/css/app/hobby.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="/public/js/lib/jquery-1.11.3.min.js"></script>
-<script type="text/javascript" src="/public/js/app/wemall.js?116"></script>
+<script type="text/javascript" src="/public/js/front/wemall.js?116"></script>
 
 <style>
 .bg_color{background-color: #000000 }
@@ -91,7 +91,7 @@ $(function () {
 
         <div class="div_header">
             <span style='float:left;margin-left:10px;margin-right:10px;margin-bottom:10px;'>
-                <img src='http://wx.qlogo.cn/mmopen/pUNYhn9qq6GAwPtahjSb7QliaicDAFibBP1aaFG5ibf2gAlXj22S0jSf6pupGmQFk2aR6mCnJibZTR4nbBgPlvNBfccX4CyStuIQn/0' width='80px;' height='80px;'>          </span>
+                <img src='${data?.user?.headImgUrl}' width='80px;' height='80px;'>          </span>
             <span class="header_right">
                 <div class="header_l_di"><span>昵称：${data?.user?.nickname}</span></div>
                             </span>
@@ -321,7 +321,7 @@ $(function () {
                         会员中心
                                             </p>
             </a></li>
-            <li id="ticket" ><a href="javascript:void(0);"> <img src="/public/images/24.png">
+            <li><a href="/qrcode.html"> <img src="/public/images/24.png">
                     <p>我的二维码</p>
             </a></li>
             

@@ -10,7 +10,7 @@ GET     /favicon.ico                            404
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
-
+GET		/qrcode/								staticDir:/data/project/aqualauder/pic/
 # Catch all
 GET /explain.html            front.Helps.explain
 GET /introduce.html            front.Helps.introduce
@@ -20,6 +20,8 @@ GET /link.html            front.Helps.link
 * /goods_list.html            front.GoodsCtrl.list
 * /myspace.html             front.Users.getUserInfo
 * /cash.html                front.Users.cash
+
+POST /createOrder           front.Orders.createOrder
 
 *       /front/{controller}/{action}            front.{controller}.{action}
 *       /{controller}/{action}                  {controller}.{action}

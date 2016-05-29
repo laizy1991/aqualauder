@@ -657,16 +657,8 @@
                     <ul class="clearfix" id="menu_id">
                         <script>
                             window.onload = function() {
-
-                                showDetail('244', 'HY-蕾丝披风两件套裙-（XHQ0804457）', '499', '/Uploads/http://oss-cn-hangzhou.aliyuncs.com/winbz/Public/Uploads/1464012107159.jpg');
-
-                                window.shareData = {
-                                    "imgUrl": "http://xhq.winbz.com/Public/Uploads/http://oss-cn-hangzhou.aliyuncs.com/winbz/Public/Uploads/1464012107159.jpg",
-                                    "sendFriendLink": 'http://xhq.winbz.com/index.php?g=App&m=Index&a=index_menu&menu_id=11&user_id=2728512&id=244',
-                                    "tTitle": "HY-蕾丝披风两件套裙-（XHQ0804457）",
-                                    "tContent": "nemo 的店铺"
-                                };
-
+                                console.log("onload..");
+                                showDetail(${goods?.price});
                             }
                         </script>
                     </ul>
@@ -677,6 +669,12 @@
             <div id="Popup" style="display: block;">
                 <div class="imgPopup" style="padding:0px;">
                     <p class="jianjie" id="detailinfo">
+                    #{if goods}
+                        <input type="hidden" id="goods_price" value="${goods?.price}">
+                    #{/if}
+                    #{else}
+                    <input type="hidden" id="goods_price" value="0">
+                    #{/else}
                         #{if goods.goodsIcons.size() > 0 && goods.goodsIcons.get(0) != null}
                             #{list items:goods.goodsIcons, as:'info'}
                                 <p><img src="/public/pictures/goods/${info.iconUrl}" _src="/public/pictures/goods/${info.iconUrl}" style=""></p>
@@ -705,6 +703,10 @@
                             <p>返回</p>
                         </a>
                     </li>
+                    <li id="add_cart" style='display:none;'><a href="javascript:void(0);"> <span class="num" id="cartN3">0</span> <img
+                                src="/Application/Tpl/App/xhqnew/Public/Static/images/cart.png" style="width:36px; height:36px;">
+                                <p>加入购物车</p>
+                        </a></li>
                     <li>
                         <a onclick="now_buy();"> <img src="/public/images/22.png" style="width:36px; height:36px;">
                             <p>立刻购买</p>
@@ -718,26 +720,31 @@
 <div id="cart-container" style="display: none;">
     <div class="menu_header">
         <div class="menu_topbar">
-            <div id="menu" class="sort">
+            <div id="cart" class="sort">
                 <a href="">购买</a>
             </div>
         </div>
     </div>
-    <img style="width:100%;" id="good_pic" src="">
+    #{if goods.goodsIcons.size() > 0 && goods.goodsIcons.get(0) != null}
+        <img style="width:100%;" id="good_pic" src="/public/pictures/goods/${goods.goodsIcons.get(0).iconUrl}">
+     #{/if}
     <section class="order">
         <div class="orderlist">
-            <ul id="ullist">
-                <dt style="display:none;">已选购的</dt>
-            </ul>
-            <ul>
+            <!-- <ul>
                 <li class="ccbg2">今日限购剩余：<span style="color:red" id="last_cnt">61</span>份</li>
-            </ul>
+            </ul> -->
             <ul id="cartinfo">
                 <dt>购物车总计</dt>
-                <li class="ccbg2" id="emptyLii">已选：<span id="totalNum">0</span>份　共计：￥<span id="totalPrice">0</span>元</li>
+                <li class="ccbg2" id="emptyLii" style="height: 30px;">
+                已选：<span id="totalNum">0</span>份　共计：￥<span id="totalPrice">0</span>元
+                <div class="orderchange"><a href=javascript:addProductN() class="increase"><b class="ico_increase">加一份</b></a>
+                <span class="count" id="buy_count">1</span>
+                <a href=javascript:reduceProductN() class="reduce">
+                <b class="ico_reduce">减一份</b></a></div>
+                </li>
             </ul>
         </div>
-        <form name="infoForm" id="infoForm" method="post" action="">
+        <form name="infoForm" id="infoForm" method="post" action="/createOrder">
             <div class="contact-info">
                 <ul>
                     <li class="title">联系信息</li>
@@ -746,11 +753,13 @@
                             <tbody>
                             <tr>
                                 <td width="90px">
+                                <input type="hidden" id="goods_id" name="goodsId" value="${goods?.id}">
+                                <input type="hidden" id="goods_num" name="goodsNum" value="0">
                                     <label for="name" class="ui-input-text"><span style="color:red">*</span>联系人：</label>
                                 </td>
                                 <td>
                                     <div class="ui-input-text">
-                                        <input id="name" name="name" placeholder="" value="" type="text" class="ui-input-text">
+                                        <input id="name" name="order.receiver" placeholder="" value="${address?.name}" type="text" class="ui-input-text">
                                     </div>
                                 </td>
                             </tr>
@@ -760,7 +769,7 @@
                                 </td>
                                 <td>
                                     <div class="ui-input-text">
-                                        <input id="phone" name="phone" placeholder="" value="" type="tel" class="ui-input-text">
+                                        <input id="phone" name="order.mobilePhone" placeholder="" value="${address?.mobile}" type="tel" class="ui-input-text">
                                     </div>
                                 </td>
                             </tr>
@@ -779,7 +788,7 @@
                                     <label for="address" class="ui-input-text"><span style="color:red">*</span>联系地址：</label>
                                 </td>
                                 <td>
-                                    <select name="s_province" id="s_province">
+                                <!--     <select name="s_province" id="s_province">
                                         <option value="">--省份--</option>
                                         <option value="北京市">北京市</option>
                                         <option value="天津市">天津市</option>
@@ -821,9 +830,9 @@
                                     </select>&nbsp;
                                     <select name="s_county" id="s_county">
                                         <option value="">--地区--</option>
-                                    </select>
+                                    </select> -->
                                     <br>
-                                    <textarea id="address" name="address" placeholder="" value="" class="ui-input-text"></textarea>
+                                    <textarea id="address" name="order.shippingAddress" placeholder="" value="" class="ui-input-text">${address?.address}</textarea>
                                     <script>
                                         var province_check = true;
                                     </script>
@@ -841,13 +850,13 @@
                                 </td>
                                 <td>
                                     <div class="mui-sku" id="guigevalue1">
-                                        <input type="radio" value="S" name="type_size1" id="gz1_0" checked="checked" onclick="check_shengyu();">
+                                        <input type="radio" value="S" name="goodsSize" id="gz1_0" checked="checked" onclick="check_shengyu();">
                                         <label for="gz1_0">&nbsp;S&nbsp;</label>
-                                        <input type="radio" value="M" name="type_size1" id="gz1_1" onclick="check_shengyu();">
+                                        <input type="radio" value="M" name="goodsSize" id="gz1_1" onclick="check_shengyu();">
                                         <label for="gz1_1">&nbsp;M&nbsp;</label>
-                                        <input type="radio" value="L" name="type_size1" id="gz1_2" onclick="check_shengyu();">
+                                        <input type="radio" value="L" name="goodsSize" id="gz1_2" onclick="check_shengyu();">
                                         <label for="gz1_2">&nbsp;L&nbsp;</label>
-                                        <input type="radio" value="XL" name="type_size1" id="gz1_3" onclick="check_shengyu();">
+                                        <input type="radio" value="XL" name="goodsSize" id="gz1_3" onclick="check_shengyu();">
                                         <label for="gz1_3">&nbsp;XL&nbsp;</label>
                                     </div>
                                 </td>
@@ -866,13 +875,13 @@
                                     <label for="note" class="ui-input-text">备注：</label>
                                 </td>
                                 <td>
-                                    <textarea name="note" placeholder="" class="ui-input-text"></textarea>
+                                    <textarea name="order.orderMemo" placeholder="" class="ui-input-text"></textarea>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                         <div class="footReturn">
-                            <a id="showcard" class="submit" href="javascript:submitOrder();">立即购买</a>
+                            <input type="submit" class="submit" name="立即购买" value="立即购买">
                         </div>
                     </li>
                 </ul>
@@ -1023,27 +1032,7 @@
 <script>
     $(function() {
         $('#add_cart').after().click(function() {
-            WeixinJSBridge.invoke(
-                    'editAddress', {
-                        "appId": "wxa33d0b489d1f8f5c",
-                        "scope": "jsapi_address",
-                        "signType": "sha1",
-                        "addrSign": "fd10c7d784648a85ab70357276b1b94cbc13d2b3",
-                        "timeStamp": "1464097901",
-                        "nonceStr": "2C3zUSBNfs9YNIEz"
-                    },
-                    function(res) {
-                        if (res.err_msg == 'edit_address:ok') {
-                            $('#name').val(res.userName); //用户名
-                            $('#phone').val(res.telNumber); //手机号
-                            var provice = res.proviceFirstStageName; //省
-                            var city = res.addressCitySecondStageName; //市
-                            var county = res.addressCountiesThirdStageName; //县
-                            new PCAS('s_province', 's_city', 's_county', provice, city, county);
-                            $('#address').val(res.addressDetailInfo);
-                        }
-                    }
-            );
+            
         });
     });
 </script>
