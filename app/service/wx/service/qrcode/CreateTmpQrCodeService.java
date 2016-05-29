@@ -96,7 +96,8 @@ public class CreateTmpQrCodeService {
     			}
     		}
     		
-    		rsp.setPicRelPath(Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") + picRelPath);
+    		rsp.setPicRelPath(Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") + 
+    				Play.configuration.getProperty("wx.qrcode.prefix", "/qrimg/") + picRelPath);
     		//保存路径
     		File imageFile = new File(picAbsPath);
     		//存在的话就删除
@@ -115,7 +116,8 @@ public class CreateTmpQrCodeService {
     			String newFileRelPath = picRelPath + "." + fileType;
     			File newFile = new File(newFileAbsPath);
     			if(imageFile.renameTo(newFile)) {
-    				rsp.setPicRelPath(Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") + newFileRelPath);
+    				rsp.setPicRelPath(Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") + 
+    						Play.configuration.getProperty("wx.qrcode.prefix", "/qrimg/") + newFileRelPath);
     				Logger.info("将二维码图片重命名成功, 重命名后文件路径: %s", newFileAbsPath);
     			} else {
     				Logger.error("将二维码图片重命名失败，文件路径：%s", picAbsPath);

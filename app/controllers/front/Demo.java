@@ -425,4 +425,7 @@ public class Demo extends FrontController {
     public static void aaa(String userId) {
     	renderText("AAAAAAAAAA___userId="+userId);
     }
+    public static void become() {
+        DistributorService.checkAndBecomeDistributor(10011);
+    }
 }
