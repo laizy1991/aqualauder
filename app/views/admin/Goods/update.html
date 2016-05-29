@@ -5,6 +5,43 @@
 <link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
 #{/set}
 <style>
+    #fileUploadBox{
+        box-shadow: 0px 0px 3px #9d9d9d;
+        background: #dedede;
+        height: 403px;
+        width: 465px;
+        overflow-y: scroll;
+    }
+
+    #imgSorter .img {
+        margin: 15px 5px;
+    }
+
+    #imgSorter .img .btn-op {
+        background: #adadad;
+        opacity: 0.5;
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        float: left;
+        cursor: pointer;
+    }
+
+    #imgSorter .img .btn-op:hover {
+        background: #6762aa;
+    }
+
+    #imgSorter .img .btn-op:active {
+        background: #2c2cad;
+    }
+
+    #imgSorter .img:first-child .up {
+        display: none;
+    }
+
+    #imgSorter .img:last-child .down {
+        display: none;
+    }
 </style>
 <!-- 页头 begin -->
 <div class="main-header">
@@ -59,6 +96,18 @@
                             </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </td>
+        <td i="body" class="ui-dialog-body ui-dialog-body-thin" style="text-align: left;display: block;">
+            <div id="fileUploadBox">
+                <div id="imgSorter">
+                        #{if goods.goodsIcons.size() > 0 && goods.goodsIcons.get(0) != null}
+                        #{list items:goods.goodsIcons, as:'info'}
+                        <img src="/public/pictures/goods/${info.iconUrl}">
+                        #{/list}
+                        #{/if}
+                    </div>
                 </div>
             </div>
         </td>

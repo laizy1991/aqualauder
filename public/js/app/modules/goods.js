@@ -11,6 +11,7 @@ define(function(require) {
     var Initiator = {
         init: function() {
             this.create($('[role="submitAdd"]'));
+            this.upload($('[role="upload"]'));
             this.delete($('[role="delete"]'));
             this.update($('#update'), $('[role="submitUpdate"]'));
             this.view($('[role="view"]'));
@@ -39,13 +40,25 @@ define(function(require) {
          * 添加
          */
         create: function($btn) {
-            $btn.click(function() {
-                swfu.startUpload();
-
-            });
+            $btn.click(function () {
+                var $form = $('#create');
+                ajax.post($form.attr('action'), $form.serialize(), function(result){
+                    if(result.success){
+                        dd.alert('保存成功！', function(){
+                            window.location.reload(false);
+                        });
+                    }else{
+                        dd.alert(result.error);
+                    }
+                });
+            })
         },
 
-
+        upload: function($btn){
+            $btn.click(function () {
+                swfu.startUpload();
+            })
+        },
 
         /**
          * 删除
@@ -119,6 +132,7 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
+                    imgs = $wrap.find('.icons'),
                     title = $wrap.find('.title').val(),
                     createTime = $wrap.find('.createTime').val(),
                     updateTime = $wrap.find('.updateTime').val(),
@@ -138,6 +152,11 @@ define(function(require) {
                         $("#stateToView").text(state==1?"上架":state==0?"下架":"未知");
                         $("#createTimeToView").text(createTime);
                         $("#updateTimeToView").text(updateTime);
+                        imgs.each(function(index) {
+                            var file = imgs[index].value;
+                            var dom = $("<img>").attr("src", "/public/pictures/goods/"+file);
+                            $("#imgToView").append(dom)
+                        });
 
                     }
                 }).showModal();

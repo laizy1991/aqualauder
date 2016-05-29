@@ -36,8 +36,10 @@ public class GoodsService {
 
         if (saved && goodsIcon != null && goodsIcon.size() != 0) {
             for (GoodsIcon gi : goodsIcon) {
-                gi.setGoodsId(goods.getId());
-                GoodsIconDao.insert(gi);
+                if (gi != null) {
+                    gi.setGoodsId(goods.getId());
+                    GoodsIconDao.insert(gi);
+                }
             }
         }
     }

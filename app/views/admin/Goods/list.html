@@ -5,6 +5,11 @@
 <link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
 #{/set}
 <style>
+    #imgToView img{
+        display: block;
+        width:300px;
+        height: auto;
+    }
 </style>
 <!-- 页头 begin -->
 <div class="main-header">
@@ -35,12 +40,18 @@
     #{list items:goodses, as:'info'}
     <tbody>
     <tr class="user-item">
+
         <input type="hidden" class="id" value="${info.id}">
         <input type="hidden" class="title" value="${info?.title}">
         <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
         <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
         <input type="hidden" class="state" value="${info?.state}">
         <input type="hidden" class="price" value="${info?.price}">
+        #{if info.goodsIcons.size() > 0 && info.goodsIcons.get(0) != null}
+        #{list items:info.goodsIcons, as:'icon'}
+            <input type="hidden" class="icons" value="${icon.iconUrl}">
+        #{/list}
+        #{/if}
         <td>${info?.id}</td>
         <td>${info?.title}</td>
         <td>
@@ -115,10 +126,18 @@
                     <label class="info" id="stateToView"></label>
                 </div>
             </div>
+            <div id="imgToView"></div>
         </form>
     </div>
 </script>
-
+<script src="/public/js/front/jquery.lazyload.js?v=1.9.1"></script>
+<script type="text/javascript" charset="utf-8">
+    $(function() {
+        $("img.lazy").lazyload({
+            effect: "fadeIn"
+        });
+    });
+</script>
 <script>
     var verNum = new Date();
     seajs.config({

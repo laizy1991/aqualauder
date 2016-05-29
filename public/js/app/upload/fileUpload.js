@@ -9,7 +9,7 @@ define(function(require) {
 
 
     window.onload = function () {
-        swfu = new SWFUpload({
+        window.swfu = new SWFUpload({
             upload_url: "/ajax.goodsctrl/upload",
             use_query_string:true,
             // File Upload Settings
@@ -93,7 +93,7 @@ define(function(require) {
      */
     function fileQueued(file){
         addReadyFileInfo(file.id,file.name,"");
-        addImage(file);
+        //addImage(file);
 
     }
     function fileDialogComplete(numFilesSelected, numFilesQueued) {
@@ -134,8 +134,10 @@ define(function(require) {
                 var temp = $('#addGoodIconTmpl').html();
                 temp = temp.replace("{index}", iconIndex);
                 temp = temp.replace("{value}", serverData.message);
+                temp = temp.replace("{src}", serverData.message);
                 var ele = $(temp);
-                $("#create").append(ele);
+                $("#imgSorter").append(ele);
+
                 iconIndex++;
             } else {
                 addFileInfo(file.id,"文件上传失败");
@@ -150,6 +152,15 @@ define(function(require) {
         var row = document.getElementById(fileId);
         row.cells[2].innerHTML = "<font color='green'>"+message+"</font>";
     }
+
+    window.deleteFile = function (fileId){
+        //用表格显示
+        var infoTable = document.getElementById("infoTable");
+        var row = document.getElementById(fileId);
+        infoTable.deleteRow(row.rowIndex);
+        swfu.cancelUpload(fileId,false);
+    }
+
     function addReadyFileInfo(fileid,fileName,message,status){
         //用表格显示
         var infoTable = document.getElementById("infoTable");
@@ -177,7 +188,6 @@ define(function(require) {
         var infoTable = document.getElementById("infoTable");
         var rows = infoTable.rows;
         var ids = new Array();
-        var row;
         if(rows==null){
             return false;
         }
@@ -187,14 +197,6 @@ define(function(require) {
         for(var i=0;i<ids.length;i++){
             deleteFile(ids[i]);
         }
-    }
-
-    function deleteFile(fileId){
-        //用表格显示
-        var infoTable = document.getElementById("infoTable");
-        var row = document.getElementById(fileId);
-        infoTable.deleteRow(row.rowIndex);
-        swfu.cancelUpload(fileId,false);
     }
 
     function uploadComplete(file) {
@@ -207,16 +209,14 @@ define(function(require) {
                 progress.setComplete();
                 progress.setStatus("<font color='red'>所有文件上传完毕!</b></font>");
                 progress.toggleCancel(false);
-                var $form = $('#create');
-                ajax.post($form.attr('action'), $form.serialize(), function(result){
-                    if(result.success){
-                        dd.alert('保存成功！', function(){
-                            window.location.reload(false);
-                        });
-                    }else{
-                        dd.alert(result.error);
-                    }
-                });
+                setTimeout(function(){
+                    $("#thumbnails").remove();
+                    $("#fileSelectButton").remove();
+                    $("#divFileProgressContainer").remove();
+                    $("#imgSorter").show();
+                    $('[role="submitAdd"]').show();
+                    $('[role="upload"]').hide();
+                }, 0)
             }
         } catch (ex) {
             this.debug(ex);
@@ -265,26 +265,26 @@ define(function(require) {
 
 
     function addImage(src) {
-        var newImg = document.createElement("img");
-        newImg.style.margin = "5px";
-
-        document.getElementById("thumbnails").appendChild(newImg);
-        if (newImg.filters) {
-            try {
-                newImg.filters.item("DXImageTransform.Microsoft.Alpha").opacity = 0;
-            } catch (e) {
-                // If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
-                newImg.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=' + 0 + ')';
-            }
-        } else {
-            newImg.style.opacity = 0;
-        }
-
-        newImg.onload = function () {
-            fadeIn(newImg, 0);
-        };
-        newImg.src = src.name;
-        console.log(src)
+        //var newImg = document.createElement("img");
+        //newImg.style.margin = "5px";
+        //
+        //document.getElementById("thumbnails").appendChild(newImg);
+        //if (newImg.filters) {
+        //    try {
+        //        newImg.filters.item("DXImageTransform.Microsoft.Alpha").opacity = 0;
+        //    } catch (e) {
+        //        // If it is not set initially, the browser will throw an error.  This will set it if it is not set yet.
+        //        newImg.style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=' + 0 + ')';
+        //    }
+        //} else {
+        //    newImg.style.opacity = 0;
+        //}
+        //
+        //newImg.onload = function () {
+        //    fadeIn(newImg, 0);
+        //};
+        //newImg.src = src.name;
+        //console.log(src)
     }
 
     function fadeIn(element, opacity) {

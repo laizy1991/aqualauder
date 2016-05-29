@@ -16,12 +16,58 @@
     }
 
     #fileUploadBox {
-        height: 200px;
+        height: 403px;
         width: 465px;
         overflow-y: scroll;
     }
     .ui-dialog-body-thin {
         padding: 0px;
+    }
+
+    #infoTable tr {
+        line-height: 25px;
+        background: #D1DAEA;
+    }
+
+    #infoTable tr td{
+        max-width: 100px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    #fileUploadBox{
+        box-shadow: 0px 0px 3px #9d9d9d;
+        background: #dedede;
+    }
+
+    #imgSorter .img {
+        margin: 15px 5px;
+    }
+
+    #imgSorter .img .btn-op {
+        background: #adadad;
+        opacity: 0.5;
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        float: left;
+        cursor: pointer;
+    }
+
+    #imgSorter .img .btn-op:hover {
+        background: #6762aa;
+    }
+
+    #imgSorter .img .btn-op:active {
+        background: #2c2cad;
+    }
+
+    #imgSorter .img:first-child .up {
+        display: none;
+    }
+
+    #imgSorter .img:last-child .down {
+        display: none;
     }
 </style>
 <!-- 页头 begin -->
@@ -31,13 +77,14 @@
     </div>
 </div>
 <!-- 页头 end -->
+<form action="@{ajax.GoodsCtrl.add}" id="create" method="post" enctype="multipart/form-data">
+
 <table style="width: 100%;">
     <tbody>
     <tr>
-        <td i="body" class="ui-dialog-body ui-dialog-body-thin">
-            <div i="content" class="ui-dialog-content" id="content:createDialog">
-                <div class="dialog dialog-create">
-                    <form action="@{ajax.GoodsCtrl.add}" id="create" method="post" enctype="multipart/form-data">
+            <td i="body" class="ui-dialog-body ui-dialog-body-thin">
+                <div i="content" class="ui-dialog-content" id="content:createDialog">
+                    <div class="dialog dialog-create">
                         <div class="form-group">
                             <label class="label"><span class="asterisk">*</span>商品名称</label>
                             <div class="col">
@@ -80,39 +127,51 @@
                         <div i="button" class="ui-dialog-button">
                             <button role="addStock" type="button" data-id="添加库存" autofocus="" class="ui-dialog-autofocus">添加库存</button>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-        </td>
-        <td i="body" class="ui-dialog-body ui-dialog-body-thin">
-            <div id="fileUploadBox">
-                <div style="background-color: #C5D9FF; padding: 5px;">
-                    <span id="spanButtonPlaceholder"></span>
+            </td>
+            <td i="body" class="ui-dialog-body ui-dialog-body-thin" style="text-align: left;display: block;">
+                <div id="fileUploadBox">
+                    <div id="fileSelectButton" style="background-color: #C5D9FF; padding: 5px;">
+                        <span id="spanButtonPlaceholder"></span>
+                    </div>
+                    <div id="thumbnails">
+                        <table id="infoTable" border="0" width="465">
+                        </table>
+                    </div>
+                    <div id="divFileProgressContainer"></div>
+                    <div id="imgSorter" style="display: none;"></div>
                 </div>
-                <div id="divFileProgressContainer"></div>
-                <div id="thumbnails">
-                    <table id="infoTable" border="0" width="530">
-                    </table>
-                </div>
-            </div>
-        </td>
+            </td>
     </tr>
     <tr>
         <td i="footer" class="ui-dialog-footer">
             <div i="button" class="ui-dialog-button">
-                <button role="submitAdd" type="button" data-id="保存" autofocus="" class="ui-dialog-autofocus">保存</button>
+                <button role="upload" type="button" data-id="上传图片" autofocus="" class="ui-dialog-autofocus">下一步</button>
+                <button role="submitAdd" type="button" data-id="保存" autofocus="" class="ui-dialog-autofocus" style="display:none;">保存</button>
             </div>
         </td>
     </tr>
     </tbody>
 </table>
+</form>
 
 #{include file="common/jsinclude.html" /}
 
 #{set 'moreScripts'}
 <script id="addGoodIconTmpl" type="text/html">
-    <div>
-            <input type="hidden" name="goodsIcon[{index}].iconUrl" value="{value}">
+    <div class="img">
+        <div class="deleteImg btn-op">×</div>
+        <div class="up btn-op" style="margin-left:5px;font-size: 24px;text-align: center;">⬆︎</div>
+        <div class="down btn-op" style="margin-left:5px;font-size: 24px;text-align: center;">⬇︎</div>
+        <img src="/public/pictures/goods/{src}" />
+        <input type="hidden" name="goodsIcon[{index}].iconUrl" value="{value}">
+    </div>
+</script>
+
+<script id="iconSort" type="text/html">
+    <div id="iconSortContent">
+        <img type="hidden" name="goodsIcon[{index}].iconUrl" value="{value}">
     </div>
 </script>
 
@@ -145,5 +204,31 @@
     });
     seajs.use("@{'/public/js/app/modules/goods.js'}");
     seajs.use("@{'/public/js/app/upload/fileUpload.js'}");
+
+    $(document).ready(function(){
+        $(document).delegate(".deleteImg" ,"click", function(){
+            $(this).parent().remove();
+        });
+
+        $(document).delegate(".up", "click", function(){
+            var temp = $(this).parent().find("input").val();
+            $(this).parent().find("input").val($(this).parent().prev().find("input").val());
+            $(this).parent().prev().find("input").val(temp);
+
+            temp =  $(this).parent().find("img").attr("src");
+            $(this).parent().find("img").attr("src", $(this).parent().prev().find("img").attr("src"));
+            $(this).parent().prev().find("img").attr("src", temp);
+        });
+
+        $(document).delegate(".down", "click", function(){
+            var temp = $(this).parent().find("input").val();
+            $(this).parent().find("input").val($(this).parent().next().find("input").val());
+            $(this).parent().next().find("input").val(temp);
+
+            temp =  $(this).parent().find("img").attr("src");
+            $(this).parent().find("img").attr("src", $(this).parent().next().find("img").attr("src"));
+            $(this).parent().next().find("img").attr("src", temp);
+        });
+    })
 </script>
 #{/set}
