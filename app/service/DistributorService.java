@@ -19,8 +19,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
+import play.Play;
+import service.wx.WXPay;
+import service.wx.dto.qrcode.CreateQrCodeRspDto;
+import service.wx.dto.qrcode.limit.CreateLimitQrCodeReqDto;
 import utils.DateUtil;
-
 import common.constants.AuditStatus;
 import common.constants.AuditType;
 import common.constants.BillType;
@@ -29,7 +32,6 @@ import common.constants.CommonDictType;
 import common.constants.DistributorStatus;
 import common.constants.DistributorType;
 import common.constants.OrderStatus;
-
 import dao.AuditInfoDao;
 import dao.CashInfoDao;
 import dao.DistributorDao;
@@ -39,6 +41,7 @@ import dao.UserDao;
 import dao.UserMonthBlotterDao;
 import dao.UserWalletDao;
 import dto.DistributorDetail;
+import exception.BusinessException;
 
 /**
  * 分销商
@@ -183,7 +186,7 @@ public class DistributorService {
             }
         }
         
-//        detail.setExtensionQrCode(distributor.getQrcodeUrl());
+        detail.setExtensionQrCode(distributor.getQrcodeLimitPath());
         detail.setExtensionUrl(distributor.getLink());
         detail.setType(distributor.getType());
         
@@ -305,13 +308,25 @@ public class DistributorService {
         }
         
         //生成推广链接
-        String link = "";
-        //生成推广二维码
-        String qrcodeUrl = "http://";
-        return createDistributor(userId, "", DistributorType.PERSONAL, link, qrcodeUrl);
+        String link = Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") +
+        		"/front/Users/qrcodeShare?userId=" + userId;
+        //获取二维码
+    	CreateLimitQrCodeReqDto req = new CreateLimitQrCodeReqDto(user.getOpenId());
+    	CreateQrCodeRspDto rsp = null;
+		try {
+			rsp = WXPay.CreateLimitQrCodeService(req);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}
+    	if(null == rsp || rsp.isSuccess() == false) {
+    		Logger.error("获取用户二维码图片失败，userId: %d", userId);
+    		return false;
+    	}
+    	
+        return createDistributor(userId, "", DistributorType.PERSONAL, link, rsp);
         
     }    
-    private static boolean createDistributor(Integer userId, String realName, DistributorType type, String link, String qrcodeUrl) {
+    private static boolean createDistributor(Integer userId, String realName, DistributorType type, String link, CreateQrCodeRspDto rsp) {
         User user = UserDao.get(userId);
         if(user == null) {
             return false;
@@ -325,7 +340,9 @@ public class DistributorService {
         distributor.setJoinTime(System.currentTimeMillis());
         distributor.setType(type.getCode());
         distributor.setLink(link);
-//        distributor.setQrcodeUrl(qrcodeUrl);
+        distributor.setQrcodeLimitWxUrl(rsp.getUrl());
+        distributor.setQrcodeLimitPath(rsp.getPicRelPath());
+        distributor.setQrcodeLimitTicket(rsp.getTicket());
         distributor.setRealName(realName);
         distributor.setStatus(DistributorStatus.INIT.getCode());
         distributor.setUserId(userId);

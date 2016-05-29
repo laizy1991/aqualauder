@@ -1,6 +1,6 @@
 package service.wx.service.user;
 
-import models.DistributorSuperior;
+import models.Distributor;
 import models.User;
 import net.sf.json.JSONObject;
 
@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import play.Logger;
 import play.Play;
 import play.cache.Cache;
+import service.DistributorService;
 import service.UserService;
 import service.wx.dto.user.SubscribeReqDto;
 import utils.EmojiFilter;
@@ -17,8 +18,9 @@ import utils.http.HttpRequester;
 import utils.http.HttpRespons;
 
 import com.google.gson.Gson;
-
 import common.constants.RegType;
+
+import dao.DistributorDao;
 import dao.DistributorSuperiorDao;
 
 public class WxUserService {
@@ -248,12 +250,18 @@ public class WxUserService {
 					if(null == superiorId) {
 						Logger.error("获取用户上线userId为空");
 					} else {
-						//将信息写入分销商上线表，这里不先检验userId, superiorId组合是否存在，因为执行到下面这一步之前
-						//库中必须没有userId所对应的记录，即用户之前并不存在于库中
-						if(superiorId != u.getUserId() && DistributorSuperiorDao.create(u.getUserId(), superiorId)) {
-							Logger.info("用户[%d]分享带来的下线[%d]入库成功", superiorId, u.getUserId());
+						//将信息写入分销商上线表，这里先检验userId, superiorId组合是否存在
+						Distributor dis = DistributorDao.get(u.getUserId());
+						if(null != dis) {
+							//该用户之前已有上线
+							Logger.warn("用户[%d]之前已成为用户[%d]的下线", u.getUserId(), superiorId);
 						} else {
-							Logger.error("用户[%d]分享带来的下线[%d]相同或入库失败", superiorId, u.getUserId());
+							//库中没有userId所对应的记录，即用户之前并不存在于库中
+							if(superiorId != u.getUserId() && DistributorSuperiorDao.create(u.getUserId(), superiorId)) {
+								Logger.info("用户[%d]分享带来的下线[%d]入库成功", superiorId, u.getUserId());
+							} else {
+								Logger.error("用户[%d]分享带来的下线[%d]相同或入库失败", superiorId, u.getUserId());
+							}
 						}
 					}
 				} else {

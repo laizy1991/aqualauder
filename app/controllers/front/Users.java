@@ -56,7 +56,7 @@ public class Users extends FrontController {
     	JsapiConfig config = JsApiService.getSign(url);
     	Logger.info("config参数为: %s", gson.toJson(config));
     	
-    	String qrImg = Play.configuration.getProperty("wx.qrcode.prefix", "/qrcode/")+ dist.getQrcodeLimitPath();
+    	String qrImg = Play.configuration.getProperty("wx.qrcode.prefix", "/qrimg/")+ dist.getQrcodeLimitPath();
     	render("/Front/user/qrcodeShare.html", user, qrImg, config);
     	
     }
