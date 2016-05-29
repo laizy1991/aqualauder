@@ -27,6 +27,8 @@ public class OrderGoods extends Model {
 
     @Column(name="goods_icon")
     private String goodsIcon;
+    @Column(name="goods_size")
+    private String goodsSize;
     
     @Column(name="goods_desc")
     private String goodsDesc;
@@ -46,6 +48,14 @@ public class OrderGoods extends Model {
 
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
+    }
+
+    public String getGoodsSize() {
+        return goodsSize;
+    }
+
+    public void setGoodsSize(String goodsSize) {
+        this.goodsSize = goodsSize;
     }
 
     public Long getGoodsId() {

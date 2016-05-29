@@ -21,5 +21,7 @@ GET /link.html            front.Helps.link
 * /myspace.html             front.Users.getUserInfo
 * /cash.html                front.Users.cash
 
+POST /createOrder           front.Orders.createOrder
+
 *       /front/{controller}/{action}            front.{controller}.{action}
 *       /{controller}/{action}                  {controller}.{action}

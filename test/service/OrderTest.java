@@ -41,7 +41,7 @@ public class OrderTest extends UnitTest {
         Map<Long, Integer> goodsNum = new HashMap<Long, Integer>();
         goodsNum.put(4l, 1);
         goodsNum.put(5l, 1);
-        OrderDetail detail = BuyerService.createOrder(3, order, goodsNum);
+        OrderDetail detail = BuyerService.createOrder(3, order, goodsNum, "M");
         System.err.println(gson.toJson(detail));
     }
     

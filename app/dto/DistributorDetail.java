@@ -27,7 +27,7 @@ public class DistributorDetail {
     /**
      * 累计收入
      */
-    private Integer totalIncome;
+    private int totalIncome;
     public Map<Integer, List<String>> getUnderling() {
         return underling;
     }
