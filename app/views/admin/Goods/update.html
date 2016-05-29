@@ -52,7 +52,7 @@
                         <div class="form-group">
                             <label class="label"><span class="asterisk">*</span>状态</label>
                             <div class="col">
-                                <select name="goods.state" value="${goods.state}">
+                                <select id="goodState" name="goods.state">
                                     <option value="0">下架</option>
                                     <option value="1">上架</option>
                                 </select>
@@ -87,5 +87,9 @@
         ]
     });
     seajs.use("@{'/public/js/app/modules/goods.js'}");
+    $(document).ready(function(){
+        var state="${goods.state}";
+        $("#goodState").val(state);
+    });
 </script>
 #{/set}
