@@ -13,15 +13,15 @@ public class DistributorDetail {
     private long orderSuccessAmount;
     private int orderFailCount;
     private long orderFailAmount;
-    private Integer allBalance;
-    private Integer usefulBalance;
+    private int allBalance;
+    private int usefulBalance;
     private int unpayWealth;
     private int payWealth;
     private int receWealth;
     private String extensionUrl;
     private String extensionQrCode;
-    private Long saleAmount = 0l;
-    private Integer type;
+    private long saleAmount = 0l;
+    private int type;
     private String superior;
     
     /**
@@ -46,43 +46,7 @@ public class DistributorDetail {
     public void setUnderlingBlotter(Map<Integer, Map<Integer, Long>> underlingBlotter) {
         this.underlingBlotter = underlingBlotter;
     }
-    public Integer getAllBalance() {
-        return allBalance;
-    }
-    public void setAllBalance(Integer allBalance) {
-        this.allBalance = allBalance;
-    }
-    public Integer getUsefulBalance() {
-        return usefulBalance;
-    }
-    public void setUsefulBalance(Integer usefulBalance) {
-        this.usefulBalance = usefulBalance;
-    }
-    public String getExtensionUrl() {
-        return extensionUrl;
-    }
-    public void setExtensionUrl(String extensionUrl) {
-        this.extensionUrl = extensionUrl;
-    }
-    public String getExtensionQrCode() {
-        return extensionQrCode;
-    }
-    public void setExtensionQrCode(String extensionQrCode) {
-        this.extensionQrCode = extensionQrCode;
-    }
-    public Integer getType() {
-        return type;
-    }
-    public void setType(Integer type) {
-        this.type = type;
-    }
-    public Integer getTotalIncome() {
-        return totalIncome;
-    }
-    public void setTotalIncome(Integer totalIncome) {
-        this.totalIncome = totalIncome;
-    }
-    
+
     public int getOrderSuccessCount() {
         return orderSuccessCount;
     }
@@ -107,22 +71,69 @@ public class DistributorDetail {
     public void setOrderFailAmount(long orderFailAmount) {
         this.orderFailAmount = orderFailAmount;
     }
+    public int getAllBalance() {
+        return allBalance;
+    }
+    public void setAllBalance(int allBalance) {
+        this.allBalance = allBalance;
+    }
+    public int getUsefulBalance() {
+        return usefulBalance;
+    }
+    public void setUsefulBalance(int usefulBalance) {
+        this.usefulBalance = usefulBalance;
+    }
+    public int getUnpayWealth() {
+        return unpayWealth;
+    }
+    public void setUnpayWealth(int unpayWealth) {
+        this.unpayWealth = unpayWealth;
+    }
+    public int getPayWealth() {
+        return payWealth;
+    }
+    public void setPayWealth(int payWealth) {
+        this.payWealth = payWealth;
+    }
+    public int getReceWealth() {
+        return receWealth;
+    }
+    public void setReceWealth(int receWealth) {
+        this.receWealth = receWealth;
+    }
+    public String getExtensionUrl() {
+        return extensionUrl;
+    }
+    public void setExtensionUrl(String extensionUrl) {
+        this.extensionUrl = extensionUrl;
+    }
+    public String getExtensionQrCode() {
+        return extensionQrCode;
+    }
+    public void setExtensionQrCode(String extensionQrCode) {
+        this.extensionQrCode = extensionQrCode;
+    }
+    public int getType() {
+        return type;
+    }
+    public void setType(int type) {
+        this.type = type;
+    }
     public String getSuperior() {
         return superior;
     }
     public void setSuperior(String superior) {
         this.superior = superior;
     }
-    public void setUnpayWealth(int unpayWealth) {
-        this.unpayWealth = unpayWealth;
+    public Integer getTotalIncome() {
+        return totalIncome;
     }
-    public void setPayWealth(int payWealth) {
-        this.payWealth = payWealth;
+    public void setTotalIncome(Integer totalIncome) {
+        this.totalIncome = totalIncome;
     }
-    public void setReceWealth(int receWealth) {
-        this.receWealth = receWealth;
+    public void setSaleAmount(long saleAmount) {
+        this.saleAmount = saleAmount;
     }
-
     public void addUnpayWealth(int wealth) {
         unpayWealth += wealth;
     }

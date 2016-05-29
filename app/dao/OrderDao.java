@@ -36,7 +36,11 @@ public class OrderDao {
     }
 
     public static List<Order> list(int userId, int page, int size) {
-        return Order.find("userId", userId).fetch(page, size);
+        if(size > 0) {
+            return Order.find("userId", userId).fetch(page, size);
+        } else {
+            return Order.find("userId", userId).fetch();
+        }
     }
     
     public static List<Order> getByStatus(int state) {

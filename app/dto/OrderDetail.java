@@ -41,6 +41,7 @@ public class OrderDetail {
     private String platformTradeNo;
     private String platformTradeMsg;
     private Long callbackTime;
+    private Long createTime;
     private List<OrderGoodsInfo> goodsInfo = new ArrayList<OrderGoodsInfo>();
 
     
@@ -71,8 +72,17 @@ public class OrderDetail {
         this.payStatus = order.getPayStatus();
         this.callbackUrl = order.getCallbackUrl();
         this.callbackTime = order.getCallbackTime();
+        this.createTime = order.getCreateTime();
     }
     
+    public Long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
+
     public String getOpenId() {
         return openId;
     }

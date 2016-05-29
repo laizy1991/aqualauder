@@ -205,6 +205,7 @@ public class BuyerService {
             Logger.error("order not found, id:%s", orderId);
             return false;
         }
+        DistributorService.checkAndBecomeDistributor(order.getUserId());
         order.setPayTime(System.currentTimeMillis());
         boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.PAYED);
         return isSucc;
