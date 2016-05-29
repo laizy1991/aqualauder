@@ -25,6 +25,7 @@ public class Users extends FrontController {
 	public static Gson gson = new Gson();
     @GuestAuthorization
     public static void orders() {
+        
         render("/Front/user/orders.html");
     }
     @GuestAuthorization

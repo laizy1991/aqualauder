@@ -41,7 +41,7 @@
         <input type="hidden" class="realName" value="${info?.realName}">
         <input type="hidden" class="joinTime" value="%{out.print(utils.DateUtil.getDateString(info?.joinTime))}%">
         <input type="hidden" class="link" value="${info?.link}">
-        <input type="hidden" class="qrcodeUrl" value="${info?.qrcodeUrl}">
+        <input type="hidden" class="qrcodeUrl" value="${info?.qrcodeLimitWxUrl}">
         <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
         <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
         <td>${info?.userId}</td>
