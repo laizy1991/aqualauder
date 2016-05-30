@@ -17,7 +17,6 @@ import java.util.UUID;
 public class GoodsCtrl extends AjaxController {
 
     public static void add(Goods goods, List<GoodsStock> goodsStock, List<GoodsIcon> goodsIcon) throws BusinessException {
-
         goods.setGoodsType(0);
         GoodsService.add(goods, goodsStock, goodsIcon);
         renderSuccessJson();
@@ -52,5 +51,35 @@ public class GoodsCtrl extends AjaxController {
         return;
     }
 
+    public static void deleteIcon(GoodsIcon goodsIcon) {
+        if(GoodsService.deleteIcon(goodsIcon)) {
+            renderSuccessJson();
+        }
+    }
+
+    public static void changeIcon(GoodsIcon goodsIcon, GoodsIcon nxGoodsIcon) {
+        String temp = goodsIcon.getIconUrl();
+        goodsIcon.setIconUrl(nxGoodsIcon.getIconUrl());
+        nxGoodsIcon.setIconUrl(temp);
+        if(GoodsService.updateIcon(goodsIcon) && GoodsService.updateIcon(nxGoodsIcon)) {
+            renderSuccessJson();
+        }
+    }
+
+    public static void addIcon(Goods goods, File file) {
+        if(file != null) {
+            String[] temp = file.getName().split("\\.");
+            String suffix = "." + temp[temp.length - 1];
+            String fileName = UUID.randomUUID().toString().replace("-", "") + suffix;
+            File storeFile = new File("./public/pictures/goods/" + fileName);
+            Files.copy(file, storeFile);
+            GoodsIcon goodsIcon = new GoodsIcon();
+            goodsIcon.setGoodsId(goods.getId());
+            goodsIcon.setIconUrl(fileName);
+            GoodsService.addGoodsIcon(goodsIcon);
+            render("/admin/Goods/reloadTop.html");
+        }
+
+    }
 
 }

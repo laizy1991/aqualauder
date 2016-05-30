@@ -101,4 +101,30 @@ public class GoodsService {
         
         return sb.toString();
     }
+
+    public static boolean deleteIcon(GoodsIcon goodsIcon) {
+        try {
+            GoodsIconDao.delete(goodsIcon);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean updateIcon(GoodsIcon goodsIcon) {
+        try {
+            GoodsIconDao.update(goodsIcon);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean addGoodsIcon(GoodsIcon goodsIcon) {
+        try {
+            return GoodsIconDao.insert(goodsIcon);
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

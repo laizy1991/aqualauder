@@ -1,0 +1,25 @@
+#{extends 'main.html' /}
+
+#{set 'moreStyles'}
+<link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+<link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+#{/set}
+<style>
+</style>
+<!-- 页头 begin -->
+<div class="main-header">
+    <div class="breadcrumb">
+        <span class="nolink">刷新父页面</span>
+    </div>
+</div>
+
+#{include file="common/jsinclude.html" /}
+
+#{set 'moreScripts'}
+
+<script>
+    $(document).ready(function(){
+        top.document.location.href=top.location;
+    });
+</script>
+#{/set}

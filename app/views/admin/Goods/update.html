@@ -95,6 +95,11 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="col">
+                                <div id="addIcon">增加图片</div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -102,12 +107,18 @@
         <td i="body" class="ui-dialog-body ui-dialog-body-thin" style="text-align: left;display: block;">
             <div id="fileUploadBox">
                 <div id="imgSorter">
-                        #{if goods.goodsIcons.size() > 0 && goods.goodsIcons.get(0) != null}
+
+                    #{if goods.goodsIcons.size() > 0 && goods.goodsIcons.get(0) != null}
                         #{list items:goods.goodsIcons, as:'info'}
-                        <img src="/public/pictures/goods/${info.iconUrl}">
-                        #{/list}
-                        #{/if}
-                    </div>
+                        <div class="img">
+                            <div class="deleteImg btn-op">×</div>
+                            <div class="up btn-op" style="margin-left:5px;font-size: 24px;text-align: center;">⬆︎</div>
+                            <div class="down btn-op" style="margin-left:5px;font-size: 24px;text-align: center;">⬇︎</div>
+                            <img src="/public/pictures/goods/${info.iconUrl}">
+                            <input type="hidden" value="${info.id}">
+                        </div>
+                    #{/list}
+                    #{/if}
                 </div>
             </div>
         </td>
@@ -121,6 +132,15 @@
     </tr>
     </tbody>
 </table>
+<iframe id="myIframe" style="display:none;" name="myIframe" style="display:none;">
+    <script type="text/javascript">
+        window.close();
+    </script>
+</iframe>
+<form style="display:none;" target="myIframe" id="addIconForm" action="@{ajax.GoodsCtrl.addIcon}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" id="selectFile">
+    <input name="goods.id" value="${goods.id}">
+</form>
 
 #{include file="common/jsinclude.html" /}
 
@@ -139,6 +159,56 @@
     $(document).ready(function(){
         var state="${goods.state}";
         $("#goodState").val(state);
+
+        $(document).delegate(".deleteImg" ,"click", function(){
+            var data = {};
+            data["goodsIcon.id"] = $(this).parent().find("input").val();
+            $.post("@{ajax.GoodsCtrl.deleteIcon}", data, function(result) {
+                result = JSON.parse(result);
+                if(result.success) {
+                    window.location.reload();
+                }
+            });
+        });
+
+        $(document).delegate(".up", "click", function(){
+            var data = {};
+            var current = $(this).parent();
+            var target = $(this).parent().prev();
+            data["goodsIcon.id"] = current.find("input").val();
+            data["nxGoodsIcon.id"] = target.find("input").val();
+            $.post("@{ajax.GoodsCtrl.changeIcon}", data, function(result) {
+                result = JSON.parse(result);
+                if(result.success) {
+                    window.location.reload();
+                }
+            });
+        });
+
+        $(document).delegate(".down", "click", function(){
+            var data = {};
+            var current = $(this).parent();
+            var target = $(this).parent().next();
+            data["goodsIcon.id"] = current.find("input").val();
+            data["nxGoodsIcon.id"] = target.find("input").val();
+            $.post("@{ajax.GoodsCtrl.changeIcon}", data, function(result) {
+                result = JSON.parse(result);
+                if(result.success) {
+                    window.location.reload();
+                }
+            });
+        });
+
+        $(document).delegate("#addIcon", "click", function(){
+            var form = $("#addIconForm");
+            form.find("input").click()
+        });
+
+        $(document).delegate("#selectFile", "change", function(){
+            var form = $("#addIconForm");
+            form.submit();
+        });
+
     });
 </script>
 #{/set}

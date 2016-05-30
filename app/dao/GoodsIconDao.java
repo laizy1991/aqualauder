@@ -24,4 +24,16 @@ public class GoodsIconDao {
         return goodsIcon.create();
     }
 
+    public static void delete(GoodsIcon goodsIcon) {
+        if (goodsIcon != null && goodsIcon.getId() != 0) {
+            goodsIcon.delete();
+        }
+    }
+
+    public static void update(GoodsIcon goodsIcon) {
+        if (goodsIcon != null && goodsIcon.getId() != 0) {
+            goodsIcon.save();
+        }
+    }
+
 }
