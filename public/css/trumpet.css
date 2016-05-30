@@ -918,3 +918,12 @@ button.Zebra_DatePicker_Icon_Inside {
   /* line 303, ../sass/trumpet.scss */
   .filter-bar-time .in-t {
     width: 136px; }
+.qrshare {
+    height: 18px;
+    width:180px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display:block;
+    white-space: nowrap;
+    max-width: 300px;
+}

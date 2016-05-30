@@ -1,0 +1,342 @@
+#{extends 'main.html' /}
+
+#{set 'moreStyles'}
+<link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+<link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+#{/set}
+<style>
+    #stockList, #iconList {
+        height: 200px;
+        width: 465px;
+        overflow-y: scroll;
+        box-shadow: 0px 0px 3px #9d9d9d;
+    }
+    .form-group {
+        padding-left: 90px;
+    }
+
+    #fileUploadBox {
+        height: 403px;
+        width: 465px;
+        overflow-y: scroll;
+    }
+    .ui-dialog-body-thin {
+        padding: 0px;
+    }
+
+    #infoTable tr {
+        line-height: 25px;
+        background: #D1DAEA;
+    }
+
+    #infoTable tr td{
+        max-width: 100px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    #fileUploadBox{
+        box-shadow: 0px 0px 3px #9d9d9d;
+        background: #dedede;
+    }
+
+    #imgSorter .img {
+        margin: 15px 5px;
+    }
+
+    #imgSorter .img .btn-op {
+        background: #adadad;
+        opacity: 0.5;
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        float: left;
+        cursor: pointer;
+    }
+
+    #imgSorter .img .btn-op:hover {
+        background: #6762aa;
+    }
+
+    #imgSorter .img .btn-op:active {
+        background: #2c2cad;
+    }
+
+    #imgSorter .img:first-child .up {
+        display: none;
+    }
+
+    #imgSorter .img:last-child .down {
+        display: none;
+    }
+</style>
+<!-- 页头 begin -->
+<div class="main-header">
+    <div class="breadcrumb">
+        <span class="nolink">二维码底图</span>
+    </div>
+</div>
+<!-- 页头 end -->
+<table class="tb">
+    <thead>
+    <tr  class="text-center">
+        <th>ID</th>
+        <th>名称</th>
+        <th>好友标题</th>
+        <th>好友描述</th>
+        <th>朋友圈标题</th>
+        <th>启用</th>
+        <th>备注</th>
+        <th>创建时间</th>
+        <th>修改时间</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    #{if qrShares == null || qrShares.size() == 0 }
+    <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+    #{/if}
+    #{else}
+    #{list items:qrShares, as:'info'}
+    <tbody>
+    <tr>
+    	<input type="hidden" class="id" value="${info.id}">
+    	<input type="hidden" class="name" value="${info.name}">
+    	<input type="hidden" class="friendShareTitle" value="${info.friendShareTitle}">
+    	<input type="hidden" class="friendShareDesc" value="${info.friendShareDesc}">
+    	<input type="hidden" class="momentShareTitle" value="${info.momentShareTitle}">
+    	<input type="hidden" class="isEnabled" value="${info.isEnabled}">
+    	<input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
+    	<input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
+    	<input type="hidden" class="imgUrl" value="${info.imgUrl}">
+    	<input type="hidden" class="remark" value="${info.remark}">
+        <td>${info?.id}</td>
+        <td>${info?.name}</td>
+        <td><span class="qrshare">${info?.friendShareTitle}</span></td>
+        <td><span class="qrshare">${info?.friendShareDesc}</span></td>
+        <td><span class="qrshare">${info?.momentShareTitle}</span></td>
+        <td>%{out.print(info?.isEnabled==0?"否":"是")}%</td>
+        <td><span class="qrshare">${info?.remark}</span></td>
+        <td>
+            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
+        </td>
+        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
+        <td>
+            <div class="opts">
+                <span class="opt" role="update"><a href="javascript:;">修改</a></span>|
+                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+    #{/list}
+    #{/else}
+</table>
+
+#{include file="common/jsinclude.html" /}
+
+#{set 'moreScripts'}
+<!-- 增加 -->
+<script id="createDialogTmpl" type="text/html">
+    <div class="dialog dialog-create">
+        <form action="@{ajax.OrderCtrl.add}" id="create">
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>姓名</label>
+                <div class="col">
+                    <input type="text" name="order.outTradeNo" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>密码</label>
+                <div class="col">
+                    <input type="password" name="order.password" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 删除 -->
+<script id="deleteDialogTmpl" type="text/html">
+    <div class="dialog dialog-delete">
+        <form action="@{ajax.QrShareCtrl.delete}" id="delete">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToDelete" name="qrShare.id" value="">
+                <label class="tips">确定删除记录<strong id="nameToDelete"></strong>？</label>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 修改 -->
+<script id="updateDialogTmpl" type="text/html">
+    <div class="dialog dialog-update">
+        <form action="@{ajax.QrShareCtrl.update}" id="update" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToUpdate" name="qrShare.id" value="">
+                <label class="tips">确定修改记录<strong id="idToUpdateTmp"></strong>？</label>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>名称:</label>
+                <div class="col">
+                    <input type="text" id="nameToUpdate" name="qrShare.name" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>好友标题:</label>
+                <div class="col">
+                    <input type="text" id="friendShareTitleToUpdate" name="qrShare.friendShareTitle" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>好友描述:</label>
+                <div class="col">
+                    <input type="text" id="friendShareDescToUpdate" name="qrShare.friendShareDesc" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>朋友圈标题:</label>
+                <div class="col">
+                    <input type="text" id="momentShareTitleToUpdate" name="qrShare.momentShareTitle" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>图片:</label>
+                <div class="col">
+                    <input type="text" id="imgUrlToUpdate" name="qrShare.imgUrl" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+				<div>
+					&nbsp;&nbsp;&nbsp;
+                    <span id="bannerImageName">
+                    	<img src="" height="100" align="absmiddle" border="0" /><br/>
+                    </span>
+				</div>
+				<div>
+					<label class="label">&nbsp;</label>
+                	<div class="col">
+			<td i="body" class="ui-dialog-body ui-dialog-body-thin" style="text-align: left;display: block;">
+                <div id="fileUploadBox">
+                    <div id="fileSelectButton" style="background-color: #C5D9FF; padding: 5px;">
+                        <span id="spanButtonPlaceholder"></span>
+                    </div>
+                    <div id="thumbnails">
+                        <table id="infoTable" border="0" width="465">
+                        </table>
+                    </div>
+                    <div id="divFileProgressContainer"></div>
+                    <div id="imgSorter" style="display: none;"></div>
+                </div>
+            </td>
+                	</div>
+                </div>
+				<div>
+					<label class="label">&nbsp;</label>&nbsp;&nbsp;&nbsp;
+					<span style="color:red">(图片尺寸建议：320*568 像素)</span>
+				</div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>启用:</label>
+				&nbsp;&nbsp;&nbsp;
+                 <select id="isEnabledToUpdate" name="qrShare.isEnabled">
+                        <option value="0">否</option>
+                        <option value="1">是</option>
+                    </select>
+                    <span class="msg error-text">必填项！</span>
+            </div>
+			<div class="form-group">
+                <label class="label"><span class="asterisk">*</span>备注:</label>
+                <div class="col">
+                    <input type="text" id="remarkToUpdate" name="qrShare.remark" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 查看 -->
+<script id="viewDialogTmpl" type="text/html">
+    <div class="dialog dialog-view">
+        <form action="#" id="view">
+            <div class="form-group">
+                <label class="label">ID:</label>
+                <div class="col">
+                    <label class="info" id="idToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">名称</label>
+                <div class="col">
+                    <label class="info" id="nameToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">好友标题:</label>
+                <div class="col">
+                    <label class="info" id="friendShareTitleToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">好友描述:</label>
+                <div class="col">
+                    <label class="info" id="friendShareDescToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">朋友圈标题:</label>
+                <div class="col">
+                    <label class="info" id="momentShareTitleToView"></label>
+                </div>
+            </div>
+			<div class="form-group">
+                <div class="col">
+                    <img class="info" id="imgUrlToView" src="" alt="底图" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">是否启用:</label>
+                <div class="col">
+                    <label class="info" id="isEnabledToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">备注:</label>
+                <div class="col">
+                    <label class="info" id="remarkToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">创建时间:</label>
+                <div class="col">
+                    <label class="info" id="createTimeToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">修改时间:</label>
+                <div class="col">
+                    <label class="info" id="updateTimeToView"></label>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script>
+    var verNum = new Date();
+    seajs.config({
+        base:"../",
+        // 加版本号
+        map: [
+            [ '.js', '.js?v='+verNum]
+        ]
+    });
+    seajs.use("@{'/public/js/app/modules/qrshare.js'}");
+    seajs.use("@{'/public/js/app/upload/fileUpload.js'}");
+</script>
+#{/set}

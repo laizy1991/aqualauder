@@ -7,10 +7,8 @@ GET     /aqualauder                                       Application.index
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
-
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
-GET		/qrcode/								staticDir:/data/project/aqualauder/pic/
 # Catch all
 GET /explain.html            front.Helps.explain
 GET /introduce.html            front.Helps.introduce
