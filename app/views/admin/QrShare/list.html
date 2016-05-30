@@ -16,8 +16,8 @@
     }
 
     #fileUploadBox {
-        height: 403px;
-        width: 465px;
+        width: 180px;
+        height: 315px;
         overflow-y: scroll;
     }
     .ui-dialog-body-thin {
@@ -171,7 +171,7 @@
 
 <!-- 修改 -->
 <script id="updateDialogTmpl" type="text/html">
-    <div class="dialog dialog-update">
+    <div class="dialog dialog-update" id="updateDialogTmplDiv">
         <form action="@{ajax.QrShareCtrl.update}" id="update" enctype="multipart/form-data">
             <div class="form-group">
                 <input type="hidden" class="in-t" id="idToUpdate" name="qrShare.id" value="">
@@ -207,20 +207,7 @@
             </div>
             <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>图片:</label>
-                <div class="col">
-                    <input type="text" id="imgUrlToUpdate" name="qrShare.imgUrl" value="">
-                    <span class="msg error-text">必填项！</span>
-                </div>
-				<div>
-					&nbsp;&nbsp;&nbsp;
-                    <span id="bannerImageName">
-                    	<img src="" height="100" align="absmiddle" border="0" /><br/>
-                    </span>
-				</div>
-				<div>
-					<label class="label">&nbsp;</label>
                 	<div class="col">
-			<td i="body" class="ui-dialog-body ui-dialog-body-thin" style="text-align: left;display: block;">
                 <div id="fileUploadBox">
                     <div id="fileSelectButton" style="background-color: #C5D9FF; padding: 5px;">
                         <span id="spanButtonPlaceholder"></span>
@@ -232,9 +219,7 @@
                     <div id="divFileProgressContainer"></div>
                     <div id="imgSorter" style="display: none;"></div>
                 </div>
-            </td>
                 	</div>
-                </div>
 				<div>
 					<label class="label">&nbsp;</label>&nbsp;&nbsp;&nbsp;
 					<span style="color:red">(图片尺寸建议：320*568 像素)</span>
