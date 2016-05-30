@@ -209,9 +209,9 @@ define(function(require) {
                 progress.setStatus("<font color='red'>所有文件上传完毕!</b></font>");
                 progress.toggleCancel(false);
                 setTimeout(function(){
-                    $("#thumbnails").remove();
-                    $("#fileSelectButton").remove();
-                    $("#divFileProgressContainer").remove();
+                    $("#thumbnails").hide();
+                    //$("#fileSelectButton").hide();
+                    $("#divFileProgressContainer").hide();
                     $("#imgSorter").show();
                 }, 0)
             }
