@@ -99,8 +99,7 @@ define(function(require) {
     function fileDialogComplete(numFilesSelected, numFilesQueued) {
         try {
             if (numFilesQueued > 0) {
-                document.getElementById('btnCancel').disabled = "";
-                //this.startUpload();
+                this.startUpload();
             }
         } catch (ex) {
             this.debug(ex);
@@ -214,8 +213,6 @@ define(function(require) {
                     $("#fileSelectButton").remove();
                     $("#divFileProgressContainer").remove();
                     $("#imgSorter").show();
-                    $('[role="submitAdd"]').show();
-                    $('[role="upload"]').hide();
                 }, 0)
             }
         } catch (ex) {

@@ -11,7 +11,6 @@ define(function(require) {
     var Initiator = {
         init: function() {
             this.create($('[role="submitAdd"]'));
-            this.upload($('[role="upload"]'));
             this.delete($('[role="delete"]'));
             this.update($('#update'), $('[role="submitUpdate"]'));
             this.view($('[role="view"]'));
@@ -51,12 +50,6 @@ define(function(require) {
                         dd.alert(result.error);
                     }
                 });
-            })
-        },
-
-        upload: function($btn){
-            $btn.click(function () {
-                swfu.startUpload();
             })
         },
 
