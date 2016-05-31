@@ -122,7 +122,7 @@ public class Users extends FrontController {
         render("/Front/user/myspace.html", data, code);
     }
     @GuestAuthorization
-    public static void cash(String amount) {
+    public static void cash(String amount, int bank) {
         String openId = session.get("openId");
         boolean isSucc = false;
         if(StringUtils.isBlank(openId)) {
@@ -136,7 +136,11 @@ public class Users extends FrontController {
         try {
             int cashAmount = (int)(Double.parseDouble(amount) * 100);
             if(cashAmount > 0) {
-                isSucc = UserWalletService.cash(user.getUserId(), cashAmount, CashType.REDPACK.getCode(), "");
+                if(cashAmount >= 20000 && bank == 1) {
+                    isSucc = UserWalletService.cash(user.getUserId(), cashAmount, CashType.BANK.getCode(), "");
+                } else {
+                    isSucc = UserWalletService.cash(user.getUserId(), cashAmount, CashType.REDPACK.getCode(), "");
+                }
             }
         } catch(Exception e) {
             Logger.error(e, "");

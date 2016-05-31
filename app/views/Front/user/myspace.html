@@ -218,14 +218,23 @@ $(function () {
                             <table style="padding: 0; margin: 0; width: 100%;">
                                 <tbody>
                                     <tr>
-                                        <td width="80px"><label for="amount" class="ui-input-text">提现金额：</label></td>
+                                        <td width="100px"><label for="amount" class="ui-input-text">提现金额：</label></td>
                                         <td>
                                             <div class="ui-input-text">
                                                 <input id="amount" name="amount" placeholder="" value="0.00" type="text"
                                                     class="ui-input-text">
                                             </div></td>
                                     </tr>
-                                    
+                                               
+                                    <tr>
+                                        <td width="100px"><label for="amount" class="ui-input-text">银行卡提现：</label></td>
+                                        <td>
+                                            <select style="width: 80px" id="bank" name="bank">
+                                            <option value="0">否</option>
+                                            <option value="1">是</option>
+                                            </select><font color="red" size="1">低于200自动通过红包提现</font>
+                                            </td>
+                                    </tr>
                                                                     </tbody>
                             </table>
 

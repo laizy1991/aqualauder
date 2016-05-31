@@ -33,12 +33,15 @@ public class Orders extends FrontController {
         
         Map<Long, Integer> goodsNumMap = new HashMap<Long, Integer>();
         goodsNumMap.put(goodsId, goodsNum);
-	    BuyerService.createOrder(user.getUserId(), order, goodsNumMap, goodsSize);
+        OrderDetail detail = BuyerService.createOrder(user.getUserId(), order, goodsNumMap, goodsSize);
+        if(detail == null) {
+            renderJSON("{\"msg\":\"创建订单失败\"}");
+        }
 	    try {
 	        ShippingAddressService.create(user.getRegType(), order.getShippingAddress(), order.getReceiver(), order.getMobilePhone(), 0);
 	    } catch(Exception e) {
 	        e.printStackTrace();
 	    }
-	    redirect("front.Users.orders");
+	    redirect("front.Pay.wxPay", detail.getOrderId());
 	}
 }

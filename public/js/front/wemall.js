@@ -396,7 +396,8 @@ function submitTxOrder () {
 		type : 'POST',
 		url : '/cash.html',
 		data : {
-			amount : $('#amount').val()
+			amount : $('#amount').val(),
+			bank : $('#bank').val()
 		},
 		success : function (response , status , xhr) {
 			if(response==true)
