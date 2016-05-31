@@ -23,6 +23,7 @@ import exception.BusinessException;
 public class FrontController extends BaseController {
 	@Before
 	protected static void beforeAction() throws SecurityException, NoSuchMethodException {
+	    session.put("openId", "olVhYv0N4I24GhgF7dyf9mBm9wgE");
 		Logger.info("Action: %s, QueryString: %s", Request.current().path, Request.current().querystring);
 		String code = request.params.get("code");
 		if(!StringUtils.isBlank(code)) {
