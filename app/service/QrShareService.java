@@ -1,5 +1,7 @@
 package service;
 
+import common.constants.GlobalConstants;
+
 import models.QrShare;
 import dao.QrShareDao;
 
@@ -16,8 +18,21 @@ public class QrShareService {
         	QrShareDao.delete(qrShare);
         }
 
-        public static void update(QrShare qrShare) {
-        	QrShareDao.update(qrShare);
+        public static boolean update(QrShare qrShare) {
+        	if(null == qrShare)
+        		return false;
+        	
+        	return QrShareDao.update(qrShare);
+        }
+        
+        public static int countIsEnabledRecs(int isEnabled) {
+        	
+        	return QrShareDao.countIsEnabledRecs(isEnabled);
+        }
+        
+        public static QrShare getLastIsEnabledRec(int isEnabled) {
+        	
+        	return QrShareDao.getLastIsEnabledRec(isEnabled);
         }
 
     }

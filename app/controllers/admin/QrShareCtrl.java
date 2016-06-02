@@ -9,7 +9,7 @@ import common.core.WebController;
 public class QrShareCtrl extends WebController {
 
 	public static void list() {
-        List<QrShare> qrShares = QrShare.all().fetch();
+        List<QrShare> qrShares = QrShare.find("ORDER BY id DESC").fetch();
         render("/admin/QrShare/list.html", qrShares);
     }
 }

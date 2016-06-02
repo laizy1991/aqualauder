@@ -61,8 +61,9 @@ define(function(require) {
             serverData = JSON.parse(serverData)
             if(serverData.success) {
                 console.log(serverData)
-                $("#imgUrlOnHiddenToUpdate").val(serverData.message)
-                $("#imgUrlToUpdate").attr("src", serverData.message)
+                $("#imgUrlOnHiddenToUpdate").val(serverData.data.imgUrl);
+                $("#imgPathOnHiddenToUpdate").val(serverData.data.imgPath);
+                $("#imgUrlToUpdate").attr("src", serverData.data.imgUrl);
             }
 
         } catch (ex) {
