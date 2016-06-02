@@ -2,16 +2,20 @@ package controllers.ajax;
 
 import java.io.File;
 import java.security.InvalidParameterException;
+import java.util.List;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
 import models.QrShare;
 import net.sf.json.JSONObject;
+import play.data.Upload;
 import play.data.validation.Required;
 
 import common.core.AjaxController;
 
 import exception.BusinessException;
+import play.libs.Files;
 
 
 public class QrShareCtrl extends AjaxController {
@@ -32,24 +36,26 @@ public class QrShareCtrl extends AjaxController {
         renderSuccessJson();
     }
 
-    /*public static void upload(File boundary) {
-        List<Upload> files = (List<Upload>) request.args.get("__UPLOADS");
-        if (files.size() > 0) {
-            Upload upload = files.get(0);
-            if (upload.getSize() > 0) {
-                File file = upload.asFile();
-                String[] temp = file.getName().split("\\.");
-                String suffix = "." + temp[temp.length -1];
-                String fileName = UUID.randomUUID().toString().replace("-", "") + suffix;
-                File storeFile = new File("./public/pictures/goods/" + fileName);
-                Files.copy(file, storeFile);
-                renderSuccessJson(fileName);
-                return;
-            }
-        }
-        renderErrorJson("upload fail");
-        return;
-    }*/
+	public static void upload(File boundary) {
+		List<Upload> files = (List<Upload>) request.args.get("__UPLOADS");
+		if (files.size() > 0) {
+			Upload upload = files.get(0);
+			if (upload.getSize() > 0) {
+				File file = upload.asFile();
+				String[] temp = file.getName().split("\\.");
+				String suffix = "." + temp[temp.length -1];
+				String fileName = UUID.randomUUID().toString().replace("-", "") + suffix;
+				String filePath = "./public/pictures/qrcode/" + fileName; //文件在磁盘中的路径
+				File storeFile = new File(filePath);
+				String urlPath = "/public/pictures/qrcode/" + fileName; //文件在网络中的路径
+				Files.copy(file, storeFile);
+				renderSuccessJson(urlPath);
+				return;
+			}
+		}
+		renderErrorJson("upload fail");
+		return;
+	}
 
     /**
 	 * 上传活动图片

@@ -159,6 +159,7 @@ define(function(require) {
 
                     },
                     onshow:function() {
+                        window.initImgUploader();
                     	$("#idToUpdate").val(id);
                     	$("#idToUpdateTmp").text(id);
                         $("#nameToUpdate").val(name);
@@ -167,6 +168,8 @@ define(function(require) {
                         $("#momentShareTitleToUpdate").val(momentShareTitle);
                         $("#isEnabledToUpdate").val(isEnabled);
                         $("#remarkToUpdate").val(remark);
+                        $("#imgUrlToUpdate").attr("src", imgUrl);
+                        $("#imgUrlOnHiddenToUpdate").val(imgUrl);
                     }
                 }).showModal();
             });
