@@ -67,12 +67,30 @@
     .swfupload {
         opacity: 0;
         position: absolute;
-        z-index: 101;
+        z-index: 201;
     }
 
     #imgUrlToUpdate{
         position: absolute;
         z-index: 100;
+    }
+
+    .upload {
+        height: 315px;
+        width: 180px;
+        position: absolute;
+        z-index: 150;
+        background-size: 48px;
+        display: none;
+        background: url("/public/images/update.png") no-repeat center;
+    }
+
+    #imgUrlToUpdateDiv:hover .upload {
+        display: block;
+    }
+
+    #imgUrlToUpdateDiv:hover #imgUrlToUpdate {
+        opacity: 0.3;
     }
 </style>
 <!-- 页头 begin -->
@@ -184,6 +202,7 @@
                 <div class="col" id="imgUrlToUpdateDiv">
                     <div id="fileSelectButton"></div>
                     <img src="" id="imgUrlToUpdate">
+                    <div class="upload"></div>
                     <input type="hidden" id="imgUrlOnHiddenToUpdate" name="qrShare.imgUrl" value="">
                 </div>
                 <div>
