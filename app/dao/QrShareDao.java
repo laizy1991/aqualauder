@@ -28,8 +28,8 @@ public class QrShareDao {
     	qrShare.delete();
     }
     
-    public static int countIsEnabledRecs(int isEnabled) {
-    	return new Long(QrShare.count("is_enabled = ?", isEnabled)).intValue();
+    public static int countIsEnabledRecsButId(long id, int isEnabled) {
+    	return new Long(QrShare.count("is_enabled = ? and id != ?", isEnabled, id)).intValue();
     }
     
     public static QrShare getLastIsEnabledRec(int isEnabled) {

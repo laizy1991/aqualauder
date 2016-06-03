@@ -12,7 +12,7 @@ import play.db.jpa.Model;
  */
 @Entity
 @Table(name="qrcode_share")
-public class QrShare extends Model {
+public class QrShare extends DeepCopyModel {
 
     @Column(name="name")
     private String name;
