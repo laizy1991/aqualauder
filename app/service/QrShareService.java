@@ -28,9 +28,9 @@ public class QrShareService {
         	return QrShareDao.update(qrShare);
         }
         
-        public static int countIsEnabledRecs(int isEnabled) {
+        public static int countIsEnabledRecsButId(long id, int isEnabled) {
         	
-        	return QrShareDao.countIsEnabledRecs(isEnabled);
+        	return QrShareDao.countIsEnabledRecsButId(id, isEnabled);
         }
         
         public static QrShare getLastIsEnabledRec(int isEnabled) {

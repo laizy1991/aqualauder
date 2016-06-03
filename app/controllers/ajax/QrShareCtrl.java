@@ -5,7 +5,10 @@ import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.Query;
 import javax.validation.Valid;
+
+import org.apache.commons.lang.StringUtils;
 
 import models.QrShare;
 import models.QrcodeUploadRsp;
@@ -13,8 +16,10 @@ import net.sf.json.JSONObject;
 import play.Play;
 import play.data.Upload;
 import play.data.validation.Required;
+import play.db.jpa.Model;
 import play.libs.Files;
 import service.QrShareService;
+import utils.PropertyUtil;
 import common.constants.GlobalConstants;
 import common.core.AjaxController;
 import exception.BusinessException;
@@ -26,35 +31,56 @@ public class QrShareCtrl extends AjaxController {
     	if(null == qrShare) {
     		renderErrorJson("传入对象为空");
     	}
+    	//新增时启用，判断图片是否存在
+    	if(GlobalConstants.IS_ENABLED.equals(qrShare.getIsEnabled()) && StringUtils.isBlank(qrShare.getImgUrl())) {
+    		renderErrorJson("启用之前必须上传底图");
+    	}
+    	
     	qrShare.setCreateTime(System.currentTimeMillis());
     	qrShare.setUpdateTime(System.currentTimeMillis());
     	QrShareService.add(qrShare);
 		renderSuccessJson();
     }
 
-//    public static void delete(QrShare qrShare) throws Exception {
-//    	qrShare.delete();
-//        renderSuccessJson();
-//    }
-
     public static void update(QrShare qrShare) {
     	if(null == qrShare) {
     		renderErrorJson("传入对象为空");
     	} 
-    	//判断是否由启用转为不启用
-    	QrShare origin = QrShareService.get(qrShare.getId());
+    	//进行深度copy
+    	QrShare qrShareUpdate = null;
+    	try {
+			qrShareUpdate = (QrShare) qrShare.deepCopy();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	if(null == qrShareUpdate) {
+    		renderErrorJson("后台复制对象时发生错误");
+    	}
+    	QrShare origin = qrShare.refresh();
+
     	if(null == origin) {
     		renderErrorJson("库中不包含此记录");
     	}
-    	if(GlobalConstants.IS_ENABLED == origin.getIsEnabled() && 
-    			GlobalConstants.NOT_ENABLED == qrShare.getIsEnabled()) {
+    	//由启用转为不启用，判断库中是否还有已启用的记录
+    	if(GlobalConstants.IS_ENABLED.equals(origin.getIsEnabled()) && 
+    			GlobalConstants.NOT_ENABLED.equals(qrShareUpdate.getIsEnabled())) {
     		//判断库中是否有已启用的记录
-    		if(0 >= QrShareService.countIsEnabledRecs(GlobalConstants.IS_ENABLED)) {
+    		if(0 >= QrShareService.countIsEnabledRecsButId(origin.getId(), GlobalConstants.IS_ENABLED)) {
     			renderErrorJson("库中不包含已启用的记录，不允许更新");
     		}
     	}
+    	//如果是由不启用转为启用，判断图片是否存在
+    	if(GlobalConstants.NOT_ENABLED.equals(origin.getIsEnabled()) && 
+    			GlobalConstants.IS_ENABLED.equals(qrShareUpdate.getIsEnabled()) &&
+    			StringUtils.isBlank(origin.getImgUrl())) {
+    		renderErrorJson("底图未上传，不允许更新");
+    	}
+    			
+    	//这里用qrShareUpdate直接更新的话会报错
+    	PropertyUtil.copyPropertyValue(qrShareUpdate, qrShare);
     	qrShare.setUpdateTime(System.currentTimeMillis());
-    	qrShare.save();
+    	
+    	QrShareService.update(qrShare);
         renderSuccessJson();
     }
 

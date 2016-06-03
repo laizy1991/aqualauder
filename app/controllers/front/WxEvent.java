@@ -41,7 +41,7 @@ public class WxEvent extends FrontController{
 				renderJSON("");
 			}
 		}
-		StringBuffer reqStr = new StringBuffer();
+		/*StringBuffer reqStr = new StringBuffer();
 		try {
 			String requestBody = "";
 			InputStream in = request.body;
@@ -54,6 +54,8 @@ public class WxEvent extends FrontController{
 			e.printStackTrace();
 		}
 		String reqXml = new String(reqStr);
+		*/
+		String reqXml = request.params.get("body");
 		if(!StringUtils.isEmpty(reqXml)) {
 			Logger.info("微信事件请求报文为: %s", reqXml);
 			Map<String,Object> xmlMap = null;
