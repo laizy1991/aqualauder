@@ -3,14 +3,15 @@ package controllers.front;
 import java.util.List;
 
 import models.Distributor;
+import models.QrShare;
 import models.User;
 
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
-import play.Play;
 import service.DistributorService;
 import service.OrderService;
+import service.QrShareService;
 import service.UserService;
 import service.UserWalletService;
 import service.wx.dto.jspai.JsapiConfig;
@@ -18,10 +19,11 @@ import service.wx.service.jsapi.JsApiService;
 import service.wx.service.user.WxUserService;
 
 import com.google.gson.Gson;
-
 import common.annotation.GuestAuthorization;
 import common.constants.CashType;
+import common.constants.GlobalConstants;
 import common.core.FrontController;
+
 import dto.DistributorDetail;
 import dto.MySpaceDto;
 import dto.OrderDetail;
@@ -42,6 +44,10 @@ public class Users extends FrontController {
         render("/Front/user/orders.html", orders);
     }
     public static void qrcodeShare(String userId) {
+    	String qrcodeBg = getQrCodeBg();
+    	if(StringUtils.isBlank(userId)) {
+    		render("/Front/user/companyQrcode.html", qrcodeBg);
+    	}
     	User user = null;
     	int id = -1;
     	try {
@@ -53,11 +59,12 @@ public class Users extends FrontController {
     		user = UserService.get(id);
     	} 
     	if(null == user) {
-    		render("/Front/user/companyQrcode.html");
+    		render("/Front/user/companyQrcode.html", qrcodeBg);
     	}
     	Distributor dist = DistributorService.get(user.getUserId());
     	if(null == dist) {
-    		render("/Front/user/companyQrcode.html");
+    		qrcodeBg = getQrCodeBg();
+    		render("/Front/user/companyQrcode.html", qrcodeBg);
     	}
     	String querystring = request.querystring;
     	String protocol = request.secure?"https://":"http://";
@@ -69,8 +76,18 @@ public class Users extends FrontController {
     	Logger.info("config参数为: %s", gson.toJson(config));
     	
     	String qrImg = dist.getQrcodeLimitPath();
-    	render("/Front/user/qrcodeShare.html", user, qrImg, config);
+
+    	render("/Front/user/qrcodeShare.html", user, qrImg, config, qrcodeBg);
+    }
+    
+    private static String getQrCodeBg() {
+    	String qrcodeBg = "/public/images/qrcode_bg.jpg";
+    	QrShare qrShare = QrShareService.getLastIsEnabledRec(GlobalConstants.IS_ENABLED);
     	
+    	if(null != qrShare && !StringUtils.isBlank(qrShare.getImgUrl())) {
+    		qrcodeBg = qrShare.getImgUrl();
+    	}
+    	return qrcodeBg;
     }
     
     @GuestAuthorization
@@ -80,12 +97,15 @@ public class Users extends FrontController {
 		if(!StringUtils.isBlank(openId)) {
 			user = WxUserService.getUserInfo(openId);
 		}
+		String qrcodeBg = "";
 		if(null == user) {
-    		render("/Front/user/companyQrcode.html");
+			qrcodeBg = getQrCodeBg();
+    		render("/Front/user/companyQrcode.html", qrcodeBg);
     	}
     	Distributor dist = DistributorService.get(user.getUserId());
     	if(null == dist) {
-    		render("/Front/user/companyQrcode.html");
+    		qrcodeBg = getQrCodeBg();
+    		render("/Front/user/companyQrcode.html", qrcodeBg);
     	}
     	redirect("/front/Users/qrcodeShare?userId="+user.getUserId());
     }

@@ -61,7 +61,7 @@ public class QrShareCtrl extends AjaxController {
     	if(null == origin) {
     		renderErrorJson("库中不包含此记录");
     	}
-    	//判断是否由启用转为不启用
+    	//由启用转为不启用，判断库中是否还有已启用的记录
     	if(GlobalConstants.IS_ENABLED.equals(origin.getIsEnabled()) && 
     			GlobalConstants.NOT_ENABLED.equals(qrShareUpdate.getIsEnabled())) {
     		//判断库中是否有已启用的记录
