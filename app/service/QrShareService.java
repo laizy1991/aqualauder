@@ -1,7 +1,10 @@
 package service;
 
-import common.constants.GlobalConstants;
+import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
+import common.constants.GlobalConstants;
 import models.QrShare;
 import dao.QrShareDao;
 
@@ -33,6 +36,19 @@ public class QrShareService {
         public static QrShare getLastIsEnabledRec(int isEnabled) {
         	
         	return QrShareDao.getLastIsEnabledRec(isEnabled);
+        }
+        
+        public static List<QrShare> listQrShare(String whereSql) {
+        	String sql = "";
+        	if(!StringUtils.isBlank(whereSql)) {
+        		sql += whereSql; 
+        	}
+        	
+        	return QrShareDao.listQrShare(sql);
+        }
+        
+        public static int countQrShare() {
+        	return QrShareDao.countQrShare();
         }
 
     }

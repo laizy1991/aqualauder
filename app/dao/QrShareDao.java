@@ -1,10 +1,15 @@
 package dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
 
 import models.QrShare;
+
+import org.apache.commons.lang.StringUtils;
+
+import play.db.jpa.JPA;
 import play.db.jpa.Model;
 
 public class QrShareDao {
@@ -40,5 +45,27 @@ public class QrShareDao {
     		return null;
     	}
     	return list.get(0);  
+    }
+    
+    /**
+     * 这里的whereSql中开头不含AND
+     * @param whereSql
+     * @return
+     */
+    public static List<QrShare> listQrShare(String whereSql) {
+    	String sql = "SELECT * FROM `qrcode_share` WHERE 1=1 ";
+    	if(!StringUtils.isBlank(whereSql)) {
+    		sql += whereSql;
+    	}
+    	Query query = Model.em().createNativeQuery(sql, QrShare.class);
+    	List<QrShare> list = query.getResultList();  
+    	if(null == list || list.size() <= 0) {
+    		return new ArrayList<QrShare>();
+    	}
+    	return list; 
+    }
+    
+    public static int countQrShare() {
+    	return new Long(QrShare.count()).intValue();
     }
 }
