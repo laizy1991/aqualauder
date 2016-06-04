@@ -1,11 +1,10 @@
 package models;
 
-import play.db.jpa.Model;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
+
+import play.db.jpa.Model;
 
 /**
  * @author nemo
@@ -13,12 +12,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="qrcode_share")
-public class QrShare extends Model {
+public class QrShare extends DeepCopyModel {
 
-	@Id
-    @Column(name="id")
-    private Long id;
-	
     @Column(name="name")
     private String name;
     
@@ -48,14 +43,6 @@ public class QrShare extends Model {
     
     @Column(name="update_time")
     private Long updateTime;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;

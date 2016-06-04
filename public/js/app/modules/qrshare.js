@@ -13,7 +13,6 @@ define(function(require) {
     var Initiator = {
         init: function() {
             this.create($('[role="create"]'));
-            this.delete($('[role="delete"]'));
             this.update($('[role="update"]'));
             this.view($('[role="view"]'));
         },
@@ -58,56 +57,7 @@ define(function(require) {
 
                     },
                     onshow: function() {
-
-                    }
-                }).showModal();
-            });
-        },
-
-
-
-        /**
-         * 删除
-         */
-        delete: function(obj) {
-            obj.click(function() {
-                var $this = $(this),
-                    $wrap = $this.closest('tr'),
-                	id = $wrap.find('.id').val(),
-                	name = $wrap.find('.name').val(),
-                    deleteDialog = dialog({
-                    id: 'deleteDialog',
-                    title: '删除',
-                    content: document.getElementById('deleteDialogTmpl').innerHTML,
-                    button: [
-                        {
-                        	value: '确定',
-                            callback: function () {
-                                var dia = this,
-                                $form = this.__popup.find('form');
-
-                                ajax.post($form.attr('action'), $form.serialize(), function(result){
-                                    if(result.success){
-                                        dia.close();
-                                        dd.alert('删除成功！', function(){
-                                            window.location.reload(false);
-                                       });
-                                    }else{
-                                        dd.alert(result.error);
-                                    }
-                                });
-                                return false;
-                            },
-                            autofocus: true
-                        }
-                    ],
-                    cancelValue: '取消',
-                    cancel: function() {
-
-                    },
-                    onshow:function() {
-                    	$("#idToDelete").val(id);
-                        $("#nameToDelete").text(name);
+                    	window.initImgUploader();
                     }
                 }).showModal();
             });
@@ -126,6 +76,7 @@ define(function(require) {
 					friendShareDesc = $wrap.find('.friendShareDesc').val(),
 					momentShareTitle = $wrap.find('.momentShareTitle').val(),
 					imgUrl = $wrap.find('.imgUrl').val(),
+					imgPath = $wrap.find('.imgPath').val(),
 					isEnabled = $wrap.find('.isEnabled').val(),
 					remark = $wrap.find('.remark').val(),
                     updateDialog = dialog({
@@ -159,6 +110,7 @@ define(function(require) {
 
                     },
                     onshow:function() {
+                        window.initImgUploader();
                     	$("#idToUpdate").val(id);
                     	$("#idToUpdateTmp").text(id);
                         $("#nameToUpdate").val(name);
@@ -167,6 +119,9 @@ define(function(require) {
                         $("#momentShareTitleToUpdate").val(momentShareTitle);
                         $("#isEnabledToUpdate").val(isEnabled);
                         $("#remarkToUpdate").val(remark);
+                        $("#imgUrlToUpdate").attr("src", imgUrl);
+                        $("#imgUrlOnHiddenToUpdate").val(imgUrl);
+                        $("#imgPathOnHiddenToUpdate").val(imgPath);
                     }
                 }).showModal();
             });

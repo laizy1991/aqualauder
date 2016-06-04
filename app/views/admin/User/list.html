@@ -28,42 +28,42 @@
         <th>操作</th>
     </tr>
     </thead>
-    #{if users == null || users.size() == 0 }
-    <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+    #{if pageData == null || pageData.list == null || pageData.list.size() == 0 }
+        <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
     #{/if}
     #{else}
-    #{list items:users, as:'info'}
-    <tbody>
-    <tr class="user-item">
-        <input type="hidden" class="userId" value="${info.userId}">
-        <input type="hidden" class="mobile" value="${info?.mobile}">
-        <input type="hidden" class="openId" value="${info?.openId}">
-        <input type="hidden" class="regType" value="${info?.regType}">
-        <input type="hidden" class="nickname" value="${info?.nickname}">
-        <input type="hidden" class="sex" value="${info?.sex}">
-        <input type="hidden" class="birthday" value="${info?.birthday}">
-        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
-        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
-        <input type="hidden" class="subscribeTime" value="%{out.print(utils.DateUtil.getDateString(info?.subscribeTime))}%">
-        <input type="hidden" class="headImgUrl" value="${info?.headImgUrl}">
-        <td>${info?.userId}</td>
-        <td>${info?.nickname}</td>
-        <td>
-            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
-        </td>
-        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
-        <td>
-            <div class="opts">
-                <span class="opt" role="update"><a href="javascript:;">修改</a></span>|
-                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
-            </div>
-        </td>
-    </tr>
-    </tbody>
+    #{list items:pageData.list,as:'info'}   
+	    <tbody>
+		    <tr class="user-item">
+		        <input type="hidden" class="userId" value="${info.userId}">
+		        <input type="hidden" class="mobile" value="${info?.mobile}">
+		        <input type="hidden" class="openId" value="${info?.openId}">
+		        <input type="hidden" class="regType" value="${info?.regType}">
+		        <input type="hidden" class="nickname" value="${info?.nickname}">
+		        <input type="hidden" class="sex" value="${info?.sex}">
+		        <input type="hidden" class="birthday" value="${info?.birthday}">
+		        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
+		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
+		        <input type="hidden" class="subscribeTime" value="%{out.print(utils.DateUtil.getDateString(info?.subscribeTime))}%">
+		        <input type="hidden" class="headImgUrl" value="${info?.headImgUrl}">
+		        <td>${info?.userId}</td>
+		        <td>${info?.nickname}</td>
+		        <td>
+		            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
+		        </td>
+		        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
+		        <td>
+		            <div class="opts">
+		                <span class="opt" role="update"><a href="javascript:;">修改</a></span>|
+		                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
+		            </div>
+		        </td>
+		    </tr>
+	    </tbody>
     #{/list}
     #{/else}
 </table>
-
+#{include file="common/page_new.html" /}
 #{include file="common/jsinclude.html" /}
 
 #{set 'moreScripts'}

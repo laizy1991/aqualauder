@@ -14,7 +14,7 @@ define(function(require) {
             use_query_string:true,
             // File Upload Settings
             file_size_limit : "10 MB",	// 文件大小控制
-            file_types : "*.*",
+            file_types : "*.jpeg,*.png",
             file_types_description : "All Files",
             file_upload_limit : "0",
             file_post_name: 'fileData',
