@@ -28,36 +28,36 @@
         <th>操作</th>
     </tr>
     </thead>
-    #{if expresses == null || expresses.size() == 0 }
+    #{if pageData == null || pageData.list == null || pageData.list.size() == 0 }
         <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
     #{/if}
     #{else}
-    #{list items:expresses, as:'info'}
-    <tbody>
-    <tr class="user-item">
-        <input type="hidden" class="id" value="${info.id}">
-        <input type="hidden" class="name" value="${info?.name}">
-        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
-        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
-        <td>${info?.id}</td>
-        <td>${info?.name}</td>
-        <td>
-        %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
-        </td>
-        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
-        <td>
-            <div class="opts">
-                <span class="opt" role="update"><a href="javascript:;">修改</a></span>|
-                <span class="opt" role="delete"><a href="javascript:;">删除</a></span>|
-                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
-            </div>
-        </td>
-    </tr>
-    </tbody>
-    #{/list}
+	    #{list items:pageData.list,as:'info'}   
+		    <tbody>
+		    <tr class="user-item">
+		        <input type="hidden" class="id" value="${info.id}">
+		        <input type="hidden" class="name" value="${info?.name}">
+		        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
+		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
+		        <td>${info?.id}</td>
+		        <td>${info?.name}</td>
+		        <td>
+		        %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
+		        </td>
+		        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
+		        <td>
+		            <div class="opts">
+		                <span class="opt" role="update"><a href="javascript:;">修改</a></span>|
+		                <span class="opt" role="delete"><a href="javascript:;">删除</a></span>|
+		                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
+		            </div>
+		        </td>
+		    </tr>
+		    </tbody>
+	    #{/list}
     #{/else}
 </table>
-
+#{include file="common/page_new.html" /}
 #{include file="common/jsinclude.html" /}
 
 #{set 'moreScripts'}

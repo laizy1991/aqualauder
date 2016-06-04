@@ -1,5 +1,7 @@
 package controllers.admin;
 
+import common.constants.GlobalConstants;
+import common.core.Pager;
 import common.core.WebController;
 import models.Express;
 import models.Order;
@@ -10,12 +12,22 @@ import java.util.List;
 
 public class OrderCtrl extends WebController {
 
-    public static void list() {
-        List<Order> orders = Order.all().fetch();
+    public static void list(int page) {
+    	if(0 == page) {
+			page = 1;
+		}
+		int pageSize = GlobalConstants.DEFAULT_PAGE_SIZE;
+		
+		Long count = Order.count();
+        List<Order> orders = Order.all().fetch(page, pageSize);
+        
+        Pager<Order> pageData = new Pager<Order>(count.intValue(), page, pageSize);
+        pageData.setList(orders);
+        
         List<Express> expresses = Express.all().fetch();
+        renderArgs.put("expresses", expresses);
 
-        renderArgs.put("expresses",expresses);
-        render("/admin/Order/list.html", orders);
+        render("/admin/Order/list.html", pageData);
     }
     
 }

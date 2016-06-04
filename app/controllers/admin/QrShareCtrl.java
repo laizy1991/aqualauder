@@ -21,7 +21,7 @@ public class QrShareCtrl extends WebController {
 		int count = QrShareService.countQrShare();
         List<QrShare> qrShares = QrShareService.listQrShare(String.format(whereSql, start, pageSize));
         
-        Pager<QrShare> pageData = new Pager<QrShare>(count, page, pageSize);;
+        Pager<QrShare> pageData = new Pager<QrShare>(count, page, pageSize);
         pageData.setList(qrShares);
         
         render("/admin/QrShare/list.html", pageData);

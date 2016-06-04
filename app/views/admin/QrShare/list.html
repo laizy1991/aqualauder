@@ -118,8 +118,8 @@
     </thead>
     <tbody>
     	#{if pageData == null || pageData.list == null || pageData.list.size() == 0 }
-    		<tr class="text-center">暂无数据</tr>
-    	#{/if} 
+   		<tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+    	#{/if}
     	#{else}
 	    	#{list items:pageData.list,as:'info'}   
 				    <tr>

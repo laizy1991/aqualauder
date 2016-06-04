@@ -33,43 +33,43 @@
         <th>操作</th>
     </tr>
     </thead>
-    #{if goodses == null || goodses.size() == 0 }
-    <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+    #{if pageData == null || pageData.list == null || pageData.list.size() == 0 }
+        <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
     #{/if}
     #{else}
-    #{list items:goodses, as:'info'}
-    <tbody>
-    <tr class="user-item">
-
-        <input type="hidden" class="id" value="${info.id}">
-        <input type="hidden" class="title" value="${info?.title}">
-        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
-        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
-        <input type="hidden" class="state" value="${info?.state}">
-        <input type="hidden" class="price" value="${info?.price}">
-        #{if info.goodsIcons.size() > 0 && info.goodsIcons.get(0) != null}
-        #{list items:info.goodsIcons, as:'icon'}
-            <input type="hidden" class="icons" value="${icon.iconUrl}">
-        #{/list}
-        #{/if}
-        <td>${info?.id}</td>
-        <td>${info?.title}</td>
-        <td>
-            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
-        </td>
-        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
-        <td>
-            <div class="opts">
-                <span class="opt"><a href="@{admin.GoodsCtrl.update}?goods.id=${info.id}">修改</a></span>|
-                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
-            </div>
-        </td>
-    </tr>
-    </tbody>
-    #{/list}
+	    #{list items:pageData.list,as:'info'}   
+		    <tbody>
+		    <tr class="user-item">
+		
+		        <input type="hidden" class="id" value="${info.id}">
+		        <input type="hidden" class="title" value="${info?.title}">
+		        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
+		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
+		        <input type="hidden" class="state" value="${info?.state}">
+		        <input type="hidden" class="price" value="${info?.price}">
+		        #{if info.goodsIcons.size() > 0 && info.goodsIcons.get(0) != null}
+		        #{list items:info.goodsIcons, as:'icon'}
+		            <input type="hidden" class="icons" value="${icon.iconUrl}">
+		        #{/list}
+		        #{/if}
+		        <td>${info?.id}</td>
+		        <td>${info?.title}</td>
+		        <td>
+		            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
+		        </td>
+		        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
+		        <td>
+		            <div class="opts">
+		                <span class="opt"><a href="@{admin.GoodsCtrl.update}?goods.id=${info.id}">修改</a></span>|
+		                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
+		            </div>
+		        </td>
+		    </tr>
+		    </tbody>
+	    #{/list}
     #{/else}
 </table>
-
+#{include file="common/page_new.html" /}
 #{include file="common/jsinclude.html" /}
 
 #{set 'moreScripts'}

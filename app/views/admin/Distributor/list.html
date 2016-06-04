@@ -28,40 +28,40 @@
         <th>操作</th>
     </tr>
     </thead>
-    #{if distributors == null || distributors.size() == 0 }
-    <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+    #{if pageData == null || pageData.list == null || pageData.list.size() == 0 }
+        <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
     #{/if}
     #{else}
-    #{list items:distributors, as:'info'}
-    <tbody>
-    <tr class="user-item">
-        <input type="hidden" class="userId" value="${info.userId}">
-        <input type="hidden" class="type" value="${info?.type}">
-        <input type="hidden" class="status" value="${info?.status}">
-        <input type="hidden" class="realName" value="${info?.realName}">
-        <input type="hidden" class="joinTime" value="%{out.print(utils.DateUtil.getDateString(info?.joinTime))}%">
-        <input type="hidden" class="link" value="${info?.link}">
-        <input type="hidden" class="qrcodeUrl" value="${info?.qrcodeLimitWxUrl}">
-        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
-        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
-        <td>${info?.userId}</td>
-        <td>${info?.realName}</td>
-        <td>
-            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
-        </td>
-        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
-        <td>
-            <div class="opts">
-                <span class="opt" role="view"><a href="javascript:;">查看基本信息</a></span>|
-                <span class="opt" role="viewDetail"><a href="javascript:;">推广详情</a></span>
-            </div>
-        </td>
-    </tr>
-    </tbody>
-    #{/list}
+	    #{list items:pageData.list,as:'info'}   
+		    <tbody>
+		    <tr class="user-item">
+		        <input type="hidden" class="userId" value="${info.userId}">
+		        <input type="hidden" class="type" value="${info?.type}">
+		        <input type="hidden" class="status" value="${info?.status}">
+		        <input type="hidden" class="realName" value="${info?.realName}">
+		        <input type="hidden" class="joinTime" value="%{out.print(utils.DateUtil.getDateString(info?.joinTime))}%">
+		        <input type="hidden" class="link" value="${info?.link}">
+		        <input type="hidden" class="qrcodeUrl" value="${info?.qrcodeLimitWxUrl}">
+		        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
+		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
+		        <td>${info?.userId}</td>
+		        <td>${info?.realName}</td>
+		        <td>
+		            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
+		        </td>
+		        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
+		        <td>
+		            <div class="opts">
+		                <span class="opt" role="view"><a href="javascript:;">查看基本信息</a></span>|
+		                <span class="opt" role="viewDetail"><a href="javascript:;">推广详情</a></span>
+		            </div>
+		        </td>
+		    </tr>
+		    </tbody>
+	    #{/list}
     #{/else}
 </table>
-
+#{include file="common/page_new.html" /}
 #{include file="common/jsinclude.html" /}
 
 #{set 'moreScripts'}
