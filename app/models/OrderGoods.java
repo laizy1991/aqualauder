@@ -27,8 +27,12 @@ public class OrderGoods extends Model {
 
     @Column(name="goods_icon")
     private String goodsIcon;
+
     @Column(name="goods_size")
     private String goodsSize;
+
+    @Column(name="goods_color")
+    private String goodsColor;
     
     @Column(name="goods_desc")
     private String goodsDesc;
@@ -104,6 +108,14 @@ public class OrderGoods extends Model {
 
     public void setGoodsDesc(String goodsDesc) {
         this.goodsDesc = goodsDesc;
+    }
+
+    public String getGoodsColor() {
+        return goodsColor;
+    }
+
+    public void setGoodsColor(String goodsColor) {
+        this.goodsColor = goodsColor;
     }
 
     public Integer getGoodsOriginPrice() {

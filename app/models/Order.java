@@ -101,6 +101,10 @@ public class Order extends GenericModel {
     @OneToMany
     @JoinColumn(name="order_id")
     private List<RefundOrder> refundOrder;
+
+    @OneToMany
+    @JoinColumn(name="order_id")
+    private List<OrderGoods> orderGoods;
     
     public Integer getUserId() {
         return userId;

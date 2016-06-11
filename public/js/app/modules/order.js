@@ -122,6 +122,9 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
+                    orderGoodsId = $wrap.find('.goods_id').val(),
+                    goodsSize = $wrap.find('.goods_goodsSize').val(),
+                    goodsColor = $wrap.find('.goods_goodsColor').val(),
                     outTradeNo = $wrap.find('.outTradeNo').val(),
                     //expressId = $wrap.find('.expressId').val(),
                     expressNum = $wrap.find('.expressNum').val(),
@@ -166,6 +169,13 @@ define(function(require) {
                         $("#forbidRefundToUpdate").val(forbidRefund);
                         $("#stateToUpdate").val(state);
                         $("#shippingAddressToUpdate").val(shippingAddress);
+
+                        $("#goodsIdToUpdate").val(orderGoodsId);
+                        console.log(goodsSize)
+                        console.log(goodsColor)
+                        $("#goodsSizeToUpdate").val(goodsSize);
+                        $("#goodsColorToUpdate").val(goodsColor);
+
                     }
                 }).showModal();
             });
@@ -198,6 +208,13 @@ define(function(require) {
                     finishTime = $wrap.find('.finishTime').val(),
                     createTime = $wrap.find('.createTime').val(),
                     updateTime = $wrap.find('.updateTime').val(),
+                    goodsTitleToView = $wrap.find('.goods_goodsTitle').val(),
+                    goodsIdToView = $wrap.find('.goods_id').val(),
+                    goodsColorToView = $wrap.find('.goods_goodsColor').val(),
+                    goodsSizeToView = $wrap.find('.goods_goodsSize').val(),
+                    goodsNumberToView = $wrap.find('.goods_goodsNumber').val(),
+                    goodsIconToView = $wrap.find('.goods_goodsIcon').val(),
+
                     viewDialog = dialog({
                     id: 'viewDialog',
                     title: '查看',
@@ -216,6 +233,7 @@ define(function(require) {
                         $("#payTypeToView").text(payType=="0"?"微信支付":payType=="1"?"余额":"未知");
                         //$("#expressIdToView_" + expressId).show();
                         $("#expressNumToView").text(expressNum);
+                        totalFee = "¥" + totalFee/100;
                         $("#totalFeeToView").text(totalFee);
                         $("#stateToView").text(stateList[state]);
                         $("#forbidRefundToView").text(forbidRefundList[forbidRefund]);
@@ -230,6 +248,19 @@ define(function(require) {
                         $("#finishTimeToView").text(finishTime);
                         $("#createTimeToView").text(createTime);
                         $("#updateTimeToView").text(updateTime);
+                        $("#goodsTitleToView").text(goodsTitleToView);
+                        $("#goodsIdToView").text(goodsIdToView);
+                        $("#goodsColorToView").text(goodsColorToView);
+                        $("#goodsSizeToView").text(goodsSizeToView);
+                        $("#goodsNumberToView").text(goodsNumberToView);
+                        if(goodsIconToView != undefined) {
+                            var imgs = goodsIconToView.split("|");
+                            for(var index=0; index < imgs.length; index++){
+                                var file = imgs[index];
+                                var dom = $("<img>").attr("src", "/public/pictures/goods/"+file);
+                                $("#imgToView").append(dom)
+                            }
+                        }
                     }
                 }).showModal();
             });

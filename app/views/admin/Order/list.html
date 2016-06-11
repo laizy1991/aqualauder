@@ -5,6 +5,11 @@
 <link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
 #{/set}
 <style>
+    #imgToView img{
+        display: block;
+        width:300px;
+        height: auto;
+    }
 </style>
 <!-- 页头 begin -->
 <div class="main-header">
@@ -56,15 +61,28 @@
 		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
 
                 #{if info?.refundOrder != null && info?.refundOrder.size() > 0}
-                    <input type="hidden" class="refund_id" value="${info?.refundOrder.get(0).id}">
-                    <input type="hidden" class="refund_orderId" value="${info?.refundOrder.get(0).orderId}">
-                    <input type="hidden" class="refund_refundState" value="${info?.refundOrder.get(0).refundState}">
-                    <input type="hidden" class="refund_userMemo" value="${info?.refundOrder.get(0).userMemo}">
-                    <input type="hidden" class="refund_sellerMemo" value="${info?.refundOrder.get(0).sellerMemo}">
-                    <input type="hidden" class="refund_stateHistory" value="${info?.refundOrder.get(0).stateHistory}">
-                    <input type="hidden" class="refund_createTime" value="%{out.print(utils.DateUtil.getDateString(info?.refundOrder.get(0).createTime))}%">
-                    <input type="hidden" class="refund_updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.refundOrder.get(0).updateTime))}%">
+                <input type="hidden" class="refund_id" value="${info?.refundOrder.get(0).id}">
+                <input type="hidden" class="refund_orderId" value="${info?.refundOrder.get(0).orderId}">
+                <input type="hidden" class="refund_refundState" value="${info?.refundOrder.get(0).refundState}">
+                <input type="hidden" class="refund_userMemo" value="${info?.refundOrder.get(0).userMemo}">
+                <input type="hidden" class="refund_sellerMemo" value="${info?.refundOrder.get(0).sellerMemo}">
+                <input type="hidden" class="refund_stateHistory" value="${info?.refundOrder.get(0).stateHistory}">
+                <input type="hidden" class="refund_createTime" value="%{out.print(utils.DateUtil.getDateString(info?.refundOrder.get(0).createTime))}%">
+                <input type="hidden" class="refund_updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.refundOrder.get(0).updateTime))}%">
                 #{/if}
+
+                #{if info?.orderGoods != null && info?.orderGoods.size() > 0}
+                <input type="hidden" class="goods_id" value="${info?.orderGoods.get(0).id}">
+                <input type="hidden" class="goods_goodsTitle" value="${info?.orderGoods.get(0).goodsTitle}">
+                <input type="hidden" class="goods_goodsIcon" value="${info?.orderGoods.get(0).goodsIcon}">
+                <input type="hidden" class="goods_goodsSize" value="${info?.orderGoods.get(0).goodsSize}">
+                <input type="hidden" class="goods_goodsColor" value="${info?.orderGoods.get(0).goodsColor}">
+                <input type="hidden" class="goods_goodsOriginPrice" value="${info?.orderGoods.get(0).goodsOriginPrice}">
+                <input type="hidden" class="goods_goodsDiscountPrice" value="${info?.orderGoods.get(0).goodsDiscountPrice}">
+                <input type="hidden" class="goods_goodsNumber" value="${info?.orderGoods.get(0).goodsNumber}">
+                <input type="hidden" class="goods_createTime" value="%{out.print(utils.DateUtil.getDateString(info?.orderGoods.get(0).createTime))}%">
+                #{/if}
+
                 <td>${info?.id}</td>
 		        <td>${info?.outTradeNo}</td>
 		        <td>
@@ -159,6 +177,7 @@
         <form action="@{ajax.OrderCtrl.update}" id="update">
             <div class="form-group">
                 <input type="hidden" class="in-t" id="idToUpdate" name="order.id" value="">
+                <input type="hidden" class="in-t" id="goodsIdToUpdate" name="orderGoods.id" value="">
                 <label class="tips">确定修改订单:<strong id="outTradeNoToUpdate"></strong>？</label>
             </div>
             <!--<div class="form-group">-->
@@ -208,11 +227,33 @@
             <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>收货地址</label>
                 <div class="col">
-                    <!--<input type="text"id="statusToUpdate" name="distributor.status" value="">-->
                     <input id="shippingAddressToUpdate" name="order.shippingAddress">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>尺码</label>
+                <div class="col">
+                    <select id="goodsSizeToUpdate" name="orderGoods.goodsSize">
+                        #{list items:sizes, as:'size'}
+                        <option value="${size.name}">${size.name}</option>
+                        #{/list}
+                    </select>
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>颜色</label>
+                <div class="col">
+                    <select id="goodsColorToUpdate" name="orderGoods.goodsColor">
+                    #{list items:colors, as:'color'}
+                        <option value="${color.name}">${color.name}</option>
+                    #{/list}
+                    </select>
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+
         </form>
     </div>
 </script>
@@ -260,7 +301,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="label">totalFee:</label>
+                <label class="label">总价:</label>
                 <div class="col">
                     <label class="info" id="totalFeeToView"></label>
                 </div>
@@ -289,6 +330,44 @@
                     <label class="info" id="receiverToView"></label>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="label">商品名称:</label>
+                <div class="col">
+                    <label class="info" id="goodsTitleToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">商品款号:</label>
+                <div class="col">
+                    <label class="info" id="goodsIdToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">颜色:</label>
+                <div class="col">
+                    <label class="info" id="goodsColorToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">尺码:</label>
+                <div class="col">
+                    <label class="info" id="goodsSizeToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">商品数量:</label>
+                <div class="col">
+                    <label class="info" id="goodsNumberToView"></label>
+                </div>
+            </div>
+
+            <div class="form-group hidden">
+                <label class="label">商品数量:</label>
+                <div class="col">
+                    <label class="info" id="goodsIconToView"></label>
+                </div>
+            </div>
+            <div id="imgToView"></div>
             <div class="form-group">
                 <label class="label">收货人电话:</label>
                 <div class="col">

@@ -7,6 +7,7 @@ import models.GoodsIcon;
 import models.GoodsStock;
 import play.data.Upload;
 import play.libs.Files;
+import play.mvc.results.RenderJson;
 import service.GoodsService;
 
 import java.io.File;
@@ -82,4 +83,11 @@ public class GoodsCtrl extends AjaxController {
 
     }
 
+    public static void get(Goods goods) {
+        throw new RenderJson(goods);
+    }
+
+    public static void getStock(Goods goods) {
+        throw new RenderJson(goods.getGoodsStocks());
+    }
 }

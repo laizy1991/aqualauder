@@ -43,6 +43,10 @@ public class OrderService {
         order.setUpdateTime(System.currentTimeMillis());
         return OrderDao.update(order);
     }
+
+    public static boolean updateOrderGoods(OrderGoods orderGoods) {
+        return OrderGoodsDao.update(orderGoods);
+    }
     
     public static boolean setStatusAndUpdate(long id, OrderStatus state) {
         Order order = get(id);
