@@ -38,6 +38,10 @@ public class Goods extends Model {
     @JoinColumn(name="goods_id", insertable = false, updatable = false)
     private List<GoodsIcon> goodsIcons;
 
+    @OneToMany
+    @JoinColumn(name="goods_id", insertable = false, updatable = false)
+    private List<GoodsStock> goodsStocks;
+
     public Long getCreateTime() {
         return createTime;
     }
@@ -110,11 +114,11 @@ public class Goods extends Model {
         this.goodsIcons = goodsIcons;
     }
 
-    public synchronized void addGoodsIcons(GoodsIcon icon) {
-        if(null == goodsIcons) {
-            goodsIcons = new ArrayList<GoodsIcon>();
-        }
+    public List<GoodsStock> getGoodsStocks() {
+        return goodsStocks;
+    }
 
-        goodsIcons.add(icon);
+    public void setGoodsStocks(List<GoodsStock> goodsStocks) {
+        this.goodsStocks = goodsStocks;
     }
 }
