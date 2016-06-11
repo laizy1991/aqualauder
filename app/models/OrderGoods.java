@@ -29,6 +29,8 @@ public class OrderGoods extends Model {
     private String goodsIcon;
     @Column(name="goods_size")
     private String goodsSize;
+    @Column(name="goods_color")
+    private String goodsColor;
     
     @Column(name="goods_desc")
     private String goodsDesc;
@@ -64,6 +66,14 @@ public class OrderGoods extends Model {
 
     public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public String getGoodsColor() {
+        return goodsColor;
+    }
+
+    public void setGoodsColor(String goodsColor) {
+        this.goodsColor = goodsColor;
     }
 
     public Integer getGoodsType() {

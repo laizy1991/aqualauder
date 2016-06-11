@@ -657,9 +657,9 @@
                     <ul class="clearfix" id="menu_id">
                         <script>
                             window.onload = function() {
-                                console.log("onload..");
                                 showDetail(${goods?.price});
                                 addProductN();
+                                selectSize();
                             }
                         </script>
                     </ul>
@@ -722,7 +722,7 @@
                 <li class="ccbg2" id="emptyLii" style="height: 30px;">
                 已选：<span id="totalNum">0</span>份　共计：￥<span id="totalPrice">0</span>元
                 <div class="orderchange"><a href=javascript:addProductN() class="increase"><b class="ico_increase">加一份</b></a>
-                <span class="count" id="buy_count">1</span>
+                <span class="count" id="buy_count">0</span>
                 <a href=javascript:reduceProductN() class="reduce">
                 <b class="ico_reduce">减一份</b></a></div>
                 </li>
@@ -738,7 +738,7 @@
                             <tr>
                                 <td width="90px">
                                 <input type="hidden" id="goods_id" name="goodsId" value="${goods?.id}">
-                                <input type="hidden" id="goods_num" name="goodsNum" value="1">
+                                <input type="hidden" id="goods_num" name="goodsNum" value="0">
                                     <label for="name" class="ui-input-text"><span style="color:red">*</span>联系人：</label>
                                 </td>
                                 <td>
@@ -825,7 +825,28 @@
                             <script type="text/javascript">
                                 var stockMap = JSON.parse('${stockMapJson.raw()}');
                                 function selectSize() {
-                                	
+                                	var size = $('input:radio:checked').val();
+                                	console.log(stockMap);
+                                	console.log(size)
+                                	var colorMap = stockMap[size];
+                                	console.log(colorMap);
+                                	var index = 0;
+                                	var goodsColorSel = $("#goodsColor");
+                                	goodsColorSel.empty();
+                                	for(color in colorMap) {
+                                		count = colorMap[color];
+                                		if(index == 0) {
+                                			$("#stockCount").html(count);
+                                		}
+                                		goodsColorSel.append("<option value=" + color + ">" + color + "</option>");
+                                	}
+                                }
+                                
+                                function selectColor() {
+                                	var size = $('input:radio:checked').val();
+                                	var color = $("#goodsColor").val();
+                                	var count = stockMap[size][color];
+                                	$("#stockCount").html(count);
                                 }
                             </script>
                             <tr id="type_siz1" style="" show="1">
@@ -853,9 +874,10 @@
                                     <label for="weixin" class="ui-input-text"><span style="color:red">*</span>颜色：</label>
                                 </td>
                                 <td>
-                                    <div class="ui-input-text">
-                                        <input id="weixin" name="weixin" placeholder="" value="" type="text" class="ui-input-text">
-                                    </div>
+                                        <select id="goodsColor" onchange="selectColor()">
+                                            
+                                        </select>
+                                        剩余<span id="stockCount">0</span>件
                                 </td>
                             </tr>
                             <tr id="type_siz2" style="display:none;" show="0">

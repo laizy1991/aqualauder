@@ -14,15 +14,16 @@ import models.User;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.google.gson.Gson;
-
 import play.Logger;
 import service.GoodsColorService;
 import service.GoodsService;
 import service.GoodsSizeService;
 import service.wx.service.user.WxUserService;
+
+import com.google.gson.Gson;
 import common.annotation.GuestAuthorization;
 import common.core.FrontController;
+
 import dao.GoodsStockDao;
 import dao.ShippingAddressDao;
 
@@ -58,10 +59,13 @@ public class GoodsCtrl extends FrontController {
         Map<Long, String> sizes = new HashMap<Long, String>();
         List<String> sizeList = new ArrayList<String>();
         for(GoodsStock gs : stock) {
+            if(gs.getAmount() <= 0) {
+                continue;
+            }
             String size = "";
             String color = "";
-            if(sizes.containsKey(gs.getGoodsSize())) {
-                size = sizes.get(gs.getGoodsSize());
+            if(sizes.containsKey(new Long(gs.getGoodsSize()))) {
+                size = sizes.get(new Long(gs.getGoodsSize()));
             } else {
                 GoodsSize goodsSize = GoodsSizeService.get(gs.getGoodsSize());
                 if(goodsSize == null) {
@@ -72,8 +76,8 @@ public class GoodsCtrl extends FrontController {
                 size = goodsSize.getName();
                 sizeList.add(size);
             }
-            if(colors.containsKey(gs.getGoodsColor())) {
-                color = colors.get(gs.getGoodsColor());
+            if(colors.containsKey(new Long(gs.getGoodsColor()))) {
+                color = colors.get(new Long(gs.getGoodsColor()));
             } else {
                 GoodsColor goodsColor = GoodsColorService.get(gs.getGoodsColor());
                 if(goodsColor == null) {
@@ -92,6 +96,8 @@ public class GoodsCtrl extends FrontController {
             map.put(color, gs.getAmount());
         }
         String stockMapJson = new Gson().toJson(stockMap);
+        System.err.println(stockMapJson);
 		render("/Front/goods/details.html", goods, stockMapJson, address, sizeList);
 	}
+	
 }

@@ -363,6 +363,10 @@ function clearCache(){
 function addProductN (){
 	var price = $("#goods_price").val();
 	var cartMenuN = parseFloat($('#buy_count').html())+1;
+	var allCount = parseFloat($("#stockCount").html());
+	if(cartMenuN > allCount) {
+		return;
+	}
 	$('#buy_count').html( cartMenuN );
 	$('#goods_num').val(cartMenuN);
 	doProduct(price)

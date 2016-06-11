@@ -21,7 +21,7 @@ import dto.OrderDetail;
 
 public class Orders extends FrontController {
 
-	public static void createOrder(Order order, long goodsId, int goodsNum, String goodsSize) {
+	public static void createOrder(Order order, long goodsId, int goodsNum, String goodsSize, String goodsColor) {
 	    String openId = session.get("openId");
         User user = null; 
         if(!StringUtils.isBlank(openId)) {
@@ -33,7 +33,7 @@ public class Orders extends FrontController {
         
         Map<Long, Integer> goodsNumMap = new HashMap<Long, Integer>();
         goodsNumMap.put(goodsId, goodsNum);
-        OrderDetail detail = BuyerService.createOrder(user.getUserId(), order, goodsNumMap, goodsSize);
+        OrderDetail detail = BuyerService.createOrder(user.getUserId(), order, goodsNumMap, goodsSize, goodsColor);
         if(detail == null) {
             renderJSON("{\"msg\":\"创建订单失败\"}");
         }
