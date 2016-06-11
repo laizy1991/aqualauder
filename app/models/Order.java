@@ -1,11 +1,10 @@
 package models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
+
+import java.util.List;
 
 @Entity
 @Table(name="`order`")
@@ -98,8 +97,10 @@ public class Order extends GenericModel {
     
     @Column(name="platform_transation_id")
     private String platformTransationId;
-    
-    
+
+    @OneToMany
+    @JoinColumn(name="order_id")
+    private List<RefundOrder> refundOrder;
     
     public Integer getUserId() {
         return userId;

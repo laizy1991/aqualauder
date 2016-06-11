@@ -15,6 +15,8 @@ define(function(require) {
             this.delete($('[role="delete"]'));
             this.update($('[role="update"]'));
             this.view($('[role="view"]'));
+            this.updateRefund($('[role="updateRefund"]'));
+            this.viewRefund($('[role="viewRefund"]'));
         },
 
         /**
@@ -230,6 +232,96 @@ define(function(require) {
                         $("#updateTimeToView").text(updateTime);
                     }
                 }).showModal();
+            });
+        },
+
+        /**
+         * 修改退款单
+         */
+        updateRefund: function(obj) {
+            obj.click(function() {
+                var $this = $(this),
+                    $wrap = $this.closest('tr'),
+                    id = $wrap.find('.refund_id').val(),
+                    orderId = $wrap.find('.refund_orderId').val(),
+                    refundState = $wrap.find('.refund_refundState').val(),
+                    sellerMemo = $wrap.find('.refund_sellerMemo').val(),
+                    updateDialog = dialog({
+                        id: 'updateDialog',
+                        title: '修改',
+                        content: document.getElementById('updateRefundDialogTmpl').innerHTML,
+                        button: [
+                            {
+                                value: '确定',
+                                callback: function () {
+                                    var dia = this,
+                                        $form = this.__popup.find('form');
+
+                                    ajax.post($form.attr('action'), $form.serialize(), function(result){
+                                        if(result.success){
+                                            dia.close();
+                                            dd.alert('修改信息成功！', function(){
+                                                window.location.reload(false);
+                                            });
+                                        }else{
+                                            dd.alert(result.error);
+                                        }
+                                    });
+                                    return false;
+                                },
+                                autofocus: true
+                            }
+                        ],
+                        cancelValue: '取消',
+                        cancel: function() {
+
+                        },
+                        onshow:function() {
+                            $("#refundIdToUpdate").val(id);
+                            $("#refundIdToUpdateEx").text(orderId);
+                            $("#refundStateToUpdate").val(refundState);
+                            $("#refundSellerMemoToUpdate").val(sellerMemo);
+                        }
+                    }).showModal();
+            });
+        },
+
+        /**
+         * 查看退款单
+         */
+        viewRefund: function(obj) {
+            obj.click(function() {
+                var $this = $(this),
+                    $wrap = $this.closest('tr'),
+                    id = $wrap.find('.refund_id').val(),
+                    orderId = $wrap.find('.refund_orderId').val(),
+                    refundState = $wrap.find('.refund_refundState').val(),
+                    userMemo = $wrap.find('.refund_userMemo').val(),
+                    sellerMemo = $wrap.find('.refund_sellerMemo').val(),
+                    stateHistory = $wrap.find('.refund_stateHistory').val(),
+                    createTime = $wrap.find('.refund_createTime').val(),
+                    updateTime = $wrap.find('.refund_updateTime').val(),
+                    viewDialog = dialog({
+                        id: 'viewRefundDialog',
+                        title: '查看',
+                        content: document.getElementById('viewRefundDialogTmpl').innerHTML,
+                        button: [],
+                        cancelValue: '关闭',
+                        cancel: function() {
+
+                        },
+                        onshow:function() {
+                            var stateList={"0":"申请退款", "2":"退款中","3":"退款成功","4":"拒绝退款","5":"取消退款"};
+                            $("#refundIdToView").text(id);
+                            $("#refundOrderIdToView").text(orderId);
+                            $("#refundStateToView").text(stateList[refundState]);
+                            $("#refundUserMemoToView").text(userMemo);
+                            $("#refundSellerMemoToView").text(sellerMemo);
+                            $("#refundStateHistoryToView").text(stateHistory);
+                            $("#refundUpdateTimeToView").text(createTime);
+                            $("#refundCreateTimeToView").text(updateTime);
+                        }
+                    }).showModal();
             });
         }
         
