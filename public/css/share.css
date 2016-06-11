@@ -162,6 +162,8 @@ html, body, * {     font-family: "Microsoft YaHei" ! important; }   code {     f
 	position:relative;
     display: inline-block;
     margin: 0;
+	width: 100%;
+	padding: 0px;
 }
 .intro .start{
 	font-size:.8rem;
@@ -202,6 +204,8 @@ html, body, * {     font-family: "Microsoft YaHei" ! important; }   code {     f
 	position:relative;
     display: inline-block;
     margin: 0;
+	padding: 0px;
+	width:100%;
 }
 .culture-desc .middle{
 	font-size:.4rem;
