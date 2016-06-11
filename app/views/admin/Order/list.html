@@ -176,11 +176,19 @@
             <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>允许退款</label>
                 <div class="col">
-                    <!--<input type="text"id="statusToUpdate" name="distributor.status" value="">-->
                     <select id="forbidRefundToUpdate" name="order.forbidRefund">
                         <option value="0">允许</option>
                         <option value="1">禁止</option>
                     </select>
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>收货地址</label>
+                <div class="col">
+                    <!--<input type="text"id="statusToUpdate" name="distributor.status" value="">-->
+                    <input id="shippingAddressToUpdate" name="order.shippingAddress">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
