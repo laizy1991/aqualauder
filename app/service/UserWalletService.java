@@ -113,6 +113,16 @@ public class UserWalletService {
         }
     }
     
+    public static UserWallet get(int userId) {
+        UserWallet userWallet = UserWalletDao.getByUserId(userId);
+        if(userWallet == null) {
+            userWallet = init(userId);
+            if(userWallet == null) {
+                Logger.error("user wallets not found and init fail, userId:%d", userId);
+            }
+        }
+        return userWallet;
+    }
     
     public static UserWallet init(int userId) {
         UserWallet userWallet = new UserWallet();

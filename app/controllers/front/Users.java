@@ -5,6 +5,7 @@ import java.util.List;
 import models.Distributor;
 import models.QrShare;
 import models.User;
+import models.UserWallet;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -24,6 +25,7 @@ import common.constants.CashType;
 import common.constants.GlobalConstants;
 import common.core.FrontController;
 
+import dao.UserWalletDao;
 import dto.DistributorDetail;
 import dto.MySpaceDto;
 import dto.OrderDetail;
@@ -166,5 +168,43 @@ public class Users extends FrontController {
             Logger.error(e, "");
         }
         renderJSON(isSucc);
+    }
+    
+    public static void userInfo() {
+        String openId = session.get("openId");
+        if(StringUtils.isBlank(openId)) {
+            Logger.error("openId为空");
+            renderText("非法请求");
+        }
+        User user = WxUserService.getUserInfo(openId);
+        if(null == user) {
+            Logger.error("获取用户信息失败, openId: %s", openId);
+            renderText("非法请求");
+        }
+        UserWallet wallet = UserWalletService.get(user.getUserId());
+        render("/Front/user/userinfo.html", user, wallet);
+    }
+
+
+    public static void setUserInfo(String cardNo, String bankName, String realName) {
+        String openId = session.get("openId");
+        User user = null; 
+        if(!StringUtils.isBlank(openId)) {
+            user = WxUserService.getUserInfo(openId);
+        }
+        if(null == user) {
+            renderJSON("{\"msg\":\"更新用户信息失败\"}");
+        }
+        UserWallet wallet = UserWalletService.get(user.getUserId());
+        if(wallet == null) {
+            renderJSON("{\"msg\":\"更新用户信息失败\"}");
+        }
+        
+        wallet.setBankName(bankName);
+        wallet.setCardNo(cardNo);
+        wallet.setRealName(realName);
+        UserWalletDao.update(wallet);
+        
+        redirect("front.Users.userInfo");
     }
 }

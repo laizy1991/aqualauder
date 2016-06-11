@@ -176,7 +176,7 @@ public class OrderDetail {
         info.setGoodsIcon(goods.getGoodsIcon());
         info.setGoodsId(goods.getGoodsId());
         info.setGoodsName(goods.getGoodsTitle());
-        info.setGoodsNumber(goods.getGoodsDiscountPrice());
+        info.setGoodsNumber(goods.getGoodsNumber());
         info.setGoodsOriginPrice(goods.getGoodsOriginPrice());
         info.setGoodsType(goods.getGoodsType());
         info.setOrderId(goods.getOrderId());

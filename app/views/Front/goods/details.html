@@ -659,6 +659,7 @@
                             window.onload = function() {
                                 console.log("onload..");
                                 showDetail(${goods?.price});
+                                addProductN();
                             }
                         </script>
                     </ul>
@@ -685,28 +686,11 @@
             </div>
             <div class="footermenu" style="z-index:1000">
                 <ul style="height:60px;">
-                    <script type="text/javascript">
-                        var id = $_GET['id'];
-                        if (id > 0) {
-                            document.cookie = "username=" + id;
-                        }
-                        var title = location.href + username;
-
-                        function goBack() {
-                            window.history.length <= 1 ?
-                                    window.location.href = './index.php?g=App&m=Index&a=index' :
-                                    window.history.back();
-                        }
-                    </script>
                     <li>
                         <a href="javascript:void(0);" onclick="goBack();"> <img src="/public/images/21.png" style="width:36px; height:36px;">
                             <p>返回</p>
                         </a>
                     </li>
-                    <li id="add_cart" style='display:none;'><a href="javascript:void(0);"> <span class="num" id="cartN3">0</span> <img
-                                src="/Application/Tpl/App/xhqnew/Public/Static/images/cart.png" style="width:36px; height:36px;">
-                                <p>加入购物车</p>
-                        </a></li>
                     <li>
                         <a onclick="now_buy();"> <img src="/public/images/22.png" style="width:36px; height:36px;">
                             <p>立刻购买</p>
@@ -839,10 +823,10 @@
                                 </td>
                             </tr>
                             <script type="text/javascript">
-                                var provice = '';
-                                var city = '';
-                                var county = '';
-                                new PCAS("s_province", "s_city", "s_county", provice, city, county);
+                                var stockMap = JSON.parse('${stockMapJson.raw()}');
+                                function selectSize() {
+                                	
+                                }
                             </script>
                             <tr id="type_siz1" style="" show="1">
                                 <td width="90px">
@@ -850,14 +834,27 @@
                                 </td>
                                 <td>
                                     <div class="mui-sku" id="guigevalue1">
-                                        <input type="radio" value="S" name="goodsSize" id="gz1_0" checked="checked" onclick="check_shengyu();">
-                                        <label for="gz1_0">&nbsp;S&nbsp;</label>
-                                        <input type="radio" value="M" name="goodsSize" id="gz1_1" onclick="check_shengyu();">
-                                        <label for="gz1_1">&nbsp;M&nbsp;</label>
-                                        <input type="radio" value="L" name="goodsSize" id="gz1_2" onclick="check_shengyu();">
-                                        <label for="gz1_2">&nbsp;L&nbsp;</label>
-                                        <input type="radio" value="XL" name="goodsSize" id="gz1_3" onclick="check_shengyu();">
-                                        <label for="gz1_3">&nbsp;XL&nbsp;</label>
+                                    #{set count:0 /}
+                                    #{list items:sizeList, as:'size'}
+                                    #{if count == 0}
+                                        <input type="radio" value="${size}" name="goodsSize" id="gz1_${count}" checked="checked" onclick="selectSize();">
+                                        #{/if} #{else}
+                                        <input type="radio" value="${size}" name="goodsSize" id="gz1_${count}" onclick="selectSize();">
+                                        #{/else}
+                                        <label for="gz1_${count}">&nbsp;${size}&nbsp;</label>
+                                        #{set count:count+1 /}
+                                        #{/list}
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td width="90px">
+                                    <label for="weixin" class="ui-input-text"><span style="color:red">*</span>颜色：</label>
+                                </td>
+                                <td>
+                                    <div class="ui-input-text">
+                                        <input id="weixin" name="weixin" placeholder="" value="" type="text" class="ui-input-text">
                                     </div>
                                 </td>
                             </tr>
@@ -1026,13 +1023,6 @@
             cancel: function() {
                 // 用户取消分享后执行的回调函数
             }
-        });
-    });
-</script>
-<script>
-    $(function() {
-        $('#add_cart').after().click(function() {
-            
         });
     });
 </script>
