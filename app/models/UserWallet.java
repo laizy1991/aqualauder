@@ -19,7 +19,19 @@ public class UserWallet extends GenericModel {
      */
     @Column(name="card_no")
     private String cardNo;
+    
+    /**
+     * 真实姓名
+     */
+    @Column(name="real_name")
+    private String realName;
 
+    /**
+     * 银行名字
+     */
+    @Column(name="bank_name")
+    private String bankName;
+    
     /**
      * 余额
      */
@@ -58,6 +70,22 @@ public class UserWallet extends GenericModel {
 
     public void setCardNo(String cardNo) {
         this.cardNo = cardNo;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
     }
 
     public Integer getBalances() {

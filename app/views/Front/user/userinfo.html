@@ -1,0 +1,219 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>会员中心</title>
+<meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link href="/public/css/front/foods.css?t=666" rel="stylesheet"
+    type="text/css">
+<link href="/Public/css/app/hobby.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/public/js/lib/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/public/js/front/wemall.js?116"></script>
+
+<style>
+.bg_color{background-color: #000000 }
+.submit{background-color: #000000 }
+.submit:active {background-color: #000000}
+.menu_topbar {background-color: #000000 ;background: -webkit-linear-gradient(top, #000000 , #000000);border-bottom: 1px solid #000000;}
+.footermenu ul {border-top: 1px solid #000000 ;background-color: #000000;background: -webkit-linear-gradient(top, #000000, #000000);}
+.footermenu ul li a.active {background: -webkit-linear-gradient(top, #000000 , #000000);}
+.bg_total{background-color:#000000}
+</style>
+
+<script type="text/javascript">
+var appurl = '/index.php';
+var rooturl = '';
+
+$(function () {
+    $("#all_cnt").click(function(){
+        $(".member_cnt").toggle();
+        if($(this).find('img').attr("src")=="/public/images/arrow_unclick.png")
+        {
+            $(this).find('img').attr("src","/public/images/arrow_click.png");
+        }
+        else
+        {
+            $(this).find('img').attr("src","/public/images/arrow_unclick.png");
+        }
+    });
+    
+    $("#all_price").click(function(){
+        $(".price_cnt").toggle();
+        if($(this).find('img').attr("src")=="/public/images/arrow_unclick.png")
+        {
+            $(this).find('img').attr("src","/public/images/arrow_click.png");
+        }
+        else
+        {
+            $(this).find('img').attr("src","/public/images/arrow_unclick.png");
+        }
+    });
+    
+    $("#all_buy").click(function(){
+        $(".buy_cnt").toggle();
+        if($(this).find('img').attr("src")=="/public/images/arrow_unclick.png")
+        {
+            $(this).find('img').attr("src","/public/images/arrow_click.png");
+        }
+        else
+        {
+            $(this).find('img').attr("src","/public/images/arrow_unclick.png");
+        }
+    });
+    
+    $("#memeber_url").click(function(){
+        $(".memeber_url").toggle();
+        if($(this).find('img').attr("src")=="/public/images/arrow_unclick.png")
+        {
+            $(this).find('img').attr("src","/public/images/arrow_click.png");
+        }
+        else
+        {
+            $(this).find('img').attr("src","/public/images/arrow_unclick.png");
+        }
+    });
+
+});
+
+</script>
+</head>
+<body class="sanckbg mode_webapp" style="background-color:#fff;">
+
+    <div id="member-container" style="display: block;">
+
+        <div class="menu_header">
+            <div class="menu_topbar">
+                <div id="menu" class="sort ">
+                    <a href="">分销详情</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="div_header">
+            <span style='float:left;margin-left:10px;margin-right:10px;margin-bottom:10px;'>
+                <img src='${user?.headImgUrl}' width='80px;' height='80px;'>          </span>
+            <span class="header_right">
+                <div class="header_l_di"><span>昵称：${user?.nickname}</span></div>
+                            </span>
+                            
+        </div>
+        
+        
+<script>
+    $(function() {
+        $('#btn').click(function(){
+            $('#hah').slideToggle('slow');
+        });
+        var src="/index.php?g=App&m=Index&a=save_hobby";
+        $('#btn-back').click(function(){
+            var ids='';
+            $('#hah input').each(function(n,v){
+                if(v.checked){
+                    ids+=','+v.value;
+                }
+            });
+            ids=ids.substring(1);
+            $.post(src,{tid:ids},function(data){
+                alert(data.msg);
+                if(data.status){
+                    $('#btn').click();
+                }
+            })
+        });
+        $('#hah input').change(function(){
+            if($(this).get(0).checked){
+                $(this).next().addClass('active');
+            }else{
+                $(this).next().removeClass('active');
+            }
+        });
+    });
+</script>    
+<div class="cardexplain" style="TEXT-ALIGN: center;color:#000;font-size:14px;">
+  #{if data?.detail?.superior}
+        您是由【${data?.detail?.superior}】推荐
+  #{/if}
+       </div>
+       <section class="order">
+                    <form method="post" action="/setUserInfo" enctype="multipart/form-data">
+                        <div class="contact-info">
+                            <ul>
+                                <li class="title" style="text-align: center;">用户信息</li>
+                                <li>
+                                    <table style="padding: 0; margin: 0; width: 100%;">
+                                        <tbody>
+                                            <tr>
+                                                <td width="80px"><label for="cardNo" class="ui-input-text">银行卡号：</label></td>
+                                                <td>
+                                                    <div class="ui-input-text">
+                                                        <input name="cardNo" id="cardNo" placeholder="只能是本人的银行卡" value="${wallet?.cardNo}" type="text"
+                                                        class="ui-input-text">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="80px"><label for="bankName" class="ui-input-text">银行名字：</label></td>
+                                                <td>
+                                                    <div class="ui-input-text">
+                                                        <input name="bankName" id="bankName" placeholder="" value="${wallet?.bankName}" type="text"
+                                                        class="ui-input-text">
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td width="80px"><label for="realName" class="ui-input-text">真实姓名：</label></td>
+                                                <td>
+                                                    <div class="ui-input-text">
+                                                        <input name="realName" id="realName" placeholder="" value="${wallet?.realName}" type="text"
+                                                        class="ui-input-text">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="">
+                                        <input type="submit" class="submit" value="确定提交" style="margin: 0 auto;color: white;">
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </form>
+                </section>
+    
+    <div class="footermenu">
+        <ul>
+            <li ><a href="/goods_list.html"> <img src="/public/images/21.png">
+                    <p>
+                        立即购买
+                                            </p>
+            </a></li>
+            <li id="user"><a href="/orders.html"> <img src="/public/images/22.png">
+                    <p>我的订单</p>
+            </a></li>
+            <li id="member" ><a href="/myspace.html" class="active"> <img src="/public/images/23.png">
+                    <p>
+                        会员中心
+                                            </p>
+            </a></li>
+            <li><a href="/qrcode.html"> <img src="/public/images/24.png">
+                    <p>我的二维码</p>
+            </a></li>
+            
+        </ul>
+    </div>
+        <script>
+    window.onload=function(){
+        if($_GET['page_type']=='order')
+        {
+            user();
+        }
+        
+        if($_GET['page_type']=='ticket')
+        {
+            $("#ticket").click();
+        }
+    }
+    </script>
+</body>
+</html>

@@ -31,7 +31,7 @@ public class BuyerService {
      * 创建一个订单
      * @return
      */
-    public static OrderDetail createOrder(int userId, Order order, Map<Long, Integer> goodsNum, String goodsSize) {
+    public static OrderDetail createOrder(int userId, Order order, Map<Long, Integer> goodsNum, String goodsSize, String goodsColor) {
         if(order == null || goodsNum == null || goodsNum.isEmpty()) {
             return null;
         }
@@ -59,6 +59,7 @@ public class BuyerService {
             og.setGoodsNumber(goodsNum.get(id));
             og.setGoodsType(GoodsType.GOODS.getType());
             og.setGoodsSize(goodsSize);
+            og.setGoodsColor(goodsColor);
             totalFee += (og.getGoodsDiscountPrice() * og.getGoodsNumber());
             orderGoodsList.add(og);
         }

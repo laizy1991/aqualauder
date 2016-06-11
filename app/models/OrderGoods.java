@@ -70,6 +70,14 @@ public class OrderGoods extends Model {
         this.goodsId = goodsId;
     }
 
+    public String getGoodsColor() {
+        return goodsColor;
+    }
+
+    public void setGoodsColor(String goodsColor) {
+        this.goodsColor = goodsColor;
+    }
+
     public Integer getGoodsType() {
         return goodsType;
     }
@@ -108,14 +116,6 @@ public class OrderGoods extends Model {
 
     public void setGoodsDesc(String goodsDesc) {
         this.goodsDesc = goodsDesc;
-    }
-
-    public String getGoodsColor() {
-        return goodsColor;
-    }
-
-    public void setGoodsColor(String goodsColor) {
-        this.goodsColor = goodsColor;
     }
 
     public Integer getGoodsOriginPrice() {

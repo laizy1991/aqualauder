@@ -17,6 +17,8 @@ GET /link.html            front.Helps.link
 * /qrcode.html            front.Users.qrcode
 * /goods_list.html            front.GoodsCtrl.list
 * /myspace.html             front.Users.getUserInfo
+* /userinfo.html             front.Users.userInfo
+* /setUserInfo             front.Users.setUserInfo
 * /cash.html                front.Users.cash
 
 POST /createOrder           front.Orders.createOrder
