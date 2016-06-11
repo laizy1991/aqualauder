@@ -36,8 +36,13 @@ public class GoodsStockService {
         if (goodsStock != null && goodsStock.size() != 0) {
             for (GoodsStock gs : goodsStock) {
                 if(gs != null) {
-                    gs.setUpdateTime(now);
-                    GoodsStockDao.save(gs);
+                    GoodsStock gss = GoodsStockDao.get(gs.getId());
+                    gss.setUpdateTime(now);
+                    gss.setAmount(gs.getAmount());
+                    gss.setStockDesc(gs.getStockDesc());
+                    gss.setGoodsColor(gs.getGoodsColor());
+                    gss.setGoodsSize(gs.getGoodsSize());
+                    GoodsStockDao.save(gss);
                 }
             }
         }
@@ -48,7 +53,8 @@ public class GoodsStockService {
         if (goodsStock != null && goodsStock.size() != 0) {
             for (GoodsStock gs : goodsStock) {
                 if(gs != null) {
-                    GoodsStockDao.delete(gs);
+                    GoodsStock gss = GoodsStockDao.get(gs.getId());
+                    GoodsStockDao.delete(gss);
                 }
             }
         }
