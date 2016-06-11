@@ -17,5 +17,18 @@ public class GoodsStockDao {
         return goodsStock.create();
     }
 
+    public static void save(GoodsStock goodsStock) {
+        if(goodsStock != null) {
+            goodsStock.save();
+        }
+    }
+
+    public static void delete(GoodsStock goodsStock) {
+        if(goodsStock != null) {
+            goodsStock.delete();
+
+        }
+    }
+
 
 }

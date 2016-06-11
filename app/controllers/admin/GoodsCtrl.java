@@ -33,6 +33,8 @@ public class GoodsCtrl extends WebController {
     }
 
     public static void update(Goods goods) {
-        render("/admin/Goods/update.html", goods);
+        List<GoodsColor> goodsColors = GoodsColor.all().fetch();
+        List<GoodsSize> goodsSizes = GoodsSize.all().fetch();
+        render("/admin/Goods/update.html", goods, goodsColors, goodsSizes);
     }
 }

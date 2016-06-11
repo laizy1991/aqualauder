@@ -69,6 +69,14 @@
     #imgSorter .img:last-child .down {
         display: none;
     }
+
+    .a-button {
+        background: #208bfe;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 3px;
+        color: #FFF;
+    }
 </style>
 <!-- 页头 begin -->
 <div class="main-header">
@@ -125,7 +133,7 @@
                         <div id="stockList">
                         </div>
                         <div i="button" class="ui-dialog-button">
-                            <button role="addStock" type="button" data-id="添加库存" autofocus="" class="ui-dialog-autofocus">添加库存</button>
+                            <button role="addStock" class="a-button" type="button" data-id="添加库存" autofocus="" class="ui-dialog-autofocus">添加库存</button>
                         </div>
                     </div>
                 </div>
@@ -188,7 +196,7 @@
         </select>
         <input type="text" placeholder="描述" name="goodsStock[{index}].stockDesc">
         <input type="text" placeholder="库存" name="goodsStock[{index}].amount">
-        <button type="button" class="btn_{index}" role="deleteStock">关闭</button>
+        <button type="button" class="btn_{index}" role="deleteStock">删除</button>
     </div>
 </script>
 

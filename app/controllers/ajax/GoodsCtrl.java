@@ -9,6 +9,7 @@ import play.data.Upload;
 import play.libs.Files;
 import play.mvc.results.RenderJson;
 import service.GoodsService;
+import service.GoodsStockService;
 
 import java.io.File;
 import java.util.List;
@@ -28,8 +29,11 @@ public class GoodsCtrl extends AjaxController {
         renderSuccessJson();
     }
 
-    public static void update(Goods goods) {
+    public static void update(Goods goods, List<GoodsStock> goodsStock, List<GoodsStock> goodsStockToUpdate, List<GoodsStock> goodsStockToDelete) {
         GoodsService.update(goods);
+        GoodsStockService.add(goodsStock);
+        GoodsStockService.update(goodsStockToUpdate);
+        GoodsStockService.delete(goodsStockToDelete);
         renderSuccessJson();
     }
 

@@ -27,10 +27,12 @@ public class GoodsService {
 
         if (saved && goodsStock != null && goodsStock.size() != 0) {
             for (GoodsStock gs : goodsStock) {
-                gs.setGoodsId(goods.getId());
-                gs.setCreateTime(now);
-                gs.setUpdateTime(now);
-                GoodsStockDao.insert(gs);
+                if (gs != null) {
+                    gs.setGoodsId(goods.getId());
+                    gs.setCreateTime(now);
+                    gs.setUpdateTime(now);
+                    GoodsStockDao.insert(gs);
+                }
             }
         }
 

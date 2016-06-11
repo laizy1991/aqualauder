@@ -12,9 +12,11 @@ define(function(require) {
         init: function() {
             this.create($('[role="submitAdd"]'));
             this.delete($('[role="delete"]'));
+            this.delete($('[role="delete"]'));
             this.update($('#update'), $('[role="submitUpdate"]'));
             this.view($('[role="view"]'));
             this.edictStock($('[role="addStock"]'), $('[role="deleteStock"]'));
+            this.deleteExitStock($('[role="deleteExistStock"]'));
         },
 
         edictStock: function($addBtn, $deleteBtn) {
@@ -33,6 +35,27 @@ define(function(require) {
             $(document).delegate($deleteBtn.selector, "click", function () {
                 $(this).closest('div').slideUp("fast", function(){this.remove()});
             })
+        },
+
+        deleteExitStock: function($deleteBtn) {
+            var index = 0;
+            $deleteBtn.click(function(){
+                var wrap = $(this).closest('div'),
+                stockId = wrap.find('.stockId').val();
+                var temp = $('#deleteGoodStockTmpl').html();
+                while(temp.indexOf("{index}") > 0) {
+                    temp = temp.replace("{index}", index);
+                }
+
+                while(temp.indexOf("{value}") > 0) {
+                    temp = temp.replace("{value}", stockId);
+                }
+
+                var ele = $(temp);
+                $("#stockListToDelete").append(ele)
+                wrap.slideUp("fast", function(){this.remove()});
+                index++;
+            });
         },
 
         /**

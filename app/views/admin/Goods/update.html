@@ -42,6 +42,25 @@
     #imgSorter .img:last-child .down {
         display: none;
     }
+
+    .a-button {
+        background: #208bfe;
+        padding: 10px;
+        margin: 10px;
+        border-radius: 3px;
+        color: #FFF;
+    }
+
+    #stockList, #iconList {
+        height: 200px;
+        width: 465px;
+        overflow-y: scroll;
+        box-shadow: 0px 0px 3px #9d9d9d;
+    }
+
+    .ui-dialog-body {
+        padding: 10px;
+    }
 </style>
 <!-- 页头 begin -->
 <div class="main-header">
@@ -95,18 +114,51 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col">
-                                <div id="addIcon">增加图片</div>
+                            <div i="button" class="ui-dialog-button">
+                                <button  id="addIcon"  class="a-button" type="button" data-id="添加图片" autofocus="" class="ui-dialog-autofocus">添加图片</button>
+                                <button role="addStock" class="a-button" type="button" data-id="添加库存" autofocus="" class="ui-dialog-autofocus">添加库存</button>
                             </div>
+                            <div i="button" class="ui-dialog-button">
+                            </div>
+                        <div id="stockList">
+                            #{if goods.goodsStocks.size() > 0}
+                            #{set index:0}
+                            #{/set}
+                            #{list items:goods.goodsStocks, as:'stock'}
+                            <div>
+                                <input type="hidden" class="stockId" name="goodsStockToUpdate[${index}].id" value="${stock.id}">
+                                <select name="goodsStockToUpdate[${index}].goodsSize">
+                                    #{list items:goodsSizes, as:'info'}
+                                    #{if info.id == stock.goodsSize}
+                                    <option value="${info.id}" selected>${info.name}</option>
+                                    #{/if}
+                                    #{else}
+                                    <option value="${info.id}">${info.name}</option>
+                                    #{/else}
+                                    #{/list}
+                                </select>
+                                <select name="goodsStockToUpdate[${index}].goodsColor">
+                                    #{list items:goodsColors, as:'info'}
+                                    #{if info.id == stock.goodsColor}
+                                    <option value="${info.id}" selected>${info.name}</option>
+                                    #{/if}
+                                    #{else}
+                                    <option value="${info.id}">${info.name}</option>
+                                    #{/else}
+                                    #{/list}
+                                </select>
+                                <input type="text" placeholder="描述" name="goodsStockToUpdate[${index}].stockDesc" value="${stock.stockDesc}">
+                                <input type="text" placeholder="库存" name="goodsStockToUpdate[${index}].amount" value="${stock.amount}">
+                                <button type="button" role="deleteExistStock">删除</button>
+                            </div>
+                            #{set index:index+1}
+                            #{/set}
+                            #{/list}
+                            #{/if}
                         </div>
-                        #{if goods.goodsStocks.size() > 0}
-                        #{list items:goods.goodsStocks, as:'info'}
-                        <div>
-                            <input type="hidden" value="${info.id}">
+
+                        <div id="stockListToDelete" class="hidden">
                         </div>
-                        #{/list}
-                        #{/if}
                     </form>
                 </div>
             </div>
@@ -152,6 +204,28 @@
 #{include file="common/jsinclude.html" /}
 
 #{set 'moreScripts'}
+
+<script id="addGoodStockTmpl" type="text/html">
+    <div>
+        <select name="goodsStock[{index}].goodsSize">
+            #{list items:goodsSizes, as:'info'}
+            <option value="${info.id}">${info.name}</option>
+            #{/list}
+        </select>
+        <select name="goodsStock[{index}].goodsColor">
+            #{list items:goodsColors, as:'info'}
+            <option value="${info.id}">${info.name}</option>
+            #{/list}
+        </select>
+        <input type="text" placeholder="描述" name="goodsStock[{index}].stockDesc">
+        <input type="text" placeholder="库存" name="goodsStock[{index}].amount">
+        <button type="button" class="btn_{index}" role="deleteStock">删除</button>
+    </div>
+</script>
+
+<script id="deleteGoodStockTmpl" type="text/html">
+    <input type="hidden" name="goodsStockToDelete[{index}].id" value="{value}">
+</script>
 
 <script>
     var verNum = new Date();
