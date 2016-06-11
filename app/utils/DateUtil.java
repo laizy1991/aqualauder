@@ -76,7 +76,7 @@ public class DateUtil {
      */
     public static String getDateString(Long time) {
         if(LongUtil.isNullOrZero(time)) {
-            return null;
+            return "";
         }
         SimpleDateFormat sdf = new SimpleDateFormat(NORMAL_DATE_FORMAT);
         return sdf.format(new Date(time));
