@@ -26,9 +26,13 @@ public class GoodsStockDao {
     public static void delete(GoodsStock goodsStock) {
         if(goodsStock != null) {
             goodsStock.delete();
-
         }
     }
+
+    public static GoodsStock get(long id) {
+        return GoodsStock.findById(id);
+    }
+
 
 
 }

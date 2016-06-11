@@ -32,10 +32,11 @@ public class GoodsStockService {
 
 
     public static void update(List<GoodsStock> goodsStock) {
+        long now = System.currentTimeMillis();
         if (goodsStock != null && goodsStock.size() != 0) {
             for (GoodsStock gs : goodsStock) {
                 if(gs != null) {
-                    gs.setUpdateTime(System.currentTimeMillis());
+                    gs.setUpdateTime(now);
                     GoodsStockDao.save(gs);
                 }
             }
