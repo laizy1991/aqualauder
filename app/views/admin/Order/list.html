@@ -18,6 +18,7 @@
     <tr  class="text-center">
         <th>ID</th>
         <th>订单编号</th>
+        <th>状态</th>
         <th class="order" role="contributeAsc">
             创建时间
         </th>
@@ -55,6 +56,29 @@
 		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
 		        <td>${info?.id}</td>
 		        <td>${info?.outTradeNo}</td>
+		        <td>
+                    #{if info?.state == 0}
+                        <span>创建订单(待支付)</span>
+                    #{/if}
+                    #{if info?.state == 1}
+                        <span>完成支付</span>
+                    #{/if}
+                    #{if info?.state == 2}
+                        <span>待发货</span>
+                    #{/if}
+                    #{if info?.state == 2}
+                        <span>完成发货</span>
+                    #{/if}
+                    #{if info?.state == 4}
+                        <span>确认收货</span>
+                    #{/if}
+                    #{if info?.state == 5}
+                        <span>交易成功(不可退货)</span>
+                    #{/if}
+                    #{if info?.state == 6}
+                        <span>交易关闭</span>
+                    #{/if}
+                </td>
 		        <td>
 		            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
 		        </td>
@@ -152,11 +176,19 @@
             <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>允许退款</label>
                 <div class="col">
-                    <!--<input type="text"id="statusToUpdate" name="distributor.status" value="">-->
                     <select id="forbidRefundToUpdate" name="order.forbidRefund">
                         <option value="0">允许</option>
                         <option value="1">禁止</option>
                     </select>
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>收货地址</label>
+                <div class="col">
+                    <!--<input type="text"id="statusToUpdate" name="distributor.status" value="">-->
+                    <input id="shippingAddressToUpdate" name="order.shippingAddress">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
@@ -248,14 +280,14 @@
                     <label class="info" id="shippingAddressToView"></label>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group hidden">
                 <label class="label">stateHistory:</label>
                 <div class="col">
                     <label class="info" id="stateHistoryToView"></label>
                 </div>
             </div>
             <div class="form-group">
-                <label class="label">payTime:</label>
+                <label class="label">付款时间:</label>
                 <div class="col">
                     <label class="info" id="payTimeToView"></label>
                 </div>

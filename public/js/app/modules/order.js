@@ -124,6 +124,7 @@ define(function(require) {
                     //expressId = $wrap.find('.expressId').val(),
                     expressNum = $wrap.find('.expressNum').val(),
                     forbidRefund = $wrap.find('.forbidRefund').val(),
+                    shippingAddress = $wrap.find('.shippingAddress').val(),
                     state = $wrap.find('.state').val(),
                     updateDialog = dialog({
                     id: 'updateDialog',
@@ -162,6 +163,7 @@ define(function(require) {
                         $("#expressNumToUpdate").val(expressNum);
                         $("#forbidRefundToUpdate").val(forbidRefund);
                         $("#stateToUpdate").val(state);
+                        $("#shippingAddressToUpdate").val(shippingAddress);
                     }
                 }).showModal();
             });
