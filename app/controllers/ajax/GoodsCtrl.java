@@ -31,6 +31,13 @@ public class GoodsCtrl extends AjaxController {
 
     public static void update(Goods goods, List<GoodsStock> goodsStock, List<GoodsStock> goodsStockToUpdate, List<GoodsStock> goodsStockToDelete) {
         GoodsService.update(goods);
+        if (goodsStock != null && goodsStock.size() != 0) {
+            for (GoodsStock gs : goodsStock) {
+                if(gs != null) {
+                    gs.setGoodsId(goods.getId());
+                }
+            }
+        }
         GoodsStockService.add(goodsStock);
         GoodsStockService.update(goodsStockToUpdate);
         GoodsStockService.delete(goodsStockToDelete);
