@@ -57,7 +57,7 @@
 							<tr><td style="border-bottom:0px">支付状态:
 
                             #{if info.state == 0}
-                                未支付
+                                未支付 　<a href="/front/Pay/wxPay?orderId=${info?.orderId}" style="color: blue;">去支付</a>
                             #{/if}
                             #{else}
                             已支付
@@ -67,8 +67,9 @@
 							%{out.print(common.constants.OrderStatus.getDesc(info?.state))}%
                             </td></tr>
                             #{list items:info.goodsInfo, as:'goodInfo'}
-							<tr><td style="border-bottom:0px">商品名称:${goodInfo.goodsName} X ${goodInfo.goodsNumber}</td></tr>
+							<tr><td style="border-bottom:0px">商品名称:${goodInfo.goodsName} X ${goodInfo.goodsNumber},颜色：${goodInfo.goodsColor},大小：${goodInfo.goodsSize}</td></tr>
 							#{/list}
+							<tr><td style="border-bottom:0px">微信号:${info.weixin}</em></td></tr>
 							<tr><td style="border-bottom:0px">快递公司:${info.expressName}</em></td></tr>
 							<tr><td style="border-bottom:0px">快递单号:${info.expressNum}</em></td></tr>
 							<tr><td>取消订单，请联系DDY客服：4000755867</td></tr><tr>

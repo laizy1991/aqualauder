@@ -96,7 +96,6 @@ public class GoodsCtrl extends FrontController {
             map.put(color, gs.getAmount());
         }
         String stockMapJson = new Gson().toJson(stockMap);
-        System.err.println(stockMapJson);
 		render("/Front/goods/details.html", goods, stockMapJson, address, sizeList);
 	}
 	

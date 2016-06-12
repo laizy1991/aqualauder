@@ -34,6 +34,9 @@ public class ShippingAddress extends GenericModel {
     private Long createTime;
     @Column(name="update_time")
     private Long updateTime;
+
+    @Column(name="weixin")
+    private String weixin;
     public String getName() {
         return name;
     }
@@ -46,7 +49,13 @@ public class ShippingAddress extends GenericModel {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
-    public Integer getId() {
+    public String getWeixin() {
+		return weixin;
+	}
+	public void setWeixin(String weixin) {
+		this.weixin = weixin;
+	}
+	public Integer getId() {
         return id;
     }
     public void setId(Integer id) {

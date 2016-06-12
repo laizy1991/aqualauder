@@ -47,6 +47,9 @@ public class Order extends GenericModel {
     @Column(name="mobile_phone")
     private String mobilePhone;
 
+    @Column(name="weixin")
+    private String weixin;
+    
     @Column(name="shipping_address")
     private String shippingAddress;
 
@@ -114,7 +117,15 @@ public class Order extends GenericModel {
         this.userId = userId;
     }
 
-    public String getOutTradeNo() {
+    public String getWeixin() {
+		return weixin;
+	}
+
+	public void setWeixin(String weixin) {
+		this.weixin = weixin;
+	}
+
+	public String getOutTradeNo() {
         return outTradeNo;
     }
 

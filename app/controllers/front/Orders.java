@@ -38,7 +38,7 @@ public class Orders extends FrontController {
             renderJSON("{\"msg\":\"创建订单失败\"}");
         }
 	    try {
-	        ShippingAddressService.create(user.getRegType(), order.getShippingAddress(), order.getReceiver(), order.getMobilePhone(), 0);
+	        ShippingAddressService.create(user.getUserId(), order.getShippingAddress(), order.getReceiver(), order.getMobilePhone(), order.getWeixin(), 0);
 	    } catch(Exception e) {
 	        e.printStackTrace();
 	    }

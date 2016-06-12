@@ -5,7 +5,7 @@ import dao.ShippingAddressDao;
 
 public class ShippingAddressService {
 
-    public static void create(int userId, String address, String name, String mobile, int postal) {
+    public static void create(int userId, String address, String name, String mobile, String weixin,  int postal) {
         ShippingAddress sa = ShippingAddressDao.getByUserId(userId);
         boolean insert = false;
         if(sa == null) {
@@ -20,6 +20,7 @@ public class ShippingAddressService {
         sa.setMobile(mobile);
         sa.setPostal(postal);
         sa.setUserId(userId);
+        sa.setWeixin(weixin);
         sa.setUpdateTime(System.currentTimeMillis());
         if(insert) {
             ShippingAddressDao.insert(sa);

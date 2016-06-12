@@ -29,6 +29,7 @@ public class OrderDetail {
     private Integer refundState;
     private String orderMemo;
     private String shippingAddress;
+    private String weixin;
     private String stateHistory;
     private Long payTime;
     private Long deliverTime;
@@ -75,9 +76,18 @@ public class OrderDetail {
         this.callbackTime = order.getCallbackTime();
         this.createTime = order.getCreateTime();
         this.orderId = order.getId();
+        this.weixin = order.getWeixin();
     }
     
-    public Long getOrderId() {
+    public String getWeixin() {
+		return weixin;
+	}
+
+	public void setWeixin(String weixin) {
+		this.weixin = weixin;
+	}
+
+	public Long getOrderId() {
         return orderId;
     }
 
@@ -180,6 +190,8 @@ public class OrderDetail {
         info.setGoodsOriginPrice(goods.getGoodsOriginPrice());
         info.setGoodsType(goods.getGoodsType());
         info.setOrderId(goods.getOrderId());
+        info.setGoodsSize(goods.getGoodsSize());
+        info.setGoodsColor(goods.getGoodsColor());
         goodsInfo.add(info);
         
         
@@ -313,6 +325,8 @@ public class OrderDetail {
         private Integer goodsNumber;
         private String goodsIcon;
         private String goodsDesc;
+        private String goodsSize;
+        private String goodsColor;
         private Integer goodsOriginPrice;
         private Integer goodsDiscountPrice;
         private Long createTime;
@@ -349,7 +363,23 @@ public class OrderDetail {
             this.goodsType = goodsType;
         }
 
-        public Integer getGoodsNumber() {
+        public String getGoodsSize() {
+			return goodsSize;
+		}
+
+		public void setGoodsSize(String goodsSize) {
+			this.goodsSize = goodsSize;
+		}
+
+		public String getGoodsColor() {
+			return goodsColor;
+		}
+
+		public void setGoodsColor(String goodsColor) {
+			this.goodsColor = goodsColor;
+		}
+
+		public Integer getGoodsNumber() {
             return goodsNumber;
         }
 
