@@ -134,25 +134,19 @@ public class Pay extends FrontController {
      * 微信回调
      */
     public static void wxCallback() {
-    	InputStream in = request.body;
-    	BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-    	String args = "";
-    	StringBuffer backStr = new StringBuffer();
+    	String backStr = request.params.get("body");
     	UnifiedOrderCallbackDto rsp = null;
     	try {
-			while((args=reader.readLine()) != null){
-				backStr.append(args);
-			}
-			if(StringUtils.isBlank(backStr.toString())) {
+			if(StringUtils.isBlank(backStr)) {
 				Logger.error("微信回调返回的参数为空");
 				renderXml("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[参数为空]]></return_msg></xml>");
 			}
 			Logger.info("微信回调返回的参数为：%s", backStr);
-			if (!Signature.checkIsSignValidFromResponseString(backStr.toString())) {
+			if (!Signature.checkIsSignValidFromResponseString(backStr)) {
 				Logger.error("统一下单API返回的数据签名验证失败，有可能数据被篡改了");
 				renderXml("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[签名失败]]></return_msg></xml>");
 			}
-			rsp = (UnifiedOrderCallbackDto)Util.getObjectFromXMLWithXStream(backStr.toString(), UnifiedOrderCallbackDto.class);
+			rsp = (UnifiedOrderCallbackDto)Util.getObjectFromXMLWithXStream(backStr, UnifiedOrderCallbackDto.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			rsp = null;
