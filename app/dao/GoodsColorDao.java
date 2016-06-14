@@ -18,4 +18,7 @@ public class GoodsColorDao {
     public static void insert(GoodsColor goodsSize) {
         goodsSize.save();
     }
+    public static GoodsColor getByName(String color) {
+        return GoodsColor.find("name = ?", color).first();
+    }
 }

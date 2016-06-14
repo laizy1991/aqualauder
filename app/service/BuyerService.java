@@ -4,23 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang.StringUtils;
-
 import models.Goods;
 import models.Order;
 import models.OrderGoods;
 import models.RefundOrder;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+
 import play.Logger;
 import utils.DateUtil;
 import utils.IdGenerator;
+
 import common.constants.GoodsType;
 import common.constants.OrderStatus;
 import common.constants.RefundStatus;
 import common.constants.Separator;
+
 import dao.GoodsDao;
 import dao.OrderGoodsDao;
 import dao.RefundOrderDao;
+import dto.GoodsBrief;
 import dto.OrderDetail;
 
 
@@ -31,7 +35,7 @@ public class BuyerService {
      * 创建一个订单
      * @return
      */
-    public static OrderDetail createOrder(int userId, Order order, Map<Long, Integer> goodsNum, String goodsSize, String goodsColor) {
+    public static OrderDetail createOrder(int userId, Order order, Map<GoodsBrief, Integer> goodsNum, String openId) {
         if(order == null || goodsNum == null || goodsNum.isEmpty()) {
             return null;
         }
@@ -39,13 +43,14 @@ public class BuyerService {
         long cussTs = System.currentTimeMillis();
         List<OrderGoods> orderGoodsList = new ArrayList<OrderGoods>();
         int totalFee = 0;
-        for(Long id : goodsNum.keySet()) {
-            if(goodsNum.get(id).intValue() <= 0) {
+        List<GoodsBrief> saveList = new ArrayList<GoodsBrief>();
+        for(GoodsBrief gb : goodsNum.keySet()) {
+            if(goodsNum.get(gb).intValue() <= 0) {
                 continue;
             }
-            Goods goods = GoodsDao.get(id);
+            Goods goods = GoodsDao.get(gb.getGoodsId());
             if(goods == null || goods.getState().intValue() == 0) {
-                Logger.error("goods not found, id:%s", id);
+                Logger.error("goods not found, id:%s", gb.getGoodsId());
             }
             OrderGoods og = new OrderGoods();
             og.setCreateTime(cussTs);
@@ -56,12 +61,24 @@ public class BuyerService {
             og.setGoodsIcon(GoodsService.getIcon(goods.getId()));
             og.setGoodsId(goods.getId());
             og.setGoodsTitle(goods.getTitle());
-            og.setGoodsNumber(goodsNum.get(id));
+            og.setGoodsNumber(goodsNum.get(gb));
             og.setGoodsType(GoodsType.GOODS.getType());
-            og.setGoodsSize(goodsSize);
-            og.setGoodsColor(goodsColor);
+            og.setGoodsSize(gb.getGoodsSize());
+            og.setGoodsColor(gb.getGoodsColor());
             totalFee += (og.getGoodsDiscountPrice() * og.getGoodsNumber());
             orderGoodsList.add(og);
+            
+            //减库存
+            boolean isSuccess = GoodsStockService.reduced(gb.getGoodsId(), gb.getGoodsSize(), gb.getGoodsColor(), goodsNum.get(gb));
+            if(isSuccess) {
+                saveList.add(gb);
+            } else {
+                //减库存失败回滚
+                for(GoodsBrief tmp : saveList) {
+                    GoodsStockService.reduced(tmp.getGoodsId(), tmp.getGoodsSize(), tmp.getGoodsColor(), goodsNum.get(tmp));
+                }
+                return null;
+            }
         }
         
         if(CollectionUtils.isEmpty(orderGoodsList)) {
@@ -85,6 +102,7 @@ public class BuyerService {
         order.setPayTime(0l);
         order.setUserId(userId);
         order.setRecevTime(0l);
+        order.setOpenId(openId);
         boolean isSucc = OrderService.add(order);
         
         if(!isSucc) {

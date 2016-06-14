@@ -826,10 +826,7 @@
                                 var stockMap = JSON.parse('${stockMapJson.raw()}');
                                 function selectSize() {
                                 	var size = $('input:radio:checked').val();
-                                	console.log(stockMap);
-                                	console.log(size)
                                 	var colorMap = stockMap[size];
-                                	console.log(colorMap);
                                 	var index = 0;
                                 	var goodsColorSel = $("#goodsColor");
                                 	goodsColorSel.empty();
@@ -839,6 +836,7 @@
                                 			$("#stockCount").html(count);
                                 		}
                                 		goodsColorSel.append("<option value=" + color + ">" + color + "</option>");
+                                		index ++;
                                 	}
                                 }
                                 

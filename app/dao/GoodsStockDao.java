@@ -33,6 +33,8 @@ public class GoodsStockDao {
         return GoodsStock.findById(id);
     }
 
-
+    public static GoodsStock get(long goodId, int goodsSize, int goodsColor) {
+        return GoodsStock.find("goodsId = ? and goodsSize = ? and goodsColor = ?", goodId, goodsSize, goodsColor).first();
+    }
 
 }

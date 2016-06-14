@@ -18,4 +18,8 @@ public class GoodsSizeDao {
     public static void insert(GoodsSize goodsSize) {
         goodsSize.save();
     }
+
+    public static GoodsSize getByName(String size) {
+        return GoodsSize.find("name = ?", size).first();
+    }
 }

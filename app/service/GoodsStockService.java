@@ -1,17 +1,15 @@
 package service;
 
-import common.constants.Separator;
-import dao.GoodsDao;
-import dao.GoodsIconDao;
-import dao.GoodsStockDao;
-import dto.GoodsDetail;
-import models.Goods;
-import models.GoodsIcon;
-import models.GoodsStock;
-import org.apache.commons.collections.CollectionUtils;
-import play.Logger;
-
 import java.util.List;
+
+import play.Logger;
+import models.GoodsColor;
+import models.GoodsSize;
+import models.GoodsStock;
+import utils.DistributeCacheLock;
+import dao.GoodsColorDao;
+import dao.GoodsSizeDao;
+import dao.GoodsStockDao;
 
 public class GoodsStockService {
 
@@ -58,5 +56,52 @@ public class GoodsStockService {
                 }
             }
         }
+    }
+    
+    /**
+     * 
+     * @param goodsId
+     * @param size
+     * @param color
+     * @param num   负数加库存，正数减库存
+     * @return
+     */
+    public static boolean reduced(long goodsId, String size, String color, int num) {
+        GoodsSize gs = GoodsSizeDao.getByName(size);
+        GoodsColor gc = GoodsColorDao.getByName(color);
+        if(gs == null || gc == null) {
+            return false;
+        }
+        //加锁
+        final DistributeCacheLock lockMgr = DistributeCacheLock.getInstance();
+        final String lockKey = getLockKey(goodsId, size, color);
+        
+        if(lockMgr.isLocked(lockKey)) {
+            return false;
+        }
+        if(!lockMgr.tryLock(lockKey)) {
+            return false;
+        }
+        
+        try {
+            GoodsStock goodsStock = GoodsStockDao.get(goodsId, gs.getId().intValue(), gc.getId().intValue());
+            if(goodsStock == null || goodsStock.getAmount() < num) {
+                return false;
+            }
+            goodsStock.setAmount(goodsStock.getAmount() - num);
+            goodsStock.setUpdateTime(System.currentTimeMillis());
+            GoodsStockDao.save(goodsStock);
+            return true;
+        } catch(Exception e) {
+            Logger.error(e, "");
+        } finally {
+            lockMgr.unLock(lockKey);
+        }
+        return false;
+    }
+
+
+    private static String getLockKey(long goodsId, String size, String color) {
+        return "g_s_" + goodsId + "_" + size + "_" + color;
     }
 }
