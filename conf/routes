@@ -9,6 +9,7 @@ GET     /aqualauder                                       Application.index
 GET     /favicon.ico                            404
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
+GET     /html/                                staticDir:html
 # Catch all
 GET /explain.html            front.Helps.explain
 GET /introduce.html            front.Helps.introduce

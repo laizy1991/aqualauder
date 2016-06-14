@@ -13,9 +13,9 @@ import common.core.WebController;
 
 public class HTMLCtrl extends WebController {
 	public static String fileDir = Play.applicationPath.getAbsolutePath();
-	public static String introduceFileRelPath = "/public/views/introduce_content.html";
-	public static String explainFileRelPath = "/public/views/explain_content.html";
-	public static String linkFileRelPath = "/public/views/link_content.html";
+	public static String introduceFileRelPath = "/html/help/introduce_content.html";
+	public static String explainFileRelPath = "/html/help/explain_content.html";
+	public static String linkFileRelPath = "/html/help/link_content.html";
 	
     public static void introduce() {
         String content = FileUtils.read(introduceFileRelPath);
