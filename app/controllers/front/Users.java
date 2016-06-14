@@ -1,5 +1,6 @@
 package controllers.front;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import models.Distributor;
@@ -20,11 +21,11 @@ import service.wx.service.jsapi.JsApiService;
 import service.wx.service.user.WxUserService;
 
 import com.google.gson.Gson;
+
 import common.annotation.GuestAuthorization;
 import common.constants.CashType;
 import common.constants.GlobalConstants;
 import common.core.FrontController;
-
 import dao.UserWalletDao;
 import dto.DistributorDetail;
 import dto.MySpaceDto;
@@ -32,6 +33,21 @@ import dto.OrderDetail;
 
 public class Users extends FrontController {
 	public static Gson gson = new Gson();
+	@GuestAuthorization
+    public static void order(long orderId) {
+		if(orderId <= 0) {
+			renderText("非法订单");
+		}
+		OrderDetail orderDetail = OrderService.getOrderDetail(orderId);
+		if(null == orderDetail) {
+			renderText("非法订单");
+		}
+        List<OrderDetail> orders = new ArrayList<OrderDetail>();
+        orders.add(orderDetail);
+        
+        render("/Front/user/orders.html", orders);
+    }
+	
     @GuestAuthorization
     public static void orders() {
         String openId = session.get("openId");
