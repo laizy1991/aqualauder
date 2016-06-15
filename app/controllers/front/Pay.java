@@ -23,6 +23,7 @@ import service.OrderService;
 import service.PayService;
 import service.RefundOrderService;
 import service.UserService;
+import service.WxMsgService;
 import service.wx.WXPay;
 import service.wx.common.Configure;
 import service.wx.common.Signature;
@@ -196,6 +197,8 @@ public class Pay extends FrontController {
     		query.setParameter(8, order.getId());
             if(query.executeUpdate() > 0) {
             	Logger.info("微信回调成功，更新回调结果成功，orderId：%d", order.getId());
+            	//发送购买成功通知
+            	WxMsgService.sendBuyResultMsg(order.getId());
             	renderXml("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
             } else {
             	Logger.error("微信回调成功，更新回调结果失败，orderId：%d", order.getId());
