@@ -1,5 +1,6 @@
 package service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import models.Order;
@@ -46,10 +47,10 @@ public class WxMsgService {
 			rsp.setMsg("发送购买成功通知失败, 无法获取订单");
 			return rsp;
 		}
-		if(order.getCallbackStatus() != WxCallbackStatus.CALLBACK_SUCC.getStatus()) {
-			rsp.setMsg("发送购买成功通知失败, 订单非支付成功状态");
-			return rsp;
-		}
+//		if(order.getCallbackStatus() != WxCallbackStatus.CALLBACK_SUCC.getStatus()) {
+//			rsp.setMsg("发送购买成功通知失败, 订单非支付成功状态");
+//			return rsp;
+//		}
 		String openId = order.getOpenId();
 		if(StringUtils.isEmpty(openId)) {
 			User user = UserService.get(order.getUserId());
@@ -217,7 +218,7 @@ public class WxMsgService {
 		JSONObject json = new JSONObject();
 		json.put("touser", openId);
 		json.put("template_id", refundMoneyTplId);
-		//TODO 这里加上退款单url, 退款金额再商量
+		//TODO 这里加上退款单url, 退款金额退多少再商量
 		json.put("url", "");
 		json.put("touser", openId);
 		
@@ -234,12 +235,15 @@ public class WxMsgService {
 		keyword1.put("value", order.getId());
 		keyword1.put("color", "#000000");
 		
+		BigDecimal b = new BigDecimal(order.getTotalFee()/100D);  
+		double totalFee = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		
 		JSONObject keyword2 = new JSONObject();
-		keyword2.put("value", order.getTotalFee());
+		keyword2.put("value", totalFee +"元");
 		keyword2.put("color", "#000000");
 		
 		JSONObject keyword3 = new JSONObject();
-		keyword3.put("value", order.getTotalFee());
+		keyword3.put("value", totalFee +"元");
 		keyword3.put("color", "#000000");
 		
 		JSONObject remark = new JSONObject();
@@ -291,8 +295,12 @@ public class WxMsgService {
 		keyword1.put("value", user.getNickname());
 		keyword1.put("color", "#000000");
 
+		int totalMoney = 100; //单位分
+		BigDecimal b = new BigDecimal(totalMoney/100D);  
+		double totalFee = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		
 		JSONObject keyword2 = new JSONObject();
-		keyword2.put("value", 10);
+		keyword2.put("value", totalFee+"元");
 		keyword2.put("color", "#000000");
 		
 		JSONObject keyword3 = new JSONObject();

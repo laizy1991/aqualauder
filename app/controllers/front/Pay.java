@@ -1,45 +1,31 @@
 package controllers.front;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Query;
 
-import models.CashInfo;
 import models.Order;
 import models.RefundOrder;
-import models.User;
 
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
-import play.db.jpa.JPA;
 import play.db.jpa.Model;
-import service.CashInfoService;
 import service.OrderService;
 import service.PayService;
 import service.RefundOrderService;
-import service.UserService;
 import service.WxMsgService;
 import service.wx.WXPay;
 import service.wx.common.Configure;
 import service.wx.common.Signature;
 import service.wx.common.Util;
 import service.wx.dto.order.UnifiedOrderCallbackDto;
-import service.wx.dto.redpack.QueryRedpackReqDto;
-import service.wx.dto.redpack.QueryRedpackRspDto;
-import service.wx.dto.redpack.SendRedpackReqDto;
-import service.wx.dto.redpack.SendRedpackRspDto;
 import service.wx.dto.refund.SendRefundReqDto;
 import service.wx.dto.refund.SendRefundRspDto;
 import utils.DateUtil;
 
 import com.google.gson.Gson;
-
-import common.constants.CashStatus;
 import common.constants.GlobalConstants;
 import common.constants.MessageCode;
 import common.constants.OrderStatus;
@@ -47,6 +33,8 @@ import common.constants.Separator;
 import common.constants.wx.PayStatus;
 import common.constants.wx.WxCallbackStatus;
 import common.core.FrontController;
+
+import dto.WxMsgRspDto;
 import exception.BusinessException;
 
 
@@ -198,7 +186,15 @@ public class Pay extends FrontController {
             if(query.executeUpdate() > 0) {
             	Logger.info("微信回调成功，更新回调结果成功，orderId：%d", order.getId());
             	//发送购买成功通知
-            	WxMsgService.sendBuyResultMsg(order.getId());
+            	WxMsgRspDto msgRsp = WxMsgService.sendBuyResultMsg(order.getId());
+            	if(null != msgRsp) {
+            		if(!msgRsp.isSuccess()) {
+            			Logger.error(msgRsp.getMsg());
+            		}
+            	} else {
+            		Logger.error("调用发送购买成功消息接口返回数据为空");
+            	}
+            		
             	renderXml("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
             } else {
             	Logger.error("微信回调成功，更新回调结果失败，orderId：%d", order.getId());
