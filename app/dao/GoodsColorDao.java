@@ -11,12 +11,12 @@ public class GoodsColorDao {
         return GoodsColor.findById(id);
     }
 
-    public static void update(GoodsColor goodsSize) {
-        goodsSize.save();
+    public static void update(GoodsColor goodsColor) {
+        goodsColor.save();
     }
 
-    public static void insert(GoodsColor goodsSize) {
-        goodsSize.save();
+    public static void insert(GoodsColor goodsColor) {
+        goodsColor.save();
     }
     public static GoodsColor getByName(String color) {
         return GoodsColor.find("name = ?", color).first();
