@@ -76,8 +76,9 @@ public class WxMsgService {
 		JSONObject json = new JSONObject();
 		json.put("touser", openId);
 		json.put("template_id", goodsBoughtTplId);
-		json.put("url", Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") 
-				+ "/front/Users/order?orderId="+orderId);
+		json.put("url", "");
+//		json.put("url", Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") 
+//				+ "/front/Users/order?orderId="+orderId);
 		json.put("touser", openId);
 		
 		//商品信息：{{name.DATA}}
@@ -145,8 +146,9 @@ public class WxMsgService {
 		JSONObject json = new JSONObject();
 		json.put("touser", openId);
 		json.put("template_id", goodsDeliveredTplId);
-		json.put("url", Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") 
-				+ "/front/Users/order?orderId="+orderId);
+		json.put("url", "");
+//		json.put("url", Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") 
+//				+ "/front/Users/order?orderId="+orderId);
 		json.put("touser", openId);
 		
 		//{{first.DATA}} 
@@ -218,7 +220,6 @@ public class WxMsgService {
 		JSONObject json = new JSONObject();
 		json.put("touser", openId);
 		json.put("template_id", refundMoneyTplId);
-		//TODO 这里加上退款单url, 退款金额退多少再商量
 		json.put("url", "");
 		json.put("touser", openId);
 		
@@ -238,6 +239,7 @@ public class WxMsgService {
 		BigDecimal b = new BigDecimal(order.getTotalFee()/100D);  
 		double totalFee = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 		
+		//TODO 退款金额退多少再商量
 		JSONObject keyword2 = new JSONObject();
 		keyword2.put("value", totalFee +"元");
 		keyword2.put("color", "#000000");
@@ -270,7 +272,7 @@ public class WxMsgService {
 		WxMsgRspDto rsp = new WxMsgRspDto();
 		rsp.setSuccess(false);
 		rsp.setMsg("");
-		//TODO 提现结果通知，等有表结构再完善，记得把下面url补全
+		//TODO 提现结果通知，等有表结构再完善
 		String openId = "olVhYv2ogEVJYgaRhEpIh83NZh5c";
 		User user = UserService.getByOpenId(openId);
 		
