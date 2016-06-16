@@ -215,6 +215,7 @@ define(function(require) {
                     goodsSizeToView = $wrap.find('.goods_goodsSize').val(),
                     goodsNumberToView = $wrap.find('.goods_goodsNumber').val(),
                     goodsIconToView = $wrap.find('.goods_goodsIcon').val(),
+                    weixin = $wrap.find('.weixin').val(),
 
                     viewDialog = dialog({
                     id: 'viewDialog',
@@ -254,6 +255,7 @@ define(function(require) {
                         $("#goodsColorToView").text(goodsColorToView);
                         $("#goodsSizeToView").text(goodsSizeToView);
                         $("#goodsNumberToView").text(goodsNumberToView);
+                        $("#weixinToView").text(weixin);
                         if(goodsIconToView != undefined) {
                             var imgs = goodsIconToView.split("|");
                             for(var index=0; index < imgs.length; index++){

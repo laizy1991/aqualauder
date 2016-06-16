@@ -24,9 +24,9 @@
         <!--<th>ID</th>-->
         <th>订单编号</th>
         <th>状态</th>
-        <th class="order" role="contributeAsc">
-            创建时间
-        </th>
+        <th class="order" role="contributeAsc">微信</th>
+        <th class="order" role="contributeAsc">商品信息</th>
+        <th class="order" role="contributeAsc">购物信息</th>
         <th class="order" role="contributeAsc">
             退款信息
         </th>
@@ -54,6 +54,7 @@
 		        <input type="hidden" class="mobilePhone" value="${info.mobilePhone}">
 		        <input type="hidden" class="shippingAddress" value="${info.shippingAddress}">
 		        <input type="hidden" class="stateHistory" value="${info.stateHistory}">
+		        <input type="hidden" class="weixin" value="${info.weixin}">
 		        <input type="hidden" class="payTime" value="%{out.print(utils.DateUtil.getDateString(info?.payTime))}%">
 		        <input type="hidden" class="deliverTime" value="%{out.print(utils.DateUtil.getDateString(info?.deliverTime))}%">
 		        <input type="hidden" class="recevTime" value="%{out.print(utils.DateUtil.getDateString(info?.recevTime))}%">
@@ -109,10 +110,18 @@
                         <span>交易关闭</span>
                     #{/if}
                 </td>
-		        <td>
-		            %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
-		        </td>
-		        <td>
+                <td>${info?.weixin}</td>
+                <td>
+                    #{if info?.orderGoods != null && info?.orderGoods.size() > 0}
+                    <span>${info?.orderGoods.get(0).goodsTitle}(${info?.orderGoods.get(0).id})</span>
+                    #{/if}
+                </td>
+                <td>
+                    <span>${info?.orderGoods.get(0).goodsColor}</span>
+                    <span>${info?.orderGoods.get(0).goodsSize}码</span>
+                    <span>${info?.orderGoods.get(0).goodsNumber}件</span>
+                </td>
+                <td>
                     #{if info?.refundOrder != null && info?.refundOrder.size() > 0}
                         <div class="opts">
                             <span class="opt" role="updateRefund"><a href="javascript:;">修改</a></span>|
@@ -265,6 +274,12 @@
                 <label class="label">用户ID:</label>
                 <div class="col">
                     <label class="info" id="userIdToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">用户微信:</label>
+                <div class="col">
+                    <label class="info" id="weixinToView"></label>
                 </div>
             </div>
             <div class="form-group">
