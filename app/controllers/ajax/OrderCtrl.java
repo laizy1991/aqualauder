@@ -27,9 +27,11 @@ public class OrderCtrl extends AjaxController {
     }
 
     public static void dispatch(Order order, Express express) {
-
-        SellerService.delivered(order.getId(), express.getId(), order.getExpressNum());
-        renderSuccessJson();
+        if(order != null && express != null && SellerService.delivered(order.getId(), express.getId(), order.getExpressNum())){
+            renderSuccessJson();
+        } else {
+            renderErrorJson("发货信息修改失败");
+        }
     }
 
     

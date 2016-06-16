@@ -117,9 +117,11 @@
                     #{/if}
                 </td>
                 <td>
+                    #{if info?.orderGoods != null && info?.orderGoods.size() > 0}
                     <span>${info?.orderGoods.get(0).goodsColor}</span>
                     <span>${info?.orderGoods.get(0).goodsSize}码</span>
                     <span>${info?.orderGoods.get(0).goodsNumber}件</span>
+                    #{/if}
                 </td>
                 <td>
                     #{if info?.refundOrder != null && info?.refundOrder.size() > 0}
