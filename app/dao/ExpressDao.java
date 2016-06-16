@@ -15,7 +15,7 @@ public class ExpressDao {
         return express.create();
     }
     
-    public static Express get(int id) {
+    public static Express get(long id) {
         List<Express> list = Express.find("id", id).fetch();
         if(CollectionUtils.isEmpty(list)) {
             return null;

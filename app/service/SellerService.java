@@ -51,7 +51,7 @@ public class SellerService {
      * @param expressNum
      * @return
      */
-    public static boolean delivered(long orderId, int expressId, String expressNum) {
+    public static boolean delivered(long orderId, long expressId, String expressNum) {
         Order order = OrderService.get(orderId);
         if(order == null) {
             Logger.error("order not found, id:%s", orderId);

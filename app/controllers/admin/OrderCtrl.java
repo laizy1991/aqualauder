@@ -26,10 +26,10 @@ public class OrderCtrl extends WebController {
         Pager<Order> pageData = new Pager<Order>(count.intValue(), page, pageSize);
         pageData.setList(orders);
         
-//        List<Express> expresses = Express.all().fetch();
+        List<Express> expresses = Express.all().fetch();
         List<GoodsColor> colors = GoodsColor.all().fetch();
         List<GoodsSize> sizes = GoodsSize.all().fetch();
-//        renderArgs.put("expresses", expresses);
+        renderArgs.put("expresses", expresses);
         renderArgs.put("colors", colors);
         renderArgs.put("sizes", sizes);
 

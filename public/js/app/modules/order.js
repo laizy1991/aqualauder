@@ -17,6 +17,7 @@ define(function(require) {
             this.view($('[role="view"]'));
             this.updateRefund($('[role="updateRefund"]'));
             this.viewRefund($('[role="viewRefund"]'));
+            this.dispatch($('[role="dispatch"]'));
         },
 
         /**
@@ -192,7 +193,7 @@ define(function(require) {
                     userId = $wrap.find('.userId').val(),
                     outTradeNo = $wrap.find('.outTradeNo').val(),
                     payType = $wrap.find('.payType').val(),
-                    expressId = $wrap.find('.expressId').val(),
+                    expressName = $wrap.find('.expressName').val(),
                     expressNum = $wrap.find('.expressNum').val(),
                     totalFee = $wrap.find('.totalFee').val(),
                     state = $wrap.find('.state').val(),
@@ -231,7 +232,7 @@ define(function(require) {
                         $("#userIdToView").text(userId);
                         $("#outTradeNoToView").text(outTradeNo);
                         $("#payTypeToView").text(payType=="0"?"微信支付":payType=="1"?"余额":"未知");
-                        //$("#expressIdToView_" + expressId).show();
+                        $("#expressNameToView").text(expressName);
                         $("#expressNumToView").text(expressNum);
                         totalFee = "¥" + totalFee/100;
                         $("#totalFeeToView").text(totalFee);
@@ -354,8 +355,59 @@ define(function(require) {
                         }
                     }).showModal();
             });
+        },
+
+        /**
+         * 修改
+         */
+        dispatch: function(obj) {
+            obj.click(function() {
+                var $this = $(this),
+                    $wrap = $this.closest('tr'),
+                    id = $wrap.find('.id').val(),
+                    outTradeNo = $wrap.find('.outTradeNo').val(),
+                    expressNum = $wrap.find('.expressNum').val(),
+                    forbidRefund = $wrap.find('.forbidRefund').val(),
+                    shippingAddress = $wrap.find('.shippingAddress').val(),
+                    state = $wrap.find('.state').val(),
+                    dispatchDialog = dialog({
+                        id: 'dispatchDialog',
+                        title: '发货',
+                        content: document.getElementById('dispatchDialogTmpl').innerHTML,
+                        button: [
+                            {
+                                value: '确定',
+                                callback: function () {
+                                    var dia = this,
+                                        $form = this.__popup.find('form');
+
+                                    ajax.post($form.attr('action'), $form.serialize(), function(result){
+                                        if(result.success){
+                                            dia.close();
+                                            dd.alert('修改信息成功！', function(){
+                                                window.location.reload(false);
+                                            });
+                                        }else{
+                                            dd.alert(result.error);
+                                        }
+                                    });
+                                    return false;
+                                },
+                                autofocus: true
+                            }
+                        ],
+                        cancelValue: '取消',
+                        cancel: function() {
+
+                        },
+                        onshow:function() {
+                            $("#idToDispatch").val(id);
+                            $("#outTradeNoToDispatch").text(outTradeNo);
+                            $("#expressNumToDispatch").val(expressNum);
+                        }
+                    }).showModal();
+            });
         }
-        
     }
 
     Initiator.init();
