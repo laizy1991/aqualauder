@@ -755,3 +755,48 @@ function showAll() {
 	});
 	$('#menu ul').hide();
 }
+
+
+
+
+function refund (type, id) {
+	console.log(type, id);
+	var msg = "";
+	var postUrl = "";
+	if(type == 1) {
+		msg = "您确认需要取消订单吗？";
+		postUrl = "/refundApply";
+	} else if(type == 2) {
+		msg = "您确认需要申请退款吗？";
+		postUrl = "/refundApply";
+	} else if(type == 3) {
+		msg = "您确认需要取消退款吗？";
+		postUrl = "/refundCancel";
+	} else {
+		return false;
+	}
+	if(!confirm(msg))
+	{
+		return false;
+	}
+	var params;
+	if(type == 3) {
+		params = {refundId : id};
+	} else {
+		params = {orderId : id};
+	}
+	$.ajax({
+		type : 'POST',
+		url : postUrl,
+		data : params,
+		success : function (response , status , xhr) {
+			if(response==true)
+			{
+				alert("操作成功");
+				location.reload();
+			} else {
+				alert("操作失败");
+			}
+		}
+	});
+}

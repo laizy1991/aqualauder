@@ -90,6 +90,7 @@ public class OrderService {
                 detail.setRefundState(RefundStatus.NOTREFUND.getCode());
             } else {
                 detail.setRefundState(refund.getRefundState());
+                detail.setRefundId(refund.getId());
             }
             List<OrderGoods> goods = OrderGoodsDao.getByOrder(order.getId());
             if(CollectionUtils.isEmpty(goods)) {
@@ -116,6 +117,7 @@ public class OrderService {
             detail.setRefundState(RefundStatus.NOTREFUND.getCode());
         } else {
             detail.setRefundState(refund.getRefundState());
+            detail.setRefundId(refund.getId());
         }
         List<OrderGoods> goods = OrderGoodsDao.getByOrder(order.getId());
         if(CollectionUtils.isNotEmpty(goods)) {

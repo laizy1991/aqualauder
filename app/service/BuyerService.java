@@ -154,10 +154,11 @@ public class BuyerService {
             Logger.error("order not found, id:%s", orderId);
             return false;
         }
-        
+        if(order.getState().intValue() == OrderStatus.INIT.getState()) {
+            return OrderService.setStatusAndUpdate(orderId, OrderStatus.CLOSE);
+        }
         if (order.getState().intValue() == OrderStatus.COMPLETE.getState()
                 || order.getState().intValue() == OrderStatus.CLOSE.getState()
-                || order.getState().intValue() == OrderStatus.INIT.getState()
                 || order.getForbidRefund().intValue() == 1
                 || order.getUserId().intValue() != userId) {
             Logger.error("can not refund.");

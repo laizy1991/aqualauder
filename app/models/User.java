@@ -28,6 +28,8 @@ public class User extends GenericModel{
 
     @Column(name="open_id")
     private String openId;
+    @Column(name="weixin")
+    private String weixin;
 
     @Column(name="reg_type")
     private int regType;
@@ -86,6 +88,14 @@ public class User extends GenericModel{
 
     public void setRegType(int regType) {
         this.regType = regType;
+    }
+
+    public String getWeixin() {
+        return weixin;
+    }
+
+    public void setWeixin(String weixin) {
+        this.weixin = weixin;
     }
 
     public String getNickname() {

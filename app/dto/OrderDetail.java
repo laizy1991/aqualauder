@@ -26,7 +26,8 @@ public class OrderDetail {
     private Integer state;
     private Integer forbidRefund;
     //-1=无退款，0=申请退款,2=退款中,3=退款成功,4=拒绝退款，5=取消退款',
-    private Integer refundState;
+    private Integer refundState = -1;
+    private long refundId = -1;
     private String orderMemo;
     private String shippingAddress;
     private String weixin;
@@ -79,6 +80,14 @@ public class OrderDetail {
         this.weixin = order.getWeixin();
     }
     
+    public long getRefundId() {
+        return refundId;
+    }
+
+    public void setRefundId(long refundId) {
+        this.refundId = refundId;
+    }
+
     public String getWeixin() {
 		return weixin;
 	}
