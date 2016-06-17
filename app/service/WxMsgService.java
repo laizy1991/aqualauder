@@ -23,7 +23,7 @@ import dto.OrderDetail.OrderGoodsInfo;
 import dto.WxMsgRspDto;
 
 public class WxMsgService {
-	private static String orderNotPayTplId = "EUzz6nAllMgLDQlw20KMpNApUeVahJRuHw993kKJ46o"; //订单未支付
+	private static String orderNotPayTplId = "b5c5mL51nYHwHoQpxkCpNfOOxXLQChsaGcXQzzfersI"; //订单未支付
 	private static String goodsBoughtTplId = "OBF7J8Nqo8E92lz25ZUfzvA77BtjVbru7nUTJRJ6hY8"; //购买成功
 	private static String goodsDeliveredTplId = "ZqEYpGZMjP6iNVpEYebApogq-ISHElqqZ6Osg3zCU-M"; //已发货
 	private static String refundMoneyTplId = "EUzz6nAllMgLDQlw20KMpNApUeVahJRuHw993kKJ46o"; //退款结果
@@ -53,7 +53,7 @@ public class WxMsgService {
 			return rsp;
 		}
 		//这里回调失败当作未支付状态，让用户与客户联系
-		if(order.getCallbackStatus() != WxCallbackStatus.CALLBACK_SUCC.getStatus()) {
+		if(null != order.getCallbackStatus() && order.getCallbackStatus() == WxCallbackStatus.CALLBACK_SUCC.getStatus()) {
 			rsp.setMsg("发送催付通知失败, 该订单已成功支付");
 			return rsp;
 		}
