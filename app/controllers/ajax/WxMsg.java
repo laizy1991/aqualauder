@@ -41,8 +41,8 @@ public class WxMsg extends AjaxController {
 	 * 发送退款通知
 	 * @param orderId
 	 */
-	public static void refundMoneyResultMsg(long orderId) {
-		WxMsgRspDto rsp = WxMsgService.refundMoneyResultMsg(orderId);
+	public static void refundMoneyResultMsg(long refundId) {
+		WxMsgRspDto rsp = WxMsgService.refundMoneyResultMsg(refundId);
 		if(rsp.isSuccess()) {
 			renderSuccessJson();
 		} else {
@@ -51,11 +51,11 @@ public class WxMsg extends AjaxController {
 	}
 	
 	/**
-	 * 发送提通知
+	 * 发送提现通知
 	 * @param orderId
 	 */
-	public static void withdrawMoneyResultMsg(long orderId) {
-		WxMsgRspDto rsp = WxMsgService.withdrawMoneyResultMsg(orderId);
+	public static void withdrawMoneyResultMsg(long cashInfoId) {
+		WxMsgRspDto rsp = WxMsgService.withdrawMoneyResultMsg(cashInfoId);
 		if(rsp.isSuccess()) {
 			renderSuccessJson();
 		} else {

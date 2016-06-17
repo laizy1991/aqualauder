@@ -263,4 +263,8 @@ public class DateUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         return sdf.format(date);
     }
+    
+    public static String getOnlyDateFormat(long time) {
+    	return new SimpleDateFormat(ONLY_DATE_FORMAT).format(new Date(time));
+    }
 }

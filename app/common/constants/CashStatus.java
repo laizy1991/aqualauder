@@ -27,4 +27,12 @@ public enum CashStatus {
         this.desc = desc;
     }
     
+    public static CashStatus resolveType(int code) {
+        for (CashStatus cs: CashStatus.values()) {
+            if (code == cs.getCode()) {
+                return cs;
+            }
+        }
+        return null;
+    }
 }
