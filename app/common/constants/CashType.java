@@ -32,4 +32,13 @@ public enum CashType {
         this.desc = desc;
     }
     
+    public static CashType resolveType(int code) {
+        for (CashType ct: CashType.values()) {
+            if (code == ct.getCode()) {
+                return ct;
+            }
+        }
+        return null;
+    }
+    
 }
