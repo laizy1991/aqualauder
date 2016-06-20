@@ -239,12 +239,18 @@ public class WxUserService {
 						superiorId = Integer.parseInt(param);
 					} else {
 						//永久二维码(用户openId)
-						User superiorUser = UserService.getByOpenId(param);
-						if(null == superiorUser) {
-							Logger.error("用户分享带来的下线通过openId获取到的用户时空, openId: %s", param);
-							superiorId = null;
+						int firstTimeDownLine = subscribeReqDto.getEventKey().indexOf("_");
+						if(-1 != firstTimeDownLine) {
+							String superiorOpenId = subscribeReqDto.getEventKey().substring(firstTimeDownLine+1);
+							User superiorUser = UserService.getByOpenId(superiorOpenId);
+							if(null == superiorUser) {
+								Logger.error("用户分享带来的下线通过openId获取到的用户时空, openId: %s", superiorOpenId);
+								superiorId = null;
+							} else {
+								superiorId = superiorUser.getUserId();
+							}
 						} else {
-							superiorId = superiorUser.getUserId();
+							Logger.error("处理微信下线关注切割永久二维码时无法解析下划线位置, eventKey: %s", subscribeReqDto.getEventKey());
 						}
 					}
 					if(null == superiorId) {
