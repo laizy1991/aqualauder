@@ -41,7 +41,6 @@ public class UserDao {
         if(user == null || user.getUserId() == 0) {
             return;
         }
-        
         user.save();
     }
 

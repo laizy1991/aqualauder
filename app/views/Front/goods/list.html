@@ -103,8 +103,13 @@
             <div id="menu" class="sort sort_on">
                 <a href="" style="overflow:hidden; height:40px; color:#fff">安淇兰黛</a>
                 <ul>
-                    <!--<li><a href="javascript:showProducts('9')">2016新品</a></li>-->
-                    <li><a href="javascript:showProducts('7')">新品</a></li>
+                    <!--<li><a href="javascript:showProducts('9')">2016新品0-新品 1-整体搭配 2-单品 3-鞋帽 4-饰品</a></li>-->
+                    <li><a href="/goods_list.html?type=0">新品</a></li>
+                    <li><a href="/goods_list.html?type=1">裙装</a></li>
+                    <li><a href="/goods_list.html?type=2">整体搭配</a></li>
+                    <li><a href="/goods_list.html?type=3">上装</a></li>
+                    <li><a href="/goods_list.html?type=4">下装</a></li>
+                    <li><a href="/goods_list.html?type=-1">全部</a></li>
                     <!--<li><a href="javascript:showProducts('8')">经典</a></li>-->
                     <!--<li><a href="javascript:showProducts('6')">礼服裙</a></li>						<li><a href="javascript:showAll()">所有商品</a></li>-->
                 </ul>
@@ -225,7 +230,7 @@
                     <ul class="clearfix" id="menu_id">
                         <!--商品-->
                         #{if goods == null || goods.size() == 0 }
-                            <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+                            <tr><td colspan="5" style="text-align:center;">这种衣服买完了，试试看其他类型的衣服</td></tr>
                         #{/if}
                         #{else}
                             #{list items:goods, as:'info'}

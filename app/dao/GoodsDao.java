@@ -4,10 +4,6 @@ import java.util.List;
 
 import models.Goods;
 
-import org.apache.commons.collections.CollectionUtils;
-
-import play.Logger;
-
 public class GoodsDao {
 
     public static boolean insert(Goods goods) {
@@ -37,9 +33,17 @@ public class GoodsDao {
     
     public static List<Goods> getBy(int type, int page, int size)  {
         if(page == -1 && size == -1) {
-            return Goods.find("goods_type = ? and state = 1", type).fetch();
+            if(type < 0) {
+                return Goods.find("state = 1").fetch();                
+            } else {
+                return Goods.find("goods_type = ? and state = 1", type).fetch();
+            }
         } else {
-            return Goods.find("goods_type = ? and state = 1", type).fetch(page, size);
+            if(type < 0) {
+                return Goods.find("state = 1").fetch(page, size);
+            } else {
+                return Goods.find("goods_type = ? and state = 1", type).fetch(page, size);
+            }
         }
     }
 }

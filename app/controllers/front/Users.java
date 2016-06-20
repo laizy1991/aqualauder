@@ -203,7 +203,7 @@ public class Users extends FrontController {
     }
 
 
-    public static void setUserInfo(String cardNo, String bankName, String realName) {
+    public static void setUserInfo(String cardNo, String bankName, String realName, String weixin) {
         String openId = session.get("openId");
         User user = null; 
         if(!StringUtils.isBlank(openId)) {
@@ -216,7 +216,7 @@ public class Users extends FrontController {
         if(wallet == null) {
             renderJSON("{\"msg\":\"更新用户信息失败\"}");
         }
-        
+        UserService.setWeixin(user.getUserId(), weixin);
         wallet.setBankName(bankName);
         wallet.setCardNo(cardNo);
         wallet.setRealName(realName);
