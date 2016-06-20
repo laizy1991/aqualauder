@@ -185,6 +185,7 @@ define(function(require) {
                     qrcodeUrl = $wrap.find('.qrcodeUrl').val(),
                     createTime = $wrap.find('.createTime').val(),
                     updateTime = $wrap.find('.updateTime').val(),
+                    weixin = $wrap.find('.weixin').val(),
                     viewDialog = dialog({
                     id: 'viewDialog',
                     title: '查看',
@@ -200,6 +201,7 @@ define(function(require) {
                         $("#typeToView").text(type=="0"?"个人":"未知");
                         $("#statusToView").text(statusList[status]);
                         $("#realNameToView").text(realName);
+                        $("#weixinToView").text(weixin);
                         $("#joinTimeToView").text(joinTime);
                         $("#linkToView").text(link);
                         $("#qrcodeUrlToView").text(qrcodeUrl);

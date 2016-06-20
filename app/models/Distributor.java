@@ -1,11 +1,10 @@
 package models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import play.db.jpa.GenericModel;
+
+import java.util.List;
 
 @Entity
 @Table(name="distributor")
@@ -55,6 +54,10 @@ public class Distributor extends GenericModel {
 
     @Column(name="update_time")
     private Long updateTime;
+
+    @OneToMany
+    @JoinColumn(name="user_id")
+    private List<User> userList;
 
     public Integer getUserId() {
         return userId;
