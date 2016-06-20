@@ -150,6 +150,7 @@ define(function(require) {
                     identifier = $wrap.find('.identifier').val(),
                     imgs = $wrap.find('.icons'),
                     title = $wrap.find('.title').val(),
+                    desc = $wrap.find('.desc').val(),
                     createTime = $wrap.find('.createTime').val(),
                     updateTime = $wrap.find('.updateTime').val(),
                     state = $wrap.find('.state').val(),
@@ -165,6 +166,7 @@ define(function(require) {
                     onshow:function() {
                         $("#identifierToView").text(identifier);
                         $("#titleToView").text(title);
+                        $("#descToView").text(desc);
                         $("#stateToView").text(state==1?"上架":state==0?"下架":"未知");
                         $("#createTimeToView").text(createTime);
                         $("#updateTimeToView").text(updateTime);
