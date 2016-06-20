@@ -396,3 +396,13 @@ CREATE TABLE `user_wallet_bill` (
   KEY `idx1` (`user_id`,`bill_month`,`bill_type`) USING BTREE,
   KEY `idx2` (`bill_month`,`bill_type`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户钱包清单';
+
+
+CREATE TABLE `album` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '唯一ID',
+  `path` varchar(200) NOT NULL COMMENT 'path',
+  `deleted` tinyint(4) DEFAULT '0' COMMENT '0-有效，1-已删除',
+  `create_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='相册';

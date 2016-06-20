@@ -1,0 +1,117 @@
+#{extends 'main.html' /}
+
+#{set 'moreStyles'}
+    <link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+    <link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+#{/set}
+ <style>
+     .btn-add-album{
+         position: absolute;
+         right: 10px;
+     }
+
+     .btn-add-album object{
+         position: absolute;
+         left: 0;
+         opacity: 0;
+     }
+
+     .picture {
+         display: inline-block;
+         width: 200px;
+         height: 200px;
+         margin: 20px;
+     }
+
+     .picture .background{
+         background: #dadada;
+         width: 200px;
+         height: 200px;
+         position: absolute;
+     }
+
+     .picture span{
+         position: relative;
+         width: 100%;
+         height: 20%;
+         display: none;
+     }
+
+     .picture:hover span{
+         position: relative;
+         width: 100%;
+         height: 20%;
+         display: block;
+         cursor: pointer;
+         background: url("/public/images/delete.png") no-repeat center;
+         background-size: 28px;
+         background-color: rgba(191, 191, 191, 0.55);
+     }
+
+     .picture img{
+         max-width: 100%;
+         max-height: 100%;
+         margin: auto;
+         left: 0;
+         right: 0;
+         top: 0;
+         bottom: 0;
+         position: absolute;
+     }
+ </style>
+<!-- 页头 begin -->
+<div class="main-header">
+    <div class="breadcrumb">
+        <span class="nolink">公共图片</span>
+    </div>
+    <div class="btn btn-default btn-add-album">添加<div id="fileSelectButton"></div></div>
+</div>
+<!-- 页头 end -->
+<table class="tb">
+    #{if pageData == null || pageData.list == null || pageData.list.size() == 0 }
+    <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+    #{/if}
+    #{else}
+    #{list items:pageData.list,as:'info'}
+    <tbody>
+    <tr class="user-item">
+        <div class="picture">
+            <input type="hidden" class="id" value="${info.id}">
+            <div class="background">
+                <img src="${info?.path}">
+            </div>
+            <span class="opt" role="delete"></span>
+        </div>
+        </td>
+    </tr>
+    </tbody>
+    #{/list}
+    #{/else}
+</table>
+
+#{include file="common/jsinclude.html" /}
+#{include file="common/page_new.html" /}
+
+#{set 'moreScripts'}
+<script id="deleteDialogTmpl" type="text/html">
+    <div class="dialog dialog-delete">
+        <form action="@{ajax.AlbumCtrl.delete}" id="delete">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToDelete" name="album.id" value="">
+                <label class="tips">确定删除？</label>
+            </div>
+        </form>
+    </div>
+</script>
+<script>
+    var verNum = new Date();
+    seajs.config({
+        base:"../",
+        // 加版本号
+        map: [
+            [ '.js', '.js?v='+verNum]
+        ]
+    });
+    seajs.use("@{'/public/js/app/modules/album.js'}");
+</script>
+#{/set}
