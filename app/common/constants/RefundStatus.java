@@ -11,11 +11,11 @@ public enum RefundStatus {
     APPLY(0, "申请退款"),
     ING(1, "退款中"),
     SUCCESS(2, "退款成功"),
-    REFUSE(3, "拒绝"),
-    CANCEL(4, "取消"),
+    REFUSE(3, "拒绝退款"),
+    CANCEL(4, "取消退款"),
     FAIL(5, "退款失败"),
-    NOTSURE(6, "退款状态未确定，需要商户原退款单号重新发起"),
-    CHANGE(7, "转入代发，退款到银行发现用户的卡作废或者冻结了，导致原路退款银行卡失败，资金回流到商户的现金帐号，需要商户人工干预，通过线下或者财付通转账的方式进行退款。"),
+    NOTSURE(6, "未知状态,联系客服"),//退款状态未确定，需要商户原退款单号重新发起
+    CHANGE(7, "转入代发"),//退款到银行发现用户的卡作废或者冻结了，导致原路退款银行卡失败，资金回流到商户的现金帐号，需要商户人工干预，通过线下或者财付通转账的方式进行退款
     NOTREFUND(-1, "无退款");
     
     private int code;
@@ -46,5 +46,14 @@ public enum RefundStatus {
         }
         
         return null;
+    }
+    
+    public static String getDesc(int code) {
+        RefundStatus status = resolveType(code);
+        if(status == null) {
+            return "";
+        }
+        
+        return status.getDesc();
     }
 }

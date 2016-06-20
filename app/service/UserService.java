@@ -35,4 +35,16 @@ public class UserService {
         user.setUpdateTime(System.currentTimeMillis());
         UserDao.update(user);
     }
+    
+    
+    public static void setWeixin(int userId, String weixin) {
+        User user = UserDao.get(userId);
+        if(user == null) {
+            return;
+        }
+        
+        user.setWeixin(weixin);
+        user.setUpdateTime(System.currentTimeMillis());
+        UserDao.update(user);
+    }
 }

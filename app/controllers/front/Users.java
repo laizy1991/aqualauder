@@ -11,6 +11,7 @@ import models.UserWallet;
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
+import service.BuyerService;
 import service.DistributorService;
 import service.OrderService;
 import service.QrShareService;
@@ -202,7 +203,7 @@ public class Users extends FrontController {
     }
 
 
-    public static void setUserInfo(String cardNo, String bankName, String realName) {
+    public static void setUserInfo(String cardNo, String bankName, String realName, String weixin) {
         String openId = session.get("openId");
         User user = null; 
         if(!StringUtils.isBlank(openId)) {
@@ -215,12 +216,43 @@ public class Users extends FrontController {
         if(wallet == null) {
             renderJSON("{\"msg\":\"更新用户信息失败\"}");
         }
-        
+        UserService.setWeixin(user.getUserId(), weixin);
         wallet.setBankName(bankName);
         wallet.setCardNo(cardNo);
         wallet.setRealName(realName);
         UserWalletDao.update(wallet);
         
         redirect("front.Users.userInfo");
+    }
+    
+    public static void refundApply(long orderId) {
+        String openId = session.get("openId");
+        boolean isSucc = false;
+        if(StringUtils.isBlank(openId)) {
+            renderJSON(isSucc);
+        }
+        User user = WxUserService.getUserInfo(openId);
+        if(null == user) {
+            Logger.error("获取用户信息失败, openId: %s", openId);
+            renderJSON(isSucc);
+        }
+        
+        isSucc = BuyerService.refundApply(user.getUserId(), orderId, "");
+        renderJSON(isSucc);
+    }
+    public static void refundCancel(long refundId) {
+        String openId = session.get("openId");
+        boolean isSucc = false;
+        if(StringUtils.isBlank(openId)) {
+            renderJSON(isSucc);
+        }
+        User user = WxUserService.getUserInfo(openId);
+        if(null == user) {
+            Logger.error("获取用户信息失败, openId: %s", openId);
+            renderJSON(isSucc);
+        }
+        
+        isSucc = BuyerService.refundCancel(user.getUserId(), refundId);
+        renderJSON(isSucc);
     }
 }

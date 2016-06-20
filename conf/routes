@@ -21,6 +21,8 @@ GET /link.html            front.Helps.link
 * /userinfo.html             front.Users.userInfo
 * /setUserInfo             front.Users.setUserInfo
 * /cash.html                front.Users.cash
+* /refundApply              front.Users.refundApply
+* /refundCancel              front.Users.refundCancel
 
 POST /createOrder           front.Orders.createOrder
 

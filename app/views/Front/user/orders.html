@@ -60,19 +60,52 @@
                                 未支付 　<a href="/front/Pay/wxPay?orderId=${info?.orderId}" style="color: blue;">去支付</a>
                             #{/if}
                             #{else}
+                            #{if info.state == 6}
+             订单关闭
+                            #{/if}
+                            #{else}
                             已支付
+                            #{/else}
+                            
                             #{/else}
                             </td></tr>
 							<tr><td style="border-bottom:0px">订单状态:
-							%{out.print(common.constants.OrderStatus.getDesc(info?.state))}%
+							 %{out.print(common.constants.OrderStatus.getDesc(info?.state))}%
                             </td></tr>
+                            #{if info.refundState == -1}
+                            #{/if}
+                            #{else}
+                            <tr><td style="border-bottom:0px">订单状态:
+                            %{out.print(common.constants.RefundStatus.getDesc(info?.refundState))}%
+                            </td></tr>
+                            #{/else}
                             #{list items:info.goodsInfo, as:'goodInfo'}
 							<tr><td style="border-bottom:0px">商品名称:${goodInfo.goodsName} X ${goodInfo.goodsNumber},颜色：${goodInfo.goodsColor},大小：${goodInfo.goodsSize}</td></tr>
 							#{/list}
 							<tr><td style="border-bottom:0px">微信号:${info.weixin}</em></td></tr>
 							<tr><td style="border-bottom:0px">快递公司:${info.expressName}</em></td></tr>
 							<tr><td style="border-bottom:0px">快递单号:${info.expressNum}</em></td></tr>
-							<tr><td>取消订单，请联系DDY客服：4000755867</td></tr><tr>
+							<tr><td>
+
+					                           #{if info.state != 5 && info.state != 6}
+					                           #{if info.state == 0}
+					                                <a href="javascript:refund(1,'${info?.orderId}');" style="color: blue;">取消订单</a>
+					                            #{/if}
+					                            #{else}
+					                               #{if info.refundState == -1 || info.refundState == 4 || info.refundState == 5}
+					                                   <a href="javascript:refund(2,'${info?.orderId}');" style="color: blue;">申请退款</a>
+				                                   #{/if}
+					                               #{else}
+					                                   #{if info.refundState == 0}
+					                                       <a href="javascript:refund(3,'${info?.refundId}');" style="color: blue;">取消退款</a>
+					                                   #{/if}
+					                                   #{else}
+   <font color="blue">退款处理中，如有需要请联系客服</font>
+					                                   #{/else}
+                                                    #{/else}
+					                            #{/else}
+					                            #{/if}
+                            </td></tr><tr>
 						</table>
 					</li>
 				#{/list}

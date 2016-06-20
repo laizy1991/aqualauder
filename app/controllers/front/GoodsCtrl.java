@@ -36,8 +36,13 @@ public class GoodsCtrl extends FrontController {
 	 * 0-新品 1-整体搭配 2-单品 3-鞋帽 4-饰品
 	 */
     @GuestAuthorization
-    public static void list() {
-		List<Goods> goods = GoodsService.list(-1, -1, 0);
+    public static void list(Integer type) {
+        if(type == null || type < 0) {
+            type = -1;
+        } else {
+            type ++;
+        }
+		List<Goods> goods = GoodsService.list(-1, -1, type);
 		render("/Front/goods/list.html", goods);
     }
 
