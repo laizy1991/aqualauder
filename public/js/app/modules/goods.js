@@ -12,7 +12,6 @@ define(function(require) {
         init: function() {
             this.create($('[role="submitAdd"]'));
             this.delete($('[role="delete"]'));
-            this.delete($('[role="delete"]'));
             this.update($('#update'), $('[role="submitUpdate"]'));
             this.view($('[role="view"]'));
             this.edictStock($('[role="addStock"]'), $('[role="deleteStock"]'));
@@ -148,6 +147,7 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
+                    identifier = $wrap.find('.identifier').val(),
                     imgs = $wrap.find('.icons'),
                     title = $wrap.find('.title').val(),
                     createTime = $wrap.find('.createTime').val(),
@@ -163,7 +163,7 @@ define(function(require) {
 
                     },
                     onshow:function() {
-                        $("#idToView").text(id);
+                        $("#identifierToView").text(identifier);
                         $("#titleToView").text(title);
                         $("#stateToView").text(state==1?"上架":state==0?"下架":"未知");
                         $("#createTimeToView").text(createTime);

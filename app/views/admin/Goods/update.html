@@ -58,6 +58,10 @@
         box-shadow: 0px 0px 3px #9d9d9d;
     }
 
+    #stockList input {
+        width: 140px;
+    }
+
     .ui-dialog-body {
         padding: 10px;
     }
@@ -81,6 +85,13 @@
                             <label class="label"><span class="asterisk">*</span>商品名称</label>
                             <div class="col">
                                 <input type="text" name="goods.title" value="${goods.title}">
+                                <span class="msg error-text">必填项！</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="label"><span class="asterisk">*</span>款号</label>
+                            <div class="col">
+                                <input type="text" name="goods.identifier" value="${goods.identifier}">
                                 <span class="msg error-text">必填项！</span>
                             </div>
                         </div>

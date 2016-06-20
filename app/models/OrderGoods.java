@@ -33,9 +33,12 @@ public class OrderGoods extends Model {
 
     @Column(name="goods_color")
     private String goodsColor;
-    
+
     @Column(name="goods_desc")
     private String goodsDesc;
+
+    @Column(name="goods_identifier")
+    private String goodsIdentifier;
 
     @Column(name="goods_origin_price")
     private Integer goodsOriginPrice;
@@ -142,4 +145,11 @@ public class OrderGoods extends Model {
         this.createTime = createTime;
     }
 
+    public String getGoodsIdentifier() {
+        return goodsIdentifier;
+    }
+
+    public void setGoodsIdentifier(String goodsIdentifier) {
+        this.goodsIdentifier = goodsIdentifier;
+    }
 }

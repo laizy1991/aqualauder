@@ -79,6 +79,7 @@
                 <input type="hidden" class="goods_goodsIcon" value="${info?.orderGoods.get(0).goodsIcon}">
                 <input type="hidden" class="goods_goodsSize" value="${info?.orderGoods.get(0).goodsSize}">
                 <input type="hidden" class="goods_goodsColor" value="${info?.orderGoods.get(0).goodsColor}">
+                <input type="hidden" class="goods_goodsIdentifier" value="${info?.orderGoods.get(0).goodsIdentifier}">
                 <input type="hidden" class="goods_goodsOriginPrice" value="${info?.orderGoods.get(0).goodsOriginPrice}">
                 <input type="hidden" class="goods_goodsDiscountPrice" value="${info?.orderGoods.get(0).goodsDiscountPrice}">
                 <input type="hidden" class="goods_goodsNumber" value="${info?.orderGoods.get(0).goodsNumber}">
@@ -113,7 +114,7 @@
                 <td>${info?.weixin}</td>
                 <td>
                     #{if info?.orderGoods != null && info?.orderGoods.size() > 0}
-                    <span>${info?.orderGoods.get(0).goodsTitle}(${info?.orderGoods.get(0).id})</span>
+                    <span>${info?.orderGoods.get(0).goodsTitle}(${info?.orderGoods.get(0).goodsIdentifier})</span>
                     #{/if}
                 </td>
                 <td>
@@ -347,7 +348,7 @@
             <div class="form-group">
                 <label class="label">商品款号:</label>
                 <div class="col">
-                    <label class="info" id="goodsIdToView"></label>
+                    <label class="info" id="goodsIdentifierToView"></label>
                 </div>
             </div>
             <div class="form-group">

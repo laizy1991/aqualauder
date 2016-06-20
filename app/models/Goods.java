@@ -10,6 +10,9 @@ import java.util.List;
 @Table(name="goods")
 public class Goods extends Model {
 
+    @Column(name="identifier")
+    private String identifier;
+
     @Column(name="title")
     private String title;
 
@@ -120,5 +123,13 @@ public class Goods extends Model {
 
     public void setGoodsStocks(List<GoodsStock> goodsStocks) {
         this.goodsStocks = goodsStocks;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }

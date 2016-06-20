@@ -70,6 +70,11 @@
         display: none;
     }
 
+    #stockList input {
+        width: 140px;
+    }
+
+
     .a-button {
         background: #208bfe;
         padding: 10px;
@@ -97,6 +102,14 @@
                             <label class="label"><span class="asterisk">*</span>商品名称</label>
                             <div class="col">
                                 <input type="text" name="goods.title" value="">
+                                <span class="msg error-text">必填项！</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="label"><span class="asterisk">*</span>商品款号</label>
+                            <div class="col">
+                                <input type="text" name="goods.identifier" value="">
                                 <span class="msg error-text">必填项！</span>
                             </div>
                         </div>

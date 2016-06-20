@@ -210,7 +210,7 @@ define(function(require) {
                     createTime = $wrap.find('.createTime').val(),
                     updateTime = $wrap.find('.updateTime').val(),
                     goodsTitleToView = $wrap.find('.goods_goodsTitle').val(),
-                    goodsIdToView = $wrap.find('.goods_id').val(),
+                    goodsIdentifierToView = $wrap.find('.goods_goodsIdentifier').val(),
                     goodsColorToView = $wrap.find('.goods_goodsColor').val(),
                     goodsSizeToView = $wrap.find('.goods_goodsSize').val(),
                     goodsNumberToView = $wrap.find('.goods_goodsNumber').val(),
@@ -251,7 +251,7 @@ define(function(require) {
                         $("#createTimeToView").text(createTime);
                         $("#updateTimeToView").text(updateTime);
                         $("#goodsTitleToView").text(goodsTitleToView);
-                        $("#goodsIdToView").text(goodsIdToView);
+                        $("#goodsIdentifierToView").text(goodsIdentifierToView);
                         $("#goodsColorToView").text(goodsColorToView);
                         $("#goodsSizeToView").text(goodsSizeToView);
                         $("#goodsNumberToView").text(goodsNumberToView);
