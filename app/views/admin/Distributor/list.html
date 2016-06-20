@@ -23,7 +23,7 @@
             微信号
         </th>
         <th class="order" role="contributeAsc">
-            修改时间
+            分销商状态:
         </th>
         <th>操作</th>
     </tr>
@@ -54,10 +54,21 @@
                         <span>${info?.userList.get(0).weixin}</span>
                     #{/if}
 		        </td>
-		        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
+		        <td>
+                    #{if info?.status == 0}
+                    <span style="color:#191aad;">未认证</span>
+                    #{/if}
+                    #{if info?.status == 1}
+                    <span style="color: #00bb9c">认证通过</span>
+                    #{/if}
+                    #{if info?.status == -1}
+                    <span style="color: red">认证不通过</span>
+                    #{/if}
+                </td>
 		        <td>
 		            <div class="opts">
 		                <span class="opt" role="view"><a href="javascript:;">查看基本信息</a></span>|
+		                <span class="opt" role="update"><a href="javascript:;">修改</a></span>|
 		                <span class="opt" role="viewDetail"><a href="javascript:;">推广详情</a></span>
 		            </div>
 		        </td>
@@ -112,7 +123,7 @@
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group hide">
                 <label class="label"><span class="asterisk">*</span>类型</label>
                 <div class="col">
                     <!--<input type="text"id="typeToUpdate" name="distributor.type" value="">-->
@@ -134,14 +145,14 @@
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group hide">
                 <label class="label"><span class="asterisk">*</span>推广链接</label>
                 <div class="col">
                     <input type="text"id="linkToUpdate" name="distributor.link" value="">
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group hide">
                 <label class="label"><span class="asterisk">*</span>二维码</label>
                 <div class="col">
                     <input type="text"id="qrcodeUrlToUpdate" name="distributor.qrcodeUrl" value="">
