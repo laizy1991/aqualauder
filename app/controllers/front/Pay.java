@@ -5,13 +5,24 @@ import java.util.Date;
 
 import javax.persistence.Query;
 
-import models.Order;
-import models.RefundOrder;
-
 import org.apache.commons.lang.StringUtils;
 
+import com.google.gson.Gson;
+
+import common.constants.GlobalConstants;
+import common.constants.MessageCode;
+import common.constants.OrderStatus;
+import common.constants.Separator;
+import common.constants.wx.PayStatus;
+import common.constants.wx.WxCallbackStatus;
+import common.core.FrontController;
+import dto.WxMsgRspDto;
+import exception.BusinessException;
+import models.Order;
+import models.RefundOrder;
 import play.Logger;
 import play.db.jpa.Model;
+import service.BuyerService;
 import service.OrderService;
 import service.PayService;
 import service.RefundOrderService;
@@ -24,18 +35,6 @@ import service.wx.dto.order.UnifiedOrderCallbackDto;
 import service.wx.dto.refund.SendRefundReqDto;
 import service.wx.dto.refund.SendRefundRspDto;
 import utils.DateUtil;
-
-import com.google.gson.Gson;
-import common.constants.GlobalConstants;
-import common.constants.MessageCode;
-import common.constants.OrderStatus;
-import common.constants.Separator;
-import common.constants.wx.PayStatus;
-import common.constants.wx.WxCallbackStatus;
-import common.core.FrontController;
-
-import dto.WxMsgRspDto;
-import exception.BusinessException;
 
 
 public class Pay extends FrontController {
@@ -183,6 +182,8 @@ public class Pay extends FrontController {
     		query.setParameter(6, dbHis);
     		query.setParameter(7, nowTime);
     		query.setParameter(8, order.getId());
+    		
+    		BuyerService.paySuccess(order.getId());
             if(query.executeUpdate() > 0) {
             	Logger.info("微信回调成功，更新回调结果成功，orderId：%d", order.getId());
             	//发送购买成功通知
