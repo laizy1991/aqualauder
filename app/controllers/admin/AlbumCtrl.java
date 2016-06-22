@@ -21,6 +21,6 @@ public class AlbumCtrl extends WebController {
         Pager<Album> pageData = new Pager<Album>(count.intValue(), page, pageSize);
         pageData.setList(album);
         
-        render("/admin/album/list.html", pageData);
+        render("/admin/Album/list.html", pageData);
     }
 }
