@@ -31,6 +31,7 @@
             退款信息
         </th>
         <th>操作</th>
+        <th>通知</th>
     </tr>
     </thead>
     #{if pageData == null || pageData.list == null || pageData.list.size() == 0 }
@@ -142,6 +143,19 @@
                         #{if info?.state == 2}
                         |<span class="opt" role="dispatch"><a href="javascript:;">发货</a></span>
                         #{/if}
+		            </div>
+		        </td>
+		        <td>
+		            <div class="opts">
+		            	 #{if info?.state == 0}
+                        	<span class="opt" role="needToPay"><a href="javascript:;">催付</a></span>
+	                    #{/if}
+	                    #{elseif info?.state == 3}
+                        	<span class="opt" role="sendDelivered"><a href="javascript:;">发货</a></span>
+	                    #{/elseif}
+	                    #{else}
+	                    	&nbsp;
+	                    #{/else}
 		            </div>
 		        </td>
 		    </tr>
