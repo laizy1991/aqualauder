@@ -7,6 +7,7 @@ import java.util.Map;
 
 import models.Goods;
 import models.GoodsColor;
+import models.GoodsIcon;
 import models.GoodsSize;
 import models.GoodsStock;
 import models.ShippingAddress;
@@ -43,7 +44,16 @@ public class GoodsCtrl extends FrontController {
             type ++;
         }
 		List<Goods> goods = GoodsService.list(-1, -1, type);
-		render("/Front/goods/list.html", goods);
+		Goods activity = GoodsService.get(1l);
+		List<String> imgs = new ArrayList<String>();
+		String desc = "";
+		if(activity != null) {
+		    for(GoodsIcon gi : activity.getGoodsIcons()) {
+		        imgs.add(gi.getIconUrl());
+		    }
+		    desc = activity.getGoodsDesc();
+		}
+		render("/Front/goods/list.html", imgs, goods, desc);
     }
 
 	@GuestAuthorization
