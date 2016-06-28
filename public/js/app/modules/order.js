@@ -418,21 +418,20 @@ define(function(require) {
         				$wrap = $this.closest('tr'),
         				orderId = $wrap.find('.id').val();
         		$.ajax({
-                    type: "POST",
-                    url: "/ajax/WxMsg.sendNotPayResultMsg",
-                    data: {"orderId":orderId},
-                    dataType: "json",
-                    success: function(result){
-                    	if(result.success){
-                            dia.close();
-                            dd.alert('发送催付通知成功！', function(){
-                                window.location.reload(false);
-                            });
-                        }else{
-                            dd.alert(result.error);
-                        }
-                    }
-                });
+        			type: "POST",
+        			url: "/ajax/WxMsg.sendNotPayResultMsg",
+        			data: {"orderId":orderId},
+        			dataType: "json",
+        			success: function(result){
+        				if(result.success){
+        					dd.alert('发送催付通知成功！', function(){
+        						window.location.reload(false);
+        					});
+        				}else{
+        					dd.alert(result.error);
+        				}
+        			}
+        		});
         	});
         },
         sendDelivered: function(obj) {
@@ -447,7 +446,6 @@ define(function(require) {
                     dataType: "json",
                     success: function(result){
                     	if(result.success){
-                            dia.close();
                             dd.alert('发送发货通知成功！', function(){
                                 window.location.reload(false);
                             });
