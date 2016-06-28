@@ -33,7 +33,7 @@ public class GoodsCtrl extends FrontController {
 	
 	/**
 	 * 微信一级菜单 女神新衣
-	 * 0-新品 1-整体搭配 2-单品 3-鞋帽 4-饰品
+	 * 0-新品 1-裙装 2-整体搭配 3-上装 4-下装 -1-全部
 	 */
     @GuestAuthorization
     public static void list(Integer type) {

@@ -109,6 +109,18 @@
                                 <span class="msg error-text">必填项！</span>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="label"><span class="asterisk">*</span>分类</label>
+                            <div class="col">
+                                <select id="goodsType" name="goods.goodsType">
+                                    <option value="0">新品</option>
+                                    <option value="1">裙装</option>
+                                    <option value="2">整体搭配</option>
+                                    <option value="3">上装</option>
+                                    <option value="4">下装</option>
+                                </select>
+                            </div>
+                        </div>
                         <!--<div class="form-group">-->
                             <!--<label class="label"><span class="asterisk">*</span>温馨提示</label>-->
                             <!--<div class="col">-->
@@ -251,6 +263,9 @@
     $(document).ready(function(){
         var state="${goods.state}";
         $("#goodState").val(state);
+
+        var goodsType="${goods.goodsType}";
+        $("#goodsType").val(goodsType);
 
         $(document).delegate(".deleteImg" ,"click", function(){
             var data = {};

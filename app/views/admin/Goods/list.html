@@ -28,6 +28,9 @@
             价格
         </th>
         <th class="order" role="contributeAsc">
+            类型
+        </th>
+        <th class="order" role="contributeAsc">
             状态
         </th>
         <th>操作</th>
@@ -49,6 +52,7 @@
 		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
 		        <input type="hidden" class="state" value="${info?.state}">
 		        <input type="hidden" class="price" value="${info?.price}">
+		        <input type="hidden" class="goodsType" value="${info?.goodsType}">
 		        #{if info.goodsIcons.size() > 0 && info.goodsIcons.get(0) != null}
 		        #{list items:info.goodsIcons, as:'icon'}
 		            <input type="hidden" class="icons" value="${icon.iconUrl}">
@@ -59,6 +63,23 @@
 		        <td>
                     ¥${info?.price/100}
 		        </td>
+                <td>
+                    #{if info?.goodsType == 0}
+                    <span>新品</span>
+                    #{/if}
+                    #{if info?.goodsType == 1}
+                    <span>裙装</span>
+                    #{/if}
+                    #{if info?.goodsType == 2}
+                    <span>整体搭配</span>
+                    #{/if}
+                    #{if info?.goodsType == 3}
+                    <span>上装</span>
+                    #{/if}
+                    #{if info?.goodsType == 4}
+                    <span>下装</span>
+                    #{/if}
+                </td>
 		        <td>
                     #{if info?.state == 0}
                     <span style="color: #9d9d9d;">下架</span>
@@ -103,6 +124,12 @@
                 <label class="label">描述:</label>
                 <div class="col">
                     <label class="info" id="descToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">分类:</label>
+                <div class="col">
+                    <label class="info" id="goodsTypeToView"></label>
                 </div>
             </div>
             <div class="form-group">

@@ -19,7 +19,6 @@ import java.util.UUID;
 public class GoodsCtrl extends AjaxController {
 
     public static void add(Goods goods, List<GoodsStock> goodsStock, List<GoodsIcon> goodsIcon) throws BusinessException {
-        goods.setGoodsType(0);
         GoodsService.add(goods, goodsStock, goodsIcon);
         renderSuccessJson();
     }

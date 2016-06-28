@@ -151,6 +151,7 @@ define(function(require) {
                     imgs = $wrap.find('.icons'),
                     title = $wrap.find('.title').val(),
                     desc = $wrap.find('.desc').val(),
+                    goodsType = $wrap.find(".goodsType").val(),
                     createTime = $wrap.find('.createTime').val(),
                     updateTime = $wrap.find('.updateTime').val(),
                     state = $wrap.find('.state').val(),
@@ -164,10 +165,12 @@ define(function(require) {
 
                     },
                     onshow:function() {
+                        var goodsTypeList={0:"新品",1:"裙装",2:"整体搭配",3:"上装",4:"下装",};
                         $("#identifierToView").text(identifier);
                         $("#titleToView").text(title);
                         $("#descToView").text(desc);
                         $("#stateToView").text(state==1?"上架":state==0?"下架":"未知");
+                        $("#goodsTypeToView").text(goodsTypeList[goodsType]);
                         $("#createTimeToView").text(createTime);
                         $("#updateTimeToView").text(updateTime);
                         imgs.each(function(index) {
