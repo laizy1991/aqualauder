@@ -46,11 +46,11 @@ public class WxTplMsgServcie {
 		
 		JSONObject respJson = JSONObject.fromObject(httpResp.getContent());
 		if(respJson.optString("errmsg").equalsIgnoreCase("ok") && respJson.optInt("errcode")==0) {
-			Logger.info("发送模板消息的成功, 内容为: %s", json.toString());
+			Logger.info("发送模板消息成功, 内容为: %s", json.toString());
 			rsp.setSuccess(true);
 			rsp.setMsg("");
 		} else {
-			Logger.error("发送模板消息的成功, 出错内容为: %s, 消息内容为: %s", 
+			Logger.error("发送模板消息失败, 出错内容为: %s, 消息内容为: %s", 
 					respJson.optString("errmsg"), json.toString());
 			rsp.setMsg(respJson.optString("errmsg"));
 		}

@@ -7,6 +7,8 @@ import models.User;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
+import play.cache.Cache;
+
 public class UserDao {
 
     public static boolean insert(User user) {
@@ -41,6 +43,8 @@ public class UserDao {
         if(user == null || user.getUserId() == 0) {
             return;
         }
+        //更新缓存
+        Cache.set(user.getOpenId(), user, "12h");
         user.save();
     }
 

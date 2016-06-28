@@ -18,6 +18,8 @@ define(function(require) {
             this.updateRefund($('[role="updateRefund"]'));
             this.viewRefund($('[role="viewRefund"]'));
             this.dispatch($('[role="dispatch"]'));
+            this.needToPay($('[role="needToPay"]'));
+            this.sendDelivered($('[role="sendDelivered"]'));
         },
 
         /**
@@ -409,6 +411,50 @@ define(function(require) {
                         }
                     }).showModal();
             });
+        },
+        needToPay: function(obj) {
+        	obj.click(function() {
+        		var $this = $(this),
+        				$wrap = $this.closest('tr'),
+        				orderId = $wrap.find('.id').val();
+        		$.ajax({
+        			type: "POST",
+        			url: "/ajax/WxMsg.sendNotPayResultMsg",
+        			data: {"orderId":orderId},
+        			dataType: "json",
+        			success: function(result){
+        				if(result.success){
+        					dd.alert('发送催付通知成功！', function(){
+        						window.location.reload(false);
+        					});
+        				}else{
+        					dd.alert(result.error);
+        				}
+        			}
+        		});
+        	});
+        },
+        sendDelivered: function(obj) {
+        	obj.click(function() {
+        		var $this = $(this),
+        				$wrap = $this.closest('tr'),
+        				orderId = $wrap.find('.id').val();
+        		$.ajax({
+                    type: "POST",
+                    url: "/ajax/WxMsg.sendDeliveredResultMsg",
+                    data: {"orderId":orderId},
+                    dataType: "json",
+                    success: function(result){
+                    	if(result.success){
+                            dd.alert('发送发货通知成功！', function(){
+                                window.location.reload(false);
+                            });
+                        }else{
+                            dd.alert(result.error);
+                        }
+                    }
+                });
+        	});
         }
     }
 

@@ -124,7 +124,7 @@
             <strong>公告</strong>
         </div>
         <div class="content">
-            <div align="">欢迎关注SOIREE设计师安琪兰黛集合平台，一个只卖安琪兰黛的互联网品牌。关于发货时间及退换货说明：SOIREE所售安琪兰黛实行预售制，下订单后7-10天发货（礼服裙10-15天发货），收货后3天内无条件退换货，运费由SOIREE承担，做一个有态度的品牌！客服电话4008907345(9:00-18:00)。更多介绍可点击“我的助手”--“代言人指南”查看。</div>
+            <div align="">${desc}</div>
         </div>
     </div>
 
@@ -133,7 +133,15 @@
     <!-- Swiper -->
     <div class="swiper-container" style="width:100%;">
         <div class="swiper-wrapper" style='height:251px;'>
-            <div class="swiper-slide"><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODEyNTQ1Mw==&mid=517038444&idx=1&sn=36c4c89b64e4cdc295a0242c9b37b8cb&scene=0&previewkey=%2F3WEVIpHQl6Z%2FoRgUO8KK8NS9bJajjJKzz%2F0By7ITJA%3D#wechat_redirect "><img style="width:100%;" src='http://oss-cn-hangzhou.aliyuncs.com/winbz/Public/Uploads/57319bb2216d6.jpg'></a></div><div class="swiper-slide"><a href="http://mp.weixin.qq.com/s?__biz=MzA4ODEyNTQ1Mw==&mid=209219890&idx=6&sn=cf6e8a6d17519fd42eb31d5d43b03b4b&scene=18#wechat_redirect"><img style="width:100%;" src='http://oss-cn-hangzhou.aliyuncs.com/winbz/Public/Uploads/57319bc26b5f7.jpg'></a></div>			</div>
+            #{list items:imgs, as:"url"}
+        
+            <div class="swiper-slide">
+            <a href="#">
+            <img style="width:100%;" src='/public/pictures/goods/${url}'></a></div>
+            
+            #{/list}
+            
+            </div>
         <div class="swiper-pagination"></div>
     </div>
 
@@ -230,7 +238,7 @@
                     <ul class="clearfix" id="menu_id">
                         <!--商品-->
                         #{if goods == null || goods.size() == 0 }
-                            <tr><td colspan="5" style="text-align:center;">这种衣服买完了，试试看其他类型的衣服</td></tr>
+                            <tr><td colspan="5" style="text-align:center;">这种衣服卖完了，试试看其他类型的衣服</td></tr>
                         #{/if}
                         #{else}
                             #{list items:goods, as:'info'}

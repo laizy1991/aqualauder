@@ -34,15 +34,15 @@ public class GoodsDao {
     public static List<Goods> getBy(int type, int page, int size)  {
         if(page == -1 && size == -1) {
             if(type < 0) {
-                return Goods.find("state = 1").fetch();                
+                return Goods.find("state = 1 and id != 1 order by id desc").fetch();                
             } else {
-                return Goods.find("goods_type = ? and state = 1", type).fetch();
+                return Goods.find("goods_type = ? and state = 1 and id != 1 order by id desc", type).fetch();
             }
         } else {
             if(type < 0) {
-                return Goods.find("state = 1").fetch(page, size);
+                return Goods.find("state = 1 and id != 1 order by id desc").fetch(page, size);
             } else {
-                return Goods.find("goods_type = ? and state = 1", type).fetch(page, size);
+                return Goods.find("goods_type = ? and state = 1 and id != 1 order by id desc", type).fetch(page, size);
             }
         }
     }
