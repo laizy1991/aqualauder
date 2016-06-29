@@ -49,6 +49,9 @@ public class Order extends GenericModel {
 
     @Column(name="weixin")
     private String weixin;
+
+    @Column(name="identifier")
+    private String identifier;
     
     @Column(name="shipping_address")
     private String shippingAddress;
@@ -348,4 +351,12 @@ public class Order extends GenericModel {
 	public void setCallbackStatus(Integer callbackStatus) {
 		this.callbackStatus = callbackStatus;
 	}
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
 }

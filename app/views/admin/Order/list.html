@@ -10,11 +10,27 @@
         width:300px;
         height: auto;
     }
+
+
 </style>
 <!-- 页头 begin -->
 <div class="main-header">
     <div class="breadcrumb">
         <span class="nolink">订单列表</span>
+    </div>
+    <div class="search-box search-combobox">
+        <form action="@{admin.OrderCtrl.list}" id="list">
+            <input name="key" class="search-combobox-input" type="text" placeholder="请输入关键字">
+            <select name="state">
+                <option value="-1">全部</option>
+                <option value="0">申请退款</option>
+                <option value="2">退款中</option>
+                <option value="3">退款成功</option>
+                <option value="4">拒绝退款</option>
+                <option value="5">取消退款</option>
+            </select>
+            <button class="search-combobox-button" type="submit" title="搜索"><div class="icon-search"></div></button>
+        </form>
     </div>
 </div>
 <!-- 页头 end -->
@@ -22,14 +38,25 @@
     <thead>
     <tr  class="text-center">
         <!--<th>ID</th>-->
-        <th>订单编号</th>
-        <th>状态</th>
-        <th class="order" role="contributeAsc">微信</th>
-        <th class="order" role="contributeAsc">商品信息</th>
-        <th class="order" role="contributeAsc">购物信息</th>
-        <th class="order" role="contributeAsc">
-            退款信息
+        <th class="order">订单编号</th>
+        <th class="filter">
+            <span>状态</span>
+            <ul class="option">
+                <li value="-1">全部</li>
+                <li value="0">创建订单(待支付)</li>
+                <li value="1">完成支付</li>
+                <li value="2">待发货</li>
+                <li value="3">完成发货</li>
+                <li value="4">确认收货</li>
+                <li value="5">交易成功(不可退货)</li>
+                <li value="6">交易关闭</li>
+            </ul>
         </th>
+        <th class="order">微信</th>
+        <th class="order">款号</th>
+        <th class="order">商品名称</th>
+        <th class="order">购物信息</th>
+        <th>退款信息</th>
         <th>操作</th>
         <th>通知</th>
     </tr>
@@ -56,6 +83,7 @@
 		        <input type="hidden" class="shippingAddress" value="${info.shippingAddress}">
 		        <input type="hidden" class="stateHistory" value="${info.stateHistory}">
 		        <input type="hidden" class="weixin" value="${info.weixin}">
+		        <input type="hidden" class="identifier" value="${info.identifier}">
 		        <input type="hidden" class="payTime" value="%{out.print(utils.DateUtil.getDateString(info?.payTime))}%">
 		        <input type="hidden" class="deliverTime" value="%{out.print(utils.DateUtil.getDateString(info?.deliverTime))}%">
 		        <input type="hidden" class="recevTime" value="%{out.print(utils.DateUtil.getDateString(info?.recevTime))}%">
@@ -113,9 +141,10 @@
                     #{/if}
                 </td>
                 <td>${info?.weixin}</td>
+                <td>${info?.identifier}</td>
                 <td>
                     #{if info?.orderGoods != null && info?.orderGoods.size() > 0}
-                    <span>${info?.orderGoods.get(0).goodsTitle}(${info?.orderGoods.get(0).goodsIdentifier})</span>
+                    <span>${info?.orderGoods.get(0).goodsTitle}</span>
                     #{/if}
                 </td>
                 <td>

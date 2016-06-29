@@ -38,9 +38,39 @@
 .tb thead th {
     background-color:#F8F8F8
 }
-.tb .order {
+.tb .order,.tb .filter {
     cursor:pointer
 }
+
+.tb .filter .option{
+    position: absolute;
+    list-style-type: none;
+    padding: 0px 0px;
+    margin: 10px 0px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: none;
+}
+
+.tb .filter .option li {
+    padding: 0px 10px;
+    line-height: 28px;
+}
+
+.tb .filter .option li:hover {
+    background-color: #eee;
+}
+
+.tb .filter .option li:active {
+    background-color: #aaa;
+    color: #fff;
+}
+
+.tb .filter:hover .option{
+    display: block;
+}
+
 .tb .order .icon-order {
     position:relative;
     top:-1px;
@@ -250,8 +280,12 @@
     max-height:380px;
     overflow-y: scroll;
 }
+
+.search-box {
+    float: right;
+}
 .search-combobox {
-    margin:40px auto
+    margin:0px auto
 }
 .game-wrap {
     *position:relative;

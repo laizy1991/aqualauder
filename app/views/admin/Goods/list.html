@@ -10,28 +10,61 @@
         width:300px;
         height: auto;
     }
+
+    .btn-add-goods {
+        height: 34px !important;
+        line-height: 34px !important;
+    }
+
+    .search-box {
+        margin-right: 10px;
+    }
 </style>
 <!-- 页头 begin -->
 <div class="main-header">
     <div class="breadcrumb">
         <span class="nolink">商品列表</span>
     </div>
-    <a class="btn btn-default" href="@{admin.GoodsCtrl.add}">添加</a>
+    <a class="btn btn-default btn-add-goods" href="@{admin.GoodsCtrl.add}">添加</a>
+
+    <div class="search-box search-combobox">
+        <form action="@{admin.OrderCtrl.list}" id="list">
+            <input name="key" class="search-combobox-input" type="text" placeholder="请输入关键字">
+            <select name="state">
+                <option value="-1">全部</option>
+                <option value="0">申请退款</option>
+                <option value="2">退款中</option>
+                <option value="3">退款成功</option>
+                <option value="4">拒绝退款</option>
+                <option value="5">取消退款</option>
+            </select>
+            <button class="search-combobox-button" type="submit" title="搜索"><div class="icon-search"></div></button>
+        </form>
+    </div>
 </div>
 <!-- 页头 end -->
 <table class="tb">
     <thead>
     <tr  class="text-center">
-        <th>款号</th>
-        <th>名称</th>
-        <th class="order" role="contributeAsc">
-            价格
+        <th class="order">款号</th>
+        <th class="order">名称</th>
+        <th class="order">价格</th>
+        <th class="filter">
+            <span>类型</span>
+            <ul class="option">
+                <li value="-1">全部</li>
+                #{list items:goodsTypes, as:'type'}
+                    <li value="${type.id}">${type.name}</li>
+                #{/list}
+            </ul>
         </th>
-        <th class="order" role="contributeAsc">
-            类型
-        </th>
-        <th class="order" role="contributeAsc">
-            状态
+        <th class="filter">
+            <span>状态</span>
+            <ul class="option">
+                <li value="-1">全部</li>
+                <li value="0">下架</li>
+                <li value="1">上架</li>
+            </ul>
         </th>
         <th>操作</th>
     </tr>

@@ -1498,7 +1498,9 @@ button.btn-default {
 	line-height: 20px;
 	padding: 6px 0;
 	padding-left: 10px;
-	border: 0 none
+	border: 0 none;
+	position: absolute;
+	top: 1px;
 }
 
 .search-combobox-button {
@@ -1511,11 +1513,12 @@ button.btn-default {
 }
 
 .search-combobox-button .icon-search {
+	background: url(../images/search.png) no-repeat;
+	background-size: 18px 18px;
 	float: left
 }
 
 .search-combobox-button:hover .icon-search {
-	background-position: -52px -56px
 }
 
 .tab {

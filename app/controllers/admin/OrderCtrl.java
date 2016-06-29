@@ -14,7 +14,7 @@ import java.util.List;
 
 public class OrderCtrl extends WebController {
 
-    public static void list(int page) {
+    public static void list(int page, String orderBy, String key, int state) {
     	if(0 == page) {
 			page = 1;
 		}

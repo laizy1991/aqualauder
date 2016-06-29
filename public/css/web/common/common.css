@@ -114,7 +114,7 @@ a{
     -webkit-animation-iteration-count: infinite;
 }
 .shine_blue_in{
-    -webkit-animation-name: shineBlue_in
+    -webkit-animation-name: shineBlue_in;
     -webkit-animation-duration: 3s;
     -webkit-animation-iteration-count: infinite;
 }

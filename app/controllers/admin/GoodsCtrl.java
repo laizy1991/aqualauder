@@ -13,12 +13,12 @@ import java.util.List;
 
 public class GoodsCtrl extends WebController {
 
-    public static void list(int page) {
+    public static void list(int page, String orderBy, String key, int goodsType, int state) {
     	if(0 == page) {
 			page = 1;
 		}
 		int pageSize = GlobalConstants.DEFAULT_PAGE_SIZE;
-		
+
 		Long count = Goods.count();
         List<Goods> goodses = Goods.find("ORDER BY id DESC").fetch(page, pageSize);
         
