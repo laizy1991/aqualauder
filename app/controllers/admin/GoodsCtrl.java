@@ -3,9 +3,11 @@ package controllers.admin;
 import common.constants.GlobalConstants;
 import common.core.Pager;
 import common.core.WebController;
+import dao.GoodsTypeDao;
 import models.Goods;
 import models.GoodsColor;
 import models.GoodsSize;
+import models.GoodsType;
 
 import java.util.List;
 
@@ -22,19 +24,22 @@ public class GoodsCtrl extends WebController {
         
         Pager<Goods> pageData = new Pager<Goods>(count.intValue(), page, pageSize);
         pageData.setList(goodses);
-        
-        render("/admin/Goods/list.html", pageData);
+        List<GoodsType> goodsTypes = GoodsTypeDao.all();
+
+        render("/admin/Goods/list.html", pageData, goodsTypes);
     }
 
     public static void add() {
         List<GoodsColor> goodsColors = GoodsColor.all().fetch();
         List<GoodsSize> goodsSizes = GoodsSize.all().fetch();
-        render("/admin/Goods/add.html", goodsColors, goodsSizes);
+        List<GoodsType> goodsTypes = GoodsTypeDao.all();
+        render("/admin/Goods/add.html", goodsColors, goodsSizes, goodsTypes);
     }
 
     public static void update(Goods goods) {
         List<GoodsColor> goodsColors = GoodsColor.all().fetch();
         List<GoodsSize> goodsSizes = GoodsSize.all().fetch();
-        render("/admin/Goods/update.html", goods, goodsColors, goodsSizes);
+        List<GoodsType> goodsTypes = GoodsTypeDao.all();
+        render("/admin/Goods/update.html", goods, goodsColors, goodsSizes, goodsTypes);
     }
 }

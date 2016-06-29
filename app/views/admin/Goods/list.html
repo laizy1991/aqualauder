@@ -64,21 +64,11 @@
                     ¥${info?.price/100}
 		        </td>
                 <td>
-                    #{if info?.goodsType == 0}
-                    <span>新品</span>
-                    #{/if}
-                    #{if info?.goodsType == 1}
-                    <span>裙装</span>
-                    #{/if}
-                    #{if info?.goodsType == 2}
-                    <span>整体搭配</span>
-                    #{/if}
-                    #{if info?.goodsType == 3}
-                    <span>上装</span>
-                    #{/if}
-                    #{if info?.goodsType == 4}
-                    <span>下装</span>
-                    #{/if}
+                    #{list items:goodsTypes, as:'type'}
+                        #{if info?.goodsType == type.id}
+                            <span>${type.name}</span>
+                        #{/if}
+                    #{/list}
                 </td>
 		        <td>
                     #{if info?.state == 0}
