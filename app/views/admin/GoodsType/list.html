@@ -1,0 +1,109 @@
+#{extends 'main.html' /}
+
+#{set 'moreStyles'}
+<link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+<link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+#{/set}
+<style>
+</style>
+<!-- 页头 begin -->
+<div class="main-header">
+    <div class="breadcrumb">
+        <span class="nolink">商品类型</span>
+    </div>
+    <a class="btn btn-default" href="javascript:;" role="create">添加</a>
+</div>
+<!-- 页头 end -->
+<!-- 页头 end -->
+<table class="tb">
+    <thead>
+    <tr  class="text-center">
+        <th>名字</th>
+        <th>描述</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+	    #{list items:infos,as:'info'}   
+		    <tbody>
+		    <tr class="user-item">
+		        <input type="hidden" class="id" value="${info.id}">
+                <input type="hidden" class="name" value="${info.name}">
+                <input type="hidden" class="desc" value="${info.typeDesc}">
+                <input type="hidden" class="createTime" value="${info.createTime}">
+                <input type="hidden" class="pid" value="${info.parentId}">
+		        <td>${info?.name}</td>
+		        <td>${info?.typeDesc}</td>
+		        <td>
+		            <div class="opts">
+		                <span class="opt" role="update"><a href="javascript:;">修改</a></span>
+		            </div>
+		        </td>
+		    </tr>
+		    </tbody>
+	    #{/list}
+</table>
+#{include file="common/jsinclude.html" /}
+
+#{set 'moreScripts'}
+<!-- 增加 -->
+<script id="createDialogTmpl" type="text/html">
+    <div class="dialog dialog-create">
+        <form action="@{ajax.GoodsTypeCtrl.add}" id="create">
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>名字</label>
+                <div class="col">
+                    <input type="text" name="goodsType.name" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>描述</label>
+                <div class="col">
+                    <input type="text" name="goodsType.typeDesc" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 修改 -->
+<script id="updateDialogTmpl" type="text/html">
+    <div class="dialog dialog-update">
+        <form action="@{ajax.GoodsTypeCtrl.update}" id="update">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToUpdate" name="goodsType.id" value="">
+                <input type="hidden" class="in-t" id="createTimeToUpdate" name="goodsType.createTime" value="">
+                <input type="hidden" class="in-t" id="parentIdToUpdate" name="goodsType.parentId" value="">
+                <label class="tips">确定修改<strong id=""></strong>？</label>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>名字</label>
+                <div class="col">
+                    <input type="text" id="nameToUpdate" name="goodsType.name" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>描述</label>
+                <div class="col">
+                    <input type="text" id="descToUpdate" name="goodsType.typeDesc" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script>
+    var verNum = new Date();
+    seajs.config({
+        base:"../",
+        // 加版本号
+        map: [
+            [ '.js', '.js?v='+verNum]
+        ]
+    });
+    seajs.use("@{'/public/js/app/modules/goodsType.js'}");
+</script>
+#{/set}
