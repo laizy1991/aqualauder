@@ -104,12 +104,10 @@
                 <a href="" style="overflow:hidden; height:40px; color:#fff">安淇兰黛</a>
                 <ul>
                     <!--<li><a href="javascript:showProducts('9')">2016新品0-新品 1-整体搭配 2-单品 3-鞋帽 4-饰品</a></li>-->
-                    <li><a href="/goods_list.html?type=0">新品</a></li>
-                    <li><a href="/goods_list.html?type=1">裙装</a></li>
-                    <li><a href="/goods_list.html?type=2">整体搭配</a></li>
-                    <li><a href="/goods_list.html?type=3">上装</a></li>
-                    <li><a href="/goods_list.html?type=4">下装</a></li>
-                    <li><a href="/goods_list.html?type=-1">全部</a></li>
+                    #{list items:types, as:'type'} 
+                    <li><a href="/goods_list.html?fromPage=true&type=${type.id}">${type.name}</a></li>
+                    #{/list}
+                    <li><a href="/goods_list.html?fromPage=true&type=-1">全部</a></li>
                     <!--<li><a href="javascript:showProducts('8')">经典</a></li>-->
                     <!--<li><a href="javascript:showProducts('6')">礼服裙</a></li>						<li><a href="javascript:showAll()">所有商品</a></li>-->
                 </ul>

@@ -10,6 +10,7 @@ import models.GoodsColor;
 import models.GoodsIcon;
 import models.GoodsSize;
 import models.GoodsStock;
+import models.GoodsType;
 import models.ShippingAddress;
 import models.User;
 
@@ -26,6 +27,7 @@ import common.annotation.GuestAuthorization;
 import common.core.FrontController;
 
 import dao.GoodsStockDao;
+import dao.GoodsTypeDao;
 import dao.ShippingAddressDao;
 
 
@@ -37,11 +39,13 @@ public class GoodsCtrl extends FrontController {
 	 * 0-新品 1-裙装 2-整体搭配 3-上装 4-下装 -1-全部
 	 */
     @GuestAuthorization
-    public static void list(Integer type) {
+    public static void list(Integer type, boolean fromPage) {
         if(type == null || type < 0) {
             type = -1;
         } else {
-            type ++;
+            if(fromPage == false) {
+                type ++;
+            }
         }
 		List<Goods> goods = GoodsService.list(-1, -1, type);
 		Goods activity = GoodsService.get(1l);
@@ -53,7 +57,10 @@ public class GoodsCtrl extends FrontController {
 		    }
 		    desc = activity.getGoodsDesc();
 		}
-		render("/Front/goods/list.html", imgs, goods, desc);
+		
+		//微信公众号菜单id从0开始，这里减1
+		List<GoodsType> types = GoodsTypeDao.all();
+		render("/Front/goods/list.html", imgs, goods, desc, types);
     }
 
 	@GuestAuthorization
