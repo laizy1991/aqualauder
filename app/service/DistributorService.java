@@ -344,7 +344,7 @@ public class DistributorService {
         distributor.setQrcodeLimitPath(rsp.getPicRelPath());
         distributor.setQrcodeLimitTicket(rsp.getTicket());
         distributor.setRealName(realName);
-        distributor.setStatus(DistributorStatus.INIT.getCode());
+        distributor.setStatus(DistributorStatus.PASS.getCode());
         distributor.setUserId(userId);
         return add(distributor);
     }
