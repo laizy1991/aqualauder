@@ -29,7 +29,7 @@
 
     <div class="search-box search-combobox">
         <form action="@{admin.GoodsCtrl.list}" id="search-box">
-            <input name="key" class="search-combobox-input" type="text" placeholder="请输入关键字">
+            <input name="key" class="search-combobox-input" type="text" placeholder="请输入关键字" value="${key}">
             <input name="asc" type="hidden" value="${asc}">
             <button class="search-combobox-button" type="submit" title="搜索"><div class="icon-search"></div></button>
         </form>
@@ -63,7 +63,7 @@
     </tr>
     </thead>
     #{if pageData == null || pageData.list == null || pageData.list.size() == 0 }
-        <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+        <tr><td colspan="6" style="text-align:center;">暂无记录</td></tr>
     #{/if}
     #{else}
 	    #{list items:pageData.list,as:'info'}   

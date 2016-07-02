@@ -9,6 +9,7 @@ import models.GoodsSize;
 import models.Order;
 import net.sf.json.JSON;
 import net.sf.json.util.JSONUtils;
+import utils.StringUtil;
 
 import java.util.List;
 
@@ -19,9 +20,10 @@ public class OrderCtrl extends WebController {
 			page = 1;
 		}
 		int pageSize = GlobalConstants.DEFAULT_PAGE_SIZE;
-		
-		Long count = Order.count();
-        List<Order> orders = Order.all().fetch(page, pageSize);
+        String HQL = createHql(orderBy,asc, key, state);
+
+        Long count = Order.count(HQL);
+        List<Order> orders = Order.find(HQL).fetch(page, pageSize);
         
         Pager<Order> pageData = new Pager<Order>(count.intValue(), page, pageSize);
         pageData.setList(orders);
@@ -38,6 +40,18 @@ public class OrderCtrl extends WebController {
         renderArgs.put("state", state);
 
         render("/admin/Order/list.html", pageData);
+    }
+
+    private static String createHql(String orderBy,boolean asc, String key, Integer state) {
+        String HQL = "ORDER BY ";
+        HQL += StringUtil.isNullOrEmpty(orderBy)?"id":orderBy;
+        HQL += asc?" ASC":" DESC";
+        state = state==null?-1:state;
+        HQL = "state " + (state<0?" != -1":("="+state)) + " " +HQL;
+        if (!StringUtil.isNullOrEmpty(key)) {
+            HQL = "(outTradeNo like '%"+key+"%' or weixin like '%"+key+"%' or goodsTitle like '%"+key+"%' or identifier like '%" + key +"%') and " + HQL;
+        }
+        return HQL;
     }
     
 }

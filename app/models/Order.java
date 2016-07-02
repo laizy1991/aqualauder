@@ -52,7 +52,10 @@ public class Order extends GenericModel {
 
     @Column(name="identifier")
     private String identifier;
-    
+
+    @Column(name="goods_title")
+    private String goodsTitle;
+
     @Column(name="shipping_address")
     private String shippingAddress;
 
@@ -359,4 +362,6 @@ public class Order extends GenericModel {
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
+
+
 }

@@ -8,6 +8,7 @@ import models.Goods;
 import models.GoodsColor;
 import models.GoodsSize;
 import models.GoodsType;
+import utils.StringUtil;
 
 import java.util.List;
 
@@ -19,8 +20,9 @@ public class GoodsCtrl extends WebController {
 		}
 		int pageSize = GlobalConstants.DEFAULT_PAGE_SIZE;
 
-		Long count = Goods.count();
-        List<Goods> goodses = Goods.find("ORDER BY id DESC").fetch(page, pageSize);
+        String HQL = createHql(orderBy,asc, key, goodsType, state);
+		Long count = Goods.count(HQL);
+        List<Goods> goodses = Goods.find(HQL).fetch(page, pageSize);
         
         Pager<Goods> pageData = new Pager<Goods>(count.intValue(), page, pageSize);
         pageData.setList(goodses);
@@ -47,5 +49,19 @@ public class GoodsCtrl extends WebController {
         List<GoodsSize> goodsSizes = GoodsSize.all().fetch();
         List<GoodsType> goodsTypes = GoodsTypeDao.all();
         render("/admin/Goods/update.html", goods, goodsColors, goodsSizes, goodsTypes);
+    }
+
+    private static String createHql(String orderBy,boolean asc, String key, Integer goodsType, Integer state) {
+        String HQL = "ORDER BY ";
+        HQL += StringUtil.isNullOrEmpty(orderBy)?"id":orderBy;
+        HQL += asc?" ASC":" DESC";
+        goodsType = goodsType==null?-1:goodsType;
+        state = state==null?-1:state;
+        HQL = "goodsType " + (goodsType<0?" != -1":("="+goodsType)) + " " +HQL;
+        HQL = "state " + (state<0?" != -1":("="+state)) + " and " +HQL;
+        if (!StringUtil.isNullOrEmpty(key)) {
+            HQL = "(title like '%"+key+"%' or identifier like '%" + key +"%') and " + HQL;
+        }
+        return HQL;
     }
 }
