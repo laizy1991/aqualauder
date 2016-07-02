@@ -132,11 +132,7 @@
                 </td>
                 <td>${info?.weixin}</td>
                 <td>${info?.identifier}</td>
-                <td>
-                    #{if info?.orderGoods != null && info?.orderGoods.size() > 0}
-                    <span>${info?.orderGoods.get(0).goodsTitle}</span>
-                    #{/if}
-                </td>
+                <td>${info?.goodsTitle}</td>
                 <td>
                     #{if info?.orderGoods != null && info?.orderGoods.size() > 0}
                     <span>${info?.orderGoods.get(0).goodsColor}</span>
