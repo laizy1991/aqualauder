@@ -28,16 +28,9 @@
     <a class="btn btn-default btn-add-goods" href="@{admin.GoodsCtrl.add}">添加</a>
 
     <div class="search-box search-combobox">
-        <form action="@{admin.OrderCtrl.list}" id="list">
+        <form action="@{admin.GoodsCtrl.list}" id="search-box">
             <input name="key" class="search-combobox-input" type="text" placeholder="请输入关键字">
-            <select name="state">
-                <option value="-1">全部</option>
-                <option value="0">申请退款</option>
-                <option value="2">退款中</option>
-                <option value="3">退款成功</option>
-                <option value="4">拒绝退款</option>
-                <option value="5">取消退款</option>
-            </select>
+            <input name="asc" type="hidden" value="${asc}">
             <button class="search-combobox-button" type="submit" title="搜索"><div class="icon-search"></div></button>
         </form>
     </div>
@@ -46,24 +39,24 @@
 <table class="tb">
     <thead>
     <tr  class="text-center">
-        <th class="order">款号</th>
-        <th class="order">名称</th>
-        <th class="order">价格</th>
+        <th class="order#{if orderBy=='identifier'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="identifier">款号</th>
+        <th class="order#{if orderBy=='title'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="title">名称</th>
+        <th class="order#{if orderBy=='price'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="price">价格</th>
         <th class="filter">
             <span>类型</span>
             <ul class="option">
-                <li value="-1">全部</li>
+                <li #{if goodsType==-1||state==null}class="currentFilter"#{/if} field="goodsType" data="-1">全部</li>
                 #{list items:goodsTypes, as:'type'}
-                    <li value="${type.id}">${type.name}</li>
+                    <li #{if goodsType==type.id}class="currentFilter"#{/if} field="goodsType" data="${type.id}">${type.name}</li>
                 #{/list}
             </ul>
         </th>
         <th class="filter">
             <span>状态</span>
             <ul class="option">
-                <li value="-1">全部</li>
-                <li value="0">下架</li>
-                <li value="1">上架</li>
+                <li #{if state==-1||state==null}class="currentFilter"#{/if} field="state" data="-1">全部</li>
+                <li #{if state==0}class="currentFilter"#{/if} field="state" data="0">下架</li>
+                <li #{if state==1}class="currentFilter"#{/if} field="state" data="1">上架</li>
             </ul>
         </th>
         <th>操作</th>
@@ -195,5 +188,6 @@
         ]
     });
     seajs.use("@{'/public/js/app/modules/goods.js'}");
+    seajs.use("@{'/public/js/app/common/listFilter.js'}");
 </script>
 #{/set}

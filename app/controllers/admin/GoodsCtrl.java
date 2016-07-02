@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GoodsCtrl extends WebController {
 
-    public static void list(int page, String orderBy, String key, int goodsType, int state) {
+    public static void list(int page, String orderBy,boolean asc, String key, Integer goodsType, Integer state) {
     	if(0 == page) {
 			page = 1;
 		}
@@ -25,6 +25,12 @@ public class GoodsCtrl extends WebController {
         Pager<Goods> pageData = new Pager<Goods>(count.intValue(), page, pageSize);
         pageData.setList(goodses);
         List<GoodsType> goodsTypes = GoodsTypeDao.all();
+
+        renderArgs.put("orderBy", orderBy);
+        renderArgs.put("asc", asc);
+        renderArgs.put("key", key);
+        renderArgs.put("goodsType", goodsType);
+        renderArgs.put("state", state);
 
         render("/admin/Goods/list.html", pageData, goodsTypes);
     }

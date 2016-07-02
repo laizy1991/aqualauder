@@ -14,7 +14,7 @@ import java.util.List;
 
 public class OrderCtrl extends WebController {
 
-    public static void list(int page, String orderBy, String key, int state) {
+    public static void list(int page, String orderBy,boolean asc, String key, Integer state) {
     	if(0 == page) {
 			page = 1;
 		}
@@ -32,6 +32,10 @@ public class OrderCtrl extends WebController {
         renderArgs.put("expresses", expresses);
         renderArgs.put("colors", colors);
         renderArgs.put("sizes", sizes);
+        renderArgs.put("orderBy", orderBy);
+        renderArgs.put("asc", asc);
+        renderArgs.put("key", key);
+        renderArgs.put("state", state);
 
         render("/admin/Order/list.html", pageData);
     }
