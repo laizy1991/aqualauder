@@ -42,10 +42,6 @@ public class GoodsCtrl extends FrontController {
     public static void list(Integer type, boolean fromPage) {
         if(type == null || type < 0) {
             type = -1;
-        } else {
-            if(fromPage == false) {
-                type ++;
-            }
         }
 		List<Goods> goods = GoodsService.list(-1, -1, type);
 		Goods activity = GoodsService.get(1l);
@@ -58,7 +54,6 @@ public class GoodsCtrl extends FrontController {
 		    desc = activity.getGoodsDesc();
 		}
 		
-		//微信公众号菜单id从0开始，这里减1
 		List<GoodsType> types = GoodsTypeDao.all();
 		render("/Front/goods/list.html", imgs, goods, desc, types);
     }

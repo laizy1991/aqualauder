@@ -57,7 +57,11 @@ define(function(require) {
 
                     },
                     onshow: function() {
-
+                    	$("#parentIdToAdd").empty();
+                		$("#parentIdToAdd").append("<option value='0'>请选择</option>");
+                		for(id in names) {
+                			$("#parentIdToAdd").append("<option value='"+id +"'>" + names[id] + "</option>");
+                		}
                     }
                 }).showModal();
             });
@@ -155,12 +159,18 @@ define(function(require) {
 
                         },
                         onshow:function() {
-                        	console.log(createTime);
                             $("#idToUpdate").val(id);
                             $("#nameToUpdate").val(name);
                             $("#descToUpdate").val(desc);
-                            $("#parentIdToUpdate").val(pid);
                             $("#createTimeToUpdate").val(createTime);
+                            $("#parentIdToUpdate").empty();
+                            if(pid <= 0){
+                            	$("#parentIdToUpdate").append("<option value='0'>请选择</option>");
+                            }
+                    		for(id in names) {
+                    			$("#parentIdToUpdate").append("<option value='"+id +"'>" + names[id] + "</option>");
+                    		}
+                    		$("#parentIdToUpdate").val(pid);
                         }
                     }).showModal();
             });

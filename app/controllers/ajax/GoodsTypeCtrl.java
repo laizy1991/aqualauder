@@ -11,7 +11,7 @@ public class GoodsTypeCtrl  extends AjaxController {
     
     public static void add(GoodsType goodsType) throws BusinessException {
         if(goodsType != null) {
-            goodsType.setParentId(0);
+            goodsType.setParentId(goodsType.getParentId());
             goodsType.setCreateTime(System.currentTimeMillis());
             goodsType.setUpdateTime(System.currentTimeMillis());
             GoodsTypeDao.save(goodsType);
@@ -26,7 +26,6 @@ public class GoodsTypeCtrl  extends AjaxController {
 
     public static void update(GoodsType goodsType) {
         if(goodsType != null) {
-            System.err.println(new Gson().toJson(goodsType));
             goodsType.setUpdateTime(System.currentTimeMillis());
             GoodsTypeDao.save(goodsType);
         }

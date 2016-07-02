@@ -32,17 +32,37 @@ public class GoodsDao {
     }
     
     public static List<Goods> getBy(int type, int page, int size)  {
+        String sql = "";
+        if(type < 0) {
+            sql = "state = 1 and id != 1 order by id desc";                
+        } else if(type == 0) {
+            sql = "state = 1 and id != 1 order by create_time desc";
+        } else {
+            List<Integer> ids = GoodsTypeDao.getAllSubType(type);
+            String idStr = "";
+            String split = "";
+            for(Integer id : ids) {
+                idStr += id + split;
+                split = ",";
+            }
+            if(idStr.endsWith(",")) {
+                idStr = idStr.substring(0, idStr.length()-1);
+            }
+            
+            sql = "goods_type in ( " + idStr + ") and state = 1 and id != 1 order by id desc";
+        }
+        System.err.println(sql);
         if(page == -1 && size == -1) {
-            if(type < 0) {
-                return Goods.find("state = 1 and id != 1 order by id desc").fetch();                
+            if(type <= 0) {
+                return Goods.find(sql).fetch();                
             } else {
-                return Goods.find("goods_type = ? and state = 1 and id != 1 order by id desc", type).fetch();
+                return Goods.find(sql).fetch();
             }
         } else {
-            if(type < 0) {
-                return Goods.find("state = 1 and id != 1 order by id desc").fetch(page, size);
+            if(type <= 0) {
+                return Goods.find(sql).fetch(page, size);
             } else {
-                return Goods.find("goods_type = ? and state = 1 and id != 1 order by id desc", type).fetch(page, size);
+                return Goods.find(sql).fetch(page, size);
             }
         }
     }

@@ -32,6 +32,7 @@ public class GoodsType extends GenericModel {
     @Column(name = "update_time")
     private Long updateTime;
 
+    private String parentName;
     public Integer getId() {
         return id;
     }
@@ -46,6 +47,14 @@ public class GoodsType extends GenericModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 
     public String getTypeDesc() {
