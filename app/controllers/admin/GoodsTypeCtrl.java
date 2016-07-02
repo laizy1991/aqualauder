@@ -1,31 +1,46 @@
 package controllers.admin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import models.GoodsType;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.google.gson.Gson;
-
-import models.GoodsType;
 import common.core.WebController;
+
 import dao.GoodsTypeDao;
+import dto.GoodsTypeDto;
 
 public class GoodsTypeCtrl extends WebController {
 
     public static void list() {
-    	List<GoodsType> infos = GoodsTypeDao.all();
+    	List<GoodsType> ddls = GoodsTypeDao.all();
     	Map<Integer, String> names = new HashMap<Integer, String>();
-    	for(GoodsType gt : infos) {
+    	for(GoodsType gt : ddls) {
     	    names.put(gt.getId(), gt.getName());
     	}
-    	for(GoodsType gt : infos) {
+    	
+    	
+    	List<GoodsTypeDto> infos = new ArrayList<GoodsTypeDto>();
+    	for(GoodsType gt : ddls) {
             String name = names.get(gt.getParentId());
             if(StringUtils.isBlank(name)) {
                 name = "无";
             }
-            gt.setParentName(name);
+            GoodsTypeDto dto = new GoodsTypeDto();
+            dto.setCreateTime(gt.getCreateTime());
+            dto.setName(gt.getName());
+            dto.setId(gt.getId());
+            dto.setParentId(gt.getParentId());
+            dto.setTypeDesc(gt.getTypeDesc());
+            dto.setUpdateTime(gt.getUpdateTime());
+            
+            dto.setParentName(name);
+            infos.add(dto);
         }
     	String goodsTypesJson = new Gson().toJson(names);
         render("/admin/GoodsType/list.html", infos, goodsTypesJson);

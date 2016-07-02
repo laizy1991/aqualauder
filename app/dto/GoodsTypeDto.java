@@ -1,4 +1,4 @@
-package models;
+package dto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,28 +8,19 @@ import javax.persistence.Table;
 
 import play.db.jpa.GenericModel;
 
-@Entity
-@Table(name="goods_type")
-public class GoodsType extends GenericModel {
+public class GoodsTypeDto extends GenericModel {
 
-    @Id
-    @GeneratedValue
-    @Column(name="id")
     private Integer id;
 
-    @Column(name="name")
     private String name;
+    private String parentName;
     
-    @Column(name="type_desc")
     private String typeDesc;
 
-    @Column(name="parent_id")
     private Integer parentId;
     
-    @Column(name = "create_time")
     private Long createTime;
     
-    @Column(name = "update_time")
     private Long updateTime;
 
     public Integer getId() {
@@ -38,6 +29,14 @@ public class GoodsType extends GenericModel {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
     }
 
     public String getName() {
