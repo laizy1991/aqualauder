@@ -17,7 +17,7 @@ public class GoodsTypeDao {
     }
 
     public static List<GoodsType> all() {
-        return GoodsType.find("order by sort_num desc").fetch();
+        return GoodsType.find("order by sort_num asc").fetch();
     }
     
     public static List<Integer> getAllSubType(int id) {
