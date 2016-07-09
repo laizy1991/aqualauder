@@ -93,7 +93,10 @@
 					                            #{/if}
 					                            #{else}
 					                               #{if info.refundState == -1 || info.refundState == 4 || info.refundState == 5}
-					                                   <a href="javascript:refund(2,'${info?.orderId}');" style="color: blue;">申请退款</a>
+                                                       <a href="javascript:refund(2,'${info?.orderId}');" style="color: blue;">申请退款</a>
+                                                        #{if info.state == 3}
+                                                       <a href="javascript:refund(4,'${info?.orderId}');" style="color: blue;">确认收货</a>
+                                                       #{/if}
 				                                   #{/if}
 					                               #{else}
 					                                   #{if info.refundState == 0}

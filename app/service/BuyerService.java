@@ -229,7 +229,7 @@ public class BuyerService {
         }
         DistributorService.checkAndBecomeDistributor(order.getUserId());
         order.setPayTime(System.currentTimeMillis());
-        boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.PAYED);
+        boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.DELIVERING);
         return isSucc;
     }
 }

@@ -22,13 +22,21 @@ public class GoodsTypeDto extends GenericModel {
     private Long createTime;
     
     private Long updateTime;
-
+    private Integer sortNum;
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(Integer sortNum) {
+        this.sortNum = sortNum;
     }
 
     public String getParentName() {

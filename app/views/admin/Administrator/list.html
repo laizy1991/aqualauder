@@ -11,7 +11,10 @@
     <div class="breadcrumb">
         <span class="nolink">管理员列表</span>
     </div>
-    <a class="btn btn-default" href="javascript:;" role="create">添加</a>
+    #{if admin.adminType == 0}
+        <a class="btn btn-default" href="javascript:;" role="create">添加</a>
+        <a class="btn btn-default" href="@{admin.AdministratorCtrl.adminPrivilege}" >普通管理台权限</a>
+    #{/if}
 </div>
 <!-- 页头 end -->
  <table class="tb">
@@ -19,6 +22,7 @@
     <tr  class="text-center">
         <th>ID</th>
         <th>姓名</th>
+        <th>管理台类型</th>
         <th class="order" role="contributeAsc">
             创建时间
         </th>
@@ -36,21 +40,34 @@
 		    <tbody>
 		    <tr class="user-item">
 		        <input type="hidden" class="id" value="${info.id}">
-		        <input type="hidden" class="username" value="${info?.username}">
+                <input type="hidden" class="username" value="${info?.username}">
+                <input type="hidden" class="adminType" value="${info?.adminType}">
 		        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
 		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
 		        <input type="hidden" class="deleted" value="${info?.deleted}">
 		        <td>${info?.id}</td>
-		        <td>${info?.username}</td>
+                <td>${info?.username}</td>
+                <td>#{if info.adminType == 0}
+                        超级管理员
+                    #{/if}
+                    #{else}
+                    普通管理员
+                    #{/else}
+                </td>
 		        <td>
 		        %{out.print(utils.DateUtil.getDateString(info?.createTime))}%
 		        </td>
 		        <td>%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%</td>
 		        <td>
 		            <div class="opts">
+		            #{if admin.adminType == 0}
 		                <span class="opt" role="update"><a href="javascript:;">修改</a></span>|
-		                <span class="opt" role="delete"><a href="javascript:;">删除</a></span>|
+                        <span class="opt" role="delete"><a href="javascript:;">删除</a></span>
 		                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
+                    #{/if}
+                    #{else}
+                        <span class="opt" role="updatePassword"><a href="javascript:;">修改密码</a></span>
+                    #{/else}
 		            </div>
 		        </td>
 		    </tr>
@@ -71,6 +88,17 @@
                 <label class="label"><span class="asterisk">*</span>姓名</label>
                 <div class="col">
                     <input type="text" name="administrator.username" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>管理员类型</label>
+                <div class="col">
+                    
+                    <select name="administrator.adminType"">
+                        <option value="0">超级管理员</option>
+                        <option value="1">普通管理员</option>
+                    </select>
                     <span class="msg error-text">必填项！</span>
                 </div>
             </div>
@@ -104,6 +132,38 @@
             <div class="form-group">
                 <input type="hidden" class="in-t" id="idToUpdate" name="administrator.id" value="">
                 <label class="tips">确定修改<strong id="usernameToUpdate"></strong>？</label>
+            </div>
+
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>管理员类型</label>
+                <div class="col">
+                    
+                    <select id="adminTypeToUpdate" name="administrator.adminType"">
+                        <option value="0">超级管理员</option>
+                        <option value="1">普通管理员</option>
+                    </select>
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>密码</label>
+                <div class="col">
+                    <input type="password" name="administrator.password" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+
+<script id="updatePasswordDialogTmpl" type="text/html">
+    <div class="dialog dialog-update">
+        <form action="@{ajax.AdministratorCtrl.update}" id="update">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToUpdate2" name="administrator.id" value="">
+                <input type="hidden" class="in-t" id="adminTypeToUpdate2" name="administrator.adminType" value="">
+                <label class="tips">确定修改<strong id="usernameToUpdate2"></strong>？</label>
             </div>
             <div class="form-group">
                 <label class="label"><span class="asterisk">*</span>密码</label>

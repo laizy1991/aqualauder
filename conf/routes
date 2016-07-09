@@ -23,6 +23,7 @@ GET /link.html            front.Helps.link
 * /cash.html                front.Users.cash
 * /refundApply              front.Users.refundApply
 * /refundCancel              front.Users.refundCancel
+* /receiving              front.Users.receiving
 
 POST /createOrder           front.Orders.createOrder
 

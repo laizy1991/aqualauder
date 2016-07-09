@@ -5,9 +5,11 @@
             <dt class="nav-hd">
                 <span>订单</span>
             </dt>
+            #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.ORDER_LIST)}
             <dd class="nav-bd hide">
                 <a class="" href="@{admin.OrderCtrl.list}">订单列表</a>
             </dd>
+            #{/if}
         </dl>
 
         <dl class="nav">
@@ -15,32 +17,24 @@
                 <span>商品</span>
             </dt>
             <dd class="nav-bd hide">
+            #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.GOODS_LIST)}
                 <a class="" href="@{admin.GoodsCtrl.list}">商品列表</a>
+                #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.GOODS_ADD)}
                 <a class="" href="@{admin.GoodsCtrl.add}">添加商品</a>
+                #{/if}
             </dd>
-            <!--<dd class="nav-bd hide">-->
-                <!--<a class="" href="@{admin.SpecInfoCtrl.list}">商品属性</a>-->
-            <!--</dd>-->
-            <!--<dd class="nav-bd hide">-->
-                <!--<a class="" href="@{admin.SpecTypeCtrl.list}">商品属性分类</a>-->
-            <!--</dd>-->
         </dl>
 
-        <!--<dl class="nav">-->
-            <!--<dt class="nav-hd">-->
-                <!--<span>退款单</span>-->
-            <!--</dt>-->
-            <!--<dd class="nav-bd hide">-->
-                <!--<a class="" href="@{admin.RefundOrderCtrl.list}">退款单列表</a>-->
-            <!--</dd>-->
-        <!--</dl>-->
 
         <dl class="nav">
             <dt class="nav-hd">
                 <span>分销商</span>
             </dt>
             <dd class="nav-bd hide">
+            #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.DISTRIBUTOR_LIST)}
                 <a class="" href="@{admin.DistributorCtrl.list}">分销商列表</a>
+                #{/if}
             </dd>
         </dl>
 
@@ -49,8 +43,12 @@
                 <span>用户</span>
             </dt>
             <dd class="nav-bd hide">
+            #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.USRE_LIST)}
                 <a class="" href="@{admin.UserCtrl.list}">用户列表</a>
+                #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.WALLET_LIST)}
                 <a class="" href="@{admin.WalletCtrl.list}">钱包列表</a>
+                #{/if}
             </dd>
         </dl>
         <dl class="nav">
@@ -58,16 +56,36 @@
                 <span>系统</span>
             </dt>
             <dd class="nav-bd hide">
+            #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.SYSTEM_SPEC)}
                 <a class="" href="@{admin.CommonDictCtrl.list}">系统属性</a>
+                #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.PP)}
                 <a class="" href="@{admin.HTMLCtrl.introduce}">品牌简介</a>
+                #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.MSJS)}
                 <a class="" href="@{admin.HTMLCtrl.explain}">模式解说</a>
+                #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.LXKF)}
                 <a class="" href="@{admin.HTMLCtrl.link}">联系客服</a>
+                #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.GOODS_COLOR)}
                 <a class="" href="@{admin.GoodsColorCtrl.list}">商品颜色</a>
+                #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.GOODS_SIZE)}
                 <a class="" href="@{admin.GoodsSizeCtrl.list}">商品码数</a>
+                #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.GOODS_TYPE)}
                 <a class="" href="@{admin.GoodsTypeCtrl.list}">商品类型</a>
+                #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.COMMON_PIC)}
                 <a class="" href="@{admin.AlbumCtrl.list}">公共图片</a>
+                #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.EXPRESS)}
                 <a class="" href="@{admin.ExpressCtrl.list}">快递公司</a>
-                <a class="" href="@{admin.AdministratorCtrl.list}">管理员列表</a>
+                #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.ADMIN_LIST)}
+                <a class="" href="@{admin.AdministratorCtrl.list}">管理员信息</a>
+                #{/if}
             </dd>
         </dl>
         <dl class="nav">
@@ -75,7 +93,9 @@
                 <span>分享</span>
             </dt>
             <dd class="nav-bd hide">
+            #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.QRCODE)}
                 <a class="" href="@{admin.QrShareCtrl.list}">二维码底图</a>
+                #{/if}
             </dd>
         </dl>
     </div>

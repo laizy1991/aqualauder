@@ -127,6 +127,7 @@ define(function(require) {
                     name = $wrap.find('.name').val(),
                     desc = $wrap.find('.desc').val(),
                     createTime = $wrap.find('.createTime').val(),
+                    sortNum = $wrap.find('.sortNum').val(),
                     pid = $wrap.find('.pid').val(),
                     updateDialog = dialog({
                         id: 'updateDialog',
@@ -163,6 +164,7 @@ define(function(require) {
                             $("#nameToUpdate").val(name);
                             $("#descToUpdate").val(desc);
                             $("#createTimeToUpdate").val(createTime);
+                            $("#sortNumToUpdate").val(sortNum);
                             $("#parentIdToUpdate").empty();
                             if(pid <= 0){
                             	$("#parentIdToUpdate").append("<option value='0'>请选择</option>");

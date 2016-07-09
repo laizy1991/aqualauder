@@ -37,7 +37,6 @@ public class UserMonthBlotterDao {
         if(list == null || list.isEmpty()) {
             return 0;
         }
-        System.err.println(new Gson().toJson(list.get(0)));
         return list.get(0).getMonthBlotters(); 
     }
     

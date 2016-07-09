@@ -14,6 +14,7 @@ define(function(require) {
             this.create($('[role="create"]'));
             this.delete($('[role="delete"]'));
             this.update($('[role="update"]'));
+            this.updatePassword($('[role="updatePassword"]'));
             this.view($('[role="view"]'));
         },
 
@@ -121,6 +122,7 @@ define(function(require) {
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
                 	name = $wrap.find('.username').val(),
+                	adminType = $wrap.find('.adminType').val(),
                     updateDialog = dialog({
                     id: 'updateDialog',
                     title: '修改',
@@ -154,6 +156,55 @@ define(function(require) {
                     onshow:function() {
                     	$("#idToUpdate").val(id);
                     	$("#usernameToUpdate").text(name);
+                    	$("#adminTypeToUpdate").val(adminType);
+                    }
+                }).showModal();
+            });
+        },
+        /**
+         * 修改
+         */
+        updatePassword: function(obj) {
+            obj.click(function() {
+                var $this = $(this),
+                    $wrap = $this.closest('tr'),
+                    id = $wrap.find('.id').val(),
+                	name = $wrap.find('.username').val(),
+                	adminType = $wrap.find('.adminType').val(),
+                	updatePassword = dialog({
+                    id: 'updatePassword',
+                    title: '修改',
+                    content: document.getElementById('updatePasswordDialogTmpl').innerHTML,
+                    button: [
+                        {
+                        	value: '确定',
+                            callback: function () {
+                                var dia = this,
+                                $form = this.__popup.find('form');
+                                
+                                ajax.post($form.attr('action'), $form.serialize(), function(result){
+                                    if(result.success){
+                                        dia.close();
+                                        dd.alert('修改信息成功！', function(){
+                                            window.location.reload(false);
+                                       });
+                                    }else{
+                                        dd.alert(result.error);
+                                    }
+                                });
+                                return false;
+                            },
+                            autofocus: true
+                        }
+                    ],
+                    cancelValue: '取消',
+                    cancel: function() {
+
+                    },
+                    onshow:function() {
+                    	$("#idToUpdate2").val(id);
+                    	$("#usernameToUpdate2").text(name);
+                    	$("#adminTypeToUpdate2").val(adminType);
                     }
                 }).showModal();
             });

@@ -19,6 +19,9 @@ public class GoodsType extends GenericModel {
 
     @Column(name="name")
     private String name;
+
+    @Column(name="sort_num")
+    private Integer sortNum;
     
     @Column(name="type_desc")
     private String typeDesc;
@@ -54,6 +57,14 @@ public class GoodsType extends GenericModel {
 
     public void setTypeDesc(String typeDesc) {
         this.typeDesc = typeDesc;
+    }
+
+    public Integer getSortNum() {
+        return sortNum;
+    }
+
+    public void setSortNum(Integer sortNum) {
+        this.sortNum = sortNum;
     }
 
     public Integer getParentId() {

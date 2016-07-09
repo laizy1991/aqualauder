@@ -1,13 +1,22 @@
 package controllers.ajax;
 
-import dto.SessionInfo;
-import exception.BusinessException;
-import models.Administrator;
+import java.util.List;
 
-import common.core.AjaxController;
+import models.Administrator;
+import models.RolePrivilege;
+
+import org.apache.commons.collections.CollectionUtils;
+
 import play.mvc.Scope.Session;
 import service.AdminService;
 import utils.StringUtil;
+
+import com.google.gson.Gson;
+import common.core.AjaxController;
+
+import dao.RolePrivilegeDao;
+import dto.SessionInfo;
+import exception.BusinessException;
 
 public class AdministratorCtrl extends AjaxController {
 
@@ -42,12 +51,28 @@ public class AdministratorCtrl extends AjaxController {
 
         if (session != null) {
             SessionInfo sessionInfo = AdminService.getSessionInfo(session.get("sid"));
-            if (sessionInfo != null && sessionInfo.getAdmin() != null && sessionInfo.getAdmin().getId() == administrator.getId()) {
+            if (sessionInfo != null && sessionInfo.getAdmin() != null && (sessionInfo.getAdmin().getId() == administrator.getId() || sessionInfo.getAdmin().getAdminType().intValue() == 0)) {
                 AdminService.update(administrator);
+                sessionInfo.setAdmin(administrator);
                 renderSuccessJson();
             }
         }
         throw new BusinessException("no permission");
+    }
+    
+    public static void updateAdminPrivilege(List<Integer> ids) {
+        
+        RolePrivilegeDao.delByRole(1);
+        if(CollectionUtils.isNotEmpty(ids)) {
+            for(Integer id : ids) {
+                RolePrivilege rp = new RolePrivilege();
+                rp.setPrivilegeId(id);
+                rp.setRoleId(1);
+                RolePrivilegeDao.insert(rp);
+            }
+        }
+        
+        redirect("admin.AdministratorCtrl.adminPrivilege");
     }
 
 }

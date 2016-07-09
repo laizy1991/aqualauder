@@ -51,7 +51,6 @@ public class GoodsDao {
             
             sql = "goods_type in ( " + idStr + ") and state = 1 and id != 1 order by id desc";
         }
-        System.err.println(sql);
         if(page == -1 && size == -1) {
             if(type <= 0) {
                 return Goods.find(sql).fetch();                

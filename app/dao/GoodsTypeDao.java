@@ -17,11 +17,12 @@ public class GoodsTypeDao {
     }
 
     public static List<GoodsType> all() {
-        return GoodsType.all().fetch();
+        return GoodsType.find("order by sort_num desc").fetch();
     }
     
     public static List<Integer> getAllSubType(int id) {
         List<Integer> ids = new ArrayList<Integer>();
+        ids.add(id);
         List<Integer> needSearch = new ArrayList<Integer>();
         needSearch.add(id);
         while(!needSearch.isEmpty()) {

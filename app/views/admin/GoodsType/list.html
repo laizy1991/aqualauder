@@ -23,6 +23,7 @@ var names = JSON.parse('${goodsTypesJson.raw()}');
     <tr  class="text-center">
         <th>名字</th>
         <th>父类</th>
+        <th>排序</th>
         <th>描述</th>
         <th>操作</th>
     </tr>
@@ -35,8 +36,10 @@ var names = JSON.parse('${goodsTypesJson.raw()}');
                 <input type="hidden" class="desc" value="${info.typeDesc}">
                 <input type="hidden" class="createTime" value="${info.createTime}">
                 <input type="hidden" class="pid" value="${info.parentId}">
+                <input type="hidden" class="pid" value="${info.sortNum}">
 		        <td>${info?.name}</td>
                 <td>${info?.parentName}</td>
+                <td>${info?.sortNum}</td>
                 <td>${info?.typeDesc}</td>
 		        <td>
 		            <div class="opts">
@@ -68,6 +71,13 @@ var names = JSON.parse('${goodsTypesJson.raw()}');
                     <select id="parentIdToAdd" name="goodsType.parentId">
 
                     </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>排序值</label>
+                <div class="col">
+                    <input type="text" name="goodsType.sortNum" value="">
+                    <span class="msg error-text">越小越靠前</span>
                 </div>
             </div>
             <div class="form-group">
@@ -104,6 +114,14 @@ var names = JSON.parse('${goodsTypesJson.raw()}');
                     <select id="parentIdToUpdate" name="goodsType.parentId"">
 
                     </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>排序值</label>
+                <div class="col">
+                    <input type="text" id="sortNumUpdate" name="goodsType.sortNum" value="">
+                    <span class="msg error-text">越小越靠前</span>
                 </div>
             </div>
             <div class="form-group">

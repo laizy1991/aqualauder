@@ -132,8 +132,8 @@ public class PayService {
             order.setPayTime(System.currentTimeMillis());
             order.setPayStatus(PayStatus.PAY_SUCC.getStatus());
             order.setPayType(PayType.BALANCE.getCode());
-            order.setState(OrderStatus.PAYED.getState());
-            return OrderService.setStatusAndUpdate(order, OrderStatus.PAYED);
+            order.setState(OrderStatus.DELIVERING.getState());
+            return OrderService.setStatusAndUpdate(order, OrderStatus.DELIVERING);
         }
         
         return isSucc;

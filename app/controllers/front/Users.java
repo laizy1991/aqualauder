@@ -255,4 +255,21 @@ public class Users extends FrontController {
         isSucc = BuyerService.refundCancel(user.getUserId(), refundId);
         renderJSON(isSucc);
     }
+    
+
+    public static void receiving(long orderId) {
+        String openId = session.get("openId");
+        boolean isSucc = false;
+        if(StringUtils.isBlank(openId)) {
+            renderJSON(isSucc);
+        }
+        User user = WxUserService.getUserInfo(openId);
+        if(null == user) {
+            Logger.error("获取用户信息失败, openId: %s", openId);
+            renderJSON(isSucc);
+        }
+        
+        isSucc = BuyerService.receiving(user.getUserId(), orderId);
+        renderJSON(isSucc);
+    }
 }

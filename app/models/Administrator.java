@@ -16,6 +16,8 @@ public class Administrator extends Model {
     private String username;
     @Column(name="deleted")
     private Integer deleted;
+    @Column(name="admin_type")
+    private Integer adminType;
     @Column(name="create_time")
     private Long createTime;
     @Column(name="update_time")
@@ -25,6 +27,12 @@ public class Administrator extends Model {
     }
     public void setPassword(String password) {
         this.password = password;
+    }
+    public Integer getAdminType() {
+        return adminType;
+    }
+    public void setAdminType(Integer adminType) {
+        this.adminType = adminType;
     }
     public String getUsername() {
         return username;

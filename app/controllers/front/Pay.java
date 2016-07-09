@@ -174,7 +174,7 @@ public class Pay extends FrontController {
     		query.setParameter(2, nowTime);
     		query.setParameter(3, "回调成功");
     		query.setParameter(4, rsp.getTransaction_id());
-    		query.setParameter(5, OrderStatus.PAYED.getState());
+    		query.setParameter(5, OrderStatus.DELIVERING.getState());
     		String dbHis = StringUtils.isBlank(order.getStateHistory()) ? "" : order.getStateHistory();
     		dbHis += OrderStatus.DELIVERED.getState() + Separator.COMMON_SEPERATOR_BL
     				+ DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss")

@@ -38,7 +38,7 @@ public class GoodsTypeCtrl extends WebController {
             dto.setParentId(gt.getParentId());
             dto.setTypeDesc(gt.getTypeDesc());
             dto.setUpdateTime(gt.getUpdateTime());
-            
+            dto.setSortNum(gt.getSortNum());
             dto.setParentName(name);
             infos.add(dto);
         }

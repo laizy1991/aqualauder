@@ -143,16 +143,16 @@ $(function () {
         <div class="cardexplain">
             <div class="div_ul" id="all_cnt" ><span><img style='margin-left:5px;' src="/public/images/arrow_unclick.png">&nbsp;&nbsp;我是代言人</span><span class="bg_total">${data?.detail?.getUnderlingCount(0)}(${data?.detail?.getUnderlingValuableCount(0)})人</span></div>
             <ul class="round">
-                <li class="member_cnt" style=""><a href="http://xhq.winbz.com/index.php?g=App&m=Index&a=member_info&type=1&id=2718433"><span>一级代言人<span style="float:right;color:red;">${data?.detail?.getUnderlingCount(1)}(${data?.detail?.getUnderlingValuableCount(1)})</span></span></a></li>
-                <li class="member_cnt"><a href="http://xhq.winbz.com/index.php?g=App&m=Index&a=member_info&type=2&id=2718433"><span>二级代言人<span style="float:right;color:red;">${data?.detail?.getUnderlingCount(2)}(${data?.detail?.getUnderlingValuableCount(2)})</span></span></a></li>
-                <li class="member_cnt"><a href="http://xhq.winbz.com/index.php?g=App&m=Index&a=member_info&type=3&id=2718433"><span>三级代言人<span style="float:right;color:red;">${data?.detail?.getUnderlingCount(3)}(${data?.detail?.getUnderlingValuableCount(3)})</span></span></a></li>           </ul>
+                <li class="member_cnt" style=""><span>一级代言人<span style="float:right;color:red;">${data?.detail?.getUnderlingCount(1)}(${data?.detail?.getUnderlingValuableCount(1)})</span></span></li>
+                <li class="member_cnt"><span>二级代言人<span style="float:right;color:red;">${data?.detail?.getUnderlingCount(2)}(${data?.detail?.getUnderlingValuableCount(2)})</span></span></li>
+                <li class="member_cnt"><span>三级代言人<span style="float:right;color:red;">${data?.detail?.getUnderlingCount(3)}(${data?.detail?.getUnderlingValuableCount(3)})</span></span></li>           </ul>
         </div>
         
         <div class="cardexplain">
             <div class="div_ul" id="all_buy"><span><img style='margin-left:5px;' src="/public/images/arrow_unclick.png">&nbsp;&nbsp;代言人推广<span class="bg_total">${data?.detail?.getOrderCount()}单(￥%{out.print(utils.NumberUtil.fen2yuan(data?.detail?.getOrderAmount()))}%)</span></span></div>
             <ul class="round">
-                <li class="buy_cnt"><a href="http://xhq.winbz.com/index.php?g=App&m=Index&a=member_order&type=1&id=2718433"><span>下单未购买<span style="float:right;color:red;">${data?.detail?.orderFailCount} (￥%{out.print(utils.NumberUtil.fen2yuan(data?.detail?.orderFailAmount))}%)</span></span></a></li>
-                <li class="buy_cnt"><a href="http://xhq.winbz.com/index.php?g=App&m=Index&a=member_order&type=2&id=2718433"><span>下单已购买<span style="float:right;color:red;">${data?.detail?.orderSuccessCount} (￥%{out.print(utils.NumberUtil.fen2yuan(data?.detail?.orderSuccessAmount))}%)</span></span></a></li>
+                <li class="buy_cnt"><span>下单未购买<span style="float:right;color:red;">${data?.detail?.orderFailCount} (￥%{out.print(utils.NumberUtil.fen2yuan(data?.detail?.orderFailAmount))}%)</span></span></li>
+                <li class="buy_cnt"><span>下单已购买<span style="float:right;color:red;">${data?.detail?.orderSuccessCount} (￥%{out.print(utils.NumberUtil.fen2yuan(data?.detail?.orderSuccessAmount))}%)</span></span></li>
             </ul>
         </div>
         
@@ -173,15 +173,6 @@ $(function () {
         <div class="cardexplain">
             <div class="div_ul" onClick="clickTx()"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;申请提现</span></div>
         </div>
-        
-        <!--div class="cardexplain">
-            <div class="div_ul" id="memeber_url"><span><img style='margin-left:5px;' src="/public/images/arrow_unclick.png">&nbsp;&nbsp;复制推广链接</span></div>
-            <span class="memeber_url" style='display:none;'>http://xhq.winbz.com/index.php?g=App&m=Member&a=register&mid=2718433</span>
-        </div-->
-        
-        <!--div class="cardexplain">
-            <a href = './index.php?g=App&m=Index&a=member_top&id=2718433'><div class="div_ul" id="top_url"><span><img style='margin-left:5px;' src="/public/images/arrow_unclick.png">&nbsp;&nbsp;销售排行榜</span></div></a>
-        </div-->
         
     </div>
     

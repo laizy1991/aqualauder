@@ -760,7 +760,6 @@ function showAll() {
 
 
 function refund (type, id) {
-	console.log(type, id);
 	var msg = "";
 	var postUrl = "";
 	if(type == 1) {
@@ -772,6 +771,9 @@ function refund (type, id) {
 	} else if(type == 3) {
 		msg = "您确认需要取消退款吗？";
 		postUrl = "/refundCancel";
+	} else if(type == 4) {
+		msg = "确认收货？";
+		postUrl = "/receiving";
 	} else {
 		return false;
 	}

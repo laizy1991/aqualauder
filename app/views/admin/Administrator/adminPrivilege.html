@@ -1,0 +1,38 @@
+#{extends 'main.html' /}
+
+#{set 'moreStyles'}
+    <link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+    <link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+#{/set}
+
+    <script type="text/javascript" src="/public/js/front/jquery.min.js"></script>
+
+<form action="@{ajax.AdministratorCtrl.updateAdminPrivilege}" method="post">
+#{list items:privileges, as:'p'}
+    <input type="checkbox" name="ids" id="id_${p?.id}" value="${p?.id}">${p.name}</input>
+    <br/>
+#{/list}
+<br/>
+<br/>
+<input type="submit" value="保存"></input>
+</form>
+
+#{include file="common/jsinclude.html" /}
+#{include file="common/page_new.html" /}
+<script>
+
+var adminPrivileges = ${adminPrivileges};
+
+$.each(adminPrivileges, function(idx, value) {
+	$("#id_"+value)[0].checked =true;
+})
+    var verNum = new Date();
+    seajs.config({
+        base:"../",
+        // 加版本号
+        map: [
+            [ '.js', '.js?v='+verNum]
+        ]
+    });
+    seajs.use("@{'/public/js/app/modules/administrator.js'}");
+</script>
