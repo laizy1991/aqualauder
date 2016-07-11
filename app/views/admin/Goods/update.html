@@ -135,12 +135,19 @@
                                 </select>
                             </div>
                         </div>
-                            <div i="button" class="ui-dialog-button">
-                                <button  id="addIcon"  class="a-button" type="button" data-id="添加图片" autofocus="" class="ui-dialog-autofocus">添加图片</button>
-                                <button role="addStock" class="a-button" type="button" data-id="添加库存" autofocus="" class="ui-dialog-autofocus">添加库存</button>
+                        <div class="form-group">
+                            <label class="label"><span class="asterisk">*</span>排序</label>
+                            <div class="col">
+                                <input type="text" name="goods.orderBy" value="${goods.orderBy}">
+                                <span class="msg error-text">必填项！</span>
                             </div>
-                            <div i="button" class="ui-dialog-button">
-                            </div>
+                        </div>
+                        <div i="button" class="ui-dialog-button">
+                            <button  id="addIcon"  class="a-button" type="button" data-id="添加图片" autofocus="" class="ui-dialog-autofocus">添加图片</button>
+                            <button role="addStock" class="a-button" type="button" data-id="添加库存" autofocus="" class="ui-dialog-autofocus">添加库存</button>
+                        </div>
+                        <div i="button" class="ui-dialog-button">
+                        </div>
                         <div id="stockList">
                             #{if goods.goodsStocks.size() > 0}
                             #{set index:0}

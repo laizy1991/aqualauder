@@ -156,6 +156,7 @@ define(function(require) {
                     createTime = $wrap.find('.createTime').val(),
                     updateTime = $wrap.find('.updateTime').val(),
                     state = $wrap.find('.state').val(),
+                    orderBy = $wrap.find('.orderBy').val(),
                     viewDialog = dialog({
                     id: 'viewDialog',
                     title: '查看',
@@ -174,6 +175,7 @@ define(function(require) {
                         $("#goodsTypeToView").text(goodsTypeList[goodsType]);
                         $("#createTimeToView").text(createTime);
                         $("#updateTimeToView").text(updateTime);
+                        $("#orderByToView").text(orderBy);
                         imgs.each(function(index) {
                             var file = imgs[index].value;
                             var dom = $("<img>").attr("src", "/public/pictures/goods/"+file);

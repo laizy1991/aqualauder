@@ -59,6 +59,7 @@
                 <li #{if state==1}class="currentFilter"#{/if} field="state" data="1">上架</li>
             </ul>
         </th>
+        <th class="order#{if orderBy=='orderBy'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="orderBy">排序</th>
         <th>操作</th>
     </tr>
     </thead>
@@ -78,6 +79,7 @@
 		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
 		        <input type="hidden" class="state" value="${info?.state}">
 		        <input type="hidden" class="price" value="${info?.price}">
+		        <input type="hidden" class="orderBy" value="${info?.orderBy}">
 		        <input type="hidden" class="goodsType" value="${info?.goodsType}">
 		        #{if info.goodsIcons.size() > 0 && info.goodsIcons.get(0) != null}
 		        #{list items:info.goodsIcons, as:'icon'}
@@ -96,13 +98,16 @@
                         #{/if}
                     #{/list}
                 </td>
-		        <td>
+                <td>
                     #{if info?.state == 0}
                     <span style="color: #9d9d9d;">下架</span>
                     #{/if}
                     #{if info?.state == 1}
                     <span style="color: #4872ff;">上架</span>
                     #{/if}
+                </td>
+                <td>
+                    <span>${info?.orderBy}</span>
                 </td>
 		        <td>
 		            <div class="opts">
@@ -123,7 +128,7 @@
 <!-- 查看 -->
 <script id="viewDialogTmpl" type="text/html">
     <div class="dialog dialog-view">
-        <form action="#" id="view">
+        <form action="#" id="view" style="max-width: 400px;">
             <div class="form-group">
                 <label class="label">款号:</label>
                 <div class="col">
@@ -164,6 +169,12 @@
                 <label class="label">状态:</label>
                 <div class="col">
                     <label class="info" id="stateToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">排序:</label>
+                <div class="col">
+                    <label class="info" id="orderByToView"></label>
                 </div>
             </div>
             <div id="imgToView"></div>

@@ -37,6 +37,9 @@ public class Goods extends Model {
     @Column(name="update_time")
     private Long updateTime;
 
+    @Column(name="order_by")
+    private Integer orderBy;
+
     @OneToMany
     @JoinColumn(name="goods_id", insertable = false, updatable = false)
     private List<GoodsIcon> goodsIcons;
@@ -131,5 +134,13 @@ public class Goods extends Model {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    public Integer getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(Integer orderBy) {
+        this.orderBy = orderBy;
     }
 }
