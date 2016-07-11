@@ -10,6 +10,7 @@ import play.libs.Files;
 import play.mvc.results.RenderJson;
 import service.GoodsService;
 import service.GoodsStockService;
+import utils.StringUtil;
 
 import java.io.File;
 import java.util.List;
@@ -19,6 +20,10 @@ import java.util.UUID;
 public class GoodsCtrl extends AjaxController {
 
     public static void add(Goods goods, List<GoodsStock> goodsStock, List<GoodsIcon> goodsIcon) throws BusinessException {
+        if(!StringUtil.isNullOrEmpty(goods.getIdentifier()) && GoodsService.getByIdentifier(goods.getIdentifier()) != null) {
+            renderErrorJson("商品款号重复!");
+            return;
+        }
         GoodsService.add(goods, goodsStock, goodsIcon);
         renderSuccessJson();
     }

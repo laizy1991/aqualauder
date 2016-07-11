@@ -3,6 +3,7 @@ package dao;
 import java.util.List;
 
 import models.Goods;
+import utils.StringUtil;
 
 public class GoodsDao {
 
@@ -63,6 +64,19 @@ public class GoodsDao {
             } else {
                 return Goods.find(sql).fetch(page, size);
             }
+        }
+    }
+
+    public static Goods getByIdentifier(String identifier) {
+        if (StringUtil.isNullOrEmpty(identifier)) {
+            return null;
+        }
+        List<Goods> list = Goods.find("lower(identifier) = lower(?)", identifier).fetch();
+
+        if (list.size() > 0) {
+            return list.get(0);
+        } else {
+            return null;
         }
     }
 }

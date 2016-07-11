@@ -10,6 +10,7 @@ import models.GoodsIcon;
 import models.GoodsStock;
 import org.apache.commons.collections.CollectionUtils;
 import play.Logger;
+import utils.StringUtil;
 
 import java.util.List;
 
@@ -127,6 +128,18 @@ public class GoodsService {
             return GoodsIconDao.insert(goodsIcon);
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public static Goods getByIdentifier(String identifier) {
+        if (StringUtil.isNullOrEmpty(identifier)) {
+            return null;
+        }
+
+        try {
+            return GoodsDao.getByIdentifier(identifier);
+        }catch (Exception e) {
+            return null;
         }
     }
 }
