@@ -66,7 +66,8 @@ define(function(require) {
                 ajax.post($form.attr('action'), $form.serialize(), function(result){
                     if(result.success){
                         dd.alert('保存成功！', function(){
-                            window.location.reload(false);
+                            //window.location.reload(false);
+                            window.location.href=$("#goodsListUrl").val();
                         });
                     }else{
                         dd.alert(result.error);
