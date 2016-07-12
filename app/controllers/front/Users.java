@@ -90,9 +90,9 @@ public class Users extends FrontController {
     	String action = request.path;
     	String url =  protocol + request.domain + action + "?" + querystring;
     	
-    	Logger.info("生成的分享链接为: %s", url);
+    	Logger.info("首页生成的分享链接为: %s", url);
     	JsapiConfig config = JsApiService.getSign(url);
-    	Logger.info("config参数为: %s", gson.toJson(config));
+    	Logger.info("首页config参数为: %s", gson.toJson(config));
     	
     	String qrImg = dist.getQrcodeLimitPath();
 
