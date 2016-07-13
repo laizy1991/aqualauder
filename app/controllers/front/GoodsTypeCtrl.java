@@ -1,8 +1,13 @@
 package controllers.front;
 
-import common.annotation.GuestAuthorization;
+import java.util.List;
 
-public class GoodsTypeCtrl {
+import play.mvc.Controller;
+import models.GoodsType;
+import common.annotation.GuestAuthorization;
+import dao.GoodsTypeDao;
+
+public class GoodsTypeCtrl extends Controller {
 	
 	/**
 	 * 索引列表
@@ -11,6 +16,8 @@ public class GoodsTypeCtrl {
 	 */
 	@GuestAuthorization
 	public static void list() {
-		
+	    List<GoodsType> types = GoodsTypeDao.all();
+
+        render("/Front/goods/types.html", types);
 	}
 }
