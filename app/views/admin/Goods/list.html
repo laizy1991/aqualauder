@@ -39,6 +39,7 @@
 <table class="tb">
     <thead>
     <tr  class="text-center">
+        <th data="goodsIcons">图标</th>
         <th class="order#{if orderBy=='identifier'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="identifier">款号</th>
         <th class="order#{if orderBy=='title'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="title">名称</th>
         <th class="order#{if orderBy=='price'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="price">价格</th>
@@ -82,9 +83,10 @@
 		        <input type="hidden" class="orderBy" value="${info?.orderBy}">
 		        <input type="hidden" class="goodsType" value="${info?.goodsType}">
 		        #{if info.goodsIcons.size() > 0 && info.goodsIcons.get(0) != null}
-		        #{list items:info.goodsIcons, as:'icon'}
-		            <input type="hidden" class="icons" value="${icon.iconUrl}">
-		        #{/list}
+			        #{list items:info.goodsIcons, as:'icon'}
+			            <input type="hidden" class="icons" value="${icon.iconUrl}">
+			        #{/list}
+			        <td><img style="width:50px;height:50px;" src="${info.goodsIcons.get(0).iconUrl}"/></td>
 		        #{/if}
 		        <td>${info?.identifier}</td>
 		        <td>${info?.title}</td>

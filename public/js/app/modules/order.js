@@ -262,7 +262,7 @@ define(function(require) {
                             var imgs = goodsIconToView.split("|");
                             for(var index=0; index < imgs.length; index++){
                                 var file = imgs[index];
-                                var dom = $("<img>").attr("src", "/public/pictures/goods/"+file);
+                                var dom = $("<img>").attr("src", file);
                                 $("#imgToView").append(dom)
                             }
                         }

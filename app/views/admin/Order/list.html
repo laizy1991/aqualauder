@@ -28,6 +28,8 @@
 <table class="tb">
     <thead>
     <tr  class="text-center">
+    	<th>图标</th>
+    	<th>商品名称</th>
         <th class="order#{if orderBy=='outTradeNo'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="outTradeNo">订单编号</th>
         <th class="filter">
             <span>状态</span>
@@ -106,6 +108,19 @@
                 #{/if}
 
                 <!--<td>${info?.id}</td>-->
+		        <td>
+		        	 #{if info?.orderGoods != null && info?.orderGoods.size() > 0}
+		        	 	<img style="width:50px;height:50px;" src="${info?.orderGoods.get(0).goodsIcon}"/>
+		        	 #{/if}
+		        </td>
+		        <td style="width:200px;">
+		        	#{if info?.orderGoods != null && info?.orderGoods.size() > 0}
+		        	 	${info?.orderGoods.get(0).goodsTitle}
+		        	 #{/if}
+		        	 #{else}
+		        	 	&nbsp;
+		        	 #{/else}
+		        </td>
 		        <td>${info?.outTradeNo}</td>
 		        <td>
                     #{if info?.state == 0}
