@@ -131,11 +131,11 @@
     <!-- Swiper -->
     <div class="swiper-container" style="width:100%;">
         <div class="swiper-wrapper" style='height:251px;'>
-            #{list items:imgs, as:"url"}
+            #{list items:imgs, as:"img"}
         
             <div class="swiper-slide">
-            <a href="#">
-            <img style="width:100%;" src='/public/pictures/goods/${url}'></a></div>
+            <a href="${img?.activityUrl}">
+            <img style="width:100%;" src='${img?.picUrl}'></a></div>
             
             #{/list}
             

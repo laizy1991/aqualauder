@@ -8,10 +8,10 @@ import java.util.Map;
 
 import models.Goods;
 import models.GoodsColor;
-import models.GoodsIcon;
 import models.GoodsSize;
 import models.GoodsStock;
 import models.GoodsType;
+import models.Notice;
 import models.ShippingAddress;
 import models.User;
 
@@ -27,12 +27,15 @@ import service.wx.service.jsapi.JsApiService;
 import service.wx.service.user.WxUserService;
 
 import com.google.gson.Gson;
-
+import com.google.gson.reflect.TypeToken;
 import common.annotation.GuestAuthorization;
 import common.core.FrontController;
+
 import dao.GoodsStockDao;
 import dao.GoodsTypeDao;
+import dao.NoticeDao;
 import dao.ShippingAddressDao;
+import dto.NoticePicInfo;
 
 
 public class GoodsCtrl extends FrontController {
@@ -48,15 +51,14 @@ public class GoodsCtrl extends FrontController {
             tag = -1;
         }
 		List<Goods> goods = GoodsService.list(-1, -1, tag);
-		Goods activity = GoodsService.get(1l);
-		List<String> imgs = new ArrayList<String>();
+		Notice notice = NoticeDao.get();
+		List<NoticePicInfo> imgs = new ArrayList<NoticePicInfo>();
 		String desc = "";
-		if(activity != null) {
-		    for(GoodsIcon gi : activity.getGoodsIcons()) {
-		        imgs.add(gi.getIconUrl());
-		    }
-		    desc = activity.getGoodsDesc();
+		if(notice != null) {
+		    desc = notice.getContent();
+		    imgs = new Gson().fromJson(notice.getPicInfo(), new TypeToken<List<NoticePicInfo>>(){}.getType());
 		}
+		
 		
 		List<GoodsType> types = GoodsTypeDao.all();
 		

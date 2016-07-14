@@ -35,9 +35,9 @@ public class GoodsDao {
     public static List<Goods> getBy(int type, int page, int size)  {
         String sql = "";
         if(type < 0) {
-            sql = "from Goods g where g.state = 1 and g.id != 1 order by g.id desc";                
+            sql = "from Goods g where g.state = 1 order by g.id desc";                
         } else if(type == 0) {
-            sql = "from Goods g where g.state = 1 and g.id != 1 order by g.createTime desc";
+            sql = "from Goods g where g.state = 1 order by g.createTime desc";
         } else {
             List<Integer> ids = GoodsTypeDao.getAllSubType(type);
             String idStr = "";
@@ -50,7 +50,7 @@ public class GoodsDao {
                 idStr = idStr.substring(0, idStr.length()-1);
             }
             
-            sql = "from Goods g where g.goodsType in ( " + idStr + ") and g.state = 1 and g.id != 1 order by g.id desc";
+            sql = "from Goods g where g.goodsType in ( " + idStr + ") and g.state = 1 order by g.id desc";
         }
         if(page == -1 && size == -1) {
             if(type <= 0) {
