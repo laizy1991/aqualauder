@@ -4,6 +4,7 @@
 
 # Home page
 GET     /aqualauder                                       Application.index
+GET /            front.GoodsCtrl.list
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
