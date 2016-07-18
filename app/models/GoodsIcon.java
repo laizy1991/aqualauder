@@ -18,9 +18,12 @@ public class GoodsIcon extends Model {
 
     @Column(name="goods_id")
     private Long goodsId;
-    
+
     @Column(name="icon_url")
     private String iconUrl;
+
+    @Column(name="order_by")
+    private String orderBy;
 
     public Long getGoodsId() {
         return goodsId;
@@ -37,5 +40,12 @@ public class GoodsIcon extends Model {
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
     }
-    
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
+    }
 }

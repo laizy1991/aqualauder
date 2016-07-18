@@ -3,6 +3,7 @@
 #{set 'moreStyles'}
 <link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
 <link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+<link rel="stylesheet" href="@{'/public/css/bootstrap.min.css'}">
 #{/set}
 <style>
     #stockList, #iconList {
@@ -16,7 +17,7 @@
     }
 
     #fileUploadBox {
-        height: 403px;
+        height: 519px;
         width: 465px;
         overflow-y: scroll;
     }
@@ -41,17 +42,21 @@
     }
 
     #imgSorter .img {
-        margin: 15px 5px;
+        padding: 5px 5px;
+        margin: 5px;
+        background: #f0f0f0;
+        border-radius: 3px;
     }
 
     #imgSorter .img .btn-op {
         background: #adadad;
         opacity: 0.5;
-        font-size: 32px;
+        font-size: 27px;
         width: 32px;
         height: 32px;
         float: left;
         cursor: pointer;
+        padding-left: 2px;
     }
 
     #imgSorter .img .btn-op:hover {
@@ -85,6 +90,17 @@
         margin: 10px;
         border-radius: 3px;
         color: #FFF;
+    }
+
+    input {
+        line-height: normal;
+    }
+
+    .swfupload{
+        opacity: 0;
+        position: absolute;
+        z-index: 201;
+        margin: 10px;
     }
 </style>
 <!-- 页头 begin -->
@@ -164,19 +180,18 @@
                                 <span class="msg error-text">必填项！</span>
                             </div>
                         </div>
-                        <div id="stockList">
-                        </div>
                         <div i="button" class="ui-dialog-button">
+                            <span id="spanButtonPlaceholder"></span>
+                            <button  id="addIcon"  class="a-button" type="button" data-id="添加图片" autofocus="" class="ui-dialog-autofocus">添加图片</button>
                             <button role="addStock" class="a-button" type="button" data-id="添加库存" autofocus="" class="ui-dialog-autofocus">添加库存</button>
+                        </div>
+                        <div id="stockList">
                         </div>
                     </div>
                 </div>
             </td>
             <td i="body" class="ui-dialog-body ui-dialog-body-thin" style="text-align: left;display: block;">
                 <div id="fileUploadBox">
-                    <div id="fileSelectButton" style="background-color: #C5D9FF; padding: 5px;">
-                        <span id="spanButtonPlaceholder"></span>
-                    </div>
                     <div id="thumbnails">
                         <table id="infoTable" border="0" width="465">
                         </table>
@@ -188,7 +203,7 @@
     </tr>
     <tr>
         <td i="footer" class="ui-dialog-footer">
-            <div i="button" class="ui-dialog-button">
+            <div i="button" class="ui-dialog-button" style="margin: 10px;">
                 <button role="submitAdd" type="button" data-id="保存" autofocus="" class="ui-dialog-autofocus">保存</button>
             </div>
         </td>
@@ -205,9 +220,10 @@
 #{set 'moreScripts'}
 <script id="addGoodIconTmpl" type="text/html">
     <div class="img">
-        <div class="deleteImg btn-op">×</div>
-        <div class="up btn-op" style="margin-left:5px;font-size: 32px;text-align: center;">↑︎</div>
-        <div class="down btn-op" style="margin-left:5px;font-size: 32px;text-align: center;">↓︎</div>
+        <div title="删除" class="deleteImg btn-op"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+        <div title="上移" class="up btn-op" style="margin-left:5px;"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></div>
+        <div title="下移" class="down btn-op" style="margin-left:5px;">︎︎<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></div>
+        <div title="修改排序" class="updateOrderBy btn-op" style="margin-left:5px;"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span>︎︎</div>
         <img src="{src}" />
         <input type="hidden" name="goodsIcon[{index}].iconUrl" value="{value}">
     </div>

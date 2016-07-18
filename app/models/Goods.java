@@ -41,6 +41,7 @@ public class Goods extends Model {
     private Integer orderBy;
 
     @OneToMany
+    @OrderBy("order_by")
     @JoinColumn(name="goods_id", insertable = false, updatable = false)
     private List<GoodsIcon> goodsIcons;
 

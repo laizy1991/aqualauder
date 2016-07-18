@@ -86,6 +86,12 @@ public class GoodsCtrl extends AjaxController {
         }
     }
 
+    public static void updateIcon(GoodsIcon goodsIcon) {
+        if(GoodsService.updateIcon(goodsIcon)) {
+            renderSuccessJson();
+        }
+    }
+
     public static void changeIcon(GoodsIcon goodsIcon, GoodsIcon nxGoodsIcon) {
         String temp = goodsIcon.getIconUrl();
         goodsIcon.setIconUrl(nxGoodsIcon.getIconUrl());

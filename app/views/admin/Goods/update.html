@@ -3,28 +3,33 @@
 #{set 'moreStyles'}
 <link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
 <link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+<link rel="stylesheet" href="@{'/public/css/bootstrap.min.css'}">
 #{/set}
 <style>
     #fileUploadBox{
         box-shadow: 0px 0px 3px #9d9d9d;
         background: #dedede;
-        height: 403px;
+        height: 519px;
         width: 465px;
         overflow-y: scroll;
     }
 
     #imgSorter .img {
-        margin: 15px 5px;
+        padding: 5px 5px;
+        margin: 5px;
+        background: #f0f0f0;
+        border-radius: 3px;
     }
 
     #imgSorter .img .btn-op {
         background: #adadad;
         opacity: 0.5;
-        font-size: 32px;
+        font-size: 27px;
         width: 32px;
         height: 32px;
         float: left;
         cursor: pointer;
+        padding-left: 2px;
     }
 
     #imgSorter .img .btn-op:hover {
@@ -41,6 +46,16 @@
 
     #imgSorter .img:last-child .down {
         display: none;
+    }
+
+    #imgSorter .img .imgOrder {
+        background: #adadad;
+        border: none;
+        color: white;
+        font-size: 26px;
+        width: 100px;
+        float: right;
+        text-indent: 6px;
     }
 
 
@@ -77,6 +92,11 @@
         z-index: 201;
         margin: 10px;
     }
+
+    input {
+        line-height: normal;
+    }
+
 </style>
 <!-- 页头 begin -->
 <div class="main-header">
@@ -209,11 +229,13 @@
                     #{if goods.goodsIcons.size() > 0 && goods.goodsIcons.get(0) != null}
                         #{list items:goods.goodsIcons, as:'info'}
                         <div class="img">
-                            <div class="deleteImg btn-op">×</div>
-                            <div class="up btn-op" style="margin-left:5px;font-size: 32px;text-align: center;">↑︎</div>
-                            <div class="down btn-op" style="margin-left:5px;font-size: 32px;text-align: center;">↓︎︎</div>
+                            <div title="删除" class="deleteImg btn-op"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                            <!--<div title="上移" class="up btn-op" style="margin-left:5px;"><span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></div>-->
+                            <!--<div title="下移" class="down btn-op" style="margin-left:5px;">︎︎<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span></div>-->
+                            <input class="imgOrder"  name="goodsIcon.orderBy"  type="text" value="${info.orderBy}">
+                            <div title="修改排序" class="updateOrderBy btn-op" style="float: right"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span>︎︎</div>
                             <img src="${info.iconUrl}">
-                            <input type="hidden" value="${info.id}">
+                            <input type="hidden" name="goodsIcon.id" value="${info.id}">
                         </div>
                     #{/list}
                     #{/if}
@@ -277,7 +299,8 @@
 
         $(document).delegate(".deleteImg" ,"click", function(){
             var data = {};
-            data["goodsIcon.id"] = $(this).parent().find("input").val();
+            data["goodsIcon.id"] = $(this).parent().find("input[name='goodsIcon.id']").val();
+            console.log(data)
             $.post("@{ajax.GoodsCtrl.deleteIcon}", data, function(result) {
                 result = JSON.parse(result);
                 if(result.success) {
@@ -290,8 +313,8 @@
             var data = {};
             var current = $(this).parent();
             var target = $(this).parent().prev();
-            data["goodsIcon.id"] = current.find("input").val();
-            data["nxGoodsIcon.id"] = target.find("input").val();
+            data["goodsIcon.id"] = current.find("input[name='goodsIcon.id']").val();
+            data["nxGoodsIcon.id"] = target.find("input[name='goodsIcon.id']").val();
             $.post("@{ajax.GoodsCtrl.changeIcon}", data, function(result) {
                 result = JSON.parse(result);
                 if(result.success) {
@@ -304,9 +327,22 @@
             var data = {};
             var current = $(this).parent();
             var target = $(this).parent().next();
-            data["goodsIcon.id"] = current.find("input").val();
-            data["nxGoodsIcon.id"] = target.find("input").val();
+            data["goodsIcon.id"] = current.find("input[name='goodsIcon.id']").val();
+            data["nxGoodsIcon.id"] = target.find("input[name='goodsIcon.id']").val();
             $.post("@{ajax.GoodsCtrl.changeIcon}", data, function(result) {
+                result = JSON.parse(result);
+                if(result.success) {
+                    window.location.reload();
+                }
+            });
+        });
+
+        $(document).delegate(".updateOrderBy", "click", function(){
+            var data = {};
+            var current = $(this).parent();
+            data["goodsIcon.id"] = current.find("input[name='goodsIcon.id']").val();
+            data["goodsIcon.orderBy"] = current.find("input[name='goodsIcon.orderBy']").val();
+            $.post("@{ajax.GoodsCtrl.updateIcon}", data, function(result) {
                 result = JSON.parse(result);
                 if(result.success) {
                     window.location.reload();
