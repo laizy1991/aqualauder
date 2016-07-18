@@ -180,7 +180,7 @@ define(function(require) {
                         $("#orderByToView").text(orderBy);
                         imgs.each(function(index) {
                             var file = imgs[index].value;
-                            var dom = $("<img>").attr("src", "/public/pictures/goods/"+file);
+                            var dom = $("<img>").attr("src", file);
                             $("#imgToView").append(dom)
                         });
 

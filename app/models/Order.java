@@ -363,5 +363,20 @@ public class Order extends GenericModel {
         this.identifier = identifier;
     }
 
+	public String getGoodsTitle() {
+		return goodsTitle;
+	}
+
+	public void setGoodsTitle(String goodsTitle) {
+		this.goodsTitle = goodsTitle;
+	}
+
+	public List<OrderGoods> getOrderGoods() {
+		return orderGoods;
+	}
+
+	public void setOrderGoods(List<OrderGoods> orderGoods) {
+		this.orderGoods = orderGoods;
+	}
 
 }

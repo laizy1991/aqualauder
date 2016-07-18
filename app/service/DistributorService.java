@@ -446,4 +446,19 @@ public class DistributorService {
         info.setUserId(userId);
         return AuditInfoDao.insert(info);
     }
+    
+    public static List<Integer> getSuperiors(int userId) {
+        List<Integer> list = new ArrayList<Integer>();
+        int findId = userId;
+        for(int i=0; i<MAX_BLOTTER_DEPTH; i++) {
+            DistributorSuperior ds = DistributorSuperiorDao.get(findId);
+            if(ds == null) {
+                break;
+            }
+            findId = ds.getSuperior();
+            list.add(ds.getSuperior());
+        }
+        
+        return list;
+    }
 }

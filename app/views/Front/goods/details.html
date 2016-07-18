@@ -970,95 +970,46 @@
     };
 
 
-    window.shareData = {
-        "imgUrl": "http://xhq.winbz.com/Public/Uploads/55c495e7ba9d0.jpg",
-        "sendFriendLink": 'http://xhq.winbz.com/index.php?g=App&m=Index&a=index_menu&menu_id=11&user_id=2728512',
-        "tTitle": "nemo 的店铺",
-        "tContent": "nemo 的店铺"
-    };
 </script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script>
-    wx.config({
-        debug: false,
-        appId: 'wxa33d0b489d1f8f5c',
-        timestamp: '1464097901',
-        nonceStr: 'CM6UXx3FlzUpDZIJ',
-        signature: '64d71566913af97a4ef8d664a0942f933d2fdda2',
-        jsApiList: ['checkJsApi', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo']
-    });
-    /* wx.error(function (res) {
-     alert('wx.error: '+JSON.stringify(res));
-     }); */
-    wx.ready(function() {
-
-        wx.onMenuShareTimeline({
-            title: window.shareData.tTitle, // 分享标题
-            link: window.shareData.sendFriendLink, // 分享链接
-            imgUrl: window.shareData.imgUrl, // 分享图标
-            success: function() {
-                // 用户确认分享后执行的回调函数
-            },
-            cancel: function() {
-                // 用户取消分享后执行的回调函数
-            }
-        });
-
-        wx.onMenuShareAppMessage({
-            title: window.shareData.tTitle, // 分享标题
-            desc: window.shareData.tContent, // 分享描述
-            link: window.shareData.sendFriendLink, // 分享链接
-            imgUrl: window.shareData.imgUrl, // 分享图标
-            type: '', // 分享类型,music、video或link，不填默认为link
-            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-            success: function() {
-                // 用户确认分享后执行的回调函数
-            },
-            cancel: function() {
-                // 用户取消分享后执行的回调函数
-            }
-        });
-
-        wx.onMenuShareQQ({
-            title: window.shareData.tTitle, // 分享标题
-            desc: window.shareData.tContent, // 分享描述
-            link: window.shareData.sendFriendLink, // 分享链接
-            imgUrl: window.shareData.imgUrl, // 分享图标
-            success: function() {
-                // 用户确认分享后执行的回调函数
-            },
-            cancel: function() {
-                // 用户取消分享后执行的回调函数
-            }
-        });
-
-        wx.onMenuShareWeibo({
-            title: window.shareData.tTitle, // 分享标题
-            desc: window.shareData.tContent, // 分享描述
-            link: window.shareData.sendFriendLink, // 分享链接
-            imgUrl: window.shareData.imgUrl, // 分享图标
-            success: function() {
-                // 用户确认分享后执行的回调函数
-            },
-            cancel: function() {
-                // 用户取消分享后执行的回调函数
-            }
-        });
-    });
-</script>
 <script type="text/javascript">
-    (function(m, ei, q, i, a, j, s) {
-        m[a] = m[a] || function() {
-                    (m[a].a = m[a].a || []).push(arguments)
-                };
-        j = ei.createElement(q),
-                s = ei.getElementsByTagName(q)[0];
-        j.async = true;
-        j.charset = 'UTF-8';
-        j.src = i + '?v=' + new Date().getUTCDate();
-        s.parentNode.insertBefore(j, s);
-    })(window, document, 'script', '//static.meiqia.com/dist/meiqia.js', '_MEIQIA');
-    _MEIQIA('entId', 15963);
+	wx.config({
+	    appId: "${config.appId}", // 必填，公众号的唯一标识
+	    timestamp: ${config.timestamp}, // 必填，生成签名的时间戳
+	    nonceStr: "${config.nonceStr}", // 必填，生成签名的随机串
+	    signature: "${config.signature}",// 必填，签名，见附录1
+	    jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+	});
+	wx.ready(function(){
+	    // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+		wx.onMenuShareTimeline({
+		    title: "安淇兰黛-${goods.title}，仅售￥${totalFee}，${goods.goodsDesc}", // 分享标题
+		    link: "${config.url}", // 分享链接
+		    imgUrl: "${goodsIcon}", // 分享图标
+		    success: function () { 
+		        // 用户确认分享后执行的回调函数
+		        console.log("分享到朋友圈成功");
+		    },
+		    cancel: function () { 
+		        // 用户取消分享后执行的回调函数
+		    	console.log("取消分享到朋友圈");
+		    }
+		});
+		wx.onMenuShareAppMessage({
+		    title: "安淇兰黛-${goods.title}", // 分享标题
+		    desc: "仅售￥${totalFee}，${goods.goodsDesc}", // 分享描述
+		    link: "${config.url}", // 分享链接
+		    imgUrl: "${goodsIcon}", // 分享图标
+		    type: "link", // 分享类型,music、video或link，不填默认为link
+		 //   dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+		    success: function () { 
+		    	console.log("分享到好友成功");
+		    },
+		    cancel: function () { 
+		    	console.log("取消分享到好友");
+		    }
+		});
+	});
 </script>
 <style>
     .footermenu ul li a {
@@ -1079,6 +1030,7 @@
 </div>
 <div id="MEIQIA-INVITE"><span id="MEIQIA-INVITE-CLOSE" class="MEIQIA-ICON"></span>
     <div id="MEIQIA-INVITE-INSIDE">您好，当前有专业客服人员在线，让我们来帮助您吧。</div> <span id="MEIQIA-INVITE-ARROW1"></span> <span id="MEIQIA-INVITE-ARROW2"></span></div>
+
 </body>
 
 </html>

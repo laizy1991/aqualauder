@@ -8,6 +8,7 @@ import models.Goods;
 import models.Order;
 import models.OrderGoods;
 import models.RefundOrder;
+import models.User;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -16,6 +17,8 @@ import play.Logger;
 import utils.DateUtil;
 import utils.IdGenerator;
 
+import common.constants.CommonDictKey;
+import common.constants.CommonDictType;
 import common.constants.GoodsType;
 import common.constants.OrderStatus;
 import common.constants.RefundStatus;
@@ -227,9 +230,32 @@ public class BuyerService {
             Logger.error("order not found, id:%s", orderId);
             return false;
         }
+        
+        //通知所有上线
+        notifySuperior(orderId, order.getUserId());
+        
         DistributorService.checkAndBecomeDistributor(order.getUserId());
         order.setPayTime(System.currentTimeMillis());
         boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.DELIVERING);
         return isSucc;
+    }
+
+    /**
+     * 支付成功通知上线
+     * @param orderId 
+     * @param userId
+     */
+    private static void notifySuperior(long orderId, Integer userId) {
+        List<Integer> superiors = DistributorService.getSuperiors(userId);
+        String msg = CommonDictService.getValue(CommonDictType.CONFIG, CommonDictKey.PAY_SUCCESS_MSG);
+        for(Integer uid : superiors) {
+            User user = UserService.get(uid);
+            if(user == null) {
+                continue;
+            }
+            String msgTmp = msg;
+            msgTmp = msgTmp.replace("%s", user.getNickname());
+            WxMsgService.notifySuperior(orderId, uid, msgTmp);
+        }
     }
 }

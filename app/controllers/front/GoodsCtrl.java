@@ -1,5 +1,6 @@
 package controllers.front;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,55 +8,70 @@ import java.util.Map;
 
 import models.Goods;
 import models.GoodsColor;
-import models.GoodsIcon;
 import models.GoodsSize;
 import models.GoodsStock;
 import models.GoodsType;
+import models.Notice;
 import models.ShippingAddress;
 import models.User;
 
 import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
+import play.Play;
 import service.GoodsColorService;
 import service.GoodsService;
 import service.GoodsSizeService;
+import service.wx.dto.jspai.JsapiConfig;
+import service.wx.service.jsapi.JsApiService;
 import service.wx.service.user.WxUserService;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import common.annotation.GuestAuthorization;
 import common.core.FrontController;
 
 import dao.GoodsStockDao;
 import dao.GoodsTypeDao;
+import dao.NoticeDao;
 import dao.ShippingAddressDao;
+import dto.NoticePicInfo;
 
 
 public class GoodsCtrl extends FrontController {
-
+	public static Gson gson = new Gson();
 	
 	/**
 	 * 微信一级菜单 女神新衣
 	 * 0-新品 1-裙装 2-整体搭配 3-上装 4-下装 -1-全部
 	 */
     @GuestAuthorization
-    public static void list(Integer type, boolean fromPage) {
-        if(type == null || type < 0) {
-            type = -1;
+    public static void list(Integer tag, boolean fromPage) {
+        if(tag == null || tag < 0) {
+            tag = -1;
         }
-		List<Goods> goods = GoodsService.list(-1, -1, type);
-		Goods activity = GoodsService.get(1l);
-		List<String> imgs = new ArrayList<String>();
+		List<Goods> goods = GoodsService.list(-1, -1, tag);
+		Notice notice = NoticeDao.get();
+		List<NoticePicInfo> imgs = new ArrayList<NoticePicInfo>();
 		String desc = "";
-		if(activity != null) {
-		    for(GoodsIcon gi : activity.getGoodsIcons()) {
-		        imgs.add(gi.getIconUrl());
-		    }
-		    desc = activity.getGoodsDesc();
+		if(notice != null) {
+		    desc = notice.getContent();
+		    imgs = new Gson().fromJson(notice.getPicInfo(), new TypeToken<List<NoticePicInfo>>(){}.getType());
 		}
 		
+		
 		List<GoodsType> types = GoodsTypeDao.all();
-		render("/Front/goods/list.html", imgs, goods, desc, types);
+		
+		String querystring = request.querystring;
+    	String protocol = request.secure?"https://":"http://";
+    	String action = request.path;
+    	String url =  protocol + request.domain + action + "?" + querystring;
+    	
+    	Logger.info("生成的分享链接为: %s", url);
+    	JsapiConfig config = JsApiService.getSign(url);
+    	Logger.info("config参数为: %s", gson.toJson(config));
+    	
+		render("/Front/goods/list.html", imgs, goods, desc, types, config);
     }
 
 	@GuestAuthorization
@@ -113,7 +129,29 @@ public class GoodsCtrl extends FrontController {
             map.put(color, gs.getAmount());
         }
         String stockMapJson = new Gson().toJson(stockMap);
-		render("/Front/goods/details.html", goods, stockMapJson, address, sizeList);
+        
+        //分享
+        String querystring = request.querystring;
+    	String protocol = request.secure?"https://":"http://";
+    	String action = request.path;
+    	String url =  protocol + request.domain + action + "?" + querystring;
+    	
+    	Logger.info("商品详情页生成的分享链接为: %s", url);
+    	JsapiConfig config = JsApiService.getSign(url);
+    	Logger.info("商品详情页config参数为: %s", gson.toJson(config));
+    	
+    	BigDecimal b = new BigDecimal(goods.getPrice()/100D);  
+		double totalFee = b.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+		String goodsIcon = Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") +
+				"/public/images/getheadimg.jpg"; 
+		if(null != goods.getGoodsIcons() && goods.getGoodsIcons().size() > 0) {
+			//TODO 图片路径修改，这里前面一定要带域名，因为分享时必须带上才能显示
+			goodsIcon = Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") + 
+					"/public/pictures/goods/" + goods.getGoodsIcons().get(0).getIconUrl(); 
+		}
+		
+		render("/Front/goods/details.html", goods, stockMapJson, address, sizeList, 
+				config, totalFee, goodsIcon);
 	}
 	
 }

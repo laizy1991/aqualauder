@@ -441,4 +441,9 @@ public class WxMsgService {
 		
 		return WxTplMsgServcie.sendWxTplMsg(json);
 	}
+
+    public static void notifySuperior(long orderId, Integer uid, String msgTmp) {
+        // TODO Auto-generated method stub
+        
+    }
 }

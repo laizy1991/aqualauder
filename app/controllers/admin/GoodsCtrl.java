@@ -1,16 +1,20 @@
 package controllers.admin;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
+import models.Goods;
+import models.GoodsColor;
+import models.GoodsIcon;
+import models.GoodsSize;
+import models.GoodsType;
+import play.Play;
+import utils.StringUtil;
 import common.constants.GlobalConstants;
 import common.core.Pager;
 import common.core.WebController;
 import dao.GoodsTypeDao;
-import models.Goods;
-import models.GoodsColor;
-import models.GoodsSize;
-import models.GoodsType;
-import utils.StringUtil;
-
-import java.util.List;
 
 public class GoodsCtrl extends WebController {
 
@@ -23,6 +27,20 @@ public class GoodsCtrl extends WebController {
         String HQL = createHql(orderBy,asc, key, goodsType, state);
 		Long count = Goods.count(HQL);
         List<Goods> goodses = Goods.find(HQL).fetch(page, pageSize);
+        String iconUrl = "";
+        if(null != goodses && goodses.size() > 0 ) {
+			for (Goods gd : goodses) {
+				if(null != gd.getGoodsIcons() && gd.getGoodsIcons().size() > 0) {
+					for (GoodsIcon icon : gd.getGoodsIcons()) {
+						if(!StringUtils.isEmpty(icon.getIconUrl())) {
+							//TODO 图片路径修改
+							iconUrl = "/public/pictures/goods/" + icon.getIconUrl();
+							icon.setIconUrl(iconUrl);
+						}
+					}
+				}
+			}
+		}
         
         Pager<Goods> pageData = new Pager<Goods>(count.intValue(), page, pageSize);
         pageData.setList(goodses);
