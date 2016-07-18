@@ -98,8 +98,8 @@ public class GoodsService {
         String sep = "";
         for(GoodsIcon icon : icons) {
             sb.append(icon.getIconUrl());
-            sb.append(sep);
             sep = Separator.COMMON_SEPERATOR_COMME;
+            sb.append(sep);
         }
         
         return sb.toString();
