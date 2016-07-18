@@ -151,6 +151,7 @@ define(function(require) {
                     identifier = $wrap.find('.identifier').val(),
                     imgs = $wrap.find('.icons'),
                     title = $wrap.find('.title').val(),
+                    price = $wrap.find('.price').val(),
                     desc = $wrap.find('.desc').val(),
                     goodsType = $wrap.find(".goodsType").val(),
                     createTime = $wrap.find('.createTime').val(),
@@ -170,6 +171,7 @@ define(function(require) {
                         var goodsTypeList={0:"新品",1:"裙装",2:"整体搭配",3:"上装",4:"下装",};
                         $("#identifierToView").text(identifier);
                         $("#titleToView").text(title);
+                        $("#priceToView").text("¥" + price/100);
                         $("#descToView").text(desc);
                         $("#stateToView").text(state==1?"上架":state==0?"下架":"未知");
                         $("#goodsTypeToView").text(goodsTypeList[goodsType]);
