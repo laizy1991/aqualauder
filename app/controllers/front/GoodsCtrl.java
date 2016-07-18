@@ -145,9 +145,7 @@ public class GoodsCtrl extends FrontController {
 		String goodsIcon = Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") +
 				"/public/images/getheadimg.jpg"; 
 		if(null != goods.getGoodsIcons() && goods.getGoodsIcons().size() > 0) {
-			//TODO 图片路径修改，这里前面一定要带域名，因为分享时必须带上才能显示
-			goodsIcon = Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn") + 
-					"/public/pictures/goods/" + goods.getGoodsIcons().get(0).getIconUrl(); 
+			goodsIcon = goods.getGoodsIcons().get(0).getIconUrl();
 		}
 		
 		render("/Front/goods/details.html", goods, stockMapJson, address, sizeList, 

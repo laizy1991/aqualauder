@@ -28,19 +28,6 @@ public class OrderCtrl extends WebController {
 
         Long count = Order.count(HQL);
         List<Order> orders = Order.find(HQL).fetch(page, pageSize);
-        if(null != orders && orders.size() > 0) {
-        	for (Order order : orders) {
-        		order.setGoodsTitle(StringUtils.trim(order.getGoodsTitle()));
-				if(null != order.getOrderGoods() && order.getOrderGoods().size() > 0) {
-					for (OrderGoods og : order.getOrderGoods()) {
-						if(!StringUtils.isEmpty(og.getGoodsIcon())) {
-							//TODO 图片路径修改
-							og.setGoodsIcon("/public/pictures/goods/" + og.getGoodsIcon());
-						}
-					}
-				}
-			}
-        }
         Pager<Order> pageData = new Pager<Order>(count.intValue(), page, pageSize);
         pageData.setList(orders);
         
