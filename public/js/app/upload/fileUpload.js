@@ -13,8 +13,8 @@ define(function(require) {
             upload_url: "/ajax.goodsctrl/upload",
             use_query_string:true,
             // File Upload Settings
-            file_size_limit : "10 MB",	// 文件大小控制
-            file_types : "*.*",
+            file_size_limit : "1 MB",	// 文件大小控制
+            file_types : "*.jpg;*.jpeg;*.png;*.gif;*.bmp",
             file_types_description : "All Files",
             file_upload_limit : "0",
             file_post_name: 'fileData',
