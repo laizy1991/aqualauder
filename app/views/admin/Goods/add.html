@@ -70,6 +70,10 @@
         display: none;
     }
 
+    #imgSorter .img img {
+        width: 100%;
+    }
+
     #stockList input {
         width: 140px;
     }
@@ -204,7 +208,7 @@
         <div class="deleteImg btn-op">×</div>
         <div class="up btn-op" style="margin-left:5px;font-size: 32px;text-align: center;">↑︎</div>
         <div class="down btn-op" style="margin-left:5px;font-size: 32px;text-align: center;">↓︎</div>
-        <img src="/public/pictures/goods/{src}" />
+        <img src="{src}" />
         <input type="hidden" name="goodsIcon[{index}].iconUrl" value="{value}">
     </div>
 </script>

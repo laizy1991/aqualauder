@@ -27,20 +27,6 @@ public class GoodsCtrl extends WebController {
         String HQL = createHql(orderBy,asc, key, goodsType, state);
 		Long count = Goods.count(HQL);
         List<Goods> goodses = Goods.find(HQL).fetch(page, pageSize);
-        String iconUrl = "";
-        if(null != goodses && goodses.size() > 0 ) {
-			for (Goods gd : goodses) {
-				if(null != gd.getGoodsIcons() && gd.getGoodsIcons().size() > 0) {
-					for (GoodsIcon icon : gd.getGoodsIcons()) {
-						if(!StringUtils.isEmpty(icon.getIconUrl())) {
-							//TODO 图片路径修改
-							iconUrl = "/public/pictures/goods/" + icon.getIconUrl();
-							icon.setIconUrl(iconUrl);
-						}
-					}
-				}
-			}
-		}
         
         Pager<Goods> pageData = new Pager<Goods>(count.intValue(), page, pageSize);
         pageData.setList(goodses);

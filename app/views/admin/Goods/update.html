@@ -43,6 +43,11 @@
         display: none;
     }
 
+
+    #imgSorter .img img {
+        width: 100%;
+    }
+
     .a-button {
         background: #208bfe;
         padding: 10px;
@@ -207,7 +212,7 @@
                             <div class="deleteImg btn-op">×</div>
                             <div class="up btn-op" style="margin-left:5px;font-size: 32px;text-align: center;">↑︎</div>
                             <div class="down btn-op" style="margin-left:5px;font-size: 32px;text-align: center;">↓︎︎</div>
-                            <img src="/public/pictures/goods/${info.iconUrl}">
+                            <img src="${info.iconUrl}">
                             <input type="hidden" value="${info.id}">
                         </div>
                     #{/list}

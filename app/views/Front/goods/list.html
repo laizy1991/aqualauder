@@ -243,7 +243,7 @@
                                 #{if info.goodsIcons.size() > 0 && info.goodsIcons.get(0) != null}
                                     <li class="F152" style="position:relative;" menu='9'><div class="pic" style="position: relative">
                                         <a href="@{front.GoodsCtrl.details}?id=${info.id}" title="${info.title}">
-                                        <img data-original="/public/pictures/goods/${info.goodsIcons.get(0).iconUrl}" class="lazy" width="100%">
+                                        <img data-original="${info.goodsIcons.get(0).iconUrl}" class="lazy" width="100%">
                                         </a>
                                         </div>
                                     </li>

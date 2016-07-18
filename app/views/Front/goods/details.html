@@ -678,7 +678,7 @@
                     #{/else}
                         #{if goods.goodsIcons.size() > 0 && goods.goodsIcons.get(0) != null}
                             #{list items:goods.goodsIcons, as:'info'}
-                                <p><img src="/public/pictures/goods/${info.iconUrl}" _src="/public/pictures/goods/${info.iconUrl}" style=""></p>
+                                <p><img src="${info.iconUrl}" _src="/public/pictures/goods/${info.iconUrl}" style=""></p>
                             #{/list}
                         #{/if}
                     </p>

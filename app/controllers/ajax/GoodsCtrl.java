@@ -72,7 +72,7 @@ public class GoodsCtrl extends AjaxController {
                     goodsIcon.setIconUrl(imgUrl);
                     GoodsService.addGoodsIcon(goodsIcon);
                 }
-                renderSuccessJson(fileName);
+                renderSuccessJson(imgUrl);
                 return;
             }
         }
