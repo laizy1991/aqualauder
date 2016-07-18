@@ -26,7 +26,7 @@ public class OrderCtrl extends AjaxController {
         renderSuccessJson();
     }
 
-    public static void dispatch(Order order, Express express) {
+    public static void delivered(Order order, Express express) {
         if(order != null && express != null && SellerService.delivered(order.getId(), express.getId(), order.getExpressNum())){
             renderSuccessJson();
         } else {

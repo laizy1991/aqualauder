@@ -17,7 +17,7 @@ define(function(require) {
             this.view($('[role="view"]'));
             this.updateRefund($('[role="updateRefund"]'));
             this.viewRefund($('[role="viewRefund"]'));
-            this.dispatch($('[role="dispatch"]'));
+            this.delivered($('[role="delivered"]'));
             this.needToPay($('[role="needToPay"]'));
             this.sendDelivered($('[role="sendDelivered"]'));
         },
@@ -364,7 +364,7 @@ define(function(require) {
         /**
          * 修改
          */
-        dispatch: function(obj) {
+        delivered: function(obj) {
             obj.click(function() {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
@@ -377,7 +377,7 @@ define(function(require) {
                     dispatchDialog = dialog({
                         id: 'dispatchDialog',
                         title: '发货',
-                        content: document.getElementById('dispatchDialogTmpl').innerHTML,
+                        content: document.getElementById('deliveredDialogTmpl').innerHTML,
                         button: [
                             {
                                 value: '确定',

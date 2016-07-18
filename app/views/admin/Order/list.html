@@ -29,7 +29,6 @@
     <thead>
     <tr  class="text-center">
     	<th>图标</th>
-    	<th>商品名称</th>
         <th class="order#{if orderBy=='outTradeNo'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="outTradeNo">订单编号</th>
         <th class="filter">
             <span>状态</span>
@@ -113,14 +112,6 @@
 		        	 	<img style="width:50px;height:50px;" src="${info?.orderGoods.get(0).goodsIcon}"/>
 		        	 #{/if}
 		        </td>
-		        <td style="width:200px;">
-		        	#{if info?.orderGoods != null && info?.orderGoods.size() > 0}
-		        	 	${info?.orderGoods.get(0).goodsTitle}
-		        	 #{/if}
-		        	 #{else}
-		        	 	&nbsp;
-		        	 #{/else}
-		        </td>
 		        <td>${info?.outTradeNo}</td>
 		        <td>
                     #{if info?.state == 0}
@@ -158,7 +149,7 @@
                 <td>
                     #{if info?.refundOrder != null && info?.refundOrder.size() > 0}
                         <div class="opts">
-                            <span class="opt" role="updateRefund"><a href="javascript:;">修改</a></span>|
+                            <!--<span class="opt" role="updateRefund"><a href="javascript:;">修改</a></span>|-->
                             <span class="opt" role="viewRefund"><a href="javascript:;">查看</a></span>
                         </div>
                     #{/if}
@@ -168,10 +159,10 @@
                 </td>
 		        <td>
 		            <div class="opts">
-		                <span class="opt" role="update"><a href="javascript:;">修改</a></span>|
+		                <!--<span class="opt" role="update"><a href="javascript:;">修改</a></span>|-->
 		                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
                         #{if info?.state == 2}
-                        |<span class="opt" role="dispatch"><a href="javascript:;">发货</a></span>
+                        |<span class="opt" role="delivered"><a href="javascript:;">发货</a></span>
                         #{/if}
 		            </div>
 		        </td>
@@ -252,7 +243,7 @@
                 <div class="col">
                     <select id="stateToUpdate" name="order.state">
                         <option value="0">创建订单(待支付)</option>
-                        <option value="1">完成支付</option>
+                        <!--<option value="1">完成支付</option>-->
                         <option value="2">待发货</option>
                         <option value="3">完成发货</option>
                         <option value="4">确认收货</option>
@@ -569,9 +560,9 @@
 </script>
 
 <!-- 发货 -->
-<script id="dispatchDialogTmpl" type="text/html">
+<script id="deliveredDialogTmpl" type="text/html">
     <div class="dialog dialog-update">
-        <form action="@{ajax.OrderCtrl.dispatch}" id="dispatch">
+        <form action="@{ajax.OrderCtrl.delivered}" id="dispatch">
             <div class="form-group">
                 <input type="hidden" class="in-t" id="idToDispatch" name="order.id" value="">
                 <label class="tips">确定修改订单:<strong id="outTradeNoDispatch"></strong>？</label>

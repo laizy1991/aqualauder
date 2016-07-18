@@ -8,6 +8,9 @@
             #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.ORDER_LIST)}
             <dd class="nav-bd hide">
                 <a class="" href="@{admin.OrderCtrl.list}">订单列表</a>
+            #{/if}
+            #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.REFUND_RDER_LIST)}
+                <a class="" href="@{admin.RefundOrderCtrl.list}">退款申请</a>
             </dd>
             #{/if}
         </dl>
