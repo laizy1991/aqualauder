@@ -97,9 +97,9 @@ public class GoodsService {
         StringBuilder sb = new StringBuilder();
         String sep = "";
         for(GoodsIcon icon : icons) {
+            sb.append(sep);
             sb.append(icon.getIconUrl());
             sep = Separator.COMMON_SEPERATOR_COMME;
-            sb.append(sep);
         }
         
         return sb.toString();
