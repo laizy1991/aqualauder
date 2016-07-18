@@ -41,14 +41,15 @@ public class AlbumCtrl extends AjaxController {
                 String[] temp = file.getName().split("\\.");
                 String suffix = "." + temp[temp.length -1];
                 String fileName = UUID.randomUUID().toString().replace("-", "") + suffix;
-                String imgUrl = "/public/pictures/album/" + fileName;
-                File storeFile = new File("./public/pictures/album/" + fileName);
 
-//                String fileDir = Play.configuration.getProperty("wx.album.path", "/data/project/aqualauder/pic/");
-//                String imgPath = fileDir + fileName; //文件在磁盘中的路径
-//                File storeFile = new File(imgPath);
-//                String imgUrl = Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn")
-//                        + imgPath;
+                String fileDir = Play.configuration.getProperty("wx.qrcode.path", "/data/project/aqualauder/pic/") +
+                        Play.configuration.getProperty("wx.album.pic.dir", "album/");
+                String imgPath = fileDir + fileName; //文件在磁盘中的路径
+                File storeFile = new File(imgPath);
+                String imgUrl = Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn")
+                        + Play.configuration.getProperty("wx.qrcode.prefix", "/qrimg/")
+                        + Play.configuration.getProperty("wx.album.pic.dir", "album/") + fileName;
+                Files.copy(file, storeFile);
                 Files.copy(file, storeFile);
                 AlbumService.add(imgUrl);
                 renderSuccessJson(imgUrl);

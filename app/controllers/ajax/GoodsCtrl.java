@@ -5,6 +5,7 @@ import exception.BusinessException;
 import models.Goods;
 import models.GoodsIcon;
 import models.GoodsStock;
+import play.Play;
 import play.data.Upload;
 import play.libs.Files;
 import play.mvc.results.RenderJson;
@@ -57,12 +58,18 @@ public class GoodsCtrl extends AjaxController {
                 String[] temp = file.getName().split("\\.");
                 String suffix = "." + temp[temp.length -1];
                 String fileName = UUID.randomUUID().toString().replace("-", "") + suffix;
-                File storeFile = new File("./public/pictures/goods/" + fileName);
+                String fileDir = Play.configuration.getProperty("wx.qrcode.path", "/data/project/aqualauder/pic/") +
+                        Play.configuration.getProperty("wx.goods.pic.dir", "goods/");
+                String imgPath = fileDir + fileName; //文件在磁盘中的路径
+                File storeFile = new File(imgPath);
+                String imgUrl = Play.configuration.getProperty("local.host.domain", "http://wx.aqualauder.cn")
+                        + Play.configuration.getProperty("wx.qrcode.prefix", "/qrimg/")
+                        + Play.configuration.getProperty("wx.goods.pic.dir", "goods/") + fileName;
                 Files.copy(file, storeFile);
                 if(goods.getId() != null) {
                     GoodsIcon goodsIcon = new GoodsIcon();
                     goodsIcon.setGoodsId(goods.getId());
-                    goodsIcon.setIconUrl(fileName);
+                    goodsIcon.setIconUrl(imgUrl);
                     GoodsService.addGoodsIcon(goodsIcon);
                 }
                 renderSuccessJson(fileName);
