@@ -1,22 +1,17 @@
 package controllers.ajax;
 
-import java.util.List;
-
+import common.core.AjaxController;
+import dao.RolePrivilegeDao;
+import dto.SessionInfo;
+import exception.BusinessException;
 import models.Administrator;
 import models.RolePrivilege;
-
 import org.apache.commons.collections.CollectionUtils;
-
 import play.mvc.Scope.Session;
 import service.AdminService;
 import utils.StringUtil;
 
-import com.google.gson.Gson;
-import common.core.AjaxController;
-
-import dao.RolePrivilegeDao;
-import dto.SessionInfo;
-import exception.BusinessException;
+import java.util.List;
 
 public class AdministratorCtrl extends AjaxController {
 

@@ -3,8 +3,6 @@ package controllers.admin;
 import common.constants.GlobalConstants;
 import common.core.Pager;
 import common.core.WebController;
-import models.Goods;
-import models.GoodsColor;
 import models.GoodsSize;
 
 import java.util.List;

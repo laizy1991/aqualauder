@@ -1,16 +1,11 @@
 package controllers.admin;
 
-import common.constants.CommonDictKey;
 import common.constants.CommonDictType;
 import common.constants.GlobalConstants;
 import common.core.Pager;
 import common.core.WebController;
 import models.CommonDict;
 
-import javax.persistence.Column;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.List;
 
 public class CommonDictCtrl extends WebController {

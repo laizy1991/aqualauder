@@ -1,6 +1,5 @@
 package controllers.admin;
 
-import common.constants.GlobalConstants;
 import common.core.Pager;
 import common.core.WebController;
 import models.Album;

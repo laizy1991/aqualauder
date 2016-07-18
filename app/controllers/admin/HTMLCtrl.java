@@ -7,7 +7,6 @@ import org.apache.commons.lang.StringUtils;
 
 import play.Logger;
 import play.Play;
-import play.mvc.Http.Request;
 import utils.FileUtils;
 import common.core.WebController;
 
