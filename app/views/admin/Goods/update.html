@@ -65,6 +65,13 @@
     .ui-dialog-body {
         padding: 10px;
     }
+
+    .swfupload{
+        opacity: 0;
+        position: absolute;
+        z-index: 201;
+        margin: 10px;
+    }
 </style>
 <!-- 页头 begin -->
 <div class="main-header">
@@ -80,7 +87,7 @@
             <div i="content" class="ui-dialog-content" id="content:createDialog">
                 <div class="dialog dialog-create">
                     <form action="@{ajax.GoodsCtrl.update}" id="update">
-                        <input name="goods.id" value="${goods.id}" hidden="hidden">
+                        <input id="goodsId" name="goods.id" value="${goods.id}" hidden="hidden">
                         <div class="form-group">
                             <label class="label"><span class="asterisk">*</span>商品名称</label>
                             <div class="col">
@@ -143,10 +150,9 @@
                             </div>
                         </div>
                         <div i="button" class="ui-dialog-button">
+                            <span id="spanButtonPlaceholder"></span>
                             <button  id="addIcon"  class="a-button" type="button" data-id="添加图片" autofocus="" class="ui-dialog-autofocus">添加图片</button>
                             <button role="addStock" class="a-button" type="button" data-id="添加库存" autofocus="" class="ui-dialog-autofocus">添加库存</button>
-                        </div>
-                        <div i="button" class="ui-dialog-button">
                         </div>
                         <div id="stockList">
                             #{if goods.goodsStocks.size() > 0}
@@ -219,15 +225,6 @@
     </tr>
     </tbody>
 </table>
-<iframe id="myIframe" style="display:none;" name="myIframe" style="display:none;">
-    <script type="text/javascript">
-        window.close();
-    </script>
-</iframe>
-<form style="display:none;" target="myIframe" id="addIconForm" action="@{ajax.GoodsCtrl.addIcon}" method="post" enctype="multipart/form-data">
-    <input type="file" name="file" id="selectFile">
-    <input name="goods.id" value="${goods.id}">
-</form>
 
 #{include file="common/jsinclude.html" /}
 
@@ -265,6 +262,7 @@
         ]
     });
     seajs.use("@{'/public/js/app/modules/goods.js'}");
+    seajs.use("@{'/public/js/app/upload/fileUpload2.js'}");
     $(document).ready(function(){
         var state="${goods.state}";
         $("#goodState").val(state);
@@ -309,11 +307,6 @@
                     window.location.reload();
                 }
             });
-        });
-
-        $(document).delegate("#addIcon", "click", function(){
-            var form = $("#addIconForm");
-            form.find("input").click()
         });
 
         $(document).delegate("#selectFile", "change", function(){

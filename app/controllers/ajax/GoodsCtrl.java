@@ -48,7 +48,7 @@ public class GoodsCtrl extends AjaxController {
         renderSuccessJson();
     }
 
-    public static void upload(File boundary) {
+    public static void upload(File boundary, Goods goods) {
         List<Upload> files = (List<Upload>) request.args.get("__UPLOADS");
         if (files.size() > 0) {
             Upload upload = files.get(0);
@@ -59,6 +59,12 @@ public class GoodsCtrl extends AjaxController {
                 String fileName = UUID.randomUUID().toString().replace("-", "") + suffix;
                 File storeFile = new File("./public/pictures/goods/" + fileName);
                 Files.copy(file, storeFile);
+                if(goods.getId() != null) {
+                    GoodsIcon goodsIcon = new GoodsIcon();
+                    goodsIcon.setGoodsId(goods.getId());
+                    goodsIcon.setIconUrl(fileName);
+                    GoodsService.addGoodsIcon(goodsIcon);
+                }
                 renderSuccessJson(fileName);
                 return;
             }
@@ -80,22 +86,6 @@ public class GoodsCtrl extends AjaxController {
         if(GoodsService.updateIcon(goodsIcon) && GoodsService.updateIcon(nxGoodsIcon)) {
             renderSuccessJson();
         }
-    }
-
-    public static void addIcon(Goods goods, File file) {
-        if(file != null) {
-            String[] temp = file.getName().split("\\.");
-            String suffix = "." + temp[temp.length - 1];
-            String fileName = UUID.randomUUID().toString().replace("-", "") + suffix;
-            File storeFile = new File("./public/pictures/goods/" + fileName);
-            Files.copy(file, storeFile);
-            GoodsIcon goodsIcon = new GoodsIcon();
-            goodsIcon.setGoodsId(goods.getId());
-            goodsIcon.setIconUrl(fileName);
-            GoodsService.addGoodsIcon(goodsIcon);
-            render("/admin/Goods/reloadTop.html");
-        }
-
     }
 
     public static void get(Goods goods) {
