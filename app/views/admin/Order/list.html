@@ -149,7 +149,9 @@
                 <td>
                     #{if info?.refundOrder != null && info?.refundOrder.size() > 0}
                         <div class="opts">
-                            <!--<span class="opt" role="updateRefund"><a href="javascript:;">修改</a></span>|-->
+                            #{if info?.refundOrder.get(0).refundState == 0}
+                                <span class="opt" role="updateRefund"><a href="javascript:;">处理退款</a></span>|
+                            #{/if}
                             <span class="opt" role="viewRefund"><a href="javascript:;">查看</a></span>
                         </div>
                     #{/if}
@@ -477,17 +479,14 @@
         <form action="@{ajax.RefundOrderCtrl.update}" id="updateRefund">
             <div class="form-group">
                 <input type="hidden" class="in-t" id="refundIdToUpdate" name="refundOrder.id" value="">
-                <label class="tips">确定修改退款单:<strong id="refundIdToUpdateEx"></strong>？</label>
+                <label class="tips">处理退款申请:<strong id="idToUpdateEx"></strong></label>
             </div>
             <div class="form-group">
-                <label class="label"><span class="asterisk">*</span>状态</label>
+                <label class="label"><span class="asterisk">*</span>是否退款</label>
                 <div class="col">
-                    <select id="refundStateToUpdate" name="refundOrder.refundState">
-                        <option value="0">申请退款</option>
-                        <option value="2">退款中</option>
-                        <option value="3">退款成功</option>
-                        <option value="4">拒绝退款</option>
-                        <option value="5">取消退款</option>
+                    <select  name="isAgree">
+                        <option value="2">拒绝退款</option>
+                        <option value="1">同意退款</option>
                     </select>
                     <span class="msg error-text">必填项！</span>
                 </div>
