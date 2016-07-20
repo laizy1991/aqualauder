@@ -93,16 +93,17 @@ public class GoodsService {
         if(CollectionUtils.isEmpty(icons)) {
             return "";
         }
+        return icons.get(0).getIconUrl();
         
-        StringBuilder sb = new StringBuilder();
-        String sep = "";
-        for(GoodsIcon icon : icons) {
-            sb.append(sep);
-            sb.append(icon.getIconUrl());
-            sep = Separator.COMMON_SEPERATOR_COMME;
-        }
-        
-        return sb.toString();
+//        StringBuilder sb = new StringBuilder();
+//        String sep = "";
+//        for(GoodsIcon icon : icons) {
+//            sb.append(sep);
+//            sb.append(icon.getIconUrl());
+//            sep = Separator.COMMON_SEPERATOR_COMME;
+//        }
+//
+//        return sb.toString();
     }
 
     public static boolean deleteIcon(GoodsIcon goodsIcon) {
