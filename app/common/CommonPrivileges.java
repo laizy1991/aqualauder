@@ -18,4 +18,6 @@ public class CommonPrivileges {
     public static final int EXPRESS = 15;
     public static final int ADMIN_LIST = 16;
     public static final int QRCODE = 17;
+    public static final int NOTICE = 18;
+    public static final int REFUND_RDER_LIST = 19;
 }

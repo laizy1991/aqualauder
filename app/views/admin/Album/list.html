@@ -73,8 +73,6 @@
     #{/if}
     #{else}
     #{list items:pageData.list,as:'info'}
-    <tbody>
-    <tr class="user-item">
         <div class="picture">
             <input type="hidden" class="id" value="${info.id}">
             <div class="background">
@@ -82,9 +80,6 @@
             </div>
             <span class="opt" role="delete"></span>
         </div>
-        </td>
-    </tr>
-    </tbody>
     #{/list}
     #{/else}
 </table>

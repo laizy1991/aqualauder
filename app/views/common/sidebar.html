@@ -83,6 +83,9 @@
                 #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.COMMON_PIC)}
                 <a class="" href="@{admin.AlbumCtrl.list}">公共图片</a>
                 #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.NOTICE)}
+                <a class="" href="@{admin.NoticeCtrl.update}">公告管理</a>
+                #{/if}
                 #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.EXPRESS)}
                 <a class="" href="@{admin.ExpressCtrl.list}">快递公司</a>
                 #{/if}

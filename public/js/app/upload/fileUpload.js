@@ -2,7 +2,6 @@
  */
 
 define(function(require) {
-    require('../../thirdParty/swfupload/swfupload.queue');
     require('../../thirdParty/swfupload/swfupload');
     var ajax = require('../util/ajax');
     var dd = require('../util/dialog');
@@ -47,31 +46,24 @@ define(function(require) {
 
     function fileQueueError(file, errorCode, message) {
         try {
-            var imageName = "<font color='red'>文件上传错误</font>";
-            var errorName = "";
-            if (errorCode === SWFUpload.errorCode_QUEUE_LIMIT_EXCEEDED) {
-                errorName = "You have attempted to queue too many files.";
-            }
-
-            if (errorName !== "") {
-                alert(errorName);
-                return;
-            }
 
             switch (errorCode) {
                 case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
-                    imageName = "<font color='red'>文件大小为0</font>";
+                    imageName = dd.alert("文件大小为0");
                     break;
                 case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
-                    imageName = "<font color='red'>文件大小超过限制</font>";
+                    imageName = dd.alert("文件大小为超过" + swfu.settings.file_size_limit);
                     break;
-                case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
                 case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
+                    dd.alert("文件格式错误")
+                    break;
+                case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
+                    dd.alert("一次上传太多文件")
+                    break;
                 default:
-                    alert(message);
+                    dd.alert(message);
                     break;
             }
-            addReadyFileInfo(file.id,file.name,imageName,"无法上传");
 
         } catch (ex) {
             this.debug(ex);

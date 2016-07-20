@@ -2,7 +2,6 @@
  */
 
 define(function(require) {
-    require('../../thirdParty/swfupload/swfupload.queue');
     require('../../thirdParty/swfupload/swfupload');
     var ajax = require('../util/ajax');
     var dd = require('../util/dialog');
@@ -21,6 +20,7 @@ define(function(require) {
             file_dialog_complete_handler : fileDialogComplete,//选择好文件后提交
             upload_success_handler : uploadSuccess,
             upload_complete_handler : uploadComplete,
+            file_queue_error_handler : fileQueueError,
             button_placeholder_id : "spanButtonPlaceholder",
             button_width: 76,
             button_height: 40,
@@ -41,6 +41,33 @@ define(function(require) {
             debug: false
         });
     };
+
+
+    function fileQueueError(file, errorCode, message) {
+        try {
+
+            switch (errorCode) {
+                case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
+                    imageName = dd.alert("文件大小为0");
+                    break;
+                case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
+                    imageName = dd.alert("文件大小为超过" + swfu.settings.file_size_limit);
+                    break;
+                case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
+                    dd.alert("文件格式错误")
+                    break;
+                case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
+                    dd.alert("一次上传太多文件")
+                    break;
+                default:
+                    dd.alert(message);
+                    break;
+            }
+
+        } catch (ex) {
+            this.debug(ex);
+        }
+    }
 
     function fileDialogComplete(numFilesSelected, numFilesQueued) {
         try {

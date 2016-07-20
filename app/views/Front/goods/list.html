@@ -136,9 +136,15 @@
             #{list items:imgs, as:"img"}
         
             <div class="swiper-slide">
-            <a href="${img?.activityUrl}">
-            <img style="width:100%;" src='${img?.picUrl}'></a></div>
-            
+            #{if img?.activityUrl==null||img?.activityUrl==''}
+                <a href="#">
+            #{/if}
+            #{else}
+                <a href="${img?.activityUrl}">
+            #{/else}
+            <img style="width:100%;" src='${img?.picUrl}'>
+            </a>
+            </div>
             #{/list}
             
             </div>
