@@ -107,6 +107,10 @@ public class BuyerService {
         order.setUserId(userId);
         order.setRecevTime(0l);
         order.setOpenId(openId);
+        if(orderGoodsList.get(0) != null) {
+            order.setGoodsTitle(orderGoodsList.get(0).getGoodsTitle());
+            order.setIdentifier(orderGoodsList.get(0).getGoodsIdentifier());
+        }
         boolean isSucc = OrderService.add(order);
         
         if(!isSucc) {

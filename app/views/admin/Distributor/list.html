@@ -20,7 +20,7 @@
         <th>UID</th>
         <th>姓名</th>
         <th class="order" role="contributeAsc">
-            微信号
+            微信昵称
         </th>
         <th class="order" role="contributeAsc">
             分销商状态:
@@ -45,13 +45,13 @@
 		        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
 		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
                 #{if info?.userList != null && info?.userList.size() > 0}
-                <input type="hidden" class="weixin" value="${info?.userList.get(0).weixin}">
+                <input type="hidden" class="weixin" value="${info?.userList.get(0).nickname}">
                 #{/if}
 		        <td>${info?.userId}</td>
 		        <td>${info?.realName}</td>
 		        <td>
                     #{if info?.userList != null && info?.userList.size() > 0}
-                        <span>${info?.userList.get(0).weixin}</span>
+                        <span>${info?.userList.get(0).nickname}</span>
                     #{/if}
 		        </td>
 		        <td>
