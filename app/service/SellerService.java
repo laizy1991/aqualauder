@@ -51,8 +51,7 @@ public class SellerService {
     
     
     private static void refund(RefundOrder ro) throws BusinessException {
-    	if(ro.getRefundState() == RefundStatus.ING.getCode() ||
-    			ro.getRefundState() == RefundStatus.SUCCESS.getCode() ||
+    	if(ro.getRefundState() == RefundStatus.SUCCESS.getCode() ||
     			ro.getRefundState() == RefundStatus.REFUSE.getCode() ||
     			ro.getRefundState() == RefundStatus.CANCEL.getCode() ||
 				ro.getRefundState() == RefundStatus.NOTREFUND.getCode()) {
