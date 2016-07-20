@@ -117,6 +117,7 @@
         </div>
     </div>
 
+    #{if desc!=""}
     <div class="gonggao" style="margin-top:39px;">
         <div class="hot" >
             <strong>公告</strong>
@@ -125,10 +126,11 @@
             <div align="">${desc}</div>
         </div>
     </div>
-
+    #{/if}
 
 
     <!-- Swiper -->
+    #{if imgs != null && imgs.size() != 0}
     <div class="swiper-container" style="width:100%;">
         <div class="swiper-wrapper" style='height:251px;'>
             #{list items:imgs, as:"img"}
@@ -142,6 +144,7 @@
             </div>
         <div class="swiper-pagination"></div>
     </div>
+    #{/if}
 
     <!-- Initialize Swiper -->
     <script>
