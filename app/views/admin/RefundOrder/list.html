@@ -11,21 +11,43 @@
     <div class="breadcrumb">
         <span class="nolink">退款单列表</span>
     </div>
-    <!--<a class="btn btn-default" href="javascript:;" role="create">添加</a>-->
+    <div class="search-box search-combobox">
+        <form action="@{admin.refundOrderCtrl.list}" id="search-box">
+            <input name="key" class="search-combobox-input" type="text" placeholder="请输入关键字" value="${key}">
+            <input name="asc" type="hidden" value="${asc}">
+            <button class="search-combobox-button" type="submit" title="搜索"><div class="icon-search"></div></button>
+        </form>
+    </div>
 </div>
 <!-- 页头 end -->
 <table class="tb">
     <thead>
     <tr  class="text-center">
-        <th>订单编号</th>
-        <th>状态</th>
+        <th class="order#{if orderBy=='outTradeNo'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="outTradeNo">订单编号</th>
+        <th class="filter">
+            <span>状态</span>
+            <ul class="option">
+                <li #{if state==-2||state==null}class="currentFilter"#{/if} field="state" data="-2">全部</li>
+                <li #{if state==-1}class="currentFilter"#{/if} field="state" data="-1">无退款</li>
+                <li #{if state==0}class="currentFilter"#{/if} field="state" data="0">申请退款</li>
+                <li #{if state==1}class="currentFilter"#{/if} field="state" data="1">退款中</li>
+                <li #{if state==2}class="currentFilter"#{/if} field="state" data="2">退款成功</li>
+                <li #{if state==3}class="currentFilter"#{/if} field="state" data="3">拒绝退款</li>
+                <li #{if state==4}class="currentFilter"#{/if} field="state" data="4">取消退款</li>
+                <li #{if state==5}class="currentFilter"#{/if} field="state" data="5">退款失败</li>
+                <li #{if state==6}class="currentFilter"#{/if} field="state" data="6">状态未确定</li>
+                <li #{if state==7}class="currentFilter"#{/if} field="state" data="7">代入转发</li>
+            </ul>
+        </th>
+        <th class="order#{if orderBy=='goodsTitle'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="goodsTitle">商品名称</th>
+        <th class="order#{if orderBy=='weixin'} currentOrder#{if asc} asc#{/if}#{else} desc#{/else}#{/if}" data="weixin">微信</th>
         <th>用户备注</th>
         <th>商家备注</th>
         <th>操作</th>
     </tr>
     </thead>
    #{if pageData == null || pageData.list == null || pageData.list.size() == 0 }
-        <tr><td colspan="5" style="text-align:center;">暂无记录</td></tr>
+        <tr><td colspan="7" style="text-align:center;">暂无记录</td></tr>
     #{/if}
     #{else}
 	    #{list items:pageData.list,as:'info'}   
@@ -33,13 +55,15 @@
 		    <tr class="user-item">
 		        <input type="hidden" class="id" value="${info.id}">
 		        <input type="hidden" class="orderId" value="${info.orderId}">
+		        <input type="hidden" class="orderId" value="${info.outTradeNo}">
+		        <input type="hidden" class="orderId" value="${info.weixin}">
 		        <input type="hidden" class="refundState" value="${info.refundState}">
 		        <input type="hidden" class="userMemo" value="${info.userMemo}">
 		        <input type="hidden" class="sellerMemo" value="${info.sellerMemo}">
 		        <input type="hidden" class="stateHistory" value="${info.stateHistory}">
 		        <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
 		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
-		        <td>${info?.orderId}</td>
+		        <td>${info?.outTradeNo}</td>
 		        <td>
                     #{if info?.refundState == -1}
                     <span>无退款</span>
@@ -68,6 +92,8 @@
                     #{if info?.refundState == 7}
                     <span>代入转发</span>
                     #{/if}
+		        <td>${info.goodsTitle}</td>
+		        <td>${info.weixin}</td>
 		        <td>${info.userMemo}</td>
 		        <td>${info.sellerMemo}</td>
 		        <td>
@@ -155,21 +181,27 @@
     <div class="dialog dialog-view">
         <form action="#" id="view">
             <div class="form-group">
-                <label class="label">ID:</label>
-                <div class="col">
-                    <label class="info" id="idToView"></label>
-                </div>
-            </div>
-            <div class="form-group">
                 <label class="label">订单ID:</label>
                 <div class="col">
-                    <label class="info" id="orderIdToView"></label>
+                    <label class="info" id="orderOutTradeNoToView"></label>
                 </div>
             </div>
             <div class="form-group">
                 <label class="label">退款状态:</label>
                 <div class="col">
                     <label class="info" id="refundStateToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">用户微信:</label>
+                <div class="col">
+                    <label class="info" id="weixinToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">商品名称:</label>
+                <div class="col">
+                    <label class="info" id="goodTitleToView"></label>
                 </div>
             </div>
             <div class="form-group">
@@ -216,5 +248,6 @@
         ]
     });
     seajs.use("@{'/public/js/app/modules/refundOrder.js'}");
+    seajs.use("@{'/public/js/app/common/listFilter.js'}");
 </script>
 #{/set}

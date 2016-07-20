@@ -52,6 +52,12 @@ public class RefundOrder extends Model {
     @Column(name="update_time")
     private Long updateTime;
 
+	@Column(name="weixin")
+	private String weixin;
+
+	@Column(name="goods_title")
+	private String goodsTitle;
+
 	public Long getOrderId() {
 		return orderId;
 	}
@@ -162,5 +168,21 @@ public class RefundOrder extends Model {
 
 	public void setRefundRecvAccout(String refundRecvAccout) {
 		this.refundRecvAccout = refundRecvAccout;
+	}
+
+	public String getWeixin() {
+		return weixin;
+	}
+
+	public void setWeixin(String weixin) {
+		this.weixin = weixin;
+	}
+
+	public String getGoodsTitle() {
+		return goodsTitle;
+	}
+
+	public void setGoodsTitle(String goodsTitle) {
+		this.goodsTitle = goodsTitle;
 	}
 }

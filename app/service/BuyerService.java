@@ -187,6 +187,9 @@ public class BuyerService {
                 + "_" + DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss"));
         refundOrder.setCreateTime(System.currentTimeMillis());
         refundOrder.setOrderId(orderId);
+        refundOrder.setOutTradeNo(order.getOutTradeNo());
+        refundOrder.setWeixin(order.getWeixin());
+        refundOrder.setGoodsTitle(order.getGoodsTitle());
         refundOrder.setRefundState(RefundStatus.APPLY.getCode());
         refundOrder.setUpdateTime(System.currentTimeMillis());
         refundOrder.setUserMemo(memo);
