@@ -1,15 +1,17 @@
 package service;
 
+import common.constants.OrderStatus;
+import common.constants.RefundStatus;
+import common.constants.wx.WxRefundStatus;
+import dao.ExpressDao;
+import exception.BusinessException;
 import models.Express;
 import models.Order;
 import models.RefundOrder;
 import play.Logger;
-
-import common.constants.OrderStatus;
-import common.constants.RefundStatus;
-
-import dao.ExpressDao;
-import exception.BusinessException;
+import service.wx.WXPay;
+import service.wx.dto.refund.SendRefundReqDto;
+import service.wx.dto.refund.SendRefundRspDto;
 
 public class SellerService {
 
@@ -21,7 +23,7 @@ public class SellerService {
      * @return
      * @throws BusinessException
      */
-    public static boolean refundAudit(long refundId, int isAgree, String reason) {
+    public static boolean refundAudit(long refundId, int isAgree, String reason) throws BusinessException {
         RefundOrder refundOrder = RefundOrderService.get(refundId);
         if(refundOrder == null) {
             return false;
@@ -41,7 +43,34 @@ public class SellerService {
 
         refundOrder.setSellerMemo(reason);
         boolean isSucc = RefundOrderService.setStatusAndUpdate(refundOrder, refundState);
+        if(isSucc && isAgree == 1) {
+        	refund(refundOrder);
+        }
         return isSucc;
+    }
+    
+    
+    private static void refund(RefundOrder ro) throws BusinessException {
+    	if(ro.getRefundState() == RefundStatus.SUCCESS.getCode() ||
+    			ro.getRefundState() == RefundStatus.REFUSE.getCode() ||
+    			ro.getRefundState() == RefundStatus.CANCEL.getCode() ||
+				ro.getRefundState() == RefundStatus.NOTREFUND.getCode()) {
+    		Logger.info("该笔订单状态为%s, 禁止退款，refundId: %d", RefundStatus.resolveType(ro.getRefundState()).getDesc(),
+    				ro.getId());
+    	}
+    	Order order = OrderService.get(ro.getOrderId());
+    	if(null == order) {
+    		Logger.error("查询订单记录失败，orderId: %d", ro.getOrderId());
+    	}
+    	SendRefundReqDto req = new SendRefundReqDto(ro.getTransactionId(), ro.getOutTradeNo(), 
+    				order.getTotalFee(), order.getTotalFee(), String.valueOf(order.getUserId()));
+    	SendRefundRspDto rsp = WXPay.sendRefundServcie(req);
+    	if(null != rsp && rsp.getReturn_code().equals("SUCCESS") && !rsp.getResult_code().equals(WxRefundStatus.FAIL.getType())) {
+    		RefundOrderService.updateRefundState(ro.getId(), RefundStatus.SUCCESS);
+    		WxMsgService.refundMoneyResultMsg(ro.getId());
+    	} else {
+    		Logger.error("退款失败");
+    	}
     }
     
     /**

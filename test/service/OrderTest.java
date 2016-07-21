@@ -106,6 +106,11 @@ public class OrderTest extends UnitTest {
     }
     
     public void refundAudit() {
-        SellerService.refundAudit(7l, 0, "促销商品不能退款");
+        try {
+			SellerService.refundAudit(7l, 0, "促销商品不能退款");
+		} catch (BusinessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }
