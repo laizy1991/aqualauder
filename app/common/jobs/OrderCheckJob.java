@@ -37,6 +37,7 @@ public class OrderCheckJob extends Job {
 
     //首先查询所有已发货状态的订单，判断是否已经达到自动确认收货时间
     private void autoRece() {
+        Logger.info("开始自动确认收货....");
         List<Order> deliveredOrders = OrderDao.getByStatus(OrderStatus.DELIVERED.getState());
         if(CollectionUtils.isEmpty(deliveredOrders)) {
             return;
@@ -50,6 +51,7 @@ public class OrderCheckJob extends Job {
             dayLimit = 7;
         }
         
+        Logger.info("发货中的订单数：%s，自动确认收货时间：%s",deliveredOrders.size(), dayLimit);
         long currTs = System.currentTimeMillis();
         long limitTs = currTs - (dayLimit * 24 * 60 * 60 * 1000);
         for(Order order : deliveredOrders) {
@@ -57,12 +59,14 @@ public class OrderCheckJob extends Job {
                 continue;
             }
             
+            Logger.info("自动确认收货， 订单id:", order.getId());
             //走到这里说明到了自动确认收货的时间。
             BuyerService.receiving(order.getUserId(), order.getId());
         }
     }
     
     private void compele() {
+        Logger.info("开始自动完成订单....");
         List<Order> receOrders = OrderDao.getByStatus(OrderStatus.RECE.getState());
         if(CollectionUtils.isEmpty(receOrders)) {
             return;
@@ -75,7 +79,8 @@ public class OrderCheckJob extends Job {
             Logger.error("invalid config, key:%s", CommonDictKey.AUTO_FINISH_ORDER);
             dayLimit = 7;
         }
-        
+
+        Logger.info("已经确认收货的订单数：%s，自动完成订单时间：%s",receOrders.size(), dayLimit);
         long currTs = System.currentTimeMillis();
         long limitTs = currTs - (dayLimit * 24 * 60 * 60 * 1000);
         for(Order order : receOrders) {
@@ -84,6 +89,7 @@ public class OrderCheckJob extends Job {
             }
             
             //走到这里说明到了自动完成订单的时间。需要判断是否处于中，或退款成功的状态，如果是不能确认收货
+            Logger.info("自动完成订单， 订单id:", order.getId());
             OrderService.compele(order.getUserId(), order.getId());
         }
     }
