@@ -1,5 +1,7 @@
 package service;
 
+import com.google.gson.Gson;
+
 import common.constants.OrderStatus;
 import common.constants.RefundStatus;
 import common.constants.wx.WxRefundStatus;
@@ -65,6 +67,7 @@ public class SellerService {
     	SendRefundReqDto req = new SendRefundReqDto(order.getPlatformTransationId(), ro.getOutRefundNo(), 
     				order.getTotalFee(), order.getTotalFee(), String.valueOf(order.getUserId()));
     	SendRefundRspDto rsp = WXPay.sendRefundServcie(req);
+    	Logger.info("rsp:" + new Gson().toJson(rsp));
     	if(null != rsp && rsp.getReturn_code().equals("SUCCESS") && !rsp.getResult_code().equals(WxRefundStatus.FAIL.getType())) {
     		RefundOrderService.updateRefundState(ro.getId(), RefundStatus.SUCCESS);
     		WxMsgService.refundMoneyResultMsg(ro.getId());
