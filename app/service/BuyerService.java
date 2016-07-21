@@ -198,7 +198,6 @@ public class BuyerService {
         refundOrder.setCreateTime(System.currentTimeMillis());
         refundOrder.setOrderId(orderId);
         refundOrder.setOutTradeNo(order.getOutTradeNo());
-        refundOrder.setTransactionId(order.getPlatformTransationId());
         refundOrder.setWeixin(order.getWeixin());
         refundOrder.setGoodsTitle(order.getGoodsTitle());
         refundOrder.setRefundState(RefundStatus.APPLY.getCode());
