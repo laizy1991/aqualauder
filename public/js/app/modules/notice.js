@@ -19,7 +19,7 @@ define(function(require) {
             ImgEditor.addImg = function (picUrl, activityUrl, sortNum) {
                 picUrl = picUrl?picUrl:"";
                 activityUrl = activityUrl?activityUrl:"";
-                sortNum = sortNum||sortNum===0?sortNum:"";
+                sortNum = sortNum?sortNum:0;
 
                 var tmpl = $('#pictureTmpl').html();
                 tmpl = tmpl.replace("{picUrl}", picUrl);
@@ -36,7 +36,9 @@ define(function(require) {
                     img.picUrl = $(obj).find(".picUrl").attr("src");
                     img.activityUrl = $(obj).find(".activityUrl").val();
                     img.sortNum = $(obj).find(".sortNum").val();
+                    img.sortNum = img.sortNum?img.sortNum:0;
                     imgs.push(img);
+
                 });
                 return imgs;
             }
