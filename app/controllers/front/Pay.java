@@ -218,33 +218,4 @@ public class Pay extends FrontController {
     	renderXml("<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[回调失败]]></return_msg></xml>");
     }
     
-    public static void sendRefund(long refundId) {
-    	if(refundId <= 0) {
-    		Logger.error("请求退款入参不正确，refundId: %d", refundId);
-    		return;
-    	}
-    	RefundOrder refundOrder = RefundOrderService.get(refundId);
-    	if(null == refundOrder) {
-    		Logger.error("获取退款记录为空，refundId: %d, orderId: %d", refundId, refundOrder.getOrderId());
-    		return;
-    	}
-    	if(null == refundOrder.getOrderId() || refundOrder.getOrderId() <= 0) {
-    		Logger.error("从退款记录中获取订单ID不正确, orderId: %d", refundOrder.getOrderId());
-    		return;
-    	}
-    	Order order = OrderService.get(refundOrder.getOrderId());
-    	if(null == order) {
-    		Logger.error("获取订单记录记录为空，orderId: %d", refundOrder.getOrderId());
-    		return;
-    	}
-    	SendRefundReqDto sendRefundReqDto = new SendRefundReqDto(order.getPlatformTransationId(), 
-    			refundOrder.getOutRefundNo(), order.getTotalFee(), order.getTotalFee(), Configure.getMchid());
-    	SendRefundRspDto rsp = null;
-		try {
-			rsp = WXPay.sendRefundServcie(sendRefundReqDto);
-			renderText(gson.toJson(rsp));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    }
 }

@@ -1,8 +1,11 @@
 package service;
 
+import javax.persistence.Query;
+
 import com.google.gson.Gson;
 
 import common.constants.OrderStatus;
+import common.constants.PayType;
 import common.constants.RefundStatus;
 import common.constants.wx.WxRefundStatus;
 import dao.ExpressDao;
@@ -11,12 +14,13 @@ import models.Express;
 import models.Order;
 import models.RefundOrder;
 import play.Logger;
+import play.db.jpa.Model;
 import service.wx.WXPay;
 import service.wx.dto.refund.SendRefundReqDto;
 import service.wx.dto.refund.SendRefundRspDto;
 
 public class SellerService {
-
+	private static Gson gson = new Gson();
     /**
      * 
      * @param refundId
@@ -69,10 +73,17 @@ public class SellerService {
     	SendRefundRspDto rsp = WXPay.sendRefundServcie(req);
     	Logger.info("rsp:" + new Gson().toJson(rsp));
     	if(null != rsp && rsp.getReturn_code().equals("SUCCESS") && !rsp.getResult_code().equals(WxRefundStatus.FAIL.getType())) {
-    		RefundOrderService.updateRefundState(ro.getId(), RefundStatus.SUCCESS);
-    		WxMsgService.refundMoneyResultMsg(ro.getId());
+    		Logger.info("申请退款成功，退款单参数为：%s", gson.toJson(ro));
+    		//更新退款单
+    		ro.setRefundId(rsp.getRefund_id());
+    		ro.setRefundState(RefundStatus.SUCCESS.getCode());
+    		ro.setUpdateTime(System.currentTimeMillis());
+    		ro.setRefundRecvAccout(PayType.WX.getDesc());
+    		RefundOrderService.update(ro);
+        	//发送通知
+        	WxMsgService.refundMoneyResultMsg(ro.getId());
     	} else {
-    		Logger.error("退款失败");
+    		Logger.error("退款失败，退款单参数为：%s", gson.toJson(ro));
     	}
     }
     
