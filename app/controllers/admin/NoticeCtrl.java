@@ -18,7 +18,7 @@ public class NoticeCtrl extends WebController {
 
     public static void update() {
         Notice notice = NoticeDao.get();
-        List<NoticePicInfo> imgs = new ArrayList<>();
+        List<NoticePicInfo> imgs = new ArrayList<NoticePicInfo>();
         String desc = "";
         if(notice != null) {
             desc = notice.getContent();

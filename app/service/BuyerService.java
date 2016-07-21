@@ -1,5 +1,6 @@
 package service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,14 +17,13 @@ import org.apache.commons.lang.StringUtils;
 import play.Logger;
 import utils.DateUtil;
 import utils.IdGenerator;
-
 import common.constants.CommonDictKey;
 import common.constants.CommonDictType;
 import common.constants.GoodsType;
 import common.constants.OrderStatus;
+import common.constants.PayType;
 import common.constants.RefundStatus;
 import common.constants.Separator;
-
 import dao.GoodsDao;
 import dao.OrderGoodsDao;
 import dao.RefundOrderDao;
@@ -32,8 +32,14 @@ import dto.OrderDetail;
 
 
 public class BuyerService {
-
-
+	
+	/**
+	 * 生成一个退款单ID，用于传给微信
+	 * @return
+	 */
+	private static String genOutRefundNo() {
+		return "" + System.currentTimeMillis() + "" +IdGenerator.getRandNumByLength(8);
+	}
     /**
      * 创建一个订单
      * @return
@@ -198,6 +204,11 @@ public class BuyerService {
         refundOrder.setUpdateTime(System.currentTimeMillis());
         refundOrder.setUserMemo(memo);
         refundOrder.setSellerMemo("");
+        
+        refundOrder.setRefundTtype(PayType.WX.getCode());
+        refundOrder.setTransactionId(order.getPlatformTransationId());
+        refundOrder.setOutRefundNo(genOutRefundNo());
+        
         return RefundOrderService.add(refundOrder);
     }
     

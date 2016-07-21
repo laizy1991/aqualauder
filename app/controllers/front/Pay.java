@@ -237,8 +237,8 @@ public class Pay extends FrontController {
     		Logger.error("获取订单记录记录为空，orderId: %d", refundOrder.getOrderId());
     		return;
     	}
-    	SendRefundReqDto sendRefundReqDto = new SendRefundReqDto(order.getOutTradeNo(), ""+refundOrder.getId(), 
-    			order.getTotalFee(), order.getTotalFee(), Configure.getMchid());
+    	SendRefundReqDto sendRefundReqDto = new SendRefundReqDto(order.getPlatformTransationId(), 
+    			refundOrder.getOutRefundNo(), order.getTotalFee(), order.getTotalFee(), Configure.getMchid());
     	SendRefundRspDto rsp = null;
 		try {
 			rsp = WXPay.sendRefundServcie(sendRefundReqDto);

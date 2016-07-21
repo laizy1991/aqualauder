@@ -62,7 +62,7 @@ public class SellerService {
     	if(null == order) {
     		Logger.error("查询订单记录失败，orderId: %d", ro.getOrderId());
     	}
-    	SendRefundReqDto req = new SendRefundReqDto(ro.getTransactionId(), ro.getOutTradeNo(), 
+    	SendRefundReqDto req = new SendRefundReqDto(order.getPlatformTransationId(), ro.getOutRefundNo(), 
     				order.getTotalFee(), order.getTotalFee(), String.valueOf(order.getUserId()));
     	SendRefundRspDto rsp = WXPay.sendRefundServcie(req);
     	if(null != rsp && rsp.getReturn_code().equals("SUCCESS") && !rsp.getResult_code().equals(WxRefundStatus.FAIL.getType())) {
