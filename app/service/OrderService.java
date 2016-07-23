@@ -152,6 +152,7 @@ public class OrderService {
                 && (refund.getRefundState().intValue() == RefundStatus.APPLY.getCode()
                         || refund.getRefundState().intValue() == RefundStatus.ING.getCode() || refund
                         .getRefundState().intValue() == RefundStatus.SUCCESS.getCode())) {
+            Logger.error("order is refund, id:%s", orderId);
             return;
         }
         

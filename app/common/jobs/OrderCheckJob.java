@@ -59,7 +59,7 @@ public class OrderCheckJob extends Job {
                 continue;
             }
             
-            Logger.info("自动确认收货， 订单id:", order.getId());
+            Logger.info("自动确认收货， 订单id:%s", order.getId());
             //走到这里说明到了自动确认收货的时间。
             BuyerService.receiving(order.getUserId(), order.getId());
         }
