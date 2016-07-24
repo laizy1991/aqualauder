@@ -53,4 +53,11 @@ public class CashInfoDao {
     	
     	return list.get(0);
     }
+    public static void update(CashInfo info) {
+        if(info == null) {
+            return;
+        }
+        
+        info.save();
+    }
 }

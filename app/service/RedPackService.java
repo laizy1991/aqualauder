@@ -34,31 +34,38 @@ public class RedPackService {
     		Logger.error("获取提现的记录为空，cashId: %d", cashId);
     		throw new BusinessException("获取提现的记录为空");
     	}
-    	if(ci.getCashStatus() == CashStatus.SUCCESS.getCode()) {
-    		//已提现成功
-    		Logger.info("该订单之前已提现成功，cashId: %d", cashId);
-    		throw new BusinessException("该订单之前已提现成功");
-    	}
-    	String mchBillno = ci.getMchBillno();
-    	User user = UserService.get(ci.getUserId());
-    	if(null == user || StringUtils.isEmpty(user.getOpenId())) {
-    		Logger.error("发送微信红包时无法获取用户Openid，cashId: %d", cashId);
-    		throw new BusinessException("发送微信红包时无法获取用户Openid");
-    	}
-    	String openid = user.getOpenId();
-    	int totalAmount = ci.getAmount();
-    	SendRedpackReqDto sendRedpackReqDto = new SendRedpackReqDto(mchBillno, openid, totalAmount);
-    	SendRedpackRspDto rsp = null;
-		try {
-			rsp = WXPay.sendRedpackService(sendRedpackReqDto);
-		} catch (Exception e) {
-			e.printStackTrace();
-			rsp = null;
-		}
-		
-		return rsp;
+    	
+    	return sendRedPack(ci);
     }
     
+	public static SendRedpackRspDto sendRedPack(CashInfo ci) throws BusinessException{
+	    if(ci == null) {
+	        return null;
+	    }
+	    if(ci.getCashStatus() == CashStatus.SUCCESS.getCode()) {
+            //已提现成功
+            Logger.info("该订单之前已提现成功，cashId: %d", ci.getId());
+            throw new BusinessException("该订单之前已提现成功");
+        }
+        String mchBillno = ci.getMchBillno();
+        User user = UserService.get(ci.getUserId());
+        if(null == user || StringUtils.isEmpty(user.getOpenId())) {
+            Logger.error("发送微信红包时无法获取用户Openid，cashId: %d", ci.getId());
+            throw new BusinessException("发送微信红包时无法获取用户Openid");
+        }
+        String openid = user.getOpenId();
+        int totalAmount = ci.getAmount();
+        SendRedpackReqDto sendRedpackReqDto = new SendRedpackReqDto(mchBillno, openid, totalAmount);
+        SendRedpackRspDto rsp = null;
+        try {
+            rsp = WXPay.sendRedpackService(sendRedpackReqDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            rsp = null;
+        }
+        
+        return rsp;
+    }
 	/**
 	 * 查询红包状态
 	 * @param cashId
