@@ -2,13 +2,19 @@ package models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
+import play.db.jpa.GenericModel;
 import play.db.jpa.Model;
 
 @Entity
 @Table(name="cash_info")
-public class CashInfo extends Model {
+public class CashInfo extends GenericModel {
+
+    @Id
+    @Column(name="id")
+    private Long id;
     @Column(name="user_id")
     private Integer userId;
     @Column(name="cash_type")
@@ -26,6 +32,14 @@ public class CashInfo extends Model {
     
     @Column(name = "update_time")
     private Long updateTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Integer getUserId() {
         return userId;

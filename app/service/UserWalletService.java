@@ -99,7 +99,9 @@ public class UserWalletService {
             }
             
             userWallet.setBalances(userWallet.getBalances() + addMoney);
-            userWallet.setIncome(userWallet.getIncome() + addMoney);
+            if(billType.getCode() != BillType.CASHFAIL.getCode()) {
+                userWallet.setIncome(userWallet.getIncome() + addMoney);
+            }
             boolean isSucc = UserWalletDao.update(userWallet);
             if(isSucc) {
                 Integer balance = userWallet.getBalances();
@@ -162,8 +164,6 @@ public class UserWalletService {
         CashStatus status = CashStatus.APPLY;
         CashType cashType = CashType.BANK;
         if(type == CashType.REDPACK.getCode()) {
-            //发红包
-            status = CashStatus.SUCCESS;
             cashType = CashType.REDPACK;
         }
         return CashInfoService.create(userId, cashType, amount, slipNo, status);

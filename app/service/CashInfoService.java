@@ -31,7 +31,7 @@ public class CashInfoService {
         }
         
         CashInfo info = new CashInfo();
-        info.id = IdGenerator.getId();
+        info.setId(IdGenerator.getId());
         info.setAmount(amount);
         info.setCashStatus(status.getCode());
         info.setSlipNo(slipNo);
@@ -59,13 +59,13 @@ public class CashInfoService {
             limit = -1;
         }
         boolean autoAudit = true;
-        if(amount > limit || type.getCode() == CashType.BANK.getCode()) {
+        if((limit > 0 && amount > limit) || type.getCode() == CashType.BANK.getCode()) {
             autoAudit = false;
         }
         
         boolean isSuccess = CashInfoDao.insert(info);
         if(isSuccess && autoAudit) {
-            cashAudit(info, true);
+            return cashAudit(info, true);
         } 
         return isSuccess;
     }
@@ -94,6 +94,14 @@ public class CashInfoService {
             cashFail(info);
             return true;
         }
+        
+        if(info.getCashType() == CashType.BANK.getCode()) {
+            info.setCashStatus(CashStatus.SUCCESS.getCode());
+            info.setUpdateTime(System.currentTimeMillis());
+            CashInfoDao.update(info);
+            return true;
+        }
+        
         SendRedpackRspDto rsp = null;
         
         try {
