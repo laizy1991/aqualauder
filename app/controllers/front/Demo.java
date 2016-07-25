@@ -7,6 +7,7 @@ import models.Distributor;
 import models.Order;
 import models.RefundOrder;
 import models.User;
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -73,11 +74,12 @@ public class Demo extends FrontController {
     	    Logger.error("code为空");
     	    renderText("非法请求");
     	}
-    	String openId = WxUserService.getUserOpenIdByCode(code);
-    	if(StringUtils.isBlank(openId)) {
+    	JSONObject accessCodeJson = WxUserService.getUserOpenIdAndAccessTokenByCode(code); 
+    	if(null == accessCodeJson || StringUtils.isBlank(accessCodeJson.optString("openid"))) {
     	    Logger.error("openId为空");
     	    renderText("非法请求");
     	}
+    	String openId = accessCodeJson.optString("openid");
     	User user = WxUserService.getUserInfo(openId);
     	if(null == user) {
     		Logger.error("获取用户信息失败, openId: %s", openId);
@@ -100,7 +102,12 @@ public class Demo extends FrontController {
     	String openId = session.get("openId");
     	if(StringUtils.isEmpty(openId)) {
     		Logger.info("从session中获取用户openId为空，通过code[%s]向微信换取", code);
-    		openId = WxUserService.getUserOpenIdByCode(code);
+    		JSONObject accessCodeJson = WxUserService.getUserOpenIdAndAccessTokenByCode(code); 
+        	if(null == accessCodeJson || StringUtils.isBlank(accessCodeJson.optString("openid"))) {
+        	    Logger.error("openId为空");
+        	    renderText("非法请求");
+        	}
+        	openId = accessCodeJson.optString("openid");
     	}
     	User user = UserService.getByOpenId(openId);
     	String outTradeNo = OutTradeNo.getOutTradeNo();

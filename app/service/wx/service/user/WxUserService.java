@@ -30,7 +30,7 @@ public class WxUserService {
 	 * 获取用户OpenID
 	 * @return
 	 */
-	public static String getUserOpenIdByCode(String code) {
+	public static JSONObject getUserOpenIdAndAccessTokenByCode(String code) {
 		if(StringUtils.isEmpty(code))
 			return null;
 		//通过code换取openid
@@ -58,15 +58,16 @@ public class WxUserService {
 			return null;
 		}
 		
-		return openId;
+		return json;
 	}
 	
 	/**
-	 * 通过openID获取用户信息
+	 * 通过openID获取用户信息，此方法基于用户信息存在于本地的情况下，即用户关注过本公众号
+	 * 其AccessToken为全局ccessToken 
 	 * @param openId
 	 * @return
 	 */
-	private static JSONObject getUserInfoByOpenId(String openId) {
+	public static JSONObject getUserInfoByOpenId(String openId) {
 		if(StringUtils.isEmpty(openId)) {
 			return null;
 		}
@@ -87,7 +88,40 @@ public class WxUserService {
 			return null;
 		JSONObject json = JSONObject.fromObject(resp.getContent());
 		if(null == json || StringUtils.isNotBlank(json.optString("errcode"))) {
-			Logger.error("微信返回用户信息时发生错误，错误码：%s，错误信息：%s", 
+			Logger.error("通过全局AccessToken获取微信用户信息时发生错误，错误码：%s，错误信息：%s", 
+					json.getString("errcode"), json.getString("errmsg"));
+			return null;
+		}
+		
+		return json;
+	}
+	
+	/**
+	 * 通过accessToken, openID获取用户信息，此方法基于用户信息存在于本地的情况下，即用户关注过本公众号
+	 * @param openId
+	 * @return
+	 */
+	public static JSONObject getUserInfoByOpenId(String accessToken, String openId) {
+		if(StringUtils.isEmpty(openId)) {
+			return null;
+		}
+		String accessUserUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN";
+		if(StringUtils.isBlank(accessToken)) {
+			return null;
+		}
+		String realUrl = String.format(accessUserUrl, accessToken, openId);
+		HttpRespons resp = null;
+		try {
+			resp = HttpRequester.sendGet(realUrl);
+		} catch (Exception e) {
+			Logger.error("向微信请求获取用户信息发生错误");
+			e.printStackTrace();
+		}
+		if(null == resp)
+			return null;
+		JSONObject json = JSONObject.fromObject(resp.getContent());
+		if(null == json || StringUtils.isNotBlank(json.optString("errcode"))) {
+			Logger.error("通过网页AccessToken获取微信用户信息时发生错误，错误码：%s，错误信息：%s", 
 					json.getString("errcode"), json.getString("errmsg"));
 			return null;
 		}
@@ -97,14 +131,14 @@ public class WxUserService {
 	
 	/**
 	 * 将用户信息入库，所有需要将用户信息入库的代码，统一调这个接口
-	 * 目前的触发条件为：用户关注公众号和进入公众号(用户关注公众号后将用户信息入库失败的情况下)
+	 * 目前的触发条件为：用户关注公众号和进入公众号(用户关注公众号后将用户信息入库失败的情况下)，用户从分享链接中进入
 	 * 1. 先从缓存拿
 	 * 2. 缓存若没有，则从库拿并放入缓存，缓存key为用户openId, value为用户对象
 	 * 3. 库也没有，向微信拿，入库并放缓存
 	 * @param openId
 	 * @return
 	 */
-	private static User addUser(JSONObject userJson) {
+	public static User addUser(JSONObject userJson) {
 		if(null == userJson) {
 			Logger.error("将用户信息入库时，入参为空");
 			return null;

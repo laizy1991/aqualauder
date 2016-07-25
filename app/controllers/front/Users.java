@@ -7,6 +7,7 @@ import models.Distributor;
 import models.QrShare;
 import models.User;
 import models.UserWallet;
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -136,7 +137,12 @@ public class Users extends FrontController {
                 Logger.error("code为空");
                 renderText("非法请求");
             }
-            openId = WxUserService.getUserOpenIdByCode(code);
+            JSONObject accessCodeJson = WxUserService.getUserOpenIdAndAccessTokenByCode(code); 
+        	if(null == accessCodeJson || StringUtils.isBlank(accessCodeJson.optString("openid"))) {
+        	    Logger.error("openId为空");
+        	    renderText("非法请求");
+        	}
+        	openId = accessCodeJson.optString("openid");
         }
         
         if(StringUtils.isBlank(openId)) {
