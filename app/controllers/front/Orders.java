@@ -25,7 +25,7 @@ public class Orders extends FrontController {
             user = WxUserService.getUserInfo(openId);
         }
         if(null == user) {
-        	String tip = "亲爱的用户，请先关注公众号后再购买！";
+        	String tip = "请关注公众号后再购买！";
         	String qrcodeBg = getQrCodeBg();
         	render("/Front/user/companyQrcode.html", qrcodeBg, tip);
         	return;

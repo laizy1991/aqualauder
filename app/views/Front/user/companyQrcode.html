@@ -28,9 +28,16 @@
 				<div class="background"></div>
 				<div class="lable-info">
 					<ul class="intro">
-						<li class="start">——&nbsp;&nbsp;&nbsp;&nbsp;AQUALAUDER&nbsp;&nbsp;·&nbsp;&nbsp;安淇兰黛&nbsp;&nbsp;&nbsp;&nbsp;——</li>
-						<li class="middle">源自伦敦高端时装品牌安淇兰黛</li>
-						<li class="end">——&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;&nbsp;LONDON&nbsp;&nbsp;&nbsp;&nbsp;——</li>
+						#{if null == tip || tip == ""}
+							<li class="start">——&nbsp;&nbsp;&nbsp;&nbsp;AQUALAUDER&nbsp;&nbsp;·&nbsp;&nbsp;安淇兰黛&nbsp;&nbsp;&nbsp;&nbsp;——</li>
+							<li class="middle">源自伦敦高端时装品牌安淇兰黛</li>
+							<li class="end">——&nbsp;&nbsp;&nbsp;&nbsp;FROM&nbsp;&nbsp;LONDON&nbsp;&nbsp;&nbsp;&nbsp;——</li>
+					     #{/if}
+					     #{else}
+					     		<li class="start">&nbsp;</li>
+					     		<li class="middle">${tip}</li>
+								<li class="end">&nbsp;</li>
+					     #{/else}
 					</ul>
 				</div>
 			</div>
@@ -47,13 +54,7 @@
 				<div class="lable-info">
 					<ul class="culture-desc">
 						<li class="middle">
-							 #{if null == tip || tip == ""}
-									长按图片，识别二维码进入代言人店铺
-						     #{/if}
-						     #{else}
-						     		${tip}
-						     #{/else}
-						     
+							长按图片，识别二维码进入代言人店铺
 						</li>
 					</ul>
 				</div>

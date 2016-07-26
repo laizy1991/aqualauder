@@ -429,7 +429,7 @@ public class Demo extends FrontController {
         DistributorService.checkAndBecomeDistributor(userId);
     }
     public static void buy() {
-    	String tip = "亲爱的用户，请先关注公众号后再购买！";
+    	String tip = "请关注公众号后再购买！";
     	String qrcodeBg = getQrCodeBg();
     	render("/Front/user/companyQrcode.html", qrcodeBg, tip);
     }
