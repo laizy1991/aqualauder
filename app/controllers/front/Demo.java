@@ -425,14 +425,12 @@ public class Demo extends FrontController {
     public static void companyQrcode() {
     	render("Front/user/companyQrcode.html");
     }
-    public static void redit() {
-    	Logger.info("dddddddddd Action: %s, QueryString: %s", request.path, Request.current().querystring);
-    	redirect("/front/Demo/aaa?userId=333333");
-    }
-    public static void aaa(String userId) {
-    	renderText("AAAAAAAAAA___userId="+userId);
-    }
     public static void become(Integer userId) {
         DistributorService.checkAndBecomeDistributor(userId);
+    }
+    public static void buy() {
+    	String tip = "亲爱的用户，请先关注公众号后再购买！";
+    	String qrcodeBg = getQrCodeBg();
+    	render("/Front/user/companyQrcode.html", qrcodeBg, tip);
     }
 }

@@ -11,9 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import service.BuyerService;
 import service.ShippingAddressService;
 import service.wx.service.user.WxUserService;
-
 import common.core.FrontController;
-
 import dto.GoodsBrief;
 import dto.OrderDetail;
 
@@ -27,7 +25,10 @@ public class Orders extends FrontController {
             user = WxUserService.getUserInfo(openId);
         }
         if(null == user) {
-            renderJSON("{\"msg\":\"创建订单失败\"}");
+        	String tip = "亲爱的用户，请先关注公众号后再购买！";
+        	String qrcodeBg = getQrCodeBg();
+        	render("/Front/user/companyQrcode.html", qrcodeBg, tip);
+        	return;
         }
         
         Map<GoodsBrief, Integer> goodsNumMap = new HashMap<GoodsBrief, Integer>();

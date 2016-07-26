@@ -46,7 +46,15 @@
 				<div class="background"></div>
 				<div class="lable-info">
 					<ul class="culture-desc">
-						<li class="middle">长按图片，识别二维码进入代言人店铺</li>
+						<li class="middle">
+							 #{if null == tip || tip == ""}
+									长按图片，识别二维码进入代言人店铺
+						     #{/if}
+						     #{else}
+						     		${tip}
+						     #{/else}
+						     
+						</li>
 					</ul>
 				</div>
 			</div>

@@ -62,7 +62,7 @@ public class WxUserService {
 	}
 	
 	/**
-	 * 通过openID获取用户信息，此方法基于用户信息存在于本地的情况下，即用户关注过本公众号
+	 * 通过openID获取用户信息，此方法基于用户关注过本公众号
 	 * 其AccessToken为全局ccessToken 
 	 * @param openId
 	 * @return
@@ -97,7 +97,8 @@ public class WxUserService {
 	}
 	
 	/**
-	 * 通过accessToken, openID获取用户信息，此方法基于用户信息存在于本地的情况下，即用户关注过本公众号
+	 * 通过accessToken, openID获取用户信息，与用户是否关注过公众号无关
+	 * @param accessToken 网页token，非全局AccessToken
 	 * @param openId
 	 * @return
 	 */
@@ -131,7 +132,7 @@ public class WxUserService {
 	
 	/**
 	 * 将用户信息入库，所有需要将用户信息入库的代码，统一调这个接口
-	 * 目前的触发条件为：用户关注公众号和进入公众号(用户关注公众号后将用户信息入库失败的情况下)，用户从分享链接中进入
+	 * 目前的触发条件为：用户关注公众号和进入公众号(用户关注公众号后将用户信息入库失败的情况下)
 	 * 1. 先从缓存拿
 	 * 2. 缓存若没有，则从库拿并放入缓存，缓存key为用户openId, value为用户对象
 	 * 3. 库也没有，向微信拿，入库并放缓存

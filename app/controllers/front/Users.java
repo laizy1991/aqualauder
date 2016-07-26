@@ -100,16 +100,6 @@ public class Users extends FrontController {
     	render("/Front/user/qrcodeShare.html", user, qrImg, config, qrcodeBg);
     }
     
-    private static String getQrCodeBg() {
-    	String qrcodeBg = "/public/images/qrcode_bg.jpg";
-    	QrShare qrShare = QrShareService.getLastIsEnabledRec(GlobalConstants.IS_ENABLED);
-    	
-    	if(null != qrShare && !StringUtils.isBlank(qrShare.getImgUrl())) {
-    		qrcodeBg = qrShare.getImgUrl();
-    	}
-    	return qrcodeBg;
-    }
-    
     @GuestAuthorization
     public static void qrcode() {
     	String openId = session.get("openId");

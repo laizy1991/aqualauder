@@ -1,5 +1,6 @@
 package common.core;
 
+import models.QrShare;
 import models.User;
 import net.sf.json.JSONObject;
 
@@ -10,8 +11,10 @@ import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Catch;
 import play.mvc.Http.Request;
+import service.QrShareService;
 import service.UserService;
 import service.wx.service.user.WxUserService;
+import common.constants.GlobalConstants;
 import common.constants.RegType;
 import exception.BusinessException;
 
@@ -55,4 +58,14 @@ public class FrontController extends BaseController {
 	protected static void renderError(String msg) {
 		renderTemplate("errors/500.html", msg);
 	}
+	
+	protected static String getQrCodeBg() {
+    	String qrcodeBg = "/public/images/qrcode_bg.jpg";
+    	QrShare qrShare = QrShareService.getLastIsEnabledRec(GlobalConstants.IS_ENABLED);
+    	
+    	if(null != qrShare && !StringUtils.isBlank(qrShare.getImgUrl())) {
+    		qrcodeBg = qrShare.getImgUrl();
+    	}
+    	return qrcodeBg;
+    }
 }
