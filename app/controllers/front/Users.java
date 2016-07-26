@@ -96,8 +96,10 @@ public class Users extends FrontController {
     	Logger.info("首页config参数为: %s", gson.toJson(config));
     	
     	String qrImg = dist.getQrcodeLimitPath();
+    	
+    	QrShare qrShare = QrShareService.getLastIsEnabledRec(GlobalConstants.IS_ENABLED);
 
-    	render("/Front/user/qrcodeShare.html", user, qrImg, config, qrcodeBg);
+    	render("/Front/user/qrcodeShare.html", user, qrImg, config, qrcodeBg, qrShare);
     }
     
     @GuestAuthorization
