@@ -49,25 +49,6 @@ public class GoodsCtrl extends FrontController {
 	 */
     @GuestAuthorization
     public static void list(Integer tag, boolean fromPage) {
-    	String openId = session.get("openId");
-    	if(StringUtils.isBlank(openId)) {
-    		String from = request.params.get("from");
-    		String isappinstalled = request.params.get("isappinstalled");
-    		//如果from和isappinstalled带上，则说明是从分享链接进来
-    		if(!StringUtils.isBlank(from) && !StringUtils.isBlank(isappinstalled)) {
-    			//跳转到授权页
-    			String callbackUrl = Play.configuration.getProperty("local.host.domain") + "/goods_list.html";
-    			try {
-					callbackUrl = java.net.URLEncoder.encode(callbackUrl, "utf-8");
-				} catch (UnsupportedEncodingException e) {
-					Logger.error(e, "商品列表URL-->encode发生错误");
-				}
-    			String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=fromshare#wechat_redirect";
-    			redirect(String.format(url, Configure.getAppid(), callbackUrl));
-    		}
-    	}
-    	
-    	
         if(tag == null || tag < 0) {
             tag = -1;
         }
