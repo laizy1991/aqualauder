@@ -53,7 +53,7 @@ public class OrderCheckJob extends Job {
         
         Logger.info("发货中的订单数：%s，自动确认收货时间：%s",deliveredOrders.size(), dayLimit);
         long currTs = System.currentTimeMillis();
-        long limitTs = currTs - (dayLimit * 24 * 60 * 60 * 1000);
+        long limitTs = currTs - ((dayLimit-1) * 24 * 60 * 60 * 1000);
         for(Order order : deliveredOrders) {
             if(order.getDeliverTime() > limitTs) {
                 continue;
@@ -82,7 +82,8 @@ public class OrderCheckJob extends Job {
 
         Logger.info("已经确认收货的订单数：%s，自动完成订单时间：%s",receOrders.size(), dayLimit);
         long currTs = System.currentTimeMillis();
-        long limitTs = currTs - (dayLimit * 24 * 60 * 60 * 1000);
+        //自然天，比如这里限制的是1天，那么昨天的任何时候刻购买的，都在今天这次定时任务计算
+        long limitTs = currTs - ((dayLimit-1) * 24 * 60 * 60 * 1000);
         for(Order order : receOrders) {
             if(order.getRecevTime() > limitTs) {
                 continue;
