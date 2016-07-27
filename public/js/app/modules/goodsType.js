@@ -77,7 +77,8 @@ define(function(require) {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
                     id = $wrap.find('.id').val(),
-                    key = $wrap.find('.key').val(),
+                    name = $wrap.find('.name').val(),
+                    hasSubType = $wrap.find('.hasSubType').val(),
                     deleteDialog = dialog({
                         id: 'deleteDialog',
                         title: '删除',
@@ -110,7 +111,10 @@ define(function(require) {
                         },
                         onshow:function() {
                             $("#idToDelete").val(id);
-                            $("#keyToDelete").text(key);
+                            $("#nameToDelete").text(name);
+                            if(hasSubType == 1) {
+                            		$("#msg").text("该商品类型包含子类，将会一并删除！！");
+                            }
                         }
                     }).showModal();
             });

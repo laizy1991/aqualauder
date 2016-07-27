@@ -39,7 +39,7 @@ public class GoodsDao {
         } else if(type == 0) {
             sql = "from Goods g where g.state = 1 order by g.createTime desc";
         } else {
-            List<Integer> ids = GoodsTypeDao.getAllSubType(type);
+            List<Integer> ids = GoodsTypeDao.getAllSubTypeAndSelf(type);
             String idStr = "";
             String split = "";
             for(Integer id : ids) {

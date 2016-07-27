@@ -23,6 +23,8 @@ public class GoodsTypeDto extends GenericModel {
     
     private Long updateTime;
     private Integer sortNum;
+    
+    private Integer hasSubType;
     public Integer getId() {
         return id;
     }
@@ -85,6 +87,14 @@ public class GoodsTypeDto extends GenericModel {
 
     public void setUpdateTime(Long updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getHasSubType() {
+        return hasSubType;
+    }
+
+    public void setHasSubType(Integer hasSubType) {
+        this.hasSubType = hasSubType;
     }
 
 }

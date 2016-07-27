@@ -8,7 +8,7 @@ import models.GoodsType;
 import org.apache.commons.collections.CollectionUtils;
 
 public class GoodsTypeDao {
-    public static GoodsType get(long id) {
+    public static GoodsType get(int id) {
         return GoodsType.findById(id);
     }
 
@@ -17,10 +17,10 @@ public class GoodsTypeDao {
     }
 
     public static List<GoodsType> all() {
-        return GoodsType.find("order by sort_num asc").fetch();
+        return GoodsType.find("deleted = 0 order by sort_num asc").fetch();
     }
     
-    public static List<Integer> getAllSubType(int id) {
+    public static List<Integer> getAllSubTypeAndSelf(int id) {
         List<Integer> ids = new ArrayList<Integer>();
         ids.add(id);
         List<Integer> needSearch = new ArrayList<Integer>();
@@ -28,7 +28,7 @@ public class GoodsTypeDao {
         while(!needSearch.isEmpty()) {
             Integer search = needSearch.get(0);
             needSearch.remove(0);
-            List<GoodsType> types = GoodsType.find("parentId = ? ", search).fetch();
+            List<GoodsType> types = GoodsType.find("parentId = ? and deleted = 0", search).fetch();
             if(CollectionUtils.isNotEmpty(types)) {
                 for(GoodsType gt : types) {
                     if(ids.contains(gt.getId())) {

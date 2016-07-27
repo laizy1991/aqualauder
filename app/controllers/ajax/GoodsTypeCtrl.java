@@ -1,9 +1,11 @@
 package controllers.ajax;
 
-import com.google.gson.Gson;
+import java.util.List;
 
 import models.GoodsType;
+
 import common.core.AjaxController;
+
 import dao.GoodsTypeDao;
 import exception.BusinessException;
 
@@ -14,13 +16,26 @@ public class GoodsTypeCtrl  extends AjaxController {
             goodsType.setParentId(goodsType.getParentId());
             goodsType.setCreateTime(System.currentTimeMillis());
             goodsType.setUpdateTime(System.currentTimeMillis());
+            goodsType.setDeleted(0);
             GoodsTypeDao.save(goodsType);
         }
         renderSuccessJson();
     }
 
-    public static void delete(GoodsType goodsType) throws Exception {
+    public static void delete(Integer id) throws Exception {
+        
+        List<Integer> ids = GoodsTypeDao.getAllSubTypeAndSelf(id);
 
+        for(Integer item : ids) {
+            GoodsType type = GoodsTypeDao.get(item);
+            if(type == null) {
+                continue;
+            }
+            type.setUpdateTime(System.currentTimeMillis());
+            type.setDeleted(1);
+            GoodsTypeDao.save(type);
+        }
+        
         renderSuccessJson();
     }
 

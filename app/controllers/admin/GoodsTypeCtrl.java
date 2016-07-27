@@ -1,17 +1,19 @@
 package controllers.admin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import models.GoodsType;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import com.google.gson.Gson;
-import common.core.WebController;
 
+import common.core.WebController;
 import dao.GoodsTypeDao;
 import dto.GoodsTypeDto;
 
@@ -28,10 +30,17 @@ public class GoodsTypeCtrl extends WebController {
     	List<GoodsTypeDto> infos = new ArrayList<GoodsTypeDto>();
     	for(GoodsType gt : ddls) {
             String name = names.get(gt.getParentId());
-            if(StringUtils.isBlank(name)) {
+            if(name == null) {
                 name = "无";
             }
+            
             GoodsTypeDto dto = new GoodsTypeDto();
+            List<Integer> sub = GoodsTypeDao.getAllSubTypeAndSelf(gt.getId());
+            if(sub.size() <= 1) {
+                dto.setHasSubType(0);
+            } else {
+                dto.setHasSubType(1);
+            }
             dto.setCreateTime(gt.getCreateTime());
             dto.setName(gt.getName());
             dto.setId(gt.getId());

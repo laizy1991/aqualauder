@@ -35,6 +35,9 @@ public class GoodsType extends GenericModel {
     @Column(name = "update_time")
     private Long updateTime;
 
+    @Column(name = "deleted")
+    private Integer deleted;
+    
     public Integer getId() {
         return id;
     }
@@ -89,6 +92,14 @@ public class GoodsType extends GenericModel {
 
     public void setUpdateTime(Long updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
     }
 
 }

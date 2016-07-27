@@ -33,6 +33,7 @@ var names = JSON.parse('${goodsTypesJson.raw()}');
 		    <tr class="user-item">
 		        <input type="hidden" class="id" value="${info.id}">
                 <input type="hidden" class="name" value="${info.name}">
+                <input type="hidden" class="hasSubType" value="${info.hasSubType}">
                 <input type="hidden" class="desc" value="${info.typeDesc}">
                 <input type="hidden" class="createTime" value="${info.createTime}">
                 <input type="hidden" class="pid" value="${info.parentId}">
@@ -43,7 +44,8 @@ var names = JSON.parse('${goodsTypesJson.raw()}');
                 <td>${info?.typeDesc}</td>
 		        <td>
 		            <div class="opts">
-		                <span class="opt" role="update"><a href="javascript:;">修改</a></span>
+		                <span class="opt" role="update"><a href="javascript:;">修改</a></span>|
+                        <span class="opt" role="delete"><a href="javascript:;">删除</a></span>
 		            </div>
 		        </td>
 		    </tr>
@@ -133,8 +135,19 @@ var names = JSON.parse('${goodsTypesJson.raw()}');
             </div>
         </form>
     </div>
+
 </script>
 
+<script id="deleteDialogTmpl" type="text/html">
+    <div class="dialog dialog-delete">
+        <form action="@{ajax.GoodsTypeCtrl.delete}" id="delete">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToDelete" name="id" value="">
+                <label class="tips">确定删除<strong id="nameToDelete"></strong>？</br><font color='red'><strong id="msg"></strong></font></label>
+            </div>
+        </form>
+    </div>
+</script>
 <script>
     var verNum = new Date();
     seajs.config({
