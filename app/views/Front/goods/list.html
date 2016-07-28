@@ -103,13 +103,11 @@
             <div id="menu" class="sort sort_on">
                 <a href="" style="overflow:hidden; height:40px; color:#fff">安淇兰黛</a>
                 <ul>
-                    <li><a href="/goods_list.html?fromPage=true&type=0">新品</a></li>
+                    <li><a href="/goods_list.html?fromPage=true&tag=0">新品</a></li>
                     #{list items:types, as:'type'} 
-                    <li><a href="/goods_list.html?fromPage=true&type=${type.id}">${type.name}</a></li>
+                    <li><a href="/goods_list.html?fromPage=true&tag=${type.id}">${type.name}</a></li>
                     #{/list}
-                    <li><a href="/goods_list.html?fromPage=true&type=-1">全部</a></li>
-                    <!--<li><a href="javascript:showProducts('8')">经典</a></li>-->
-                    <!--<li><a href="javascript:showProducts('6')">礼服裙</a></li>						<li><a href="javascript:showAll()">所有商品</a></li>-->
+                    <li><a href="/goods_list.html?fromPage=true&tag=-1">全部</a></li>
                 </ul>
             </div>
             <a class="head_btn_right" href="javascript:showMenu();"><i
