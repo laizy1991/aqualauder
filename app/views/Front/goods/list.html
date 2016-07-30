@@ -92,6 +92,11 @@
             $("img.lazy").lazyload({effect: "fadeIn"});
 
         });
+
+        $(window).bind("load", function() {
+           setTimeout(function() { $(window).trigger('scroll'); }, 100);
+        });
+
     </script>
 
 
@@ -230,12 +235,6 @@
 
                     }
                     var username='F' + getCookie('username');
-                </script>
-                <script>
-                    window.onload=function top(){
-                        var mTop = document.getElementsByClassName(username)[0].offsetTop;
-                        window.scrollTo(0,mTop)
-                    }
                 </script>
 
 
@@ -613,25 +612,8 @@
             }
         });
     });
-</script><script>$(function(){
-    $('#add_cart').after().click(function(){
-        WeixinJSBridge.invoke(
-                'editAddress',
-                {"appId":"wxa33d0b489d1f8f5c","scope":"jsapi_address","signType":"sha1","addrSign":"39389407e77f36c179f7571badf92b58f2b8e734","timeStamp":"1463897576","nonceStr":"aIzZALli9kqcBu9Z"},
-                function(res){
-                    if(res.err_msg=='edit_address:ok'){
-                        $('#name').val(res.userName);			//用户名
-                        $('#phone').val(res.telNumber);			//手机号
-                        var provice=res.proviceFirstStageName;	//省
-                        var city=res.addressCitySecondStageName;//市
-                        var county=res.addressCountiesThirdStageName;//县
-                        new PCAS('s_province','s_city','s_county',provice,city,county);
-                        $('#address').val(res.addressDetailInfo);
-                    }
-                }
-        );
-    });
-});</script><script type='text/javascript'>
+</script>
+<script type='text/javascript'>
     (function(m, ei, q, i, a, j, s) {
         m[a] = m[a] || function() {
                     (m[a].a = m[a].a || []).push(arguments)
