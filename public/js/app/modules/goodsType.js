@@ -170,11 +170,13 @@ define(function(require) {
                             $("#createTimeToUpdate").val(createTime);
                             $("#sortNumToUpdate").val(sortNum);
                             $("#parentIdToUpdate").empty();
-                            if(pid <= 0){
-                            	$("#parentIdToUpdate").append("<option value='0'>请选择</option>");
-                            }
-                    		for(id in names) {
-                    			$("#parentIdToUpdate").append("<option value='"+id +"'>" + names[id] + "</option>");
+                            
+							$("#parentIdToUpdate").append("<option value='0'>请选择</option>");
+                    		for(item in names) {
+								if(item != id) {
+									$("#parentIdToUpdate").append("<option value='"+item +"'>" + names[item] + "</option>");
+								}
+                    			
                     		}
                     		$("#parentIdToUpdate").val(pid);
                         }

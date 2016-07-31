@@ -20,14 +20,8 @@ $(function(){
 //$(".img-lazyload").scrollLoading();
 })
 </script>
-<script src="/Public/js/app/jquery.lazyload.js?v=1.9.1"></script>
 <script type="text/javascript" charset="utf-8">
 
-  $(function() {
-
-      $("img.lazy").lazyload({effect: "fadeIn"});
-
-  });
     (function (doc, win) {
         var docEl = doc.documentElement,
             resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
@@ -258,7 +252,7 @@ body{
                 <div class="tit">
                    ${info.title}               </div>
                 <div class="pce">
-                    ￥${info.price}                </div>
+                    ￥${info?.price/100}                </div>
             </a>
             </li>
                                 #{/else}

@@ -10,6 +10,17 @@
     <script type="text/javascript" src="/public/js/front/wemall.js"></script>
     <script type="text/javascript" src="/public/js/front/alert.js"></script>
     <style type="text/css">
+    	.nice_select {
+    	    width: 100px;
+		    padding: 0 10px;
+		    height: 38px;
+		    border: 1px solid #999;
+		    position: relative;
+		    box-shadow: 0 0 5px #999;
+		    background: #fff url(/public/images/a2.jpg) no-repeat right center;
+		    cursor: pointer;
+    }
+    
         .window {
             width: 290px;
             position: fixed;
@@ -710,7 +721,7 @@
         </div>
     </div>
     #{if goods.goodsIcons.size() > 0 && goods.goodsIcons.get(0) != null}
-        <img style="width:100%;" id="good_pic" src="/public/pictures/goods/${goods.goodsIcons.get(0).iconUrl}">
+        <img style="width:100%;" id="good_pic" src="${goods.goodsIcons.get(0).iconUrl}">
      #{/if}
     <section class="order">
         <div class="orderlist">
@@ -869,10 +880,10 @@
                             
                             <tr>
                                 <td width="90px">
-                                    <label for="weixin" class="ui-input-text"><span style="color:red">*</span>颜色：</label>
+                                    <label for="weixin" class="ui-input-text" ><span style="color:red">*</span>颜色：</label>
                                 </td>
                                 <td>
-                                        <select id="goodsColor" name="goodsColor" onchange="selectColor()">
+                                        <select id="goodsColor" name="goodsColor" class="nice_select" onchange="selectColor()">
                                             
                                         </select>
                                         剩余<span id="stockCount">0</span>件

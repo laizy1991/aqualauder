@@ -21,11 +21,11 @@
             
 <body style="text-align: center;font-size: 18px;background: #fff;background-color: #000000;background: -webkit-linear-gradient(top, #000000, #000000);color:white;">
     
-     <pre><a href="/goods_list.html?fromPage=true&type=0">新品</a></pre>
+     <pre><a href="/goods_list.html?fromPage=true&tag=0">新品</a></pre>
      #{list items:types, as:'type'} 
-     <pre><a href="/goods_list.html?fromPage=true&type=${type.id}">${type.name}</a></pre>
+     <pre><a href="/goods_list.html?fromPage=true&tag=${type.id}">${type.name}</a></pre>
      #{/list}
-     <pre><a href="/goods_list.html?fromPage=true&type=-1">全部</a></pre>
+     <pre><a href="/goods_list.html?fromPage=true&tag=-1">全部</a></pre>
                 
 
         　　<br/>
