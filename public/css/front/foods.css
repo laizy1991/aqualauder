@@ -3256,7 +3256,7 @@ del {
 
 .footermenu ul {
 
-	border-top: 1px solid #e61945;
+	border-top: 1px solid #ffffff;
 
 	position: fixed;
 
@@ -3282,9 +3282,9 @@ del {
 
 	-webkit-box-orient: horizontal;
 
-	background-color: #e61945;
+	background-color: #000000;
 
-	background: -webkit-linear-gradient(top, #e61945, #e61945);
+	background: -webkit-linear-gradient(top, #000000, #000000);
 
 }
 
