@@ -153,8 +153,6 @@ body{
     border-bottom:1px #939393 solid;
 }
 #div1{
-    display:none;
-    position:fixed;
     top:0;
     font-size:0.22rem;
     left:0;
@@ -224,9 +222,11 @@ body{
 </script>
     <div class="list">
         <div id="menu">
-            <div id="butt">公告</div>
             <div menu="11">
             <a href="/goods_list.html?fromPage=true&type=0">新品</a></div>
+            #{if hotType}
+            	<div menu="10"><a href="/goods_list.html?fromPage=true&type=${hotType.id}">${hotType.name}</a></div>
+            #{/if}
             <div menu="12"><a href="/goods_list.html?fromPage=true&type=-1">全部</a>
             </div>
             <div id="all"><img src="/public/images/filter.png">筛选</div>

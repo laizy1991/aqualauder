@@ -64,6 +64,15 @@ public class GoodsCtrl extends FrontController {
 		
 		List<GoodsType> types = GoodsTypeDao.all();
 		
+		GoodsType hotType = null;
+		for(GoodsType type : types) {
+			if(type.getId().intValue() == 1) {
+				hotType = type;
+				types.remove(type);
+				break;
+			}
+		}
+		
 		String querystring = request.querystring;
     	String protocol = request.secure?"https://":"http://";
     	String action = request.path;
@@ -73,7 +82,7 @@ public class GoodsCtrl extends FrontController {
     	JsapiConfig config = JsApiService.getSign(url);
     	Logger.info("config参数为: %s", gson.toJson(config));
     	
-		render("/Front/goods/list.html", imgs, goods, desc, types, config);
+		render("/Front/goods/list.html", imgs, goods, desc, types, config, hotType);
     }
 
 	@GuestAuthorization
