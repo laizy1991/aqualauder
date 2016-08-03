@@ -164,6 +164,12 @@ body{
     box-sizing:border-box;
     width:100%;
 }
+
+.line:after {
+    content: "";
+    display: block;
+    clear:both;
+}
 </style>
 <body>
     <div id="div1">
@@ -232,34 +238,36 @@ body{
             <div id="all"><img src="/public/images/filter.png">筛选</div>
         </div>
         <ul id="cplist">
-                            #{list items:goods, as:'info'}
-                                #{if info.goodsIcons.size() > 0 && info.goodsIcons.get(0) != null}
-                                    
-                                    <li class="F368" menu='11'>
-            <a href="@{front.GoodsCtrl.details}?id=${info.id}">
-                <img src="${info.goodsIcons.get(0).iconUrl}"  width="100%">
-                <div class="tit">
-                   ${info.title}               </div>
-                <div class="pce">
-                    ￥${info?.price/100}                </div>
-            </a>
+        #{set count:0 /}
+        #{list items:goods, as:'info'}
+            #{if count%2 == 0}
+                <div class="line">
+            #{/if}
+            <li class="F368" menu='11'>
+                <a href="@{front.GoodsCtrl.details}?id=${info.id}">
+                    #{if info.goodsIcons.size() > 0 && info.goodsIcons.get(0) != null}
+                        <img src="${info.goodsIcons.get(0).iconUrl}"  width="100%">
+                    #{/if}
+                    #{else}
+                        <img src="#"  width="100%">
+                    #{/else}
+                    <div class="tit">
+                        ${info.title}
+                    </div>
+                    <div class="pce">
+                        ￥${info?.price/100}
+                    </div>
+                </a>
             </li>
-                                #{/if}
-                                #{else}
-                                    <li class="F368" menu='11'>
-            <a href="@{front.GoodsCtrl.details}?id=${info.id}">
-                <img data-original="#" class="lazy" width="100%">
-                <div class="tit">
-                   ${info.title}               </div>
-                <div class="pce">
-                    ￥${info?.price/100}                </div>
-            </a>
-            </li>
-                                #{/else}
-                            #{/list}
-        
-        
-            </ul>
+            #{set count:count+1 /}
+            #{if count%2 == 0}
+                </div>
+            #{/if}
+        #{/list}
+        #{if count%2 != 0}
+            </div>
+        #{/if}
+        </ul>
         <ul id="menuli" style="display:none;">
          #{list items:types, as:'type'} 
                     <li><a href="/goods_list.html?fromPage=true&type=${type.id}">${type.name}</a></li>
