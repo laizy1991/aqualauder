@@ -1,22 +1,12 @@
 package service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import models.Goods;
-import models.Order;
-import models.OrderGoods;
-import models.RefundOrder;
-import models.User;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 
-import play.Logger;
-import utils.DateUtil;
-import utils.IdGenerator;
 import common.constants.CommonDictKey;
 import common.constants.CommonDictType;
 import common.constants.GoodsType;
@@ -29,10 +19,18 @@ import dao.OrderGoodsDao;
 import dao.RefundOrderDao;
 import dto.GoodsBrief;
 import dto.OrderDetail;
+import models.Goods;
+import models.Order;
+import models.OrderGoods;
+import models.RefundOrder;
+import models.User;
+import play.Logger;
+import utils.DateUtil;
+import utils.IdGenerator;
 
 
 public class BuyerService {
-	
+
 	/**
 	 * 生成一个退款单ID，用于传给微信
 	 * @return
@@ -48,7 +46,7 @@ public class BuyerService {
         if(order == null || goodsNum == null || goodsNum.isEmpty()) {
             return null;
         }
-        
+
         long cussTs = System.currentTimeMillis();
         List<OrderGoods> orderGoodsList = new ArrayList<OrderGoods>();
         int totalFee = 0;
@@ -77,7 +75,7 @@ public class BuyerService {
             og.setGoodsIdentifier(goods.getIdentifier());
             totalFee += (og.getGoodsDiscountPrice() * og.getGoodsNumber());
             orderGoodsList.add(og);
-            
+
             //减库存
             boolean isSuccess = GoodsStockService.reduced(gb.getGoodsId(), gb.getGoodsSize(), gb.getGoodsColor(), goodsNum.get(gb));
             if(isSuccess) {
@@ -90,11 +88,11 @@ public class BuyerService {
                 return null;
             }
         }
-        
+
         if(CollectionUtils.isEmpty(orderGoodsList)) {
             return null;
         }
-        
+
         order.setTotalFee(totalFee);
         order.setId(IdGenerator.getId());
         order.setForbidRefund(0);
@@ -104,7 +102,7 @@ public class BuyerService {
                 + DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss"));
         order.setCreateTime(System.currentTimeMillis());
         order.setUpdateTime(System.currentTimeMillis());
-        
+
         order.setDeliverTime(0l);
         order.setExpressName("");
         order.setExpressNum("");
@@ -118,21 +116,21 @@ public class BuyerService {
             order.setIdentifier(orderGoodsList.get(0).getGoodsIdentifier());
         }
         boolean isSucc = OrderService.add(order);
-        
+
         if(!isSucc) {
             return null;
         }
-        
+
         OrderDetail detail = new OrderDetail(order);
         for(OrderGoods og : orderGoodsList) {
             og.setOrderId(order.getId());
             OrderGoodsDao.insert(og);
             detail.addGoodsInfo(og);
         }
-        
+
         return detail;
     }
-    
+
     public static boolean refundCancel(Integer userId, long refundId) {
         RefundOrder refundOrder = RefundOrderService.get(refundId);
         if(refundOrder == null) {
@@ -145,17 +143,17 @@ public class BuyerService {
             Logger.error("order is refund over, refundId:{}", refundId);
             return false;
         }
-        
+
         Order order = OrderService.get(refundOrder.getOrderId());
         if(order == null || order.getUserId().intValue() != userId) {
             Logger.error("order on found, id:%s, userId:%s", refundOrder.getOrderId(), userId);
             return false;
         }
-        
+
         boolean isSucc = RefundOrderService.updateRefundState(refundId, RefundStatus.CANCEL);
         return isSucc;
     }
-    
+
     /**
      * 申请退款
      * @param userId
@@ -190,30 +188,33 @@ public class BuyerService {
         }
         if(refundOrder == null) {
             refundOrder = new RefundOrder();
+            String dbHis = StringUtils.isBlank(refundOrder.getStateHistory()) ? "" : refundOrder.getStateHistory();
+            refundOrder.setStateHistory(dbHis + RefundStatus.APPLY.getCode()
+                    + "_" + DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss") + Separator.COMMON_SEPERATOR_COMME);
+            refundOrder.setCreateTime(System.currentTimeMillis());
+            refundOrder.setOrderId(orderId);
+            refundOrder.setOutTradeNo(order.getOutTradeNo());
+            refundOrder.setWeixin(order.getWeixin());
+            refundOrder.setGoodsTitle(order.getGoodsTitle());
+            refundOrder.setRefundState(RefundStatus.APPLY.getCode());
+            refundOrder.setUpdateTime(System.currentTimeMillis());
+            refundOrder.setUserMemo(memo);
+            refundOrder.setSellerMemo("");
+
+            refundOrder.setRefundTtype(PayType.WX.getCode());
+            refundOrder.setTransactionId(order.getPlatformTransationId());
+            refundOrder.setOutRefundNo(genOutRefundNo());
+
+            return RefundOrderService.add(refundOrder);
+        } else {
+        	return RefundOrderService.setStatusAndUpdate(refundOrder, RefundStatus.APPLY);
         }
-        
-        String dbHis = StringUtils.isBlank(refundOrder.getStateHistory()) ? "" : refundOrder.getStateHistory();
-        refundOrder.setStateHistory(dbHis + RefundStatus.APPLY.getCode()
-                + "_" + DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss"));
-        refundOrder.setCreateTime(System.currentTimeMillis());
-        refundOrder.setOrderId(orderId);
-        refundOrder.setOutTradeNo(order.getOutTradeNo());
-        refundOrder.setWeixin(order.getWeixin());
-        refundOrder.setGoodsTitle(order.getGoodsTitle());
-        refundOrder.setRefundState(RefundStatus.APPLY.getCode());
-        refundOrder.setUpdateTime(System.currentTimeMillis());
-        refundOrder.setUserMemo(memo);
-        refundOrder.setSellerMemo("");
-        
-        refundOrder.setRefundTtype(PayType.WX.getCode());
-        refundOrder.setTransactionId(order.getPlatformTransationId());
-        refundOrder.setOutRefundNo(genOutRefundNo());
-        
-        return RefundOrderService.add(refundOrder);
+
+
     }
-    
+
     /**
-     * 
+     *
      * @param userId
      * @param orderId
      * @return
@@ -227,7 +228,7 @@ public class BuyerService {
         if (dbOrderState != OrderStatus.DELIVERED.getState()) {
             return false;
         }
-        
+
         RefundOrder refund = RefundOrderService.getByOrder(orderId);
         int refundState = refund == null ? RefundStatus.NOTREFUND.getCode() : refund.getRefundState();
         if (refundState == RefundStatus.APPLY.getCode()
@@ -236,22 +237,22 @@ public class BuyerService {
             Logger.error("order is refund, id:%s", orderId);
             return false;
         }
-        
+
         order.setRecevTime(System.currentTimeMillis());
         boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.RECE);
         return isSucc;
     }
-    
+
     public static boolean paySuccess(long orderId) {
         Order order = OrderService.get(orderId);
         if(order == null) {
             Logger.error("order not found, id:%s", orderId);
             return false;
         }
-        
+
         //通知所有上线
         notifySuperior(orderId, order.getUserId());
-        
+
         DistributorService.checkAndBecomeDistributor(order.getUserId());
         order.setPayTime(System.currentTimeMillis());
         boolean isSucc = OrderService.setStatusAndUpdate(order, OrderStatus.DELIVERING);
@@ -260,20 +261,24 @@ public class BuyerService {
 
     /**
      * 支付成功通知上线
-     * @param orderId 
+     * @param orderId
      * @param userId
      */
     private static void notifySuperior(long orderId, Integer userId) {
-        List<Integer> superiors = DistributorService.getSuperiors(userId);
-        String msg = CommonDictService.getValue(CommonDictType.CONFIG, CommonDictKey.PAY_SUCCESS_MSG);
-        for(Integer uid : superiors) {
-            User user = UserService.get(uid);
-            if(user == null) {
-                continue;
-            }
-            String msgTmp = msg;
-            msgTmp = msgTmp.replace("%s", user.getNickname());
-            WxMsgService.notifySuperior(orderId, uid, msgTmp);
-        }
+    	try {
+	        List<Integer> superiors = DistributorService.getSuperiors(userId);
+	        String msg = CommonDictService.getValue(CommonDictType.CONFIG, CommonDictKey.PAY_SUCCESS_MSG);
+	        for(Integer uid : superiors) {
+	            User user = UserService.get(uid);
+	            if(user == null) {
+	                continue;
+	            }
+	            String msgTmp = msg;
+	            msgTmp = msgTmp.replace("%s", user.getNickname());
+	            WxMsgService.notifySuperior(orderId, uid, msgTmp);
+	        }
+    	} catch (Exception e) {
+    		Logger.error(e, "");
+    	}
     }
 }
