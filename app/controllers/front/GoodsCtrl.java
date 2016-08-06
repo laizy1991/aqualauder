@@ -73,16 +73,16 @@ public class GoodsCtrl extends FrontController {
 			}
 		}
 		
-		String querystring = request.querystring;
+		/*String querystring = request.querystring;
     	String protocol = request.secure?"https://":"http://";
     	String action = request.path;
     	String url =  protocol + request.domain + action + "?" + querystring;
     	
     	Logger.info("生成的分享链接为: %s", url);
     	JsapiConfig config = JsApiService.getSign(url);
-    	Logger.info("config参数为: %s", gson.toJson(config));
+    	Logger.info("config参数为: %s", gson.toJson(config));*/
     	
-		render("/Front/goods/list.html", imgs, goods, desc, types, config, hotType);
+		render("/Front/goods/list.html", imgs, goods, desc, types, hotType);
     }
 
 	@GuestAuthorization
