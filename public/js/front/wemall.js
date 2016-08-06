@@ -1,7 +1,7 @@
 $(document).ready(function () {
-	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-		WeixinJSBridge.call('hideOptionMenu');
-	});
+//	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+//		WeixinJSBridge.call('hideOptionMenu');
+//	});
 //	推荐商品
 //	$('.menu .ccbg dd').each(function(){
 //		if( $(this).attr("menu") == '1' ){
