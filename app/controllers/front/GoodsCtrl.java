@@ -44,6 +44,18 @@ public class GoodsCtrl extends FrontController {
 	public static Gson gson = new Gson();
 	
 	/**
+	 * 此入口专门为公众号自定义菜单而设
+	 * 因为从自定义菜单进来后，会带上一些其它参数，比如code和state，这些参数会造成不能分享
+	 * @param tag
+	 */
+	@GuestAuthorization
+    public static void listForMenu(Integer tag) {
+		if(null == tag || tag < 0) {
+			tag = -1;
+		}
+		redirect("/front/GoodsCtrl/list?tag="+tag);
+	}
+	/**
 	 * 微信一级菜单 女神新衣
 	 * 0-新品 1-裙装 2-整体搭配 3-上装 4-下装 -1-全部
 	 */
@@ -73,16 +85,16 @@ public class GoodsCtrl extends FrontController {
 			}
 		}
 		
-		/*String querystring = request.querystring;
+		String querystring = request.querystring;
     	String protocol = request.secure?"https://":"http://";
     	String action = request.path;
     	String url =  protocol + request.domain + action + "?" + querystring;
     	
     	Logger.info("生成的分享链接为: %s", url);
     	JsapiConfig config = JsApiService.getSign(url);
-    	Logger.info("config参数为: %s", gson.toJson(config));*/
+    	Logger.info("config参数为: %s", gson.toJson(config));
     	
-		render("/Front/goods/list.html", imgs, goods, desc, types, hotType);
+		render("/Front/goods/list.html", imgs, goods, desc, config, types, hotType);
     }
 
 	@GuestAuthorization
