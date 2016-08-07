@@ -18,6 +18,7 @@ import service.OrderService;
 import service.QrShareService;
 import service.UserService;
 import service.UserWalletService;
+import service.WxMsgService;
 import service.wx.dto.jspai.JsapiConfig;
 import service.wx.service.jsapi.JsApiService;
 import service.wx.service.user.WxUserService;
@@ -268,6 +269,9 @@ public class Users extends FrontController {
         }
         
         isSucc = BuyerService.receiving(user.getUserId(), orderId);
+        if(isSucc) {
+        	WxMsgService.confirmDelivered(orderId);
+        }
         renderJSON(isSucc);
     }
 }

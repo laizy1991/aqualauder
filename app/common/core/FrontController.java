@@ -62,7 +62,11 @@ public class FrontController extends BaseController {
 	    	}
 		} else {
 			if(StringUtils.isBlank(openId)) {
-				//从分享链接进来，准备跳转
+				//从分享链接进来，准备跳转，如果是二维码分享链接，不跳转
+				if(-1 != Request.current().path.indexOf("qrcodeShare")) {
+					return;
+				}
+				
 	    		if(-1 != Request.current().querystring.indexOf("from") && -1 != 
 	    				Request.current().querystring.indexOf("isappinstalled")) {
 	    			Logger.info("分享链接准备跳转");

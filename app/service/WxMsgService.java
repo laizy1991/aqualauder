@@ -28,10 +28,11 @@ import dto.WxMsgRspDto;
 public class WxMsgService {
 	private static String orderNotPayTplId = "b5c5mL51nYHwHoQpxkCpNfOOxXLQChsaGcXQzzfersI"; //订单未支付
 	private static String goodsBoughtTplId = "OBF7J8Nqo8E92lz25ZUfzvA77BtjVbru7nUTJRJ6hY8"; //购买成功
-	private static String goodsDeliveredTplId = "ZqEYpGZMjP6iNVpEYebApogq-ISHElqqZ6Osg3zCU-M"; //已发货
+	private static String goodsDeliveredTplId = "Ho7VZhk5Hbsc2zHHJBQiZki-NkMcWXbceR2HMv_qTHI"; //已发货
 	private static String refundMoneyTplId = "EUzz6nAllMgLDQlw20KMpNApUeVahJRuHw993kKJ46o"; //退款结果
 	private static String withdrawMoneyTplId = "mGp6nX75oO1Wp_QvY42SmQn1xtIO-rwq_JTYSs5yd9g"; //提现结果
 	private static String subLvPayTplId = "JdkDvWZFBFElVLOeVapHFpmauM3k3y6Lz97leLbcWWQ"; //下级消费
+	private static String comfirmDeliveredTplId = "Ho7VZhk5Hbsc2zHHJBQiZki-NkMcWXbceR2HMv_qTHI"; //确认收货
 	
 	private static Order checkOrder(long orderId) {
 		if(orderId <= 0) {
@@ -86,7 +87,7 @@ public class WxMsgService {
 		
 		String firstStr = CommonDictService.getValue(CommonDictType.CONFIG, CommonDictKey.NOT_PAY_MSG);
 		if(StringUtils.isBlank(firstStr)) {
-			firstStr = "亲，您好！您有一笔订单未支付";
+			firstStr = "您好，您有一笔订单未支付";
 		}
 		
 		//{{first.DATA}}
@@ -227,36 +228,47 @@ public class WxMsgService {
 		
 		String firstStr = CommonDictService.getValue(CommonDictType.CONFIG, CommonDictKey.GOODS_DELIVERED_MSG);
 		if(StringUtils.isBlank(firstStr)) {
-			firstStr = "亲，您的\""+goodTitle+"\"已经发货了";
-		} else {
-			firstStr = firstStr.replace("%s", goodTitle);
-			
+			firstStr = "你好，您的订单已经确认收货";
 		}
 		
-		//{{first.DATA}} 
-		//快递公司：{{delivername.DATA}}
-		//快递单号：{{ordername.DATA}}
-		//{{remark.DATA}}  
+		//{{first.DATA}}
+		//订单商品：{{keyword1.DATA}}
+		//订单编号：{{keyword2.DATA}}
+		//快递公司：{{keyword3.DATA}}
+		//运单编号：{{keyword4.DATA}}
+		//{{remark.DATA}}
 		JSONObject first = new JSONObject();
 		first.put("value", firstStr);
 		first.put("color", "#000000");
 		
-		JSONObject delivername = new JSONObject();
-		delivername.put("value", order.getExpressName());
-		delivername.put("color", "#000000");
+		JSONObject keyword1 = new JSONObject();
+		keyword1.put("value", goodTitle);
+		keyword1.put("color", "#000000");
+
 		
-		JSONObject ordername = new JSONObject();
-		ordername.put("value", order.getExpressNum());
-		ordername.put("color", "#000000");
+		JSONObject keyword2 = new JSONObject();
+		keyword2.put("value", order.getOutTradeNo());
+		keyword2.put("color", "#000000");
+		
+		JSONObject keyword3 = new JSONObject();
+		keyword3.put("value", order.getExpressName());
+		keyword3.put("color", "#000000");
+		
+		
+		JSONObject keyword4 = new JSONObject();
+		keyword4.put("value", order.getExpressNum());
+		keyword4.put("color", "#000000");
 		
 		JSONObject remark = new JSONObject();
-		remark.put("value", "订单号为"+String.valueOf(order.getOutTradeNo())+",欢迎再次购买!");
+		remark.put("value", "感谢您的支持。");
 		remark.put("color", "#000000");
 		
 		JSONObject dataJson = new JSONObject();
 		dataJson.put("first", first);
-		dataJson.put("delivername", delivername);
-		dataJson.put("ordername", ordername);
+		dataJson.put("keyword1", keyword1);
+		dataJson.put("keyword2", keyword2);
+		dataJson.put("keyword3", keyword3);
+		dataJson.put("keyword4", keyword4);
 		dataJson.put("remark", remark);
 		
 		json.put("data", dataJson);
@@ -543,7 +555,7 @@ public class WxMsgService {
 		keyword4.put("color", "#000000");
 		
 		JSONObject remark = new JSONObject();
-		remark.put("value", "感谢你的支持。");
+		remark.put("value", "感谢您的支持。");
 		remark.put("color", "#000000");
 		
 		JSONObject dataJson = new JSONObject();
@@ -557,5 +569,95 @@ public class WxMsgService {
 		json.put("data", dataJson);
 		
 		return WxTplMsgServcie.sendWxTplMsg(json);
+    }
+    
+    
+    /**
+     * 订单确认收货通知
+     * @param orderId
+     * @param openId
+     * @param msgTmp
+     * @return
+     */
+    public static WxMsgRspDto confirmDelivered(long orderId) {
+    	WxMsgRspDto rsp = new WxMsgRspDto();
+    	rsp.setSuccess(false);
+    	rsp.setMsg("");
+    	
+    	Order order = checkOrder(orderId); 
+    	if(null == order) {
+    		rsp.setMsg("发送确认收货消息通知失败, 无法获取订单");
+    		return rsp;
+    	}
+    	String openId = order.getOpenId();
+    	//获取用户openId
+    	if(StringUtils.isBlank(openId)) {
+    		rsp.setMsg("发送确认收货消息通知失败, 上级用户openId为空");
+    		return rsp;
+    	}
+    	//获取商品详情
+    	OrderDetail od = OrderService.getOrderDetail(orderId);
+    	if(null == od) {
+    		rsp.setMsg("发送确认收货消息通知失败, 无法获取商品详情");
+    		return rsp;
+    	}
+    	String goodTitle = "服装商品";
+    	List<OrderGoodsInfo> goodsInfo = od.getGoodsInfo();
+    	if(null != goodsInfo && goodsInfo.size()>0) {
+    		goodTitle = goodsInfo.get(0).getGoodsName();
+    	}
+    	
+    	//包装请求body
+    	JSONObject json = new JSONObject();
+    	json.put("touser", openId);
+    	json.put("template_id", comfirmDeliveredTplId);
+    	json.put("url", "");
+    	
+    	String firstStr = CommonDictService.getValue(CommonDictType.CONFIG, CommonDictKey.CONFIRM_DELIVERED_MSG);
+    	if(StringUtils.isBlank(firstStr)) {
+    		firstStr = "您好，您的订单已经确认收货";
+    	}
+    	
+    	//{{first.DATA}}
+    	//订单商品：{{keyword1.DATA}}
+    	//订单编号：{{keyword2.DATA}}
+    	//快递公司：{{keyword3.DATA}}
+    	//运单编号：{{keyword4.DATA}}
+    	//{{remark.DATA}}
+    	JSONObject first = new JSONObject();
+    	first.put("value", firstStr);
+    	first.put("color", "#000000");
+    	
+    	JSONObject keyword1 = new JSONObject();
+    	keyword1.put("value", goodTitle);
+    	keyword1.put("color", "#000000");
+    	
+    	JSONObject keyword2 = new JSONObject();
+    	keyword2.put("value", order.getOutTradeNo());
+    	keyword2.put("color", "#000000");
+    	
+    	JSONObject keyword3 = new JSONObject();
+    	keyword3.put("value", order.getExpressName());
+    	keyword3.put("color", "#000000");
+    	
+    	JSONObject keyword4 = new JSONObject();
+    	keyword4.put("value", order.getExpressNum());
+    	keyword4.put("color", "#000000");
+    	
+    	JSONObject remark = new JSONObject();
+    	remark.put("value", "感谢您的支持。");
+    	remark.put("color", "#000000");
+    	
+    	JSONObject dataJson = new JSONObject();
+    	dataJson.put("first", first);
+    	dataJson.put("keyword1", keyword1);
+    	dataJson.put("keyword2", keyword2);
+    	dataJson.put("keyword3", keyword3);
+    	dataJson.put("keyword4", keyword4);
+    	dataJson.put("remark", remark);
+    	
+    	json.put("data", dataJson);
+    	
+    	return WxTplMsgServcie.sendWxTplMsg(json);
     }
 }

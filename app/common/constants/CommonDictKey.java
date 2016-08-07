@@ -19,4 +19,5 @@ public class CommonDictKey {
     public static final String GOODS_DELIVERED_MSG = "goods_delivered_msg";
     public static final String REFUND_MENEY_MSG = "refund_money_msg";
     public static final String WITHDRAW_MONEY_MSG = "withdraw_money_msg";
+    public static final String CONFIRM_DELIVERED_MSG = "confirm_delivered_msg";
 }
