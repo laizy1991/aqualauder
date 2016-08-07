@@ -273,9 +273,7 @@ public class BuyerService {
 	            if(user == null) {
 	                continue;
 	            }
-	            String msgTmp = msg;
-	            msgTmp = msgTmp.replace("%s", user.getNickname());
-	            WxMsgService.notifySuperior(orderId, uid, msgTmp);
+	            WxMsgService.notifySuperior(orderId, user.getOpenId());
 	        }
     	} catch (Exception e) {
     		Logger.error(e, "");

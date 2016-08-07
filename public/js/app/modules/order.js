@@ -433,28 +433,6 @@ define(function(require) {
         			}
         		});
         	});
-        },
-        sendDelivered: function(obj) {
-        	obj.click(function() {
-        		var $this = $(this),
-        				$wrap = $this.closest('tr'),
-        				orderId = $wrap.find('.id').val();
-        		$.ajax({
-                    type: "POST",
-                    url: "/ajax/WxMsg.sendDeliveredResultMsg",
-                    data: {"orderId":orderId},
-                    dataType: "json",
-                    success: function(result){
-                    	if(result.success){
-                            dd.alert('发送发货通知成功！', function(){
-                                window.location.reload(false);
-                            });
-                        }else{
-                            dd.alert(result.error);
-                        }
-                    }
-                });
-        	});
         }
     }
 

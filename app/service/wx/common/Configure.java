@@ -71,7 +71,7 @@ public class Configure {
 	public static String SEND_REFUND_API = "https://api.mch.weixin.qq.com/secapi/pay/refund";
 	//8) 查询退款
 	public static String QUERY_REFUND_API = "https://api.mch.weixin.qq.com/pay/refundquery";
-	//9) 创建二维码
+	//9) 发送请求模板信息
 	public static String SEND_TPL_MSG_API = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s";
 
 	public static boolean isUseThreadToDoReport() {

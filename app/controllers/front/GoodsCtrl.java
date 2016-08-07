@@ -53,7 +53,7 @@ public class GoodsCtrl extends FrontController {
 		if(null == tag || tag < 0) {
 			tag = -1;
 		}
-		redirect("/goods_list.html?tag="+tag);
+		redirect("/front/GoodsCtrl/list?tag="+tag);
 	}
 	/**
 	 * 微信一级菜单 女神新衣
