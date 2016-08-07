@@ -229,11 +229,11 @@ body{
     <div class="list">
         <div id="menu">
             <div menu="11">
-            <a href="/goods_list.html?fromPage=true&type=0">新品</a></div>
+            <a href="/goods_list.html?fromPage=true&tap=0">新品</a></div>
             #{if hotType}
-            	<div menu="10"><a href="/goods_list.html?fromPage=true&type=${hotType.id}">${hotType.name}</a></div>
+            	<div menu="10"><a href="/goods_list.html?fromPage=true&tag=${hotType.id}">${hotType.name}</a></div>
             #{/if}
-            <div menu="12"><a href="/goods_list.html?fromPage=true&type=-1">全部</a>
+            <div menu="12"><a href="/goods_list.html?fromPage=true&tag=-1">全部</a>
             </div>
             <div id="all"><img src="/public/images/filter.png">筛选</div>
         </div>
@@ -270,7 +270,7 @@ body{
         </ul>
         <ul id="menuli" style="display:none;">
          #{list items:types, as:'type'} 
-                    <li><a href="/goods_list.html?fromPage=true&type=${type.id}">${type.name}</a></li>
+                    <li><a href="/goods_list.html?fromPage=true&tag=${type.id}">${type.name}</a></li>
                     #{/list}
         
             </ul>
