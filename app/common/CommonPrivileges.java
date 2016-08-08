@@ -20,4 +20,5 @@ public class CommonPrivileges {
     public static final int QRCODE = 17;
     public static final int NOTICE = 18;
     public static final int REFUND_RDER_LIST = 19;
+    public static final int CASH_INFO = 20;
 }

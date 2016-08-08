@@ -1,0 +1,242 @@
+#{extends 'main.html' /}
+
+#{set 'moreStyles'}
+<link rel="stylesheet" href="@{'/public/css/admin-info.css'}">
+<link rel="stylesheet" href="@{'/public/css/trumpet.css'}">
+#{/set}
+<style>
+</style>
+<!-- 页头 begin -->
+<div class="main-header">
+    <div class="breadcrumb">
+        <span class="nolink">提现列表</span>
+    </div>
+    <div class="search-box search-combobox">
+        <form action="@{admin.cashInfoCtrl.list}" id="search-box">
+            <input name="key" class="search-combobox-input" type="text" placeholder="请输入关键字" value="${key}">
+            <input name="asc" type="hidden" value="${asc}">
+            <button class="search-combobox-button" type="submit" title="搜索"><div class="icon-search"></div></button>
+        </form>
+    </div>
+</div>
+<!-- 页头 end -->
+<table class="tb">
+    <thead>
+    <tr  class="text-center">
+        <th class="filter">
+            <span>提现方式</span>
+            <ul class="option">
+                <li #{if cashType==-1||cashType==null}class="currentFilter"#{/if} field="cashType" data="-2">全部</li>
+                <li #{if cashType==0}class="currentFilter"#{/if} field="cashType" data="0">红包</li>
+                <li #{if cashType==1}class="currentFilter"#{/if} field="cashType" data="1">银行</li>
+            </ul>
+        </th>
+        <th class="filter">
+            <span>状态</span>
+            <ul class="option">
+                <li #{if state==-1||state==null}class="currentFilter"#{/if} field="state" data="-1">全部</li>
+                <li #{if state==0}class="currentFilter"#{/if} field="state" data="0">申请中</li>
+                <li #{if state==1}class="currentFilter"#{/if} field="state" data="1">转账中</li>
+                <li #{if state==2}class="currentFilter"#{/if} field="state" data="2">提现成功</li>
+                <li #{if state==3}class="currentFilter"#{/if} field="state" data="3">提现失败</li>
+            </ul>
+        </th>
+        <th>用户</th>
+        <th>金额</th>
+        <!--<th>凭证号</th>-->
+        <!--<th>商户发送红包订单号</th>-->
+        <th>操作</th>
+    </tr>
+    </thead>
+   #{if pageData == null || pageData.list == null || pageData.list.size() == 0 }
+        <tr><td colspan="7" style="text-align:center;">暂无记录</td></tr>
+    #{/if}
+    #{else}
+	    #{list items:pageData.list,as:'info'}
+		    <tbody>
+		    <tr class="user-item">
+		        <input type="hidden" class="id" value="${info.id}">
+                <input type="hidden" class="userId" value="${info.userId}">
+                <input type="hidden" class="cashType" value="${info.cashType}">
+                <input type="hidden" class="amount" value="${info.amount}">
+                <input type="hidden" class="cashStatus" value="${info.cashStatus}">
+                <input type="hidden" class="slipNo" value="${info.slipNo}">
+                <input type="hidden" class="mchBillno" value="${info.mchBillno}">
+
+                <input type="hidden" class="createTime" value="%{out.print(utils.DateUtil.getDateString(info?.createTime))}%">
+		        <input type="hidden" class="updateTime" value="%{out.print(utils.DateUtil.getDateString(info?.updateTime))}%">
+		        <td>
+                    #{if info?.cashType == 0}
+                    <span>红包</span>
+                    #{/if}
+                    #{if info?.cashType == 1}
+                    <span>银行</span>
+                    #{/if}
+                </td>
+		        <td>
+                    #{if info?.cashStatus == 0}
+                    <span>申请中</span>
+                    #{/if}
+                    #{if info?.cashStatus == 1}
+                    <span>转账中</span>
+                    #{/if}
+                    #{if info?.cashStatus == 2}
+                    <span>提现成功</span>
+                    #{/if}
+                    #{if info?.cashStatus == 3}
+                    <span>提现失败</span>
+                    #{/if}
+		        <td>${info.userId}</td>
+		        <td>¥${info.amount/100}</td>
+		        <!--<td>${info.slipNo}</td>-->
+		        <!--<td>${info.mchBillno}</td>-->
+		        <td>
+		            <div class="opts">
+                        #{if info?.cashStatus == 0}
+                            <span class="opt" role="update"><a href="javascript:;">提现处理</a></span>|
+                        #{/if}
+                        <span class="opt" role="view"><a href="javascript:;">查看</a></span>
+		            </div>
+		        </td>
+		    </tr>
+		    </tbody>
+	    #{/list}
+    #{/else}
+</table>
+#{include file="common/page_new.html" /}
+#{include file="common/jsinclude.html" /}
+
+#{set 'moreScripts'}
+<!-- 增加 -->
+<script id="createDialogTmpl" type="text/html">
+    <div class="dialog dialog-create">
+        <form action="@{ajax.RefundOrderCtrl.add}" id="create">
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>订单编号</label>
+                <div class="col">
+                    <input type="text" name="refundOrder.orderId" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>商家备注</label>
+                <div class="col">
+                    <input type="password" name="refundOrder.sellerMemo" value="">
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 删除 -->
+<script id="deleteDialogTmpl" type="text/html">
+    <div class="dialog dialog-delete">
+        <form action="@{ajax.RefundOrderCtrl.delete}" id="delete">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToDelete" name="refundOrder.id" value="">
+                <label class="tips">确定删除<strong id="idToDeleteEx"></strong>？</label>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 修改 -->
+<script id="updateDialogTmpl" type="text/html">
+    <div class="dialog dialog-update">
+        <form action="@{ajax.CashInfoCtrl.update}" id="update">
+            <div class="form-group">
+                <input type="hidden" class="in-t" id="idToUpdate" name="cashInfo.id" value="">
+                <label class="tips">提现审核
+                    <!--<strong id="idToUpdateEx"></strong>-->
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="label"><span class="asterisk">*</span>是否同意</label>
+                <div class="col">
+                    <select  name="isAgree">
+                        <option value="2">拒绝提现</option>
+                        <option value="1">同意提现</option>
+                    </select>
+                    <span class="msg error-text">必填项！</span>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<!-- 查看 -->
+<script id="viewDialogTmpl" type="text/html">
+    <div class="dialog dialog-view">
+        <form action="#" id="view">
+            <div class="form-group">
+                <label class="label">用户ID:</label>
+                <div class="col">
+                    <label class="info" id="userIdToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">申请状态:</label>
+                <div class="col">
+                    <label class="info" id="cashStatusToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">提现方式:</label>
+                <div class="col">
+                    <label class="info" id="cashTypeToView"></label>
+                </div>
+            </div>
+            <!--<div class="form-group">-->
+                <!--<label class="label">用户微信:</label>-->
+                <!--<div class="col">-->
+                    <!--<label class="info" id="weixinToView"></label>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="form-group">
+                <label class="label">金额:</label>
+                <div class="col">
+                    <label class="info" id="amountToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">凭证号:</label>
+                <div class="col">
+                    <label class="info" id="slipNoToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">红包订单号:</label>
+                <div class="col">
+                    <label class="info" id="mchBillnoToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">修改时间:</label>
+                <div class="col">
+                    <label class="info" id="updateTimeToView"></label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="label">创建时间:</label>
+                <div class="col">
+                    <label class="info" id="createTimeToView"></label>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script>
+    var verNum = new Date();
+    seajs.config({
+        base:"../",
+        // 加版本号
+        map: [
+            [ '.js', '.js?v='+verNum]
+        ]
+    });
+    seajs.use("@{'/public/js/app/modules/cashInfo.js'}");
+    seajs.use("@{'/public/js/app/common/listFilter.js'}");
+</script>
+#{/set}

@@ -52,6 +52,9 @@
                 #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.WALLET_LIST)}
                 <a class="" href="@{admin.WalletCtrl.list}">钱包列表</a>
                 #{/if}
+                #{if admin.adminType==0 || adminPrivileges.contains(common.CommonPrivileges.CASH_INFO)}
+                <a class="" href="@{admin.CashInfoCtrl.list}">提现列表</a>
+                #{/if}
             </dd>
         </dl>
         <dl class="nav">
