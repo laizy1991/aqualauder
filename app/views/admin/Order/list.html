@@ -53,7 +53,7 @@
     </tr>
     </thead>
     #{if pageData == null || pageData.list == null || pageData.list.size() == 0 }
-        <tr><td colspan="9" style="text-align:center;">暂无记录</td></tr>
+        <tr><td colspan="10" style="text-align:center;">暂无记录</td></tr>
     #{/if}
     #{else}
 	    #{list items:pageData.list,as:'info'}   
@@ -138,7 +138,7 @@
                 </td>
                 <td>${info?.weixin}</td>
                 <td>${info?.identifier}</td>
-                <td>${info?.goodsTitle}</td>
+                <td><span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;display: block;width: 200px" title="${info?.goodsTitle}">${info?.goodsTitle}</span></td>
                 <td>
                     #{if info?.orderGoods != null && info?.orderGoods.size() > 0}
                     <span>${info?.orderGoods.get(0).goodsColor}</span>
@@ -163,7 +163,7 @@
 		            <div class="opts">
 		                <!--<span class="opt" role="update"><a href="javascript:;">修改</a></span>|-->
 		                <span class="opt" role="view"><a href="javascript:;">查看</a></span>
-                        #{if info?.state == 2}
+                        #{if info?.state == 2 && info?.refundOrder == null}
                         |<span class="opt" role="delivered"><a href="javascript:;">发货</a></span>
                         #{/if}
 		            </div>
