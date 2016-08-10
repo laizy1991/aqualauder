@@ -200,6 +200,7 @@ define(function(require) {
                     totalFee = $wrap.find('.totalFee').val(),
                     state = $wrap.find('.state').val(),
                     forbidRefund = $wrap.find('.forbidRefund').val(),
+                    refundId = $wrap.find('.refund_id').val(),
                     orderMemo = $wrap.find('.orderMemo').val(),
                     receiver = $wrap.find('.receiver').val(),
                     mobilePhone = $wrap.find('.mobilePhone').val(),
@@ -240,7 +241,9 @@ define(function(require) {
                         totalFee = "¥" + totalFee/100;
                         $("#totalFeeToView").text(totalFee);
                         $("#stateToView").text(stateList[state]);
-                        $("#forbidRefundToView").text(forbidRefundList[forbidRefund]);
+                        if(refundId != undefined ) {
+                            $("#forbidRefundToView").text(forbidRefundList[forbidRefund]);
+                        }
                         $("#orderMemoToView").text(orderMemo);
                         $("#receiverToView").text(receiver);
                         $("#mobilePhoneToView").text(mobilePhone);
