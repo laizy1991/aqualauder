@@ -28,7 +28,7 @@ import dto.WxMsgRspDto;
 public class WxMsgService {
 	private static String orderNotPayTplId = "b5c5mL51nYHwHoQpxkCpNfOOxXLQChsaGcXQzzfersI"; //订单未支付
 	private static String goodsBoughtTplId = "OBF7J8Nqo8E92lz25ZUfzvA77BtjVbru7nUTJRJ6hY8"; //购买成功
-	private static String goodsDeliveredTplId = "Ho7VZhk5Hbsc2zHHJBQiZki-NkMcWXbceR2HMv_qTHI"; //已发货
+	private static String goodsDeliveredTplId = "UFp6Ylm9R_9yX7ZHzcYJ1LUkQ7lsfP8Ern28OIJfUp0"; //已发货
 	private static String refundMoneyTplId = "EUzz6nAllMgLDQlw20KMpNApUeVahJRuHw993kKJ46o"; //退款结果
 	private static String withdrawMoneyTplId = "mGp6nX75oO1Wp_QvY42SmQn1xtIO-rwq_JTYSs5yd9g"; //提现结果
 	private static String subLvPayTplId = "JdkDvWZFBFElVLOeVapHFpmauM3k3y6Lz97leLbcWWQ"; //下级消费
@@ -232,10 +232,10 @@ public class WxMsgService {
 		}
 		
 		//{{first.DATA}}
-		//订单商品：{{keyword1.DATA}}
-		//订单编号：{{keyword2.DATA}}
-		//快递公司：{{keyword3.DATA}}
-		//运单编号：{{keyword4.DATA}}
+		//商品名称：{{keyword1.DATA}}
+		//快递公司：{{keyword2.DATA}}
+		//快递单号：{{keyword3.DATA}}
+		//收货地址：{{keyword4.DATA}}
 		//{{remark.DATA}}
 		JSONObject first = new JSONObject();
 		first.put("value", firstStr);
@@ -247,20 +247,20 @@ public class WxMsgService {
 
 		
 		JSONObject keyword2 = new JSONObject();
-		keyword2.put("value", order.getOutTradeNo());
+		keyword2.put("value", order.getExpressName());
 		keyword2.put("color", "#000000");
 		
 		JSONObject keyword3 = new JSONObject();
-		keyword3.put("value", order.getExpressName());
+		keyword3.put("value", order.getExpressNum());
 		keyword3.put("color", "#000000");
 		
 		
 		JSONObject keyword4 = new JSONObject();
-		keyword4.put("value", order.getExpressNum());
+		keyword4.put("value", order.getShippingAddress());
 		keyword4.put("color", "#000000");
 		
 		JSONObject remark = new JSONObject();
-		remark.put("value", "感谢您的支持。");
+		remark.put("value", "订单号为"+String.valueOf(order.getOutTradeNo())+",欢迎再次购买!");
 		remark.put("color", "#000000");
 		
 		JSONObject dataJson = new JSONObject();
