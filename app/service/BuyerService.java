@@ -267,7 +267,9 @@ public class BuyerService {
     private static void notifySuperior(long orderId, Integer userId) {
     	try {
 	        List<Integer> superiors = DistributorService.getSuperiors(userId);
-	        String msg = CommonDictService.getValue(CommonDictType.CONFIG, CommonDictKey.PAY_SUCCESS_MSG);
+	        if(null == superiors || superiors.size() <= 0)
+	        	return;
+
 	        for(Integer uid : superiors) {
 	            User user = UserService.get(uid);
 	            if(user == null) {
