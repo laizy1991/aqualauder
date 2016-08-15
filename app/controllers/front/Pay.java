@@ -168,21 +168,15 @@ public class Pay extends FrontController {
     	if(rsp.getReturn_code().equals("SUCCESS") && rsp.getResult_code().equals("SUCCESS")) {
     		Logger.info("微信回调返回的结果正确");
     		String updateSql = "UPDATE `order` SET callback_status=?,callback_time=?,platform_trade_msg=?," +
-    				"platform_transation_id=?,state=?,state_history=?,update_time=? WHERE id=?";
+    				"platform_transation_id=? WHERE id=?";
     		Query query = Model.em().createNativeQuery(updateSql);
     		query.setParameter(1, WxCallbackStatus.CALLBACK_SUCC.getStatus());
     		query.setParameter(2, nowTime);
     		query.setParameter(3, "回调成功");
     		query.setParameter(4, rsp.getTransaction_id());
-    		query.setParameter(5, OrderStatus.DELIVERING.getState());
-    		String dbHis = StringUtils.isBlank(order.getStateHistory()) ? "" : order.getStateHistory();
-    		dbHis += OrderStatus.DELIVERED.getState() + Separator.COMMON_SEPERATOR_BL
-    				+ DateUtil.getDateString(System.currentTimeMillis(), "yyyyMMddHHmmss")
-    				+ Separator.COMMON_SEPERATOR_COMME;
-    		query.setParameter(6, dbHis);
-    		query.setParameter(7, nowTime);
-    		query.setParameter(8, order.getId());
+    		query.setParameter(5, order.getId());
     		
+    		BuyerService.paySuccess(order.getId());
             if(query.executeUpdate() > 0) {
             	Logger.info("微信回调成功，更新回调结果成功，orderId：%d", order.getId());
             	//发送购买成功通知
@@ -195,7 +189,6 @@ public class Pay extends FrontController {
             		Logger.error("调用发送购买成功消息接口返回数据为空");
             	}
             		
-            	BuyerService.paySuccess(order.getId());
             	renderXml("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
             } else {
             	Logger.error("微信回调成功，更新回调结果失败，orderId：%d", order.getId());

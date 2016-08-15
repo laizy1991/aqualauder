@@ -228,7 +228,7 @@ public class WxMsgService {
 		
 		String firstStr = CommonDictService.getValue(CommonDictType.CONFIG, CommonDictKey.GOODS_DELIVERED_MSG);
 		if(StringUtils.isBlank(firstStr)) {
-			firstStr = "你好，您的订单已经确认收货";
+			firstStr = "您好，您的订单已发货";
 		}
 		
 		//{{first.DATA}}
