@@ -183,7 +183,6 @@ public class Pay extends FrontController {
     		query.setParameter(7, nowTime);
     		query.setParameter(8, order.getId());
     		
-    		BuyerService.paySuccess(order.getId());
             if(query.executeUpdate() > 0) {
             	Logger.info("微信回调成功，更新回调结果成功，orderId：%d", order.getId());
             	//发送购买成功通知
@@ -196,6 +195,7 @@ public class Pay extends FrontController {
             		Logger.error("调用发送购买成功消息接口返回数据为空");
             	}
             		
+            	BuyerService.paySuccess(order.getId());
             	renderXml("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
             } else {
             	Logger.error("微信回调成功，更新回调结果失败，orderId：%d", order.getId());
