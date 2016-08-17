@@ -909,7 +909,7 @@
                             </tbody>
                         </table>
                         <div class="footReturn">
-                            <input type="submit" class="submit" name="立即购买" value="立即购买">
+                            <div class="submit oi-submit" value="立即购买">立即购买</div>
                         </div>
                     </li>
                 </ul>
@@ -974,6 +974,61 @@
     function go_guanzhu() {
         location.href = 'http://mp.weixin.qq.com/s?__biz=MzA4ODEyNTQ1Mw==&mid=209219890&idx=7&sn=3a0d0e4583c7d1e92856718708102fa1#rd';
     };
+
+    $(document).delegate(".oi-submit", "click", function () {
+        var goods_id = $.trim($("#goods_id").val());
+        var goods_num = $.trim($("#goods_num").val());
+        var name = $.trim($("#name").val());
+        var phone = $.trim($("#phone").val());
+        var weixin = $.trim($("#weixin").val());
+        var address = $.trim($("#address").val());
+        var goodsSize = $.trim($("#goodsSize").val());
+        var goodsColor = $.trim($("#goodsColor").val());
+
+        if(goods_id == undefined || goods_id.length <= 0) {
+            alert("参数错误!");
+            return false;
+        }
+
+        if(goods_num == undefined || goods_num.length <= 0) {
+            alert("参数错误");
+            return false;
+        }
+
+        if(goods_num <= 0) {
+            alert("请选择购买数量");
+            return false;
+        }
+
+        if(name == undefined || name.length <= 0) {
+            alert("请输入联系人姓名");
+            $("#name").focus();
+            return false;
+        }
+        if(phone == undefined || phone.length <= 0) {
+            alert("请输入联系电话");
+            $("#phone").focus();
+            return;
+        }
+        if(weixin == undefined || weixin.length <= 0) {
+            alert("请输入微信号");
+            $("#weixin").focus();
+            return false;
+        }
+        if(address == undefined || address.length <= 0) {
+            alert("请输入联系地址");
+            $("#address").focus();
+            return false;
+        }
+
+        if(goodsColor == undefined || goodsColor.length <= 0) {
+            alert("请选择要购买的颜色");
+            $("#goodsColor").focus();
+            return false;
+        }
+
+        $("#infoForm").submit();
+    })
 
 
 </script>
