@@ -193,7 +193,7 @@ $(function () {
         
         <div class="div_header">
             <span style='float:left;margin-left:10px;margin-right:10px;'>
-                <img src='http://wx.qlogo.cn/mmopen/pUNYhn9qq6GAwPtahjSb7QliaicDAFibBP1aaFG5ibf2gAlXj22S0jSf6pupGmQFk2aR6mCnJibZTR4nbBgPlvNBfccX4CyStuIQn/0' width='80px;' height='90px;'>          </span>
+                <img src='${data?.user?.headImgUrl}' width='80px;' height='90px;'>          </span>
             <span class="header_right">
                 <div><span>昵称：${data?.user?.nickname}</span></div>
                 <div><span>关注时间：%{out.print(utils.DateUtil.getDateString(data?.user?.subscribeTime, "yyyy-MM-dd"))}%</span></div>
