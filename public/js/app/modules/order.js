@@ -332,8 +332,7 @@ define(function(require) {
             obj.click(function() {
                 var $this = $(this),
                     $wrap = $this.closest('tr'),
-                    id = $wrap.find('.refund_id').val(),
-                    orderId = $wrap.find('.refund_orderId').val(),
+                    outTradeNo = $wrap.find('.outTradeNo').val(),
                     refundState = $wrap.find('.refund_refundState').val(),
                     userMemo = $wrap.find('.refund_userMemo').val(),
                     sellerMemo = $wrap.find('.refund_sellerMemo').val(),
@@ -350,9 +349,8 @@ define(function(require) {
 
                         },
                         onshow:function() {
-                            var stateList={"0":"申请退款", "2":"退款中","3":"退款成功","4":"拒绝退款","5":"取消退款"};
-                            $("#refundIdToView").text(id);
-                            $("#refundOrderIdToView").text(orderId);
+                            var stateList={"-1":"无退款", "0":"申请退款", "1":"退款中","2":"退款成功","3":"拒绝退款","4":"取消退款","5":"退款失败","6":"状态未确定","7":"代入转发"};
+                            $("#refundOrderOutTradeNoToView").text(outTradeNo);
                             $("#refundStateToView").text(stateList[refundState]);
                             $("#refundUserMemoToView").text(userMemo);
                             $("#refundSellerMemoToView").text(sellerMemo);

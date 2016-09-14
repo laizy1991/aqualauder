@@ -55,8 +55,9 @@
 		    <tr class="user-item">
 		        <input type="hidden" class="id" value="${info.id}">
 		        <input type="hidden" class="orderId" value="${info.orderId}">
-		        <input type="hidden" class="orderId" value="${info.outTradeNo}">
-		        <input type="hidden" class="orderId" value="${info.weixin}">
+		        <input type="hidden" class="outTradeNo" value="${info.outTradeNo}">
+		        <input type="hidden" class="weixin" value="${info.weixin}">
+		        <input type="hidden" class="goodTitle" value="${info.goodsTitle}">
 		        <input type="hidden" class="refundState" value="${info.refundState}">
 		        <input type="hidden" class="userMemo" value="${info.userMemo}">
 		        <input type="hidden" class="sellerMemo" value="${info.sellerMemo}">
@@ -181,7 +182,7 @@
     <div class="dialog dialog-view">
         <form action="#" id="view">
             <div class="form-group">
-                <label class="label">订单ID:</label>
+                <label class="label">订单编号:</label>
                 <div class="col">
                     <label class="info" id="orderOutTradeNoToView"></label>
                 </div>
